@@ -1,5 +1,6 @@
-import { map, join, prop, find } from 'ramda';
+import { map, prop, find } from 'ramda';
 import { validation as Validation } from 'folktale';
+import { joinWithAnd } from '../utils';
 
 const { Success, Failure } = Validation;
 
@@ -12,6 +13,6 @@ export default validators => o => {
   if (success) {
     return Success(o);
   }
-  const message = join(` and `, map(prop(`value`), validations));
+  const message = joinWithAnd(map(prop(`value`), validations));
   return Failure(message);
 };
