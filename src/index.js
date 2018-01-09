@@ -10,3 +10,6 @@ export {
   default as validateIsValidNumber,
 } from './validators/validateIsValidNumber';
 export { default as validateKeys } from './validators/validateKeys';
+export {
+  default as validateIsWhitelistedString,
+} from './validators/validateIsWhitelistedString';

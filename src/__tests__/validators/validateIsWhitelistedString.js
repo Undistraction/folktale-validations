@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale';
-import validateIsWhitelistedString from '../../validators/validateIsWhitelistedString';
+import { validateIsWhitelistedString } from '../../index';
 
 const { Success, Failure } = Validation;
 
@@ -48,7 +48,7 @@ describe(`validateIsWhitelistedString()`, () => {
     describe(`when value isn't on the whitelist`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const value = `d`;
-        const validation = validator(value);
+        const validation = validator();
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
           `Value wan't one of the accepted values: a, b, c`,
