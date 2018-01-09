@@ -4,17 +4,19 @@ import { validateIsValidNumber } from '../../index';
 const { Success, Failure } = Validation;
 
 describe(`validateIsValidNumber()`, () => {
-  describe(`when argument is an Object`, () => {
+  describe(`when argument is a valid number`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
-      const validation = validateIsValidNumber(1);
+      const value = 1;
+      const validation = validateIsValidNumber(value);
       expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(1);
+      expect(validation.value).toEqual(value);
     });
   });
 
-  describe(`when argument is not an object`, () => {
+  describe(`when argument is not a valid number`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
-      const validation = validateIsValidNumber(`x`);
+      const value = `x`;
+      const validation = validateIsValidNumber(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual([`Wasn't a valid Number`]);
     });
