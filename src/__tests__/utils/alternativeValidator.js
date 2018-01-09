@@ -35,9 +35,9 @@ describe(`alternativeValidator()`, () => {
       const value = `x`;
       const validation = validator(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(
-        `Wasn't type: 'Boolean' and Wasn't a valid Number`
-      );
+      expect(validation.value).toEqual([
+        `Wasn't type: 'Boolean' and Wasn't a valid Number`,
+      ]);
     });
   });
 });

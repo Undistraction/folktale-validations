@@ -14,5 +14,5 @@ export default validators => o => {
     return Success(o);
   }
   const message = joinWithAnd(map(prop(`value`), validations));
-  return Failure(message);
+  return Failure([message]);
 };
