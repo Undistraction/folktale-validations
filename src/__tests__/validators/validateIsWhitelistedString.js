@@ -48,7 +48,7 @@ describe(`validateIsWhitelistedString()`, () => {
     describe(`when value isn't on the whitelist`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const value = `d`;
-        const validation = validator();
+        const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
           `Value wan't one of the accepted values: a, b, c`,
