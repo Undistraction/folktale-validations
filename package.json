@@ -63,8 +63,5 @@
     "js-css-units": "^0.2.10",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.1.0"
-  },
-  "config": {
-    "unsafe-perm": true
   }
 }
