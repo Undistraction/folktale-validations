@@ -1,17 +1,14 @@
 import { validation as Validation } from 'folktale';
 import {
-  alternativeValidator,
+  anyOfValidator,
   validateIsBoolean,
   validateIsValidNumber,
 } from '../../index';
 
 const { Success, Failure } = Validation;
 
-describe(`alternativeValidator()`, () => {
-  const validator = alternativeValidator([
-    validateIsBoolean,
-    validateIsValidNumber,
-  ]);
+describe(`anyOfValidator()`, () => {
+  const validator = anyOfValidator([validateIsBoolean, validateIsValidNumber]);
   describe(`with a valid value`, () => {
     describe(`with first validation succeeding`, () => {
       it(`returns a Validation.Success`, () => {
