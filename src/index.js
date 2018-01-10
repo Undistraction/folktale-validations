@@ -1,4 +1,5 @@
-export { default as alternativeValidator } from './utils/alternativeValidator';
+export { default as anyOfValidator } from './utils/anyOfValidator';
+export { default as orValidator } from './utils/orValidator';
 export {
   default as numberWithUnitValidator,
 } from './utils/numberWithUnitValidator';
