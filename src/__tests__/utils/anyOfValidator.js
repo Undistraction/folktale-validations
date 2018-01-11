@@ -1,40 +1,52 @@
 import { validation as Validation } from 'folktale';
-import {
-  anyOfValidator,
-  validateIsBoolean,
-  validateIsValidNumber,
-} from '../../index';
+import sinon from 'sinon';
+import { anyOfValidator } from '../../index';
 
 const { Success, Failure } = Validation;
 
 describe(`anyOfValidator()`, () => {
-  const validator = anyOfValidator([validateIsBoolean, validateIsValidNumber]);
   describe(`with a valid value`, () => {
     describe(`with first validation succeeding`, () => {
       it(`returns a Validation.Success`, () => {
         const value = true;
+        const v1 = sinon.stub().returns(Success(value));
+        const v2 = sinon.spy();
+        const validator = anyOfValidator([v1, v2]);
         const validation = validator(value);
         expect(Success.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual(value);
+        expect(v1.calledWith(value)).toBeTruthy();
+        expect(v2.notCalled).toBeTruthy();
       });
     });
     describe(`with second validation succeeding`, () => {
       it(`returns a Validation.Success`, () => {
         const value = 1;
+        const errorMessage = `message`;
+        const v1 = sinon.stub().returns(Failure(errorMessage));
+        const v2 = sinon.stub().returns(Success(value));
+        const validator = anyOfValidator([v1, v2]);
         const validation = validator(value);
         expect(Success.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual(value);
+        expect(v1.calledWith(value)).toBeTruthy();
+        expect(v2.calledWith(value)).toBeTruthy();
       });
     });
   });
   describe(`with an invalid value`, () => {
     it(`returns a Validation.Failure`, () => {
       const value = `x`;
+      const errorMessage1 = `message1`;
+      const errorMessage2 = `message2`;
+      const v1 = sinon.stub().returns(Failure(errorMessage1));
+      const v2 = sinon.stub().returns(Failure(errorMessage2));
+      const validator = anyOfValidator([v1, v2]);
       const validation = validator(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([
-        `Wasn't type: 'Boolean' and Wasn't a valid Number`,
-      ]);
+      expect(validation.value).toEqual([`message1 and message2`]);
+      expect(v1.calledWith(value)).toBeTruthy();
+      expect(v2.calledWith(value)).toBeTruthy();
     });
   });
 });
