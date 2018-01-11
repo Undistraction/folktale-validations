@@ -1,7 +1,6 @@
 import sinon from 'sinon';
 import { validation as Validation } from 'folktale';
 import predicateValidator from '../../utils/predicateValidator';
-import { toErrorMessage } from '../../utils';
 
 const { Success, Failure } = Validation;
 

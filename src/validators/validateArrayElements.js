@@ -9,6 +9,5 @@ export default validator => o => {
       Failure.hasInstance(acc) ? acc : acc.concat(validator(value)),
     Success()
   )(o);
-  console.log(`Validation`, validation);
   return Success.hasInstance(validation) ? Success(o) : validation;
 };
