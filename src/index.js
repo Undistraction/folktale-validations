@@ -11,6 +11,9 @@ export { default as typeValidator } from './utils/typeValidator';
 export { default as validateIsBoolean } from './validators/validateIsBoolean';
 export { default as validateIsObject } from './validators/validateIsObject';
 export {
+  default as validateIsUndefined,
+} from './validators/validateIsUndefined';
+export {
   default as validateIsValidNumber,
 } from './validators/validateIsValidNumber';
 export { default as validateKeys } from './validators/validateKeys';
