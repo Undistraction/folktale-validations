@@ -13,6 +13,7 @@ export { default as validateIsBoolean } from './validators/validateIsBoolean';
 export { default as validateIsString } from './validators/validateIsString';
 export { default as validateIsObject } from './validators/validateIsObject';
 export { default as validateIsArray } from './validators/validateIsArray';
+export { default as validateIsArrayOf } from './validators/validateIsArrayOf';
 export {
   default as validateArrayElements,
 } from './validators/validateArrayElements';
