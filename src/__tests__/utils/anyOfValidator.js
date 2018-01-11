@@ -27,7 +27,7 @@ describe(`anyOfValidator()`, () => {
       });
     });
   });
-  describe(`with a valid value`, () => {
+  describe(`with an invalid value`, () => {
     it(`returns a Validation.Failure`, () => {
       const value = `x`;
       const validation = validator(value);

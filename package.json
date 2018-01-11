@@ -56,7 +56,8 @@
     "rollup": "^0.51.3",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "sinon": "^4.1.4"
   },
   "dependencies": {
     "folktale": "^2.0.1",
