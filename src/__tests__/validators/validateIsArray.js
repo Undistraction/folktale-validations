@@ -4,7 +4,7 @@ import { validateIsArray } from '../../index';
 const { Success, Failure } = Validation;
 
 describe(`validateIsArray()`, () => {
-  describe(`when argument is a boolean`, () => {
+  describe(`when argument is a array`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = [];
       const validation = validateIsArray(value);
@@ -13,7 +13,7 @@ describe(`validateIsArray()`, () => {
     });
   });
 
-  describe(`when argument is not an object`, () => {
+  describe(`when argument is not an array`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsArray();
       expect(Failure.hasInstance(validation)).toBeTruthy();
