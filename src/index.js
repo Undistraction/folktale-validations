@@ -4,6 +4,9 @@ export {
   default as numberWithUnitValidator,
 } from './utils/numberWithUnitValidator';
 export { default as predicateValidator } from './utils/predicateValidator';
+export {
+  default as untilFailureValidator,
+} from './utils/untilFailureValidator';
 export { default as typeValidator } from './utils/typeValidator';
 export { default as validateIsBoolean } from './validators/validateIsBoolean';
 export { default as validateIsObject } from './validators/validateIsObject';

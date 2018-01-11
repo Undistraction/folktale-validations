@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import { validation as Validation } from 'folktale';
-import untilFailureValidator from '../../utils/untilFailureValidator';
+import { untilFailureValidator } from '../../index';
 
 const { Success, Failure } = Validation;
 
