@@ -14,6 +14,9 @@ export { default as validateIsString } from './validators/validateIsString';
 export { default as validateIsObject } from './validators/validateIsObject';
 export { default as validateIsArray } from './validators/validateIsArray';
 export {
+  default as validateArrayElements,
+} from './validators/validateArrayElements';
+export {
   default as validateIsUndefined,
 } from './validators/validateIsUndefined';
 export {
