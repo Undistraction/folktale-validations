@@ -10,6 +10,7 @@ export {
 export { default as ifDefinedValidator } from './utils/ifDefinedValidator';
 export { default as typeValidator } from './utils/typeValidator';
 export { default as validateIsBoolean } from './validators/validateIsBoolean';
+export { default as validateIsString } from './validators/validateIsString';
 export { default as validateIsObject } from './validators/validateIsObject';
 export { default as validateIsArray } from './validators/validateIsArray';
 export {
