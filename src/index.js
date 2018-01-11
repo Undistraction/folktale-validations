@@ -27,3 +27,4 @@ export { default as validateKeys } from './validators/validateKeys';
 export {
   default as validateIsWhitelistedString,
 } from './validators/validateIsWhitelistedString';
+export { default as withField } from './utils/withField';

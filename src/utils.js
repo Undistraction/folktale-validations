@@ -4,3 +4,6 @@ import { join } from 'ramda';
 export const joinWithComma = join(`, `);
 export const joinWithAnd = join(` and `);
 export const joinWithOr = join(` or `);
+
+export const toFieldErrorMessage = (field, errorMessage) =>
+  `Field '${field}': ${errorMessage}`;
