@@ -11,12 +11,14 @@ describe(`anyOfValidator()`, () => {
         const value = true;
         const v1 = sinon.stub().returns(Success(value));
         const v2 = sinon.spy();
-        const validator = anyOfValidator([v1, v2]);
+        const v3 = sinon.spy();
+        const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Success.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual(value);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.notCalled).toBeTruthy();
+        expect(v3.notCalled).toBeTruthy();
       });
     });
     describe(`with second validation succeeding`, () => {
@@ -25,12 +27,30 @@ describe(`anyOfValidator()`, () => {
         const errorMessage = `message`;
         const v1 = sinon.stub().returns(Failure(errorMessage));
         const v2 = sinon.stub().returns(Success(value));
-        const validator = anyOfValidator([v1, v2]);
+        const v3 = sinon.spy();
+        const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Success.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual(value);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
+        expect(v3.notCalled).toBeTruthy();
+      });
+    });
+    describe(`with third validation succeeding`, () => {
+      it(`returns a Validation.Success`, () => {
+        const value = 1;
+        const errorMessage = `message`;
+        const v1 = sinon.stub().returns(Failure(errorMessage));
+        const v2 = sinon.stub().returns(Failure(errorMessage));
+        const v3 = sinon.stub().returns(Success(value));
+        const validator = anyOfValidator([v1, v2, v3]);
+        const validation = validator(value);
+        expect(Success.hasInstance(validation)).toBeTruthy();
+        expect(validation.value).toEqual(value);
+        expect(v1.calledWith(value)).toBeTruthy();
+        expect(v2.calledWith(value)).toBeTruthy();
+        expect(v3.calledWith(value)).toBeTruthy();
       });
     });
   });
