@@ -1,6 +1,7 @@
 import { validation as Validation } from 'folktale';
 import sinon from 'sinon';
 import { anyOfValidator } from '../../index';
+import { orErrorMessages } from '../../messages';
 
 const { Success, Failure } = Validation;
 
@@ -64,7 +65,9 @@ describe(`anyOfValidator()`, () => {
       const validator = anyOfValidator([v1, v2]);
       const validation = validator(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`message1 and message2`]);
+      expect(validation.value).toEqual([
+        orErrorMessages([errorMessage1, errorMessage2]),
+      ]);
       expect(v1.calledWith(value)).toBeTruthy();
       expect(v2.calledWith(value)).toBeTruthy();
     });

@@ -1,5 +1,5 @@
 import { reduce } from 'ramda';
-import { joinWithAnd } from '../utils';
+import { orErrorMessages } from '../messages';
 
 export default validators => o =>
   reduce(
@@ -8,7 +8,7 @@ export default validators => o =>
         ? validator(o)
         : accumulatedValidation.orElse(errorMessage1 =>
             validator(o).mapFailure(errorMessage2 => [
-              joinWithAnd([errorMessage1, errorMessage2]),
+              orErrorMessages([errorMessage1, errorMessage2]),
             ])
           ),
     null
