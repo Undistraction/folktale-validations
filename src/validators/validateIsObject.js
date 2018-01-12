@@ -1,4 +1,4 @@
 import { isObj } from 'ramda-adjunct';
-import typeValidator from '../utils/typeValidator';
+import typeValidator from '../helpers/typeValidator';
 
 export default typeValidator(isObj, `Object`);

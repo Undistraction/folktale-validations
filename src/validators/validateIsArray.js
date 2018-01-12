@@ -1,4 +1,4 @@
 import { isArray } from 'ramda-adjunct';
-import typeValidator from '../utils/typeValidator';
+import typeValidator from '../helpers/typeValidator';
 
 export default typeValidator(isArray, `Array`);

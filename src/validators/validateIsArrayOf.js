@@ -1,4 +1,4 @@
-import untilFailureValidator from '../utils/untilFailureValidator';
+import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateIsArray from '../validators/validateIsArray';
 import validateArrayElements from '../validators/validateArrayElements';
 

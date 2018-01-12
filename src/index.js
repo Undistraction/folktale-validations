@@ -1,14 +1,20 @@
-export { default as anyOfValidator } from './utils/anyOfValidator';
-export { default as orValidator } from './utils/orValidator';
+// Utils
+export { default as withField } from './utils/withField';
+
+// Helpers
+export { default as anyOfValidator } from './helpers/anyOfValidator';
+export { default as orValidator } from './helpers/orValidator';
 export {
   default as numberWithUnitValidator,
-} from './utils/numberWithUnitValidator';
-export { default as predicateValidator } from './utils/predicateValidator';
+} from './helpers/numberWithUnitValidator';
+export { default as predicateValidator } from './helpers/predicateValidator';
 export {
   default as untilFailureValidator,
-} from './utils/untilFailureValidator';
-export { default as ifDefinedValidator } from './utils/ifDefinedValidator';
-export { default as typeValidator } from './utils/typeValidator';
+} from './helpers/untilFailureValidator';
+export { default as ifDefinedValidator } from './helpers/ifDefinedValidator';
+export { default as typeValidator } from './helpers/typeValidator';
+
+// Validators
 export { default as validateIsBoolean } from './validators/validateIsBoolean';
 export { default as validateIsString } from './validators/validateIsString';
 export { default as validateIsObject } from './validators/validateIsObject';
@@ -27,4 +33,3 @@ export { default as validateKeys } from './validators/validateKeys';
 export {
   default as validateIsWhitelistedString,
 } from './validators/validateIsWhitelistedString';
-export { default as withField } from './utils/withField';
