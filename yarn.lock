@@ -1041,6 +1041,13 @@ cssbeautify@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cssbeautify/-/cssbeautify-0.3.1.tgz#12dd1f734035c2e6faca67dcbdcef74e42811397"
 
+cssjs-units@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/cssjs-units/-/cssjs-units-0.2.12.tgz#2a21d1202f693d28f355064618108259e0eb19a8"
+  dependencies:
+    ramda "^0.25.0"
+    ramda-adjunct "^2.2.0"
+
 cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/cssom/-/cssom-0.3.2.tgz#b8036170c79f07a90ff2f16e22284027a243848b"
@@ -2350,13 +2357,6 @@ jest@^21.2.1:
   resolved "https://registry.yarnpkg.com/jest/-/jest-21.2.1.tgz#c964e0b47383768a1438e3ccf3c3d470327604e1"
   dependencies:
     jest-cli "^21.2.1"
-
-js-css-units@^0.2.10:
-  version "0.2.10"
-  resolved "https://registry.yarnpkg.com/js-css-units/-/js-css-units-0.2.10.tgz#6e3fba3ae2673531aaaef75388776f4e4c7ed2f2"
-  dependencies:
-    ramda "^0.25.0"
-    ramda-adjunct "^2.2.0"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"

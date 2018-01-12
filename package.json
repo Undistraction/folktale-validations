@@ -60,8 +60,8 @@
     "sinon": "^4.1.4"
   },
   "dependencies": {
+    "cssjs-units": "^0.2.12",
     "folktale": "^2.0.1",
-    "js-css-units": "^0.2.10",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.1.0"
   }
