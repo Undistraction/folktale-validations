@@ -25,7 +25,7 @@ describe(`validateValues()`, () => {
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Object key(s) invalid: Key 'a': message`,
+          `Object included invalid values(s): Key 'a': message`,
         ]);
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();
@@ -51,7 +51,7 @@ describe(`validateValues()`, () => {
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Object key(s) invalid: Key 'b': message`,
+          `Object included invalid values(s): Key 'b': message`,
         ]);
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();
@@ -78,7 +78,7 @@ describe(`validateValues()`, () => {
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Object key(s) invalid: Key 'a': message1, Key 'b': message2`,
+          `Object included invalid values(s): Key 'a': message1, Key 'b': message2`,
         ]);
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();

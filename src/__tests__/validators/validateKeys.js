@@ -34,7 +34,7 @@ describe(`validateKeys()`, () => {
       const validation = validateKeysWithKeys(invalidObject);
       expect(Failure.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual([
-        `Object included invalid keys: '[delta, echo]'`,
+        `Object included invalid key(s): '[delta, echo]'`,
       ]);
     });
   });

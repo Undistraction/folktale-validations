@@ -17,11 +17,12 @@ export const whitelistErrorMessage = whitelist =>
   `Value wan't one of the accepted values: ${joinWithComma(whitelist)}`;
 
 export const keysErrorMessage = invalidKeys =>
-  `Object included invalid keys: '[${joinWithComma(invalidKeys)}]'`;
+  `Object included invalid key(s): '[${joinWithComma(invalidKeys)}]'`;
 
 export const valueErrorMessage = (name, value) => `Key '${name}': ${value}`;
 
-export const valuesErrorMessage = messages => `Object key(s) invalid: ${joinWithComma(messages)}`;
+export const valuesErrorMessage = messages =>
+  `Object included invalid values(s): ${joinWithComma(messages)}`;
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
 
