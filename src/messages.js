@@ -24,6 +24,9 @@ export const valueErrorMessage = (name, value) => `Key '${name}': ${value}`;
 export const valuesErrorMessage = messages =>
   `Object included invalid values(s): ${joinWithComma(messages)}`;
 
+export const numberWithUnitErrorMessage = unit =>
+  `Wasn't number with unit: '${unit}'`;
+
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
 
 export const orErrorMessages = joinWithAnd;
