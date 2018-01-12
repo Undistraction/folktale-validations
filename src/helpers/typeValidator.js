@@ -1,4 +1,5 @@
 import predicateValidator from './predicateValidator';
+import { typeErrorMessage } from '../messages';
 
 export default (predicate, typeName) =>
-  predicateValidator(predicate, `Wasn't type: '${typeName}'`);
+  predicateValidator(predicate, typeErrorMessage(typeName));

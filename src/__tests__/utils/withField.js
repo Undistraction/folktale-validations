@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale';
-import { toFieldErrorMessage } from '../../utils';
+import { fieldErrorMessage } from '../../messages';
 import { withField } from '../../index';
 
 const { Success, Failure } = Validation;
@@ -13,7 +13,7 @@ describe(`withField()`, () => {
       const result = withField(field, validation);
 
       expect(Failure.hasInstance(result)).toBeTruthy();
-      expect(result.value).toEqual(toFieldErrorMessage(field, message));
+      expect(result.value).toEqual(fieldErrorMessage(field, message));
     });
   });
 

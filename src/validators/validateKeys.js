@@ -1,16 +1,13 @@
 import { without, compose, keys, isEmpty } from 'ramda';
 import { validation as Validation } from 'folktale';
-import { joinWithComma } from '../utils';
+import { keysErrorMessage } from '../messages';
 
 const { Success, Failure } = Validation;
 
-export default items => o => {
-  const withoutValidKeys = without(items);
-  const collectInvalidKeys = compose(withoutValidKeys, keys);
+export default validKeys => o => {
+  const collectInvalidKeys = compose(without(validKeys), keys);
   const invalidKeys = collectInvalidKeys(o);
   return isEmpty(invalidKeys)
     ? Success(o)
-    : Failure([
-        `Object included invalid keys: '[${joinWithComma(invalidKeys)}]'`,
-      ]);
+    : Failure([keysErrorMessage(invalidKeys)]);
 };

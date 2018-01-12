@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
-import { toFieldErrorMessage } from '../utils';
+import { fieldErrorMessage } from '../messages';
 
 const { Failure } = Validation;
 
 export default (field, validation) =>
-  validation.orElse(message => Failure(toFieldErrorMessage(field, message)));
+  validation.orElse(message => Failure(fieldErrorMessage(field, message)));
