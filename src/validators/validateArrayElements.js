@@ -1,13 +1,29 @@
 import { validation as Validation } from 'folktale';
 import { reduce } from 'ramda';
+import {
+  arrayElementsErrorMessage,
+  arrayElementErrorMessage,
+} from '../messages';
 
 const { Success, Failure } = Validation;
 
+const validateAllWith = validator => o =>
+  reduce(
+    (acc, element) =>
+      acc.concat(
+        validator(element).orElse(message =>
+          Failure([arrayElementErrorMessage(element, message)])
+        )
+      ),
+    Success(),
+    o
+  );
+
 export default validator => o => {
-  const validation = reduce(
-    (acc, value) =>
-      Failure.hasInstance(acc) ? acc : acc.concat(validator(value)),
-    Success()
-  )(o);
-  return Success.hasInstance(validation) ? Success(o) : validation;
+  const v = validateAllWith(validator);
+  const validation = v(o);
+  return validation.matchWith({
+    Success: _ => Success(o),
+    Failure: ({ value }) => Failure([arrayElementsErrorMessage(value)]),
+  });
 };

@@ -56,7 +56,9 @@ describe(`validateIsArrayOf()`, () => {
       const validator = validateIsArrayOf(v1);
       const validation = validator(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(message);
+      expect(validation.value).toEqual([
+        `Array contained invalid element(s): '3': message`,
+      ]);
       expect(v1.calledWith(1)).toBeTruthy();
       expect(v1.calledWith(2)).toBeTruthy();
       expect(v1.calledWith(3)).toBeTruthy();

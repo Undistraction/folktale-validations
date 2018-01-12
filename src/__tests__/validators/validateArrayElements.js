@@ -39,12 +39,18 @@ describe(`validateArrayElements()`, () => {
         const message = `message`;
         const v1 = sinon.stub();
         v1.onFirstCall().returns(Failure(message));
+        v1.onSecondCall().returns(Success(message));
+        v1.onThirdCall().returns(Success(message));
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message);
+        expect(validation.value).toEqual([
+          `Array contained invalid element(s): '1': message`,
+        ]);
         expect(v1.calledWith(1)).toBeTruthy();
-        expect(v1.calledOnce).toBeTruthy();
+        expect(v1.calledWith(2)).toBeTruthy();
+        expect(v1.calledWith(3)).toBeTruthy();
+        expect(v1.calledThrice).toBeTruthy();
       });
     });
 
@@ -55,13 +61,16 @@ describe(`validateArrayElements()`, () => {
         const v1 = sinon.stub();
         v1.onFirstCall().returns(Success());
         v1.onSecondCall().returns(Failure(message));
+        v1.onThirdCall().returns(Success());
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message);
+        expect(validation.value).toEqual([
+          `Array contained invalid element(s): '2': message`,
+        ]);
         expect(v1.calledWith(1)).toBeTruthy();
         expect(v1.calledWith(2)).toBeTruthy();
-        expect(v1.calledTwice).toBeTruthy();
+        expect(v1.calledWith(3)).toBeTruthy();
       });
     });
 
@@ -76,7 +85,31 @@ describe(`validateArrayElements()`, () => {
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message);
+        expect(validation.value).toEqual([
+          `Array contained invalid element(s): '3': message`,
+        ]);
+        expect(v1.calledWith(1)).toBeTruthy();
+        expect(v1.calledWith(2)).toBeTruthy();
+        expect(v1.calledWith(3)).toBeTruthy();
+        expect(v1.calledThrice).toBeTruthy();
+      });
+    });
+
+    describe(`multiple items`, () => {
+      it(`returns a Validation.Failiure with messsage`, () => {
+        const value = [1, 2, 3];
+        const message1 = `message1`;
+        const message2 = `message2`;
+        const v1 = sinon.stub();
+        v1.onFirstCall().returns(Failure(message1));
+        v1.onSecondCall().returns(Success());
+        v1.onThirdCall().returns(Failure(message2));
+        const validator = validateArrayElements(v1);
+        const validation = validator(value);
+        expect(Failure.hasInstance(validation)).toBeTruthy();
+        expect(validation.value).toEqual([
+          `Array contained invalid element(s): '1': message1,'3': message2`,
+        ]);
         expect(v1.calledWith(1)).toBeTruthy();
         expect(v1.calledWith(2)).toBeTruthy();
         expect(v1.calledWith(3)).toBeTruthy();
