@@ -1,5 +1,5 @@
 import { always } from 'ramda';
-import { joinWithComma } from './utils';
+import { joinWithComma, quoteAndJoinWithComma } from './utils';
 import { joinWithAnd } from '../lib/utils';
 
 export const fieldErrorMessage = (field, errorMessage) =>
@@ -26,6 +26,9 @@ export const valuesErrorMessage = messages =>
 
 export const numberWithUnitErrorMessage = unit =>
   `Wasn't number with unit: '${unit}'`;
+
+export const missingRequiredKeyErrorMessage = keys =>
+  `Object was missing required key(s): [${quoteAndJoinWithComma(keys)}]`;
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
 

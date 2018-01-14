@@ -36,4 +36,7 @@ export {
 export {
   default as validateWhitelistedKeys,
 } from './validators/validateWhitelistedKeys';
+export {
+  default as validateRequiredKeys,
+} from './validators/validateRequiredKeys';
 export { default as validateValues } from './validators/validateValues';
