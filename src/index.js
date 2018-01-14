@@ -3,6 +3,7 @@ export { default as withField } from './utils/withField';
 
 // Helpers
 export { default as anyOfValidator } from './helpers/anyOfValidator';
+export { default as allOfValidator } from './helpers/allOfValidator';
 export { default as orValidator } from './helpers/orValidator';
 export {
   default as numberWithUnitValidator,

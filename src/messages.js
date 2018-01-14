@@ -1,6 +1,6 @@
 import { always } from 'ramda';
 import { joinWithComma, quoteAndJoinWithComma } from './utils';
-import { joinWithAnd } from '../lib/utils';
+import { joinWithAnd, joinWithOr } from '../lib/utils';
 
 export const fieldErrorMessage = (field, errorMessage) =>
   `Field '${field}': ${errorMessage}`;
@@ -32,4 +32,5 @@ export const missingRequiredKeyErrorMessage = keys =>
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
 
-export const orErrorMessages = joinWithAnd;
+export const andErrorMessages = joinWithAnd;
+export const orErrorMessages = joinWithOr;
