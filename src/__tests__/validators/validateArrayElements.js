@@ -4,6 +4,9 @@ import { validateArrayElements } from '../../index';
 
 const { Success, Failure } = Validation;
 
+const message1 = `message1`;
+const message2 = `message2`;
+
 describe(`validateArrayElements()`, () => {
   describe(`when array is empty`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
@@ -36,16 +39,15 @@ describe(`validateArrayElements()`, () => {
     describe(`as first item`, () => {
       it(`returns a Validation.Failiure with messsage`, () => {
         const value = [1, 2, 3];
-        const message = `message`;
         const v1 = sinon.stub();
-        v1.onFirstCall().returns(Failure(message));
-        v1.onSecondCall().returns(Success(message));
-        v1.onThirdCall().returns(Success(message));
+        v1.onFirstCall().returns(Failure(message1));
+        v1.onSecondCall().returns(Success(message1));
+        v1.onThirdCall().returns(Success(message1));
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Array contained invalid element(s): '1': message`,
+          `Array contained invalid element(s): '1': message1`,
         ]);
         expect(v1.calledWith(1)).toBeTruthy();
         expect(v1.calledWith(2)).toBeTruthy();
@@ -57,16 +59,15 @@ describe(`validateArrayElements()`, () => {
     describe(`as middle item`, () => {
       it(`returns a Validation.Failiure with messsage`, () => {
         const value = [1, 2, 3];
-        const message = `message`;
         const v1 = sinon.stub();
         v1.onFirstCall().returns(Success());
-        v1.onSecondCall().returns(Failure(message));
+        v1.onSecondCall().returns(Failure(message1));
         v1.onThirdCall().returns(Success());
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Array contained invalid element(s): '2': message`,
+          `Array contained invalid element(s): '2': message1`,
         ]);
         expect(v1.calledWith(1)).toBeTruthy();
         expect(v1.calledWith(2)).toBeTruthy();
@@ -77,16 +78,15 @@ describe(`validateArrayElements()`, () => {
     describe(`as last item`, () => {
       it(`returns a Validation.Failiure with messsage`, () => {
         const value = [1, 2, 3];
-        const message = `message`;
         const v1 = sinon.stub();
         v1.onFirstCall().returns(Success());
         v1.onSecondCall().returns(Success());
-        v1.onThirdCall().returns(Failure(message));
+        v1.onThirdCall().returns(Failure(message1));
         const validator = validateArrayElements(v1);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
         expect(validation.value).toEqual([
-          `Array contained invalid element(s): '3': message`,
+          `Array contained invalid element(s): '3': message1`,
         ]);
         expect(v1.calledWith(1)).toBeTruthy();
         expect(v1.calledWith(2)).toBeTruthy();
@@ -98,8 +98,6 @@ describe(`validateArrayElements()`, () => {
     describe(`multiple items`, () => {
       it(`returns a Validation.Failiure with messsage`, () => {
         const value = [1, 2, 3];
-        const message1 = `message1`;
-        const message2 = `message2`;
         const v1 = sinon.stub();
         v1.onFirstCall().returns(Failure(message1));
         v1.onSecondCall().returns(Success());
