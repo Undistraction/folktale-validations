@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale';
-import { validateKeys } from '../../index';
+import { validateWhitelistedKeys } from '../../index';
 
 const { Success, Failure } = Validation;
 
@@ -18,12 +18,12 @@ const invalidObject = {
 
 const validKeys = [`alpha`, `bravo`, `charlie`];
 
-const validateKeysWithKeys = validateKeys(validKeys);
+const validateWhitelistedKeysWithKeys = validateWhitelistedKeys(validKeys);
 
-describe(`validateKeys()`, () => {
+describe(`validateWhitelistedKeys()`, () => {
   describe(`when object has only valid keys`, () => {
     it(`returns a Validation.Success with a value of the object`, () => {
-      const validation = validateKeysWithKeys(validObject);
+      const validation = validateWhitelistedKeysWithKeys(validObject);
       expect(Success.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual(validObject);
     });
@@ -31,7 +31,7 @@ describe(`validateKeys()`, () => {
 
   describe(`when object has only invalid keys`, () => {
     it(`returns a Validation.Failure with a value of an array of the invalid keys`, () => {
-      const validation = validateKeysWithKeys(invalidObject);
+      const validation = validateWhitelistedKeysWithKeys(invalidObject);
       expect(Failure.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual([
         `Object included invalid key(s): '[delta, echo]'`,
@@ -42,7 +42,7 @@ describe(`validateKeys()`, () => {
   describe(`when object has no keys`, () => {
     it(`returns a Validation.Success with a value of the object`, () => {
       const o = {};
-      const validation = validateKeysWithKeys({});
+      const validation = validateWhitelistedKeysWithKeys({});
       expect(Success.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual(o);
     });
