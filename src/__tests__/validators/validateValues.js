@@ -126,8 +126,8 @@ describe(`validateValues()`, () => {
   });
 
   describe(`with a validator but no key`, () => {
-    it(`returns a Validation.Failure with supplied value`, () => {
-      const v1 = sinon.stub().returns(Failure());
+    it(`returns a Validation.Success with supplied value`, () => {
+      const v1 = sinon.spy();
       const value = {
         a: key1,
       };
@@ -136,11 +136,9 @@ describe(`validateValues()`, () => {
       };
       const validator = validateValues(validators);
       const validation = validator(value);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([
-        `Object included invalid values(s): Key 'b': undefined`,
-      ]);
-      expect(v1.calledWith(undefined)).toBeTruthy();
+      expect(Success.hasInstance(validation)).toBeTruthy();
+      expect(validation.value).toEqual(value);
+      expect(v1.notCalled).toBeTruthy();
     });
   });
 });
