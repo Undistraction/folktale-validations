@@ -15,6 +15,7 @@ export { default as ifDefinedValidator } from './helpers/ifDefinedValidator';
 export { default as typeValidator } from './helpers/typeValidator';
 
 // Validators
+export { default as validateIsFunction } from './validators/validateIsFunction';
 export { default as validateIsBoolean } from './validators/validateIsBoolean';
 export { default as validateIsString } from './validators/validateIsString';
 export { default as validateIsObject } from './validators/validateIsObject';
