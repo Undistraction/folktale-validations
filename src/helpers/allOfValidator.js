@@ -1,10 +1,18 @@
-import { compose, map, when } from 'ramda';
+import { compose, when, reduce, flip, append } from 'ramda';
 import { isArray } from 'ramda-adjunct';
 
-import { collect, Failure } from 'folktale/validation';
-import { orErrorMessages } from '../../lib/messages';
+import { Success, Failure } from 'folktale/validation';
+import { andErrorMessages } from '../messages';
+
+const toErr = compose(
+  Failure,
+  flip(append)([]),
+  when(isArray, andErrorMessages)
+);
 
 export default validators => o =>
-  compose(collect, map(validator => validator(o)))(validators).orElse(message =>
-    Failure(when(isArray, orErrorMessages)(message))
-  );
+  reduce(
+    (acc, validator) => acc.concat(validator(o)),
+    Success(o),
+    validators
+  ).orElse(toErr);

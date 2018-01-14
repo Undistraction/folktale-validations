@@ -31,13 +31,13 @@ describe(`allOfValidator()`, () => {
     describe(`with first validation failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
-        const v1 = sinon.stub().returns(Failure(message1));
+        const v1 = sinon.stub().returns(Failure([message1]));
         const v2 = sinon.stub().returns(Success(value));
         const v3 = sinon.stub().returns(Success(value));
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message1);
+        expect(validation.value).toEqual([message1]);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -48,12 +48,12 @@ describe(`allOfValidator()`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
         const v1 = sinon.stub().returns(Success(value));
-        const v2 = sinon.stub().returns(Failure(message1));
+        const v2 = sinon.stub().returns(Failure([message1]));
         const v3 = sinon.stub().returns(Success(value));
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message1);
+        expect(validation.value).toEqual([message1]);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -64,11 +64,11 @@ describe(`allOfValidator()`, () => {
         const value = 1;
         const v1 = sinon.stub().returns(Success(value));
         const v2 = sinon.stub().returns(Success(value));
-        const v3 = sinon.stub().returns(Failure(message1));
+        const v3 = sinon.stub().returns(Failure([message1]));
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(message1);
+        expect(validation.value).toEqual([message1]);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -84,9 +84,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(
-          andErrorMessages([message1, message2, message3])
-        );
+        expect(validation.value).toEqual([
+          andErrorMessages([message1, message2, message3]),
+        ]);
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
