@@ -1,8 +1,9 @@
+import { validation as Validation } from 'folktale';
 import { compose, when, reduce, flip, append } from 'ramda';
 import { isArray } from 'ramda-adjunct';
-
-import { Success, Failure } from 'folktale/validation';
 import { andErrorMessages } from '../messages';
+
+const { Success, Failure } = Validation;
 
 const toErr = compose(
   Failure,
