@@ -3,17 +3,18 @@ import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 
 export default {
-  name: `folktale-validations`,
   input: `src/index.js`,
   output: {
+    name: `folktale-validations`,
     file: `dist/folktale-validations.js`,
     format: `umd`,
+    globals: { ramda: `R`, ramdaAdjunct: `RA`, folktale: `folktale` },
   },
   // Define modules that shouldn't be included in the build. It is assumed they
   // will be available via globals at runtime.
   external: [`ramda`],
   // Define how external global modules should be referenced in the UMD bundle
-  globals: { ramda: `R`, ramdaAdjunct: `RA`, folktale: `folktale` },
+
   plugins: [
     nodeResolve(),
     babel({
