@@ -22,7 +22,7 @@ export default [
   {
     name: `isRequired`,
     validator: validateIsBoolean,
-    default: false,
+    defaultValue: false,
   },
   {
     name: `default`,

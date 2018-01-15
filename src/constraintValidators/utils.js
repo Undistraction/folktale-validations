@@ -32,3 +32,9 @@ export const transformersMap = reduce(
     isNotUndefined(transformer) ? assoc(name, transformer, acc) : acc,
   {}
 );
+
+export const defaultsMap = reduce(
+  (acc, { name, defaultValue }) =>
+    isNotUndefined(defaultValue) ? assoc(name, defaultValue, acc) : acc,
+  {}
+);

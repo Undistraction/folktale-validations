@@ -53,6 +53,3 @@ export {
 export {
   default as validateObjectKeysWithConstraints,
 } from './constraintValidators/validateObjectKeysWithConstraints';
-export {
-  default as validateObjectValuesWithConstraints,
-} from './constraintValidators/validateObjectValuesWithConstraints';

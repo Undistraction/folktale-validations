@@ -7,13 +7,12 @@ const { Success, Failure } = Validation;
 
 describe(`validateConstraints`, () => {
   describe(`with invalid constraints`, () => {
-    describe(`with invalid constraint array`, () => {
+    describe(`with invalid value for constraints`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const values = [`x`, 5, true, false, null, undefined, NaN, {}, /x/];
         map(value => {
           const validation = validateConstraints(value);
-          expect(Failure.hasInstance(validation)).toBeTruthy();
-          expect(validation.value).toEqual([`Wasn't type: 'Array'`]);
+          expect(validation).toEqual(Failure([`Wasn't type: 'Array'`]));
         }, values);
       });
     });
@@ -22,10 +21,11 @@ describe(`validateConstraints`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const value = [`x`, false];
         const validation = validateConstraints(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([
-          `Array contained invalid element(s): 'x': Wasn't type: 'Object','false': Wasn't type: 'Object'`,
-        ]);
+        expect(validation).toEqual(
+          Failure([
+            `Array contained invalid element(s): 'x': Wasn't type: 'Object','false': Wasn't type: 'Object'`,
+          ])
+        );
       });
     });
 
@@ -33,8 +33,7 @@ describe(`validateConstraints`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const value = [];
         const validation = validateConstraints(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([`Was Empty`]);
+        expect(validation).toEqual(Failure([`Was Empty`]));
       });
     });
 
@@ -48,10 +47,11 @@ describe(`validateConstraints`, () => {
           },
         ];
         const validation = validateConstraints(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([
-          `Array contained invalid element(s): '[object Object]': Object included invalid key(s): '[a]'`,
-        ]);
+        expect(validation).toEqual(
+          Failure([
+            `Array contained invalid element(s): '[object Object]': Object included invalid key(s): '[a]'`,
+          ])
+        );
       });
     });
 
@@ -72,10 +72,11 @@ describe(`validateConstraints`, () => {
         const values = [[`name`, value1], [`validator`, value2]];
         map(([name, value]) => {
           const validation = validateConstraints(value);
-          expect(Failure.hasInstance(validation)).toBeTruthy();
-          expect(validation.value).toEqual([
-            `Array contained invalid element(s): '[object Object]': Object was missing required key(s): ['${name}']`,
-          ]);
+          expect(validation).toEqual(
+            Failure([
+              `Array contained invalid element(s): '[object Object]': Object was missing required key(s): ['${name}']`,
+            ])
+          );
         }, values);
       });
     });
@@ -100,17 +101,14 @@ describe(`validateConstraints`, () => {
         },
       ];
       const validation = validateConstraints(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
   describe(`with own constraint obj`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
-      const value = CONSTRAINTS;
-      const validation = validateConstraints(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      const validation = validateConstraints(CONSTRAINTS);
+      expect(validation).toEqual(Success(CONSTRAINTS));
     });
   });
 });
