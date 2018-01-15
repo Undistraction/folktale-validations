@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import sinon from 'sinon';
-import validateObjectValuesWithConstraints from '../../constraintValidators/validateObjectValuesWithConstraints';
+import { validateObjectValuesWithConstraints } from '../../index';
 
 const { Success, Failure } = Validation;
 
@@ -72,7 +72,6 @@ describe(`validateObjectValuesWithConstraints()`, () => {
           a: `t1 transformed ${value1}`,
           b: `t2 transformed ${value2}`,
         });
-        console.log(`t1 calls`, t1.calls);
         expect(v1.calledWith(value1)).toBeTruthy();
         expect(v2.calledWith(value2)).toBeTruthy();
         expect(t1.calledWith(value1)).toBeTruthy();

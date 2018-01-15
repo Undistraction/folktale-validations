@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import sinon from 'sinon';
-import validateObjectKeysWithConstraints from '../../constraintValidators/validateObjectKeysWithConstraints';
+import { validateObjectKeysWithConstraints } from '../../index';
 import { invalidKeysErrorMessage } from '../../messages';
 
 const { Success, Failure } = Validation;
