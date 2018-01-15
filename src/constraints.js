@@ -1,7 +1,7 @@
-import { validateIsString } from './validators/validateIsString';
-import { validateIsBoolean } from './validators/validateIsBoolean';
-import { validateIsFunction } from './validators/validateIsFunction';
-import { validateIsNotUndefined } from './validators/validateIsNotUndefined';
+import validateIsString from './validators/validateIsString';
+import validateIsBoolean from './validators/validateIsBoolean';
+import validateIsFunction from './validators/validateIsFunction';
+import validateIsNotUndefined from './validators/validateIsNotUndefined';
 
 // eslint-disable-next-line import/prefer-default-export
 export default [
@@ -25,7 +25,7 @@ export default [
     defaultValue: false,
   },
   {
-    name: `default`,
+    name: `defaultValue`,
     validator: validateIsNotUndefined,
   },
 ];

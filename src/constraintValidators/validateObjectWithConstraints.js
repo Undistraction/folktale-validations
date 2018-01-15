@@ -3,6 +3,7 @@ import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
 import validateValues from '../validators/validateValues';
 import validateConstraints from './validateConstraints';
+import applyDefaultsWithConstraints from './applyDefaultsWithConstraints';
 import transformValuesWithConstraints from './transformValuesWithConstraints';
 import { validatorsMap } from './utils';
 
@@ -12,6 +13,7 @@ export default constraints => o =>
       untilFailureValidator([
         validateObjectKeysWithConstraints(constraints),
         validateValues(validatorsMap(constraints)),
+        applyDefaultsWithConstraints(constraints),
         transformValuesWithConstraints(constraints),
       ])(o),
     Failure: identity,

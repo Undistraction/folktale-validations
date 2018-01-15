@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
 import { map } from 'ramda';
 import validateConstraints from '../../constraintValidators/validateConstraints';
-import { CONSTRAINTS } from '../../../lib/constraints';
+import CONSTRAINTS from '../../constraints';
 
 const { Success, Failure } = Validation;
 
@@ -90,14 +90,14 @@ describe(`validateConstraints`, () => {
           validator() {},
           isRequired: true,
           transformer() {},
-          default: true,
+          defaultValue: true,
         },
         {
           name: `b`,
           validator() {},
           isRequired: true,
           transformer() {},
-          default: true,
+          defaultValue: true,
         },
       ];
       const validation = validateConstraints(value);
