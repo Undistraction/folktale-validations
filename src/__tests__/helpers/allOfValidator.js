@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
-import sinon from 'sinon';
 import { allOfValidator } from '../../index';
 import { andErrorMessages } from '../../messages';
+import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 
@@ -14,13 +14,12 @@ describe(`allOfValidator()`, () => {
     describe(`with all validations succeeding`, () => {
       it(`returns a Validation.Success`, () => {
         const value = true;
-        const v1 = sinon.stub().returns(Success(value));
-        const v2 = sinon.stub().returns(Success(value));
-        const v3 = sinon.stub().returns(Success(value));
+        const v1 = stubReturnsSuccess(value);
+        const v2 = stubReturnsSuccess(value);
+        const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(Success.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(value);
+        expect(validation).toEqual(Success(value));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -31,13 +30,12 @@ describe(`allOfValidator()`, () => {
     describe(`with first validation failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
-        const v1 = sinon.stub().returns(Failure([message1]));
-        const v2 = sinon.stub().returns(Success(value));
-        const v3 = sinon.stub().returns(Success(value));
+        const v1 = stubReturnsFailure(message1);
+        const v2 = stubReturnsSuccess(value);
+        const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([message1]);
+        expect(validation).toEqual(Failure([message1]));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -47,13 +45,12 @@ describe(`allOfValidator()`, () => {
     describe(`with second validation failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
-        const v1 = sinon.stub().returns(Success(value));
-        const v2 = sinon.stub().returns(Failure([message1]));
-        const v3 = sinon.stub().returns(Success(value));
+        const v1 = stubReturnsSuccess(value);
+        const v2 = stubReturnsFailure(message1);
+        const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([message1]);
+        expect(validation).toEqual(Failure([message1]));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -62,13 +59,12 @@ describe(`allOfValidator()`, () => {
     describe(`with second validation failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
-        const v1 = sinon.stub().returns(Success(value));
-        const v2 = sinon.stub().returns(Success(value));
-        const v3 = sinon.stub().returns(Failure([message1]));
+        const v1 = stubReturnsSuccess(value);
+        const v2 = stubReturnsSuccess(value);
+        const v3 = stubReturnsFailure(message1);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([message1]);
+        expect(validation).toEqual(Failure([message1]));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -78,15 +74,14 @@ describe(`allOfValidator()`, () => {
     describe(`with all validations failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
-        const v1 = sinon.stub().returns(Failure([message1]));
-        const v2 = sinon.stub().returns(Failure([message2]));
-        const v3 = sinon.stub().returns(Failure([message3]));
+        const v1 = stubReturnsFailure(message1);
+        const v2 = stubReturnsFailure(message2);
+        const v3 = stubReturnsFailure(message3);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([
-          andErrorMessages([message1, message2, message3]),
-        ]);
+        expect(validation).toEqual(
+          Failure([andErrorMessages([message1, message2, message3])])
+        );
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();

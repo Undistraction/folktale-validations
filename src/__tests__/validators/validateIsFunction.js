@@ -8,8 +8,7 @@ describe(`validateIsFunction()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = function() {};
       const validation = validateIsFunction(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
@@ -17,7 +16,7 @@ describe(`validateIsFunction()`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsFunction();
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'Function'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'Function'`]));
     });
   });
 });

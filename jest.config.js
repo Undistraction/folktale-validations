@@ -6,5 +6,10 @@ module.exports = {
   coveragePathIgnorePatterns: [`src/index.js`],
   coverageReporters: [`json`],
   setupFiles: [],
-  modulePathIgnorePatterns: [`sharedTests/`, `data.js`, `featureValues.js`],
+  modulePathIgnorePatterns: [
+    `sharedTests/`,
+    `data.js`,
+    `featureValues.js`,
+    `testHelpers/`,
+  ],
 };

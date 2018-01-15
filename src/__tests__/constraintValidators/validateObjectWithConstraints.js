@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
-import sinon from 'sinon';
 import { validateObjectWithConstraints } from '../../index';
+import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 
@@ -8,7 +8,7 @@ describe(`validateObjectWithConstraints`, () => {
   describe(`with a value that satisfies constraints`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
       const value1 = 1;
-      const v1 = sinon.stub().returns(Success(value1));
+      const v1 = stubReturnsSuccess(value1);
       const o = {
         a: value1,
       };
@@ -27,8 +27,7 @@ describe(`validateObjectWithConstraints`, () => {
 
       const validator = validateObjectWithConstraints(constraints);
       const validation = validator(o);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(o);
+      expect(validation).toEqual(Success(o));
       expect(v1.calledWith(value1)).toBeTruthy();
     });
 
@@ -73,8 +72,8 @@ describe(`validateObjectWithConstraints`, () => {
     it(`returns a Validation.Failure with message`, () => {
       const value1 = 1;
       const message1 = `message1`;
-      const v1 = sinon.stub().returns(Success(value1));
-      const v2 = sinon.stub().returns(Failure(message1));
+      const v1 = stubReturnsSuccess(value1);
+      const v2 = stubReturnsFailure(message1);
       const o = {
         a: value1,
       };
@@ -94,10 +93,9 @@ describe(`validateObjectWithConstraints`, () => {
 
       const validator = validateObjectWithConstraints(constraints);
       const validation = validator(o);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([
-        `Object was missing required key(s): ['b']`,
-      ]);
+      expect(validation).toEqual(
+        Failure([`Object was missing required key(s): ['b']`])
+      );
     });
   });
 });

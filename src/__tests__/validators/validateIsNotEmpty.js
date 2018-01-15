@@ -9,8 +9,7 @@ describe(`validateIsNotEmpty()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = [1];
       const validation = validateIsNotEmpty(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
@@ -18,8 +17,7 @@ describe(`validateIsNotEmpty()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = { a: 1 };
       const validation = validateIsNotEmpty(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
@@ -28,7 +26,7 @@ describe(`validateIsNotEmpty()`, () => {
       const value = [];
       const validation = validateIsNotEmpty(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([isEmptyErrorMessage()]);
+      expect(validation).toEqual(Failure([isEmptyErrorMessage()]));
     });
   });
 
@@ -36,8 +34,7 @@ describe(`validateIsNotEmpty()`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const value = {};
       const validation = validateIsNotEmpty(value);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([isEmptyErrorMessage()]);
+      expect(validation).toEqual(Failure([isEmptyErrorMessage()]));
     });
   });
 });

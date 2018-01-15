@@ -8,16 +8,14 @@ describe(`validateIsArray()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = [];
       const validation = validateIsArray(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
   describe(`when argument is not an array`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsArray();
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'Array'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'Array'`]));
     });
   });
 });

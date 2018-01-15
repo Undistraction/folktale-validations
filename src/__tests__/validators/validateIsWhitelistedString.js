@@ -11,16 +11,14 @@ describe(`validateIsWhitelistedString()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = `b`;
       const validation = validator(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
 
     describe(`when value is first item`, () => {
       it(`returns a Validation.Success with the supplied value`, () => {
         const value = `a`;
         const validation = validator(value);
-        expect(Success.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(value);
+        expect(validation).toEqual(Success(value));
       });
     });
 
@@ -28,8 +26,7 @@ describe(`validateIsWhitelistedString()`, () => {
       it(`returns a Validation.Success with the supplied value`, () => {
         const value = `c`;
         const validation = validator(value);
-        expect(Success.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual(value);
+        expect(validation).toEqual(Success(value));
       });
     });
   });
@@ -38,10 +35,9 @@ describe(`validateIsWhitelistedString()`, () => {
     describe(`when no value is passed`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([
-          `Value wan't one of the accepted values: a, b, c`,
-        ]);
+        expect(validation).toEqual(
+          Failure([`Value wan't one of the accepted values: a, b, c`])
+        );
       });
     });
 
@@ -49,10 +45,9 @@ describe(`validateIsWhitelistedString()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const value = `d`;
         const validation = validator(value);
-        expect(Failure.hasInstance(validation)).toBeTruthy();
-        expect(validation.value).toEqual([
-          `Value wan't one of the accepted values: a, b, c`,
-        ]);
+        expect(validation).toEqual(
+          Failure([`Value wan't one of the accepted values: a, b, c`])
+        );
       });
     });
   });

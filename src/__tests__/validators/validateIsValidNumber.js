@@ -9,7 +9,7 @@ describe(`validateIsValidNumber()`, () => {
       const value = 1;
       const validation = validateIsValidNumber(value);
       expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
@@ -18,7 +18,7 @@ describe(`validateIsValidNumber()`, () => {
       const value = `x`;
       const validation = validateIsValidNumber(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't a valid Number`]);
+      expect(validation).toEqual(Failure([`Wasn't a valid Number`]));
     });
   });
 });

@@ -15,8 +15,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.spy();
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(Failure.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(failureMessage);
+        expect(result).toEqual(Failure(failureMessage));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.notCalled).toBeTruthy();
         expect(v3.notCalled).toBeTruthy();
@@ -32,8 +31,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.spy();
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(Failure.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(failureMessage);
+        expect(result).toEqual(Failure(failureMessage));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.notCalled).toBeTruthy();
@@ -49,8 +47,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.stub().returns(Failure(failureMessage));
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(Failure.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(failureMessage);
+        expect(result).toEqual(Failure(failureMessage));
         expect(v1.calledWith(value)).toBeTruthy();
         expect(v2.calledWith(value)).toBeTruthy();
         expect(v3.calledWith(value)).toBeTruthy();
@@ -66,8 +63,7 @@ describe(`untilFailureValidator()`, () => {
       const v3 = sinon.stub().returns(Success(value));
       const validator = untilFailureValidator([v1, v2, v3]);
       const result = validator(value);
-      expect(Success.hasInstance(result)).toBeTruthy();
-      expect(result.value).toEqual(value);
+      expect(result).toEqual(Success(value));
       expect(v1.calledWith(value)).toBeTruthy();
       expect(v2.calledWith(value)).toBeTruthy();
       expect(v3.calledWith(value)).toBeTruthy();

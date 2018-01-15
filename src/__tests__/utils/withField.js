@@ -14,8 +14,7 @@ describe(`withField()`, () => {
       const v1 = sinon.stub().returns(Failure(message));
       const validator = withField(field, v1);
       const validation = validator(value);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(fieldErrorMessage(field, message));
+      expect(validation).toEqual(Failure(fieldErrorMessage(field, message)));
       expect(v1.calledWith(value)).toBeTruthy();
     });
   });
@@ -29,8 +28,7 @@ describe(`withField()`, () => {
       const validation = validator(value);
 
       expect(validation).toEqual(validation);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
       expect(v1.calledWith(value)).toBeTruthy();
     });
   });

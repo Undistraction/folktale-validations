@@ -1,6 +1,10 @@
 import { validation as Validation } from 'folktale';
-import sinon from 'sinon';
 import chain from '../../utils/chain';
+import {
+  spy,
+  stubReturnsFailure,
+  stubReturnsSuccess,
+} from '../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 
@@ -9,8 +13,9 @@ describe(`chain()`, () => {
     it(`returns an equal Validation.Faliure`, () => {
       const message = `message`;
       const acc = Failure(message);
-      const validator = sinon.spy();
+      const validator = spy();
       const result = chain(acc, validator);
+      expect(result).toEqual(Failure(message));
       expect(result.equals(acc)).toBeTruthy();
       expect(validator.notCalled).toBeTruthy();
     });
@@ -22,10 +27,9 @@ describe(`chain()`, () => {
         const message = `message`;
         const value = `x`;
         const acc = Success(value);
-        const validator = sinon.stub().returns(Failure(message));
+        const validator = stubReturnsFailure(message);
         const result = chain(acc, validator);
-        expect(Failure.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(message);
+        expect(result).toEqual(Failure([message]));
         expect(validator.calledWith(value)).toBeTruthy();
       });
     });
@@ -34,10 +38,9 @@ describe(`chain()`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const value = `x`;
         const acc = Success(value);
-        const validator = sinon.stub().returns(Success(value));
+        const validator = stubReturnsSuccess(value);
         const result = chain(acc, validator);
-        expect(Success.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(value);
+        expect(result).toEqual(Success(value));
         expect(validator.calledWith(value)).toBeTruthy();
       });
     });

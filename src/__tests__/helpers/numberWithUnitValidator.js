@@ -14,8 +14,7 @@ describe(`numberWithUnitValidator`, () => {
         const value = `${number}${unit}`;
         const validator = numberWithUnitValidator(unit);
         const result = validator(value);
-        expect(Success.hasInstance(result)).toBeTruthy();
-        expect(result.value).toEqual(value);
+        expect(result).toEqual(Success(value));
       })(numbers);
     });
   });
@@ -29,8 +28,7 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = numberWithUnitValidator(unit);
           const result = validator(value);
-          expect(Failure.hasInstance(result)).toBeTruthy();
-          expect(result.value).toEqual([numberWithUnitErrorMessage(unit)]);
+          expect(result).toEqual(Failure([numberWithUnitErrorMessage(unit)]));
         })(numbers);
       });
     });
@@ -44,7 +42,7 @@ describe(`numberWithUnitValidator`, () => {
           const validator = numberWithUnitValidator(unit);
           const result = validator(value);
           expect(Failure.hasInstance(result)).toBeTruthy();
-          expect(result.value).toEqual([numberWithUnitErrorMessage(unit)]);
+          expect(result).toEqual(Failure([numberWithUnitErrorMessage(unit)]));
         })(numbers);
       });
     });
@@ -57,8 +55,7 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = numberWithUnitValidator(unit);
           const result = validator(value);
-          expect(Failure.hasInstance(result)).toBeTruthy();
-          expect(result.value).toEqual([numberWithUnitErrorMessage(unit)]);
+          expect(result).toEqual(Failure([numberWithUnitErrorMessage(unit)]));
         })(numbers);
       });
     });

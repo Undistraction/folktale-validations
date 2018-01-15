@@ -8,7 +8,7 @@ describe(`validateIsUndefined()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const validation = validateIsUndefined();
       expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(undefined);
+      expect(validation).toEqual(Success(undefined));
     });
   });
 
@@ -17,7 +17,7 @@ describe(`validateIsUndefined()`, () => {
       const value = true;
       const validation = validateIsUndefined(value);
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'Undefined'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'Undefined'`]));
     });
   });
 });

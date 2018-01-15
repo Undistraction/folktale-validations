@@ -12,7 +12,6 @@ export { default as predicateValidator } from './helpers/predicateValidator';
 export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator';
-export { default as ifDefinedValidator } from './helpers/ifDefinedValidator';
 export { default as typeValidator } from './helpers/typeValidator';
 
 // Validators

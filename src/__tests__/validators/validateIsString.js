@@ -9,7 +9,7 @@ describe(`validateIsString()`, () => {
       const value = `x`;
       const validation = validateIsString(value);
       expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
@@ -17,7 +17,7 @@ describe(`validateIsString()`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsString();
       expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'String'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'String'`]));
     });
   });
 });

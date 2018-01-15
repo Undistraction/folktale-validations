@@ -12,8 +12,7 @@ describe(`predicateValidator`, () => {
       const message = `message`;
       const validator = predicateValidator(p, message);
       const validation = validator(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
       expect(p.calledOnce).toBeTruthy();
       expect(p.calledWith(true)).toBeTruthy();
     });
@@ -26,8 +25,7 @@ describe(`predicateValidator`, () => {
       const message = `message`;
       const validator = predicateValidator(p, message);
       const validation = validator(value);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([message]);
+      expect(validation).toEqual(Failure([message]));
       expect(p.calledOnce).toBeTruthy();
       expect(p.calledWith(true)).toBeTruthy();
     });

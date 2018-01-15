@@ -24,18 +24,16 @@ describe(`validateWhitelistedKeys()`, () => {
   describe(`when object has only valid keys`, () => {
     it(`returns a Validation.Success with a value of the object`, () => {
       const validation = validateWhitelistedKeysWithKeys(validObject);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(validObject);
+      expect(validation).toEqual(Success(validObject));
     });
   });
 
   describe(`when object has only invalid keys`, () => {
     it(`returns a Validation.Failure with a value of an array of the invalid keys`, () => {
       const validation = validateWhitelistedKeysWithKeys(invalidObject);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([
-        `Object included invalid key(s): '[delta, echo]'`,
-      ]);
+      expect(validation).toEqual(
+        Failure([`Object included invalid key(s): '[delta, echo]'`])
+      );
     });
   });
 
@@ -43,8 +41,7 @@ describe(`validateWhitelistedKeys()`, () => {
     it(`returns a Validation.Success with a value of the object`, () => {
       const o = {};
       const validation = validateWhitelistedKeysWithKeys({});
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(o);
+      expect(validation).toEqual(Success(o));
     });
   });
 });

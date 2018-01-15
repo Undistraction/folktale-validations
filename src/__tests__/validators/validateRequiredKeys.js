@@ -11,10 +11,9 @@ describe(`validate required keys`, () => {
       const value = {};
       const validator = validateRequiredKeys(requiredKeys);
       const result = validator(value);
-      expect(Failure.hasInstance(result)).toBeTruthy();
-      expect(result.value).toEqual([
-        missingRequiredKeyErrorMessage(requiredKeys),
-      ]);
+      expect(result).toEqual(
+        Failure([missingRequiredKeyErrorMessage(requiredKeys)])
+      );
     });
   });
 
@@ -28,8 +27,7 @@ describe(`validate required keys`, () => {
       };
       const validator = validateRequiredKeys(requiredKeys);
       const result = validator(value);
-      expect(Success.hasInstance(result)).toBeTruthy();
-      expect(result.value).toEqual(value);
+      expect(result).toEqual(Success(value));
     });
   });
 });

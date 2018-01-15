@@ -8,16 +8,14 @@ describe(`validateIsBoolean()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = true;
       const validation = validateIsBoolean(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
   describe(`when argument is not an object`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsBoolean();
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'Boolean'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'Boolean'`]));
     });
   });
 });

@@ -8,16 +8,14 @@ describe(`validateIsObject()`, () => {
     it(`returns a Validation.Success with the supplied object`, () => {
       const value = {};
       const validation = validateIsObject(value);
-      expect(Success.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual(value);
+      expect(validation).toEqual(Success(value));
     });
   });
 
   describe(`when argument is not an object`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const validation = validateIsObject();
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation.value).toEqual([`Wasn't type: 'Object'`]);
+      expect(validation).toEqual(Failure([`Wasn't type: 'Object'`]));
     });
   });
 });

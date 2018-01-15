@@ -30,11 +30,12 @@ describe(`transformValuesWithConstraints`, () => {
 
     const validator = transformValuesWithConstraints(constraints);
     const validation = validator(o);
-    expect(Success.hasInstance(validation)).toBeTruthy();
-    expect(validation.value).toEqual({
-      a: `t1 transformed ${value1}`,
-      b: `t2 transformed ${value2}`,
-    });
+    expect(validation).toEqual(
+      Success({
+        a: `t1 transformed ${value1}`,
+        b: `t2 transformed ${value2}`,
+      })
+    );
     expect(t1.calledWith(value1)).toBeTruthy();
     expect(t2.calledWith(value2)).toBeTruthy();
   });
