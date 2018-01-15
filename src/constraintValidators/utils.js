@@ -1,7 +1,21 @@
-import { has, pluck, prop, compose, filter, map, reduce, assoc } from 'ramda';
-import { isNotUndefined } from 'ramda-adjunct';
+import {
+  has,
+  pluck,
+  prop,
+  compose,
+  filter,
+  map,
+  reduce,
+  assoc,
+  both,
+  propSatisfies,
+} from 'ramda';
+import { isNotUndefined, isTruthy } from 'ramda-adjunct';
 
-const hasIsRequiredKey = has(`isRequired`);
+const hasIsRequiredKey = both(
+  has(`isRequired`),
+  compose(isTruthy, propSatisfies(isTruthy, `isRequired`))
+);
 const propName = prop(`name`);
 
 export const pluckName = pluck(`name`);

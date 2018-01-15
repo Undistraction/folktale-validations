@@ -4,8 +4,8 @@ import { valueErrorMessage, valuesErrorMessage } from '../messages';
 
 const { Success, Failure } = Validation;
 
-const validate = validators => (acc, [name, v]) => {
-  const validator = validators[name];
+const validate = validatorsMap => (acc, [name, v]) => {
+  const validator = validatorsMap[name];
   return validator
     ? validator(v).matchWith({
         Success: _ => acc,
@@ -15,7 +15,7 @@ const validate = validators => (acc, [name, v]) => {
     : acc;
 };
 
-export default validators => o =>
-  compose(reduce(validate(validators), Success(o)), toPairs)(o).orElse(
+export default validatorsMap => o =>
+  compose(reduce(validate(validatorsMap), Success(o)), toPairs)(o).orElse(
     message => Failure([valuesErrorMessage(message)])
   );

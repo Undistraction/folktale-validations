@@ -4,20 +4,25 @@ import { validateIsFunction } from './validators/validateIsFunction';
 import { validateIsNotUndefined } from './validators/validateIsNotUndefined';
 
 // eslint-disable-next-line import/prefer-default-export
-export const CONSTRAINTS = [
+export default [
   {
     name: `name`,
     validator: validateIsString,
     isRequired: true,
   },
   {
-    name: `isRequired`,
-    validator: validateIsBoolean,
-  },
-  {
     name: `validator`,
     validator: validateIsFunction,
     isRequired: true,
+  },
+  {
+    name: `transformer`,
+    validator: validateIsFunction,
+  },
+  {
+    name: `isRequired`,
+    validator: validateIsBoolean,
+    default: false,
   },
   {
     name: `default`,
