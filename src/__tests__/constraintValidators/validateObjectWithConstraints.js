@@ -27,7 +27,6 @@ describe(`validateObjectWithConstraints`, () => {
 
       const validator = validateObjectWithConstraints(constraints);
       const validation = validator(o);
-      console.log(`VAL`, validation);
       expect(Success.hasInstance(validation)).toBeTruthy();
       expect(validation.value).toEqual(o);
       expect(v1.calledWith(value1)).toBeTruthy();

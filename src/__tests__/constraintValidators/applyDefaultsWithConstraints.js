@@ -1,5 +1,4 @@
 import { validation as Validation } from 'folktale';
-import sinon from 'sinon';
 import applyDefaultsWithConstraints from '../../constraintValidators/applyDefaultsWithConstraints';
 
 const { Success } = Validation;
