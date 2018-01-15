@@ -1,6 +1,6 @@
 module.exports = {
   bail: true,
-  verbose: true,
+  verbose: false,
   collectCoverage: true,
   collectCoverageFrom: [`src/**/*.js`],
   coveragePathIgnorePatterns: [`src/index.js`],

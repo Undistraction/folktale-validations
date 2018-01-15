@@ -4,5 +4,6 @@ import { join, compose, map } from 'ramda';
 export const joinWithComma = join(`, `);
 export const joinWithAnd = join(` and `);
 export const joinWithOr = join(` or `);
+export const joinWitColon = join(`: `);
 export const quote = value => `'${value}'`;
 export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));

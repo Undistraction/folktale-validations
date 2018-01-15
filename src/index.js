@@ -29,6 +29,9 @@ export {
   default as validateIsUndefined,
 } from './validators/validateIsUndefined';
 export {
+  default as validateIsNotUndefined,
+} from './validators/validateIsNotUndefined';
+export {
   default as validateIsValidNumber,
 } from './validators/validateIsValidNumber';
 export {

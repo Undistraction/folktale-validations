@@ -4,7 +4,7 @@ import { validateIsUndefined } from '../../index';
 const { Success, Failure } = Validation;
 
 describe(`validateIsUndefined()`, () => {
-  describe(`when argument is a undefined`, () => {
+  describe(`when argument is undefined`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const validation = validateIsUndefined();
       expect(Success.hasInstance(validation)).toBeTruthy();
@@ -12,7 +12,7 @@ describe(`validateIsUndefined()`, () => {
     });
   });
 
-  describe(`when argument is not an object`, () => {
+  describe(`when argument is not undefined`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const value = true;
       const validation = validateIsUndefined(value);
