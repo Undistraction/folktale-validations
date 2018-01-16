@@ -24,7 +24,7 @@ export const arrayElementsErrorMessage = elementErrorMessages =>
   `Array contained invalid element(s): ${elementErrorMessages}`;
 
 export const whitelistErrorMessage = whitelist =>
-  `Value wan't one of the accepted values: ${joinWithComma(whitelist)}`;
+  `Value wasn't one of the accepted values: ${joinWithComma(whitelist)}`;
 
 export const invalidKeysErrorMessage = invalidKeys =>
   `Object included invalid key(s): '[${joinWithComma(invalidKeys)}]'`;

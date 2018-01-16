@@ -56,7 +56,7 @@ describe(`allOfValidator()`, () => {
         expect(v3.calledWith(value)).toBeTruthy();
       });
     });
-    describe(`with second validation failing`, () => {
+    describe(`with third validation failing`, () => {
       it(`returns a Validation.Failure`, () => {
         const value = 1;
         const v1 = stubReturnsSuccess(value);

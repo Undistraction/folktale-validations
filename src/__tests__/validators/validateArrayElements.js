@@ -72,7 +72,7 @@ describe(`validateArrayElements()`, () => {
     });
 
     describe(`as last item`, () => {
-      it(`returns a Validation.Failiure with messsage`, () => {
+      it(`returns a Validation.Failure with messsage`, () => {
         const value = [1, 2, 3];
         const v1 = stub();
         v1.onFirstCall().returns(Success());
