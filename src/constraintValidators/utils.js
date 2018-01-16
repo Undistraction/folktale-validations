@@ -12,13 +12,16 @@ import {
 } from 'ramda';
 import { isNotUndefined, isTruthy } from 'ramda-adjunct';
 
-const hasIsRequiredKey = both(
-  has(`isRequired`),
-  compose(isTruthy, propSatisfies(isTruthy, `isRequired`))
-);
-const propName = prop(`name`);
+const NAME_KEY = `name`;
+const IS_REQUIRED_KEY = `isRequired`;
 
-export const pluckName = pluck(`name`);
+const hasIsRequiredKey = both(
+  has(IS_REQUIRED_KEY),
+  compose(isTruthy, propSatisfies(isTruthy, IS_REQUIRED_KEY))
+);
+
+const propName = prop(NAME_KEY);
+export const pluckName = pluck(NAME_KEY);
 
 export const requiredKeys = compose(map(propName), filter(hasIsRequiredKey));
 
