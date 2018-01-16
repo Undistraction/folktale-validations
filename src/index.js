@@ -45,8 +45,14 @@ export {
 export { default as validateValues } from './validators/validateValues';
 export { default as validateIsNotEmpty } from './validators/validateIsNotEmpty';
 export {
-  default as validateLength,
-} from './validators/validateLength';
+  default as validateLengthGreaterThan,
+} from './validators/validateLengthGreaterThan';
+export {
+  default as validateLengthLessThan,
+} from './validators/validateLengthLessThan';
+export {
+  default as validateLengthBetween,
+} from './validators/validateLengthBetween';
 
 // Constraint Validators
 export {
