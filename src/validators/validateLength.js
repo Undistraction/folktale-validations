@@ -5,6 +5,6 @@ import { isInvalidLengthErrorMessage } from '../messages';
 // Use any Ramda relation that returns a boolean for numeric comparison
 export default (relation, comparator) =>
   predicateValidator(
-    compose(relation(__, comparator), length),
-    isInvalidLengthErrorMessage()
+    isInvalidLengthErrorMessage(),
+    compose(relation(__, comparator), length)
   );
