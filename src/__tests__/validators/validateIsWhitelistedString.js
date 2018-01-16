@@ -36,7 +36,7 @@ describe(`validateIsWhitelistedString()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
         expect(validation).toEqual(
-          Failure([`Value wan't one of the accepted values: a, b, c`])
+          Failure([`Value wasn't one of the accepted values: a, b, c`])
         );
       });
     });
@@ -46,7 +46,7 @@ describe(`validateIsWhitelistedString()`, () => {
         const value = `d`;
         const validation = validator(value);
         expect(validation).toEqual(
-          Failure([`Value wan't one of the accepted values: a, b, c`])
+          Failure([`Value wasn't one of the accepted values: a, b, c`])
         );
       });
     });
