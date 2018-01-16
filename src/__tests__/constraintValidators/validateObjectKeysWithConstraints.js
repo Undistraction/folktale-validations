@@ -1,5 +1,4 @@
 import { validation as Validation } from 'folktale';
-
 import { validateObjectKeysWithConstraints } from '../../index';
 import { invalidKeysErrorMessage } from '../../messages';
 import { spy } from '../testHelpers/sinon';
