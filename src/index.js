@@ -44,6 +44,9 @@ export {
 } from './validators/validateRequiredKeys';
 export { default as validateValues } from './validators/validateValues';
 export { default as validateIsNotEmpty } from './validators/validateIsNotEmpty';
+export {
+  default as validateLength,
+} from './validators/validateLength';
 
 // Constraint Validators
 export {
