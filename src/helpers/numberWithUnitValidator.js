@@ -5,6 +5,6 @@ import { numberWithUnitErrorMessage } from '../messages';
 // Create a type validator
 export default unit =>
   predicateValidator(
-    isNumberWithUnit([unit]),
-    numberWithUnitErrorMessage(unit)
+    numberWithUnitErrorMessage(unit),
+    isNumberWithUnit([unit])
   );
