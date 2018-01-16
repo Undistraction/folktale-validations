@@ -10,7 +10,7 @@ describe(`predicateValidator`, () => {
       const p = sinon.stub().returns(true);
       const value = true;
       const message = `message`;
-      const validator = predicateValidator(p, message);
+      const validator = predicateValidator(message, p);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(p.calledOnce).toBeTruthy();
@@ -23,7 +23,7 @@ describe(`predicateValidator`, () => {
       const p = sinon.stub().returns(false);
       const value = true;
       const message = `message`;
-      const validator = predicateValidator(p, message);
+      const validator = predicateValidator(message, p);
       const validation = validator(value);
       expect(validation).toEqual(Failure([message]));
       expect(p.calledOnce).toBeTruthy();
