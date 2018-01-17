@@ -47,6 +47,9 @@ export const lengthGreaterThanErrorMessage = length =>
 export const lengthLessThanErrorMessage = length =>
   `Length must be less than ${length}`;
 
+export const constraintValidatorErrorMessage = messages =>
+  `Constraints Object Invalid: ${messages}`;
+
 export const isEmptyErrorMessage = always(`Was Empty`);
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);

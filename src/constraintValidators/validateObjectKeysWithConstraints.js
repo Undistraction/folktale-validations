@@ -4,8 +4,7 @@ import validateRequiredKeys from '../validators/validateRequiredKeys';
 
 import { pluckName, requiredKeys } from './utils';
 
-export default constraints =>
-  untilFailureValidator([
+export default constraints => untilFailureValidator([
     validateWhitelistedKeys(pluckName(constraints)),
     validateRequiredKeys(requiredKeys(constraints)),
   ]);
