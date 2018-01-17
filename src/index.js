@@ -5,6 +5,7 @@ export { default as withField } from './utils/withField';
 export { default as anyOfValidator } from './helpers/anyOfValidator';
 export { default as allOfValidator } from './helpers/allOfValidator';
 export { default as orValidator } from './helpers/orValidator';
+export { default as andValidator } from './helpers/andValidator';
 export {
   default as numberWithUnitValidator,
 } from './helpers/numberWithUnitValidator';
