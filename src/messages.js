@@ -41,6 +41,12 @@ export const numberWithUnitErrorMessage = unit =>
 export const missingRequiredKeyErrorMessage = keys =>
   `Object was missing required key(s): [${quoteAndJoinWithComma(keys)}]`;
 
+export const lengthGreaterThanErrorMessage = length =>
+  `Length must be greater than ${length}`;
+
+export const lengthLessThanErrorMessage = length =>
+  `Length must be less than ${length}`;
+
 export const isEmptyErrorMessage = always(`Was Empty`);
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
