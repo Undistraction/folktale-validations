@@ -4,40 +4,46 @@ import validateIsBoolean from './validators/validateIsBoolean';
 import validateIsFunction from './validators/validateIsFunction';
 import validateIsNotUndefined from './validators/validateIsNotUndefined';
 import validateObjectWithConstraints from './constraintValidators/validateObjectWithConstraints';
+import validateExclusiveKeys from './validators/validateExclusiveKeys';
+
+const NAME = `name`;
+const VALIDATOR = `validator`;
+const IS_REQUIRED = `isRequired`;
+const DEFAULT_VALUE = `defaultValue`;
 
 const nameField = {
-  name: `name`,
-  validator: validateIsString,
+  [NAME]: `name`,
+  [VALIDATOR]: validateIsString,
   isRequired: true,
 };
 
 const validatorField = {
-  name: `validator`,
-  validator: validateIsFunction,
-  isRequired: true,
+  [NAME]: `validator`,
+  [VALIDATOR]: validateIsFunction,
+  [IS_REQUIRED]: true,
 };
 
 const transformerField = {
-  name: `transformer`,
-  validator: validateIsFunction,
+  [NAME]: `transformer`,
+  [VALIDATOR]: validateIsFunction,
 };
 
-const defaultField = {
-  name: `defaultValue`,
-  validator: validateIsNotUndefined,
+const defaultValueField = {
+  [NAME]: `defaultValue`,
+  [VALIDATOR]: validateIsNotUndefined,
 };
 
 const isRequiredField = {
-  name: `isRequired`,
-  validator: validateIsBoolean,
-  defaultValue: false,
+  [NAME]: `isRequired`,
+  [VALIDATOR]: validateIsBoolean,
+  [DEFAULT_VALUE]: false,
 };
 
 const fields = [
   nameField,
   validatorField,
   transformerField,
-  defaultField,
+  defaultValueField,
   isRequiredField,
 ];
 
@@ -47,6 +53,7 @@ const fields = [
 // };
 
 const constraints = {
+  validator: validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
   fields,
 };
 

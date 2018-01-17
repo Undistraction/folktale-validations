@@ -103,14 +103,12 @@ describe(`validateConstraints`, () => {
             validator() {},
             isRequired: true,
             transformer() {},
-            defaultValue: true,
           },
           {
             name: `b`,
             validator() {},
             isRequired: true,
             transformer() {},
-            defaultValue: true,
           },
         ],
       };
