@@ -1,7 +1,7 @@
 import { identity } from 'ramda';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
-import validateValues from '../validators/validateValues';
+import validateObjectValues from '../validators/validateObjectValues';
 import applyDefaultsWithConstraints from './applyDefaultsWithConstraints';
 import transformValuesWithConstraints from './transformValuesWithConstraints';
 import { validatorsMap } from './utils';
@@ -16,7 +16,7 @@ export default constraints => o => {
     Success: _ =>
       untilFailureValidator([
         validateObjectKeysWithConstraints(constraints.fields),
-        validateValues(validatorsMap(constraints.fields)),
+        validateObjectValues(validatorsMap(constraints.fields)),
         applyDefaultsWithConstraints(constraints.fields),
         transformValuesWithConstraints(constraints.fields),
       ])(o),

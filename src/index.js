@@ -43,7 +43,9 @@ export {
 export {
   default as validateRequiredKeys,
 } from './validators/validateRequiredKeys';
-export { default as validateValues } from './validators/validateValues';
+export {
+  default as validateObjectValues,
+} from './validators/validateObjectValues';
 export { default as validateIsNotEmpty } from './validators/validateIsNotEmpty';
 export {
   default as validateLengthGreaterThan,

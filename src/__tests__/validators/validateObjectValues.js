@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale';
-import validateValues from '../../validators/validateValues';
+import validateObjectValues from '../../validators/validateObjectValues';
 import {
   spy,
   stubReturnsFailure,
@@ -12,7 +12,7 @@ const key1 = 1;
 const key2 = 2;
 const key3 = 2;
 
-describe(`validateValues()`, () => {
+describe(`validateObjectValues()`, () => {
   describe(`with valid values`, () => {
     describe(`with first value invalid`, () => {
       it(`returns a Validation.Failure with message`, () => {
@@ -27,7 +27,7 @@ describe(`validateValues()`, () => {
           a: v1,
           b: v2,
         };
-        const validator = validateValues(validators);
+        const validator = validateObjectValues(validators);
         const validation = validator(value);
         expect(validation).toEqual(
           Failure([`Object included invalid values(s): Key 'a': message`])
@@ -50,7 +50,7 @@ describe(`validateValues()`, () => {
           a: v1,
           b: v2,
         };
-        const validator = validateValues(validators);
+        const validator = validateObjectValues(validators);
         const validation = validator(value);
         expect(validation).toEqual(
           Failure([`Object included invalid values(s): Key 'b': message`])
@@ -78,7 +78,7 @@ describe(`validateValues()`, () => {
           b: v2,
           c: v3,
         };
-        const validator = validateValues(validators);
+        const validator = validateObjectValues(validators);
         const validation = validator(value);
         expect(validation).toEqual(
           Failure([
@@ -104,7 +104,7 @@ describe(`validateValues()`, () => {
         a: v1,
         b: v2,
       };
-      const validator = validateValues(validators);
+      const validator = validateObjectValues(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.calledWith(key1)).toBeTruthy();
@@ -119,7 +119,7 @@ describe(`validateValues()`, () => {
         a: key1,
       };
       const validators = {};
-      const validator = validateValues(validators);
+      const validator = validateObjectValues(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.notCalled).toBeTruthy();
@@ -135,7 +135,7 @@ describe(`validateValues()`, () => {
       const validators = {
         b: v1,
       };
-      const validator = validateValues(validators);
+      const validator = validateObjectValues(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.notCalled).toBeTruthy();
