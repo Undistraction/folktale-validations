@@ -1,4 +1,4 @@
-import { identity } from 'ramda';
+import { identity, always } from 'ramda';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
 import validateObjectValues from '../validators/validateObjectValues';
@@ -12,32 +12,27 @@ export default constraints => o => {
   // a late import.
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
+  const validators = [
+    validateObjectKeysWithConstraints(
+      constraints.fieldsValidator,
+      constraints.fields
+    ),
+    validateObjectValues(validatorsMap(constraints.fields)),
+    // Trigger validation of value if field of `value`
+    // Trigger validation of children if field of `children`.
+    applyDefaultsWithConstraints(constraints.fields),
+    transformValuesWithConstraints(constraints.fields),
+  ];
 
+  const validateObject = untilFailureValidator(validators);
+
+  // Avoid recursion where we are validating CONSTRAINTS with CONSTRAINTS
   if (constraints === CONSTRAINTS) {
-    const r = untilFailureValidator([
-      validateObjectKeysWithConstraints(
-        constraints.validator,
-        constraints.fields
-      ),
-      validateObjectValues(validatorsMap(constraints.fields)),
-      applyDefaultsWithConstraints(constraints.fields),
-      transformValuesWithConstraints(constraints.fields),
-    ])(o);
-    return r;
+    return validateObject(o);
   }
 
-  const s = validateConstraints(constraints).matchWith({
-    Success: _ =>
-      untilFailureValidator([
-        validateObjectKeysWithConstraints(
-          constraints.validator,
-          constraints.fields
-        ),
-        validateObjectValues(validatorsMap(constraints.fields)),
-        applyDefaultsWithConstraints(constraints.fields),
-        transformValuesWithConstraints(constraints.fields),
-      ])(o),
+  return validateConstraints(constraints).matchWith({
+    Success: always(validateObject(o)),
     Failure: identity,
   });
-  return s;
 };

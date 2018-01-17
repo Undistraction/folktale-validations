@@ -63,7 +63,7 @@ const fields = [
 ];
 
 const constraints = {
-  validator: allOfValidator([
+  fieldsValidator: allOfValidator([
     validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
     validateExclusiveKeys([VALUE, CHILDREN]),
   ]),
