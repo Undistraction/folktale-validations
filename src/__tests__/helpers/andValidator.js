@@ -1,10 +1,6 @@
 import { validation as Validation } from 'folktale';
 import { andValidator } from '../../index';
-import {
-  stubReturnsSuccess,
-  spy,
-  stubReturnsFailure,
-} from '../testHelpers/sinon';
+import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
 import { andErrorMessages } from '../../messages';
 
 const { Success, Failure } = Validation;
