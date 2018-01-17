@@ -2,7 +2,6 @@ import { validation as Validation } from 'folktale';
 import { validateLengthBetween } from '../../index';
 import {
   lengthGreaterThanErrorMessage,
-  andErrorMessages,
   lengthLessThanErrorMessage,
 } from '../../messages';
 
