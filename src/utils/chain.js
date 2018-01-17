@@ -1,9 +1,8 @@
-import { validation as Validation } from 'folktale';
-
-const { Failure } = Validation;
+import { identity } from 'ramda';
+import applySuccessValueTo from './applySuccessValueTo';
 
 export default (acc, f) =>
   acc.matchWith({
-    Success: ({ value }) => f(value),
-    Failure: ({ value }) => Failure(value),
+    Success: applySuccessValueTo(f),
+    Failure: identity,
   });

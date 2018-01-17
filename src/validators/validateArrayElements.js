@@ -1,9 +1,10 @@
 import { validation as Validation } from 'folktale';
-import { reduce } from 'ramda';
+import { reduce, always } from 'ramda';
 import {
   arrayElementsErrorMessage,
   arrayElementErrorMessage,
 } from '../messages';
+import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
 
 const { Success, Failure } = Validation;
 
@@ -23,7 +24,7 @@ export default validator => o => {
   const v = validateAllWith(validator);
   const validation = v(o);
   return validation.matchWith({
-    Success: _ => Success(o),
-    Failure: ({ value }) => Failure([arrayElementsErrorMessage(value)]),
+    Success: always(Success(o)),
+    Failure: wrapFailureMessageWith(arrayElementsErrorMessage),
   });
 };

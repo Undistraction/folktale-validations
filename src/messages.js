@@ -29,7 +29,7 @@ export const whitelistErrorMessage = whitelist =>
 export const invalidKeysErrorMessage = invalidKeys =>
   `Object included invalid key(s): '[${joinWithComma(invalidKeys)}]'`;
 
-export const valueErrorMessage = (name, value) =>
+export const valueErrorMessage = name => value =>
   `Key ${quote(name)}: ${value}`;
 
 export const valuesErrorMessage = messages =>
