@@ -1,15 +1,18 @@
-import { append } from 'ramda';
 import validateIsString from './validators/validateIsString';
 import validateIsBoolean from './validators/validateIsBoolean';
 import validateIsFunction from './validators/validateIsFunction';
 import validateIsNotUndefined from './validators/validateIsNotUndefined';
-import validateObjectWithConstraints from './constraintValidators/validateObjectWithConstraints';
 import validateExclusiveKeys from './validators/validateExclusiveKeys';
+import validateIsObject from './validators/validateIsObject';
+import { validateIsArray } from '.';
+import allOfValidator from './helpers/allOfValidator';
 
 const NAME = `name`;
 const VALIDATOR = `validator`;
 const IS_REQUIRED = `isRequired`;
 const DEFAULT_VALUE = `defaultValue`;
+const VALUE = `value`;
+const CHILDREN = `children`;
 
 const nameField = {
   [NAME]: `name`,
@@ -39,21 +42,31 @@ const isRequiredField = {
   [DEFAULT_VALUE]: false,
 };
 
+const valueField = {
+  [NAME]: `value`,
+  [VALIDATOR]: validateIsObject,
+};
+
+const childrenField = {
+  [NAME]: `children`,
+  [VALIDATOR]: validateIsArray,
+};
+
 const fields = [
   nameField,
   validatorField,
   transformerField,
   defaultValueField,
   isRequiredField,
+  valueField,
+  childrenField,
 ];
 
-// const valueField = {
-//   name: `value`,
-//   validator: validateObjectWithConstraints(baseConstraints),
-// };
-
 const constraints = {
-  validator: validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
+  validator: allOfValidator([
+    validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
+    validateExclusiveKeys([VALUE, CHILDREN]),
+  ]),
   fields,
 };
 
