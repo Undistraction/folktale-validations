@@ -15,7 +15,6 @@ const validate = validatorsMap => (acc, [name, v]) => {
     : acc;
 };
 
-export default validatorsMap => o =>
-  compose(reduce(validate(validatorsMap), Success(o)), toPairs)(o).orElse(
-    message => Failure([valuesErrorMessage(message)])
-  );
+export default validatorsMap => o => compose(reduce(validate(validatorsMap), Success(o)), toPairs)(
+    o
+  ).orElse(message => Failure([valuesErrorMessage(message)]));

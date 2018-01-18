@@ -1,4 +1,4 @@
-import { identity, always } from 'ramda';
+import { identity } from 'ramda';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
 import validateObjectValues from '../validators/validateObjectValues';
@@ -12,7 +12,8 @@ export default constraints => o => {
   // a late import.
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
-  const validators = [
+
+  const validateObject = untilFailureValidator([
     validateObjectKeysWithConstraints(
       constraints.fieldsValidator,
       constraints.fields
@@ -22,9 +23,7 @@ export default constraints => o => {
     // Trigger validation of children if field of `children`.
     applyDefaultsWithConstraints(constraints.fields),
     transformValuesWithConstraints(constraints.fields),
-  ];
-
-  const validateObject = untilFailureValidator(validators);
+  ]);
 
   // Avoid recursion where we are validating CONSTRAINTS with CONSTRAINTS
   if (constraints === CONSTRAINTS) {
@@ -32,7 +31,7 @@ export default constraints => o => {
   }
 
   return validateConstraints(constraints).matchWith({
-    Success: always(validateObject(o)),
+    Success: _ => validateObject(o),
     Failure: identity,
   });
 };

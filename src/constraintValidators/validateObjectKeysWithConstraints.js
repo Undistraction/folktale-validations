@@ -5,13 +5,16 @@ import validateRequiredKeys from '../validators/validateRequiredKeys';
 
 import { pluckName, requiredKeys } from './utils';
 
-export default curry((validator, constraints) => {
+export default curry((fieldValidator, constraints) => {
   let validators = [
     validateWhitelistedKeys(pluckName(constraints)),
     validateRequiredKeys(requiredKeys(constraints)),
   ];
-  if (validator) {
-    validators = prepend(validator, validators);
+  if (fieldValidator) {
+    validators = prepend(fieldValidator, validators);
   }
-  return untilFailureValidator(validators);
+  return v => {
+    const r = untilFailureValidator(validators)(v);
+    return r;
+  };
 });

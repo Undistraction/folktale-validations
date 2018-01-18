@@ -1,6 +1,10 @@
 import { validation as Validation } from 'folktale';
 import { validateObjectWithConstraints } from '../../index';
-import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
+import {
+  stubReturnsSuccess,
+  stubReturnsFailure,
+  spy,
+} from '../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 
@@ -36,7 +40,7 @@ describe(`validateObjectWithConstraints`, () => {
     });
 
     describe(`that doesn't satisfy constraints`, () => {
-      describe(`with missing required key`, () => {
+      describe(`with missing required key on item`, () => {
         it(`returns a Validation.Failure with message`, () => {
           const value1 = 1;
           const message1 = `message1`;
@@ -69,14 +73,11 @@ describe(`validateObjectWithConstraints`, () => {
         });
       });
 
-      describe(`with both isRequired and defaultValue keys`, () => {
+      describe(`with both isRequired and defaultValue keys present on an item`, () => {
         it(`returns a Validation.Failure with message`, () => {
-          const value1 = 1;
-          const message1 = `message1`;
-          const v1 = stubReturnsSuccess(value1);
-          const v2 = stubReturnsFailure(message1);
+          const v1 = spy();
           const o = {
-            a: value1,
+            a: 1,
           };
 
           const constraints = {
@@ -84,11 +85,6 @@ describe(`validateObjectWithConstraints`, () => {
               {
                 name: `a`,
                 validator: v1,
-                isRequired: true,
-              },
-              {
-                name: `b`,
-                validator: v2,
                 isRequired: true,
                 defaultValue: true,
               },
@@ -99,9 +95,39 @@ describe(`validateObjectWithConstraints`, () => {
           const validation = validator(o);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: Array contained invalid element(s): '{"name":"b","isRequired":true,"defaultValue":true}': Object had more than one exlusive key: ['isRequired', 'defaultValue']`,
+              `Constraints Object Invalid: Array contained invalid element(s): '[object Object]': Object had more than one exlusive key: ['isRequired', 'defaultValue']`,
             ])
           );
+          expect(v1.notCalled).toBeTruthy();
+        });
+      });
+
+      describe(`with both value and children keys present on an item`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const v1 = spy();
+          const o = {
+            a: 1,
+          };
+
+          const constraints = {
+            fields: [
+              {
+                name: `a`,
+                validator: v1,
+                value: true,
+                children: true,
+              },
+            ],
+          };
+
+          const validator = validateObjectWithConstraints(constraints);
+          const validation = validator(o);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Array contained invalid element(s): '[object Object]': Object had more than one exlusive key: ['value', 'children']`,
+            ])
+          );
+          expect(v1.notCalled).toBeTruthy();
         });
       });
     });
