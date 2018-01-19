@@ -1,11 +1,12 @@
 import { always } from 'ramda';
 import {
   joinWithComma,
+  joinWithColon,
   joinWithOr,
   joinWithAnd,
   quoteAndJoinWithComma,
-  joinWitColon,
   quote,
+  wrapSB,
 } from './utils';
 import { ROOT_FIELD } from './const';
 
@@ -13,34 +14,46 @@ const prefixForTypeErrorMessage = complement =>
   complement ? `Was type` : `Wasn't type`;
 
 export const fieldErrorMessage = (field, errorMessage) =>
-  `Field '${field}': ${errorMessage}`;
+  `Field ${joinWithColon([quote(field), errorMessage])}`;
 
 export const typeErrorMessage = (typeName, complement = false) =>
-  joinWitColon([prefixForTypeErrorMessage(complement), quote(typeName)]);
+  joinWithColon([prefixForTypeErrorMessage(complement), quote(typeName)]);
 
 export const arrayElementErrorMessage = (value, message) =>
-  `'${value}': ${message}`;
+  joinWithColon([quote(value), message]);
 
 export const arrayElementsErrorMessage = elementErrorMessages =>
-  `Array contained invalid element(s): ${joinWithComma(elementErrorMessages)}`;
+  joinWithColon([
+    `Array contained invalid element(s)`,
+    joinWithComma(elementErrorMessages),
+  ]);
 
 export const whitelistErrorMessage = whitelist =>
-  `Value wasn't one of the accepted values: ${joinWithComma(whitelist)}`;
+  joinWithColon([
+    `Value wasn't one of the accepted values`,
+    joinWithComma(whitelist),
+  ]);
 
 export const invalidKeysErrorMessage = invalidKeys =>
-  `Object included invalid key(s): '[${joinWithComma(invalidKeys)}]'`;
+  joinWithColon([
+    `Object included invalid key(s)`,
+    quote(wrapSB(joinWithComma(invalidKeys))),
+  ]);
 
 export const valueErrorMessage = name => value =>
-  `Key ${quote(name)}: ${value}`;
+  `Key ${joinWithColon([quote(name), value])}`;
 
 export const valuesErrorMessage = messages =>
-  `Object included invalid values(s): ${joinWithComma(messages)}`;
+  joinWithColon([`Object included invalid values(s)`, joinWithComma(messages)]);
 
 export const numberWithUnitErrorMessage = unit =>
-  `Wasn't number with unit: ${quote(unit)}`;
+  joinWithColon([`Wasn't number with unit`, quote(unit)]);
 
 export const missingRequiredKeyErrorMessage = keys =>
-  `Object was missing required key(s): [${quoteAndJoinWithComma(keys)}]`;
+  joinWithColon([
+    `Object was missing required key(s)`,
+    wrapSB(quoteAndJoinWithComma(keys)),
+  ]);
 
 export const lengthGreaterThanErrorMessage = length =>
   `Length must be greater than ${length}`;
@@ -53,15 +66,19 @@ export const constraintValidatorErrorMessage = messages =>
 
 export const objectValidatorErrorMessage = fieldName => messages =>
   fieldName === ROOT_FIELD
-    ? `Object Invalid: ${messages}`
-    : `for field '${fieldName}': ${messages}`;
+    ? joinWithColon([`Object Invalid`, messages])
+    : `for field ${joinWithColon([quote(fieldName), messages])}`;
 
 export const exclusiveKeyErrorMessage = keys =>
-  `Object had more than one exlusive key: [${quoteAndJoinWithComma(keys)}]`;
+  joinWithColon([
+    `Object had more than one exlusive key`,
+    wrapSB(quoteAndJoinWithComma(keys)),
+  ]);
 
 export const isEmptyErrorMessage = always(`Was Empty`);
 
 export const validNumberErrorMessage = always(`Wasn't a valid Number`);
 
 export const andErrorMessages = joinWithAnd;
+
 export const orErrorMessages = joinWithOr;

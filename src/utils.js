@@ -1,4 +1,14 @@
-import { join, compose, map, append, flip, curry, tap } from 'ramda';
+import {
+  join,
+  compose,
+  map,
+  append,
+  flip,
+  curry,
+  tap,
+  addIndex,
+  reduce,
+} from 'ramda';
 import { validation as Validation } from 'folktale';
 
 const { Success } = Validation;
@@ -7,10 +17,12 @@ const { Success } = Validation;
 export const joinWithComma = join(`, `);
 export const joinWithAnd = join(` and `);
 export const joinWithOr = join(` or `);
-export const joinWitColon = join(`: `);
+export const joinWithColon = join(`: `);
 export const quote = value => `'${value}'`;
+export const wrapSB = value => `[${value}]`;
 export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));
 export const { freeze } = Object;
+export const iReduce = addIndex(reduce);
 
 const log = curry((loggingFunction, prefix) =>
   tap(

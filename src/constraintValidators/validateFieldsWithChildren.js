@@ -3,6 +3,7 @@ import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { constraintsForFieldsWithPropChildren } from './utils';
 import { validateObject } from './validateObjectWithConstraints';
+import { iReduce } from '../utils';
 
 const { collect, Success } = Validation;
 
@@ -21,10 +22,8 @@ const replaceChildren = (childrenMap, o) => {
 };
 
 // Run through all the
-const validateChildrenOfField = childConstraints => fieldName => {
-  let index = -1;
-  return reduce((acc, child) => {
-    index += 1;
+const validateChildrenOfField = childConstraints => fieldName =>
+  iReduce((acc, child, index) => {
     if (isEmpty(child)) {
       return acc;
     }
@@ -32,7 +31,6 @@ const validateChildrenOfField = childConstraints => fieldName => {
     acc.set(index, validateObject(fieldName, childConstraints, child));
     return acc;
   }, new Map());
-};
 
 // { alpha: Success, beta: Success}
 
