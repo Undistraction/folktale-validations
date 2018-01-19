@@ -1,11 +1,22 @@
+import deepFreeze from 'deep-freeze';
 import validateIsString from './validators/validateIsString';
 import validateIsBoolean from './validators/validateIsBoolean';
 import validateIsFunction from './validators/validateIsFunction';
 import validateIsNotUndefined from './validators/validateIsNotUndefined';
 import validateExclusiveKeys from './validators/validateExclusiveKeys';
 import validateIsObject from './validators/validateIsObject';
-import { validateIsArray } from '.';
 import allOfValidator from './helpers/allOfValidator';
+import validateIsArrayOf from './validators/validateIsArrayOf';
+import { freeze } from './utils';
+
+export const FIELD_NAMES = freeze({
+  NAME: `name`,
+  VALIDATOR: `validator`,
+  IS_REQUIRED: `isRequired`,
+  DEFAULT_VALUE: `defaultValues`,
+  VALUE: `value`,
+  CHILDREN: `children`,
+});
 
 const NAME = `name`;
 const VALIDATOR = `validator`;
@@ -15,41 +26,41 @@ const VALUE = `value`;
 const CHILDREN = `children`;
 
 const nameField = {
-  [NAME]: `name`,
-  [VALIDATOR]: validateIsString,
+  [FIELD_NAMES.NAME]: `name`,
+  [FIELD_NAMES.VALIDATOR]: validateIsString,
   isRequired: true,
 };
 
 const validatorField = {
-  [NAME]: `validator`,
-  [VALIDATOR]: validateIsFunction,
-  [IS_REQUIRED]: true,
+  [FIELD_NAMES.NAME]: `validator`,
+  [FIELD_NAMES.VALIDATOR]: validateIsFunction,
+  [FIELD_NAMES.IS_REQUIRED]: true,
 };
 
 const transformerField = {
-  [NAME]: `transformer`,
-  [VALIDATOR]: validateIsFunction,
+  [FIELD_NAMES.NAME]: `transformer`,
+  [FIELD_NAMES.VALIDATOR]: validateIsFunction,
 };
 
 const defaultValueField = {
-  [NAME]: `defaultValue`,
-  [VALIDATOR]: validateIsNotUndefined,
+  [FIELD_NAMES.NAME]: `defaultValue`,
+  [FIELD_NAMES.VALIDATOR]: validateIsNotUndefined,
 };
 
 const isRequiredField = {
-  [NAME]: `isRequired`,
-  [VALIDATOR]: validateIsBoolean,
-  [DEFAULT_VALUE]: false,
+  [FIELD_NAMES.NAME]: `isRequired`,
+  [FIELD_NAMES.VALIDATOR]: validateIsBoolean,
+  [FIELD_NAMES.DEFAULT_VALUE]: false,
 };
 
 const valueField = {
-  [NAME]: `value`,
+  [FIELD_NAMES.NAME]: `value`,
   [VALIDATOR]: validateIsObject,
 };
 
 const childrenField = {
-  [NAME]: `children`,
-  [VALIDATOR]: validateIsArray,
+  [FIELD_NAMES.NAME]: `children`,
+  [FIELD_NAMES.VALIDATOR]: validateIsObject,
 };
 
 const fields = [
@@ -62,13 +73,31 @@ const fields = [
   childrenField,
 ];
 
-const constraints = {
-  fieldsValidator: allOfValidator([
-    validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
-    validateExclusiveKeys([VALUE, CHILDREN]),
-  ]),
-  fields,
+// -----------------------------------------------------------------------------
+
+const fieldsValidatorField = {
+  [NAME]: `fieldsValidator`,
+  [VALIDATOR]: validateIsFunction,
 };
 
+const fieldsField = {
+  [FIELD_NAMES.NAME]: `fields`,
+  [FIELD_NAMES.VALIDATOR]: validateIsArrayOf(validateIsObject),
+  [FIELD_NAMES.CHILDREN]: {
+    fieldsValidator: allOfValidator([
+      validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
+      validateExclusiveKeys([VALUE, CHILDREN]),
+    ]),
+    fields,
+  },
+};
+
+const constraintRoot = {
+  fields: [fieldsValidatorField, fieldsField],
+};
+
+// Set up a pointer pack to the rootmost object
+childrenField.value = constraintRoot;
+
 // eslint-disable-next-line import/prefer-default-export
-export default constraints;
+export default deepFreeze(constraintRoot);

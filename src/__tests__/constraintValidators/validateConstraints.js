@@ -1,99 +1,10 @@
 import { validation as Validation } from 'folktale';
-import { map } from 'ramda';
+import { map, descend } from 'ramda';
 import validateConstraints from '../../constraintValidators/validateConstraints';
-import CONSTRAINTS from '../../constraints';
 
 const { Success, Failure } = Validation;
 
 describe(`validateConstraints`, () => {
-  describe(`with invalid constraints`, () => {
-    describe(`with invalid value for constraints`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const values = [`x`, 5, true, false, null, undefined, NaN, [], /x/];
-        map(value => {
-          const validation = validateConstraints(value);
-          expect(validation).toEqual(
-            Failure([`Constraints Object Invalid: Wasn't type: 'Object'`])
-          );
-        }, values);
-      });
-    });
-
-    describe(`with empty constraint object`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const value = {};
-        const validation = validateConstraints(value);
-        expect(validation).toEqual(
-          Failure([`Constraints Object Invalid: Was Empty`])
-        );
-      });
-    });
-
-    describe(`with fields array containing non-object values`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const value = {
-          fields: [`x`, false],
-        };
-        const validation = validateConstraints(value);
-        expect(validation).toEqual(
-          Failure([
-            `Constraints Object Invalid: Array contained invalid element(s): 'x': Wasn't type: 'Object','false': Wasn't type: 'Object'`,
-          ])
-        );
-      });
-    });
-
-    describe(`with additional keys`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const value = {
-          fields: [
-            {
-              name: `x`,
-              validator() {},
-              a: 1,
-            },
-          ],
-        };
-        const validation = validateConstraints(value);
-        expect(validation).toEqual(
-          Failure([
-            `Constraints Object Invalid: Array contained invalid element(s): '[object Object]': Object included invalid key(s): '[a]'`,
-          ])
-        );
-      });
-    });
-
-    describe(`with missing required keys`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const value1 = {
-          fields: [
-            {
-              validator() {},
-            },
-          ],
-        };
-
-        const value2 = {
-          fields: [
-            {
-              name: `x`,
-            },
-          ],
-        };
-
-        const values = [[`name`, value1], [`validator`, value2]];
-        map(([name, value]) => {
-          const validation = validateConstraints(value);
-          expect(validation).toEqual(
-            Failure([
-              `Constraints Object Invalid: Array contained invalid element(s): '[object Object]': Object was missing required key(s): ['${name}']`,
-            ])
-          );
-        }, values);
-      });
-    });
-  });
-
   describe(`with valid constraints`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
       const value = {
@@ -103,14 +14,51 @@ describe(`validateConstraints`, () => {
             validator() {},
             isRequired: true,
             transformer() {},
-            children: [],
+            children: {
+              fields: [
+                {
+                  name: `c`,
+                  validator() {},
+                  children: {}, // Allow empty object as value of childrn
+                },
+                {
+                  name: `d`,
+                  validator() {},
+                  children: {
+                    fields: [], // Allow empty array as value of fields
+                  },
+                },
+                {
+                  name: `e`,
+                  validator() {},
+                  value: {}, // Allow empty object as value of value
+                },
+                {
+                  name: `f`,
+                  validator() {},
+                  defaultValue: true,
+                  transformer() {},
+                  children: {
+                    fields: [
+                      {
+                        name: `g`,
+                        validator() {},
+                      },
+                      {
+                        name: `h`,
+                        validator() {},
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
           },
           {
             name: `b`,
             validator() {},
             defaultValue: true,
             transformer() {},
-            value: {},
           },
         ],
       };
@@ -119,38 +67,178 @@ describe(`validateConstraints`, () => {
     });
   });
 
-  // describe(`with valid nested constraint obj`, () => {
-  //   it(`returns a Validation.Success with supplied value`, () => {
-  //     const value = [
-  //       {
-  //         name: `a`,
-  //         isRequired: true,
-  //         value: [
-  //           {
-  //             name: `c`,
-  //             validator() {},
-  //             isRequired: true,
-  //             transformer() {},
-  //             defaultValue: true,
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         name: `b`,
-  //         validator() {},
-  //         isRequired: true,
-  //         transformer() {},
-  //         defaultValue: true,
-  //       },
-  //     ];
-  //     const validation = validateConstraints(value);
-  //     expect(validation).toEqual(Success(value));
-  //   });
+  describe(`with a flat object`, () => {
+    describe(`with invalid constraints`, () => {
+      describe(`with empty constraint object`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {};
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([`Constraints Object Invalid: Object Invalid: Was Empty`])
+          );
+        });
+      });
 
-  describe(`with own constraint obj`, () => {
-    it(`returns a Validation.Success with supplied value`, () => {
-      const validation = validateConstraints(CONSTRAINTS);
-      expect(validation).toEqual(Success(CONSTRAINTS));
+      describe(`with invalid value for constraints`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const values = [`x`, 5, true, false, null, undefined, NaN, [], /x/];
+          map(value => {
+            const validation = validateConstraints(value);
+            expect(validation).toEqual(
+              Failure([
+                `Constraints Object Invalid: Object Invalid: Wasn't type: 'Object'`,
+              ])
+            );
+          }, values);
+        });
+      });
+
+      describe(`with additional keys`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const key = `x`;
+          const value = {
+            [key]: 1,
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object included invalid key(s): '[${key}]'`,
+            ])
+          );
+        });
+      });
+
+      describe(`with two exclusive keys ['defaultValue' and 'isRequired']`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {
+            fields: [
+              {
+                name: `a`,
+                validator() {},
+                defaultValue: true, // Exclusive
+                isRequired: true, // Exclusive
+              },
+            ],
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object had more than one exlusive key: ['isRequired', 'defaultValue']`,
+            ])
+          );
+        });
+      });
+
+      describe(`with two exclusive keys ['value' and 'children']`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {
+            fields: [
+              {
+                name: `a`,
+                validator() {},
+                value: {}, // Exclusive
+                children: [], // Exclusive
+              },
+            ],
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object had more than one exlusive key: ['value', 'children']`,
+            ])
+          );
+        });
+      });
+
+      describe(`with non-array value for 'fields'`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {
+            fields: {},
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Wasn't type: 'Array'`,
+            ])
+          );
+        });
+      });
+
+      describe(`with 'fields' array containing non-object values`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {
+            fields: [`x`, false],
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Array contained invalid element(s): 'x': Wasn't type: 'Object','false': Wasn't type: 'Object'`,
+            ])
+          );
+        });
+      });
+
+      describe(`with non-function value for 'fieldsValidator'`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const value = {
+            fieldsValidator: {},
+            fields: [],
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object included invalid values(s): Key 'fieldsValidator': Wasn't type: 'Function'`,
+            ])
+          );
+        });
+      });
+
+      describe(`for fields array values`, () => {
+        describe(`with non-string value for 'name'`, () => {
+          it(`returns a Validation.Failure with message`, () => {
+            const value = {
+              fieldsValidator() {},
+              fields: [
+                {
+                  name: {},
+                  validator() {},
+                },
+              ],
+            };
+            const validation = validateConstraints(value);
+            expect(validation).toEqual(
+              Failure([
+                `Constraints Object Invalid: Object included invalid values(s): Key 'name': Wasn't type: 'String'`,
+              ])
+            );
+          });
+        });
+      });
+    });
+  });
+
+  describe(`with a nested object`, () => {
+    describe(`with invalid constraints`, () => {
+      describe(`with invalid field keys`, () => {
+        it(`returns a Validation.Failure with message`, () => {
+          const invalidKey = `invalid`;
+          const value = {
+            fields: [
+              {
+                name: `a`,
+                validator() {},
+                invalid: `x`,
+              },
+            ],
+          };
+          const validation = validateConstraints(value);
+          expect(validation).toEqual(
+            Failure([
+              `Constraints Object Invalid: Object included invalid key(s): '[${invalidKey}]'`,
+            ])
+          );
+        });
+      });
     });
   });
 });

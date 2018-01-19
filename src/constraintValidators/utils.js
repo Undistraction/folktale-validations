@@ -9,19 +9,23 @@ import {
   assoc,
   both,
   propSatisfies,
+  propEq,
+  find,
+  append,
+  toPairs,
 } from 'ramda';
-import { isNotUndefined, isTruthy } from 'ramda-adjunct';
+import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
+import { FIELD_NAMES } from '../constraints';
 
-const NAME_KEY = `name`;
-const IS_REQUIRED_KEY = `isRequired`;
+export const propName = prop(FIELD_NAMES.NAME);
+export const pluckName = pluck(FIELD_NAMES.NAME);
+export const propEqName = propEq(FIELD_NAMES.NAME);
+export const hasIsRequired = has(FIELD_NAMES.IS_REQUIRED);
 
 const hasIsRequiredKey = both(
-  has(IS_REQUIRED_KEY),
-  compose(isTruthy, propSatisfies(isTruthy, IS_REQUIRED_KEY))
+  hasIsRequired,
+  compose(isTruthy, propSatisfies(isTruthy, FIELD_NAMES.IS_REQUIRED))
 );
-
-const propName = prop(NAME_KEY);
-export const pluckName = pluck(NAME_KEY);
 
 export const requiredKeys = compose(map(propName), filter(hasIsRequiredKey));
 
@@ -41,3 +45,32 @@ export const defaultsMap = reduce(
     isNotUndefined(defaultValue) ? assoc(name, defaultValue, acc) : acc,
   {}
 );
+
+// Use each prop of the object to find its constraint.
+// Check if the constraint supports children
+// If it does, acc the [fieldName, fieldValue, childConstraints]
+export const constraintsForFieldsWithProp = name => constraints => (
+  acc,
+  [fieldName, fieldValue]
+) => {
+  const constraintForField = find(propEqName(fieldName), constraints);
+  const childConstraints = prop(name, constraintForField);
+  if (isNotUndefined(childConstraints) && isNotEmpty(fieldValue)) {
+    return append([fieldName, fieldValue, childConstraints], acc);
+  }
+  return acc;
+};
+
+export const constraintsForFieldsWithPropChildren = constraints => o =>
+  reduce(
+    constraintsForFieldsWithProp(FIELD_NAMES.CHILDREN)(constraints),
+    [],
+    toPairs(o)
+  );
+
+export const constraintsForFieldsWithPropValue = constraints => o =>
+  reduce(
+    constraintsForFieldsWithProp(FIELD_NAMES.VALUE)(constraints),
+    [],
+    toPairs(o)
+  );

@@ -1,12 +1,14 @@
 import { validation as Validation } from 'folktale';
 import { compose, reduce, toPairs, always } from 'ramda';
+import { isNotUndefined } from 'ramda-adjunct';
 import { valueErrorMessage, valuesErrorMessage } from '../messages';
 
 const { Success, Failure } = Validation;
 
 const validate = validatorsMap => (acc, [name, v]) => {
   const validator = validatorsMap[name];
-  return validator
+
+  return isNotUndefined(validator)
     ? validator(v).matchWith({
         Success: always(acc),
         Failure: ({ value }) =>
@@ -15,6 +17,7 @@ const validate = validatorsMap => (acc, [name, v]) => {
     : acc;
 };
 
-export default validatorsMap => o => compose(reduce(validate(validatorsMap), Success(o)), toPairs)(
-    o
-  ).orElse(message => Failure([valuesErrorMessage(message)]));
+export default validatorsMap => o =>
+  compose(reduce(validate(validatorsMap), Success(o)), toPairs)(o).orElse(
+    message => Failure([valuesErrorMessage(message)])
+  );

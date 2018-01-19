@@ -50,6 +50,9 @@ export const lengthLessThanErrorMessage = length =>
 export const constraintValidatorErrorMessage = messages =>
   `Constraints Object Invalid: ${messages}`;
 
+export const objectValidatorErrorMessage = messages =>
+  `Object Invalid: ${messages}`;
+
 export const exclusiveKeyErrorMessage = keys =>
   `Object had more than one exlusive key: [${quoteAndJoinWithComma(keys)}]`;
 

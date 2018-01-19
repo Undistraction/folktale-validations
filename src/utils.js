@@ -7,6 +7,7 @@ export const joinWithOr = join(` or `);
 export const joinWitColon = join(`: `);
 export const quote = value => `'${value}'`;
 export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));
+export const { freeze } = Object;
 
 const log = curry((loggingFunction, prefix) =>
   tap(
