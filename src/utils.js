@@ -1,4 +1,7 @@
 import { join, compose, map, append, flip, curry, tap } from 'ramda';
+import { validation as Validation } from 'folktale';
+
+const { Success } = Validation;
 
 // eslint-disable-next-line import/prefer-default-export
 export const joinWithComma = join(`, `);
@@ -17,3 +20,8 @@ const log = curry((loggingFunction, prefix) =>
 
 // eslint-disable-next-line no-console
 export const logToConsole = log(console.log);
+
+export const loggingValidator = message => validation => {
+  logToConsole(message)(validation);
+  return Success(validation);
+};

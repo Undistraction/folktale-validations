@@ -46,16 +46,16 @@ export const defaultsMap = reduce(
   {}
 );
 
-// Use each prop of the object to find its constraint.
-// Check if the constraint supports children
-// If it does, acc the [fieldName, fieldValue, childConstraints]
 export const constraintsForFieldsWithProp = name => constraints => (
   acc,
   [fieldName, fieldValue]
 ) => {
-  const constraintForField = find(propEqName(fieldName), constraints);
-  const childConstraints = prop(name, constraintForField);
-  if (isNotUndefined(childConstraints) && isNotEmpty(fieldValue)) {
+  const childConstraints = prop(name, find(propEqName(fieldName), constraints));
+  if (
+    isNotUndefined(childConstraints) &&
+    isNotEmpty(childConstraints) &&
+    isNotEmpty(fieldValue)
+  ) {
     return append([fieldName, fieldValue, childConstraints], acc);
   }
   return acc;
@@ -73,4 +73,11 @@ export const constraintsForFieldsWithPropValue = constraints => o =>
     constraintsForFieldsWithProp(FIELD_NAMES.VALUE)(constraints),
     [],
     toPairs(o)
+  );
+
+export const replaceFieldsWithValidationValues = (fieldsToValidationsMap, o) =>
+  reduce(
+    (acc, [fieldName, validation]) => assoc(fieldName, validation.value, o),
+    o,
+    toPairs(fieldsToValidationsMap)
   );

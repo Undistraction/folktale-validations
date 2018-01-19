@@ -7,6 +7,7 @@ import {
   joinWitColon,
   quote,
 } from './utils';
+import { ROOT_FIELD } from './const';
 
 const prefixForTypeErrorMessage = complement =>
   complement ? `Was type` : `Wasn't type`;
@@ -21,7 +22,7 @@ export const arrayElementErrorMessage = (value, message) =>
   `'${value}': ${message}`;
 
 export const arrayElementsErrorMessage = elementErrorMessages =>
-  `Array contained invalid element(s): ${elementErrorMessages}`;
+  `Array contained invalid element(s): ${joinWithComma(elementErrorMessages)}`;
 
 export const whitelistErrorMessage = whitelist =>
   `Value wasn't one of the accepted values: ${joinWithComma(whitelist)}`;
@@ -48,10 +49,12 @@ export const lengthLessThanErrorMessage = length =>
   `Length must be less than ${length}`;
 
 export const constraintValidatorErrorMessage = messages =>
-  `Constraints Object Invalid: ${messages}`;
+  `Constraints ${messages}`;
 
-export const objectValidatorErrorMessage = messages =>
-  `Object Invalid: ${messages}`;
+export const objectValidatorErrorMessage = fieldName => messages =>
+  fieldName === ROOT_FIELD
+    ? `Object Invalid: ${messages}`
+    : `for field '${fieldName}': ${messages}`;
 
 export const exclusiveKeyErrorMessage = keys =>
   `Object had more than one exlusive key: [${quoteAndJoinWithComma(keys)}]`;

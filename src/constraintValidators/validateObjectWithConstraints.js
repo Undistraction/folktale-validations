@@ -1,47 +1,31 @@
-import { identity, append, reduce, curry } from 'ramda';
-import { isNotEmpty } from 'ramda-adjunct';
+import { identity, curry } from 'ramda';
 import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
 import validateObjectValues from '../validators/validateObjectValues';
 import applyDefaultsWithConstraints from './applyDefaultsWithConstraints';
 import transformValuesWithConstraints from './transformValuesWithConstraints';
-import { validatorsMap, constraintsForFieldsWithPropValue } from './utils';
+import { validatorsMap } from './utils';
 import CONSTRAINTS from '../constraints';
 import validateIsObject from '../validators/validateIsObject';
 import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
 import { objectValidatorErrorMessage } from '../messages';
 import validateIsNotEmpty from '../validators/validateIsNotEmpty';
-import validateFieldsWithChildren from './validateFieldsWithChildren';
 import validateFieldsWithValue from './validateFieldsWithValue';
+import { ROOT_FIELD } from '../const';
+import validateFieldsWithChildren from './validateFieldsWithChildren';
 
-const { Success, Failure, collect } = Validation;
+const { Failure } = Validation;
 
-const objectErrorMessageWrapper = wrapFailureMessageWith(
-  objectValidatorErrorMessage
-);
+const objectErrorMessageWrapper = fieldName =>
+  wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
 
 const validateIsObjectNotEmpty = untilFailureValidator([
   validateIsObject,
   validateIsNotEmpty,
 ]);
 
-// VALIDATE CHILDREN
-// -----------------------------------------------------------------------------
-
-// VALIDATE VALUES
-// -----------------------------------------------------------------------------
-
-// VALIDATE OBJECT
-// -----------------------------------------------------------------------------
-
-export const validateObject = curry((constraints, o) => {
-  const objectValidation = validateIsObjectNotEmpty(o);
-
-  if (Failure.hasInstance(objectValidation)) {
-    return objectErrorMessageWrapper(objectValidation);
-  }
-
+export const validateObject = curry((fieldName, constraints, o) => {
   const result = untilFailureValidator([
     // Validate this object's keys
     validateObjectKeysWithConstraints(
@@ -53,13 +37,10 @@ export const validateObject = curry((constraints, o) => {
     applyDefaultsWithConstraints(constraints.fields),
     transformValuesWithConstraints(constraints.fields),
     // Validate nested objects
-    validateFieldsWithChildren(constraints.fields),
     validateFieldsWithValue(constraints.fields),
+    validateFieldsWithChildren(constraints.fields),
   ])(o);
-  return result.orElse(v =>
-    // const wrapped = objectErrorMessageWrapper(Failure(v));
-    Failure(v)
-  );
+  return result.orElse(v => objectErrorMessageWrapper(fieldName)(Failure(v)));
 });
 
 const validateObjectWithConstraints = constraints => o => {
@@ -71,14 +52,14 @@ const validateObjectWithConstraints = constraints => o => {
   const objectValidation = validateIsObjectNotEmpty(o);
 
   if (Failure.hasInstance(objectValidation)) {
-    return objectErrorMessageWrapper(objectValidation);
+    return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);
   }
 
   // Avoid recursion if we try and validate CONSTRAINTS with CONSTRAINTS
   return constraints === CONSTRAINTS
-    ? validateObject(constraints, o)
+    ? validateObject(ROOT_FIELD, constraints, o)
     : validateConstraints(constraints).matchWith({
-        Success: _ => validateObject(constraints, o),
+        Success: _ => validateObject(ROOT_FIELD, constraints, o),
         Failure: identity,
       });
 };

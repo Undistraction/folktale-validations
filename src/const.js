@@ -8,3 +8,5 @@ export const TYPES = Object.freeze({
   Boolean: `Boolean`,
   Undefined: `Undefined`,
 });
+
+export const ROOT_FIELD = `root`;

@@ -101,7 +101,7 @@ describe(`validateArrayElements()`, () => {
         const validation = validator(value);
         expect(validation).toEqual(
           Failure([
-            `Array contained invalid element(s): '1': message1,'3': message2`,
+            `Array contained invalid element(s): '1': message1, '3': message2`,
           ])
         );
         expect(v1.calledWith(1)).toBeTruthy();

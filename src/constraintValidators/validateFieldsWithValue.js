@@ -1,19 +1,21 @@
-import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { reduce, append } from 'ramda';
+import { reduce, identity, assoc, values, isEmpty } from 'ramda';
 import { validateObject } from './validateObjectWithConstraints';
-import { constraintsForFieldsWithPropValue } from './utils';
+import {
+  constraintsForFieldsWithPropValue,
+  replaceFieldsWithValidationValues,
+} from './utils';
 
 const { collect, Success } = Validation;
 
 const validateValues = reduce(
-  // eslint-disable-next-line no-unused-vars
   (acc, [fieldName, fieldValue, childConstraints]) =>
-    isNotEmpty(fieldValue)
-      ? // eslint-disable-next-line no-use-before-define
-        append(validateObject(childConstraints, fieldValue), acc)
-      : acc,
-  []
+    assoc(
+      fieldName,
+      validateObject(fieldName, childConstraints, fieldValue),
+      acc
+    ),
+  {}
 );
 
 export default constraints => o => {
@@ -22,5 +24,12 @@ export default constraints => o => {
   )(o);
 
   const childValidations = validateValues(fieldsWithPropConstraints);
-  return isNotEmpty(childValidations) ? collect(childValidations) : Success(o);
+  if (isEmpty(childValidations)) {
+    return Success(o);
+  }
+  return collect(values(childValidations)).matchWith({
+    Success: _ =>
+      Success(replaceFieldsWithValidationValues(childValidations, o)),
+    Failure: identity,
+  });
 };

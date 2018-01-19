@@ -6,11 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": [
-    "dist",
-    "src",
-    "lib"
-  ],
+  "files": ["dist", "src", "lib"],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
@@ -25,7 +21,7 @@
     "build:lib": "babel --out-dir lib --ignore \"__tests__\" src",
     "prebuild:dist": "rimraf dist/*",
     "build:dist": "NODE_ENV=development rollup --config",
-    "test": "jest __tests__/constraintValidators/validateConstraints --watch",
+    "test": "jest --watch",
     "test:noWatch": "jest",
     "prepublishOnly": "sudo npm run build",
     "publish:patch": "npm version patch && sudo npm publish",
