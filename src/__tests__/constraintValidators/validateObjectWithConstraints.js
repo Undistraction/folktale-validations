@@ -56,9 +56,11 @@ describe(`validateObjectWithConstraints`, () => {
 
   describe(`with a flat constraint object`, () => {
     describe(`that satisfies constraints`, () => {
-      it(`returns a Validation.Success with supplied value`, () => {
+      it.only(`returns a Validation.Success with supplied value`, () => {
         const v1 = stubReturnsSuccess(value1);
-        const vNotCalled = spy();
+        const spyNotCalled1 = spy();
+        const spyNotCalled2 = spy();
+        const spyNotCalled3 = spy();
         const v3 = stubReturnsSuccess(value3);
         const v5 = stubReturnsSuccess(value5);
         const v6 = stubReturnsSuccess(value6);
@@ -95,7 +97,7 @@ describe(`validateObjectWithConstraints`, () => {
             },
             {
               [NAME]: `b`,
-              [VALIDATOR]: vNotCalled,
+              [VALIDATOR]: spyNotCalled1,
             },
             {
               [NAME]: `c`,
@@ -104,12 +106,12 @@ describe(`validateObjectWithConstraints`, () => {
             },
             {
               [NAME]: `d`,
-              [VALIDATOR]: vNotCalled, // Not run because no value
+              [VALIDATOR]: spyNotCalled1, // Not run because no value
               [DEFAULT_VALUE]: value2, // Should be applied instead
             },
             {
               [NAME]: `k`,
-              [VALIDATOR]: vNotCalled, // Not run because no value
+              [VALIDATOR]: spyNotCalled1, // Not run because no value
               [DEFAULT_VALUE]: defaultValue1, // Should be applied instead
             },
             {
@@ -148,6 +150,11 @@ describe(`validateObjectWithConstraints`, () => {
                 ],
               },
             },
+            {
+              [NAME]: `l`,
+              [VALIDATOR]: spyNotCalled2,
+              [TRANSFORMER]: spyNotCalled3, // Transformer should not be called
+            },
           ],
         };
 
@@ -181,7 +188,9 @@ describe(`validateObjectWithConstraints`, () => {
         expect(v1.calledWith(value1)).toBeTruthy();
         expect(v3.calledWith(value3)).toBeTruthy();
         expect(v5.calledWith(value4)).toBeTruthy();
-        expect(vNotCalled.notCalled).toBeTruthy();
+        expect(spyNotCalled1.notCalled).toBeTruthy();
+        expect(spyNotCalled2.notCalled).toBeTruthy();
+        expect(spyNotCalled3.notCalled).toBeTruthy();
       });
     });
 

@@ -8,7 +8,7 @@ import {
   always,
   __,
 } from 'ramda';
-import { isNotEmpty } from 'ramda-adjunct';
+import { isNotEmpty, isUndefined } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { transformersMap } from './utils';
 
@@ -19,7 +19,11 @@ const transformValues = transformers =>
     Success,
     reduce(
       (acc, [name, transformer]) =>
-        assoc(name, transformer(prop(name, acc)))(acc),
+        ifElse(
+          isUndefined,
+          always(acc),
+          compose(assoc(name, __, acc), transformer)
+        )(prop(name, acc)),
       __,
       toPairs(transformers)
     )
