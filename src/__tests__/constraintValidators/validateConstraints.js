@@ -131,17 +131,15 @@ describe(`validateConstraints`, () => {
   // ---------------------------------------------------------------------------
 
   describe(`with one level of constraints`, () => {
-    describe(`with invalid constraints`, () => {
-      describe(`with empty constraint object`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const value = {};
-          const validation = validateConstraints(value);
-          expect(validation).toEqual(
-            Failure([`Constraints Object Invalid: Was Empty`])
-          );
-        });
+    describe(`with empty constraint object`, () => {
+      it(`returns a Validation.Success with supplied value`, () => {
+        const value = {};
+        const validation = validateConstraints(value);
+        expect(validation).toEqual(Success(value));
       });
+    });
 
+    describe(`with invalid constraints`, () => {
       describe(`with invalid value`, () => {
         it(`returns a Validation.Failure with message`, () => {
           map(value => {

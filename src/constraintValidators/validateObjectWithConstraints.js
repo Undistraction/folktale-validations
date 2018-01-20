@@ -10,7 +10,6 @@ import CONSTRAINTS from '../constraints';
 import validateIsObject from '../validators/validateIsObject';
 import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
 import { objectValidatorErrorMessage } from '../messages';
-import validateIsNotEmpty from '../validators/validateIsNotEmpty';
 import validateFieldsWithValue from './validateFieldsWithValue';
 import { ROOT_FIELD } from '../const';
 import validateFieldsWithChildren from './validateFieldsWithChildren';
@@ -19,11 +18,6 @@ const { Failure } = Validation;
 
 const objectErrorMessageWrapper = fieldName =>
   wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
-
-const validateIsObjectNotEmpty = untilFailureValidator([
-  validateIsObject,
-  validateIsNotEmpty,
-]);
 
 export const validateObject = curry((fieldName, constraints, o) => {
   const result = untilFailureValidator([
@@ -49,7 +43,7 @@ const validateObjectWithConstraints = constraints => o => {
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
 
-  const objectValidation = validateIsObjectNotEmpty(o);
+  const objectValidation = validateIsObject(o);
 
   if (Failure.hasInstance(objectValidation)) {
     return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);

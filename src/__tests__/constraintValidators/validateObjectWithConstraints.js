@@ -168,36 +168,32 @@ describe(`validateObjectWithConstraints`, () => {
     // One level of constraints
     // -------------------------------------------------------------------------
 
-    describe(`that doesn't satisfy constraints`, () => {
-      describe(`empty object`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const v1 = stubReturnsSuccess(value1);
-          const v2 = stubReturnsFailure(message1);
-          const o = {};
+    describe(`empty object`, () => {
+      it(`returns a Validation.Success with message`, () => {
+        const v1 = stubReturnsSuccess(value1);
+        const value = {};
 
-          const constraints = {
-            fields: [
-              {
-                name: `a`,
-                validator: v1,
-                isRequired: true,
-              },
-              {
-                name: `b`,
-                validator: v2,
-                isRequired: true,
-              },
-            ],
-          };
+        const constraints = {
+          fields: [
+            {
+              name: `a`,
+              validator: v1,
+            },
+            {
+              name: `b`,
+              validator: v1,
+            },
+          ],
+        };
 
-          const validator = validateObjectWithConstraints(constraints);
-          const validation = validator(o);
-          expect(validation).toEqual(Failure([`Object Invalid: Was Empty`]));
-          expect(v1.notCalled).toBeTruthy();
-          expect(v2.notCalled).toBeTruthy();
-        });
+        const validator = validateObjectWithConstraints(constraints);
+        const validation = validator(value);
+        expect(validation).toEqual(Success(value));
+        expect(v1.notCalled).toBeTruthy();
       });
+    });
 
+    describe(`that doesn't satisfy constraints`, () => {
       describe(`with missing required key on item`, () => {
         it(`returns a Validation.Failure with message`, () => {
           const v1 = stubReturnsSuccess(value1);
