@@ -1,4 +1,4 @@
-import { reduce, concat, isEmpty, identity } from 'ramda';
+import { reduce, concat, isEmpty, identity, assoc } from 'ramda';
 import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { constraintsForFieldsWithPropChildren } from './utils';
@@ -9,7 +9,7 @@ const { collect, Success } = Validation;
 
 const replaceArrayItemsWithValidationValues = (o, replacements) => {
   for (const [key, validation] of replacements) {
-    o[key] = validation.value;
+    assoc(key, validation.value, o);
   }
   return o;
 };

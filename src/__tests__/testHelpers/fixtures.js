@@ -75,3 +75,5 @@ export const notFunctionValues = [
   true,
   false,
 ];
+
+export const func = () => {};

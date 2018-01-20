@@ -16,6 +16,7 @@ import {
 } from 'ramda';
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
 import { FIELD_NAMES } from '../constraints';
+import { isObject } from 'util';
 
 export const propName = prop(FIELD_NAMES.NAME);
 export const pluckName = pluck(FIELD_NAMES.NAME);
@@ -46,11 +47,13 @@ export const defaultsMap = reduce(
   {}
 );
 
+//
 export const constraintsForFieldsWithProp = name => constraints => (
   acc,
   [fieldName, fieldValue]
 ) => {
   const childConstraints = prop(name, find(propEqName(fieldName), constraints));
+
   if (
     isNotUndefined(childConstraints) &&
     isNotEmpty(childConstraints) &&
