@@ -8,6 +8,7 @@ import {
   tap,
   addIndex,
   reduce,
+  toPairs,
 } from 'ramda';
 import { validation as Validation } from 'folktale';
 
@@ -23,6 +24,9 @@ export const wrapSB = value => `[${value}]`;
 export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));
 export const { freeze } = Object;
 export const iReduce = addIndex(reduce);
+export const reduceObjIndexed = curry((f, acc, v) =>
+  compose(reduce(f, acc), toPairs)(v)
+);
 
 const log = curry((loggingFunction, prefix) =>
   tap(
