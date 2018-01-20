@@ -1,79 +1,112 @@
-import { reduce, concat, isEmpty, identity, assoc } from 'ramda';
-import { isNotEmpty } from 'ramda-adjunct';
+import {
+  reduce,
+  isEmpty,
+  identity,
+  update,
+  assoc,
+  concat,
+  append,
+  toPairs,
+  compose,
+  always,
+  prop,
+} from 'ramda';
 import { validation as Validation } from 'folktale';
 import { constraintsForFieldsWithPropChildren } from './utils';
 import { validateObject } from './validateObjectWithConstraints';
-import { iReduce } from '../utils';
+import { iReduce, reduceObjIndexed } from '../utils';
 
 const { collect, Success } = Validation;
 
-const replaceArrayItemsWithValidationValues = (o, replacements) => {
-  for (const [key, validation] of replacements) {
-    assoc(key, validation.value, o);
-  }
-  return o;
-};
+// -----------------------------------------------------------------------------
+// Replace Field Values
+// -----------------------------------------------------------------------------
 
-const replaceChildren = (childrenMap, o) => {
-  for (const [key, value] of childrenMap) {
-    o[key] = replaceArrayItemsWithValidationValues(o[key], value);
-  }
-  return o;
-};
+const replaceChildrenOfArrayField = (o, fieldToValidationsMap) =>
+  reduceObjIndexed(
+    (acc, [validation, fieldName]) => update(fieldName, validation.value, o),
+    o,
+    fieldToValidationsMap
+  );
 
-// Run through all the
-const validateChildrenOfField = childConstraints => fieldName =>
-  iReduce((acc, child, index) => {
-    if (isEmpty(child)) {
+const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
+  reduceObjIndexed(
+    (acc, [fieldName, validation]) =>
+      assoc(
+        fieldName,
+        replaceChildrenOfArrayField(prop(fieldName, acc), validation),
+        acc
+      ),
+    o,
+    fieldToValidationsMap
+  );
+
+// -----------------------------------------------------------------------------
+// Validate Field Values
+// -----------------------------------------------------------------------------
+
+const validateChildrenOfArrayField = (
+  fieldName,
+  fieldValue,
+  childConstraints
+) =>
+  iReduce(
+    (acc, child, index) => {
+      if (isEmpty(child)) {
+        return acc;
+      }
+      acc[index] = validateObject(fieldName, childConstraints, child);
       return acc;
-    }
-    // eslint-disable-next-line no-use-before-define
-    acc.set(index, validateObject(fieldName, childConstraints, child));
-    return acc;
-  }, new Map());
+    },
+    [],
+    fieldValue
+  );
 
-// { alpha: Success, beta: Success}
+const validateChildrenOfArrayFields = reduce(
+  (acc, [fieldName, fieldValue, childConstraints]) => {
+    const childValidations = validateChildrenOfArrayField(
+      fieldName,
+      fieldValue,
+      childConstraints
+    );
+    return isEmpty(childValidations)
+      ? acc
+      : assoc(fieldName, childValidations, acc);
+  },
+  {}
+);
 
-// Run through each field that has children
-const validateChildren = v =>
-  reduce((acc, [fieldName, fieldValue, childConstraints]) => {
-    const childValidations = validateChildrenOfField(childConstraints)(
-      fieldName
-    )(fieldValue);
-    if (isNotEmpty(childValidations)) {
-      acc.set(fieldName, childValidations);
-    }
-    return acc;
-  }, new Map())(v);
+// -----------------------------------------------------------------------------
+// Process Fields that have children - that have a value that is an array
+// -----------------------------------------------------------------------------
 
-// [
-//    { alpha: Success, beta: Success},
-//    { charlie: Success, delta: Success}
-// [
+const collectAllValidationsFromChildren = compose(
+  // eslint-disable-next-line no-unused-vars
+  reduce((acc, [key, value]) => {
+    const its = reduce((acc2, v) => append(v, acc2), [], value);
+    return concat(its, acc);
+  }, []),
+  toPairs
+);
 
 export default constraints => o => {
-  const fieldsWithChildrenConstraints = constraintsForFieldsWithPropChildren(
-    constraints
+  const fieldToValidationsMap = compose(
+    validateChildrenOfArrayFields,
+    constraintsForFieldsWithPropChildren(constraints)
   )(o);
-  const childValidations = validateChildren(fieldsWithChildrenConstraints);
-  let allValidations = [];
-  for (const [key, set] of childValidations) {
-    const a = [];
-    for (const value of set) {
-      a.push(value[1]);
-    }
-    allValidations = concat(a, allValidations);
-  }
 
-  if (isEmpty(childValidations)) {
+  if (isEmpty(fieldToValidationsMap)) {
     return Success(o);
   }
 
+  const allValidations = collectAllValidationsFromChildren(
+    fieldToValidationsMap
+  );
+
   return collect(allValidations).matchWith({
-    Success: _ => {
-      const replacedO = replaceChildren(childValidations, o);
-      return Success(replacedO);
-    },
+    Success: always(
+      Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o))
+    ),
     Failure: identity,
   });
 };
