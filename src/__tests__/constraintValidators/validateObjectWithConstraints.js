@@ -9,32 +9,54 @@ import {
 
 const { Success, Failure } = Validation;
 
-const value1 = 1;
-const value3 = 3;
-const value4 = 4;
-const value5 = 5;
-const value6 = 6;
-const value7 = 7;
+const value1 = `value1`;
+const value2 = `value2`;
+const value3 = `value3`;
+const value4 = `value4`;
+const value5 = `value5`;
+const value6 = `value6`;
+const value7 = `value7`;
+const value8 = `value8`;
+const value9 = `value9`;
 const message1 = `message1`;
+const transformedValue1 = `transformed1`;
+const transformedValue2 = `transformed2`;
+const defaultValue1 = `default1`;
+const defaultValue2 = `default2`;
+
+// Note: No need to test the validity of the constraints object itself as this
+// is well tested in `validateConstraints.js`. These tests should validate that
+// given a valid constraint object, the constraints are appled correctly.
 
 describe(`validateObjectWithConstraints`, () => {
+  // ---------------------------------------------------------------------------
+  // Full nested constraint object with all features
+  // ---------------------------------------------------------------------------
+
   describe(`with a flat constraint object`, () => {
     describe(`that satisfies constraints`, () => {
       it(`returns a Validation.Success with supplied value`, () => {
         const v1 = stubReturnsSuccess(value1);
-        const v2 = spy();
+        const vNotCalled = spy();
         const v3 = stubReturnsSuccess(value3);
-        const v4 = spy();
         const v5 = stubReturnsSuccess(value5);
         const v6 = stubReturnsSuccess(value6);
         const v7 = stubReturnsSuccess(value7);
-        const t1 = stubReturns(2);
+        const v8 = stubReturnsSuccess(value8);
+        const t1 = stubReturns(transformedValue1);
+        const t2 = stubReturns(transformedValue2);
         const o = {
           a: value1,
           c: value3,
           e: [
             {
               f: value4,
+              i: value8,
+            },
+            {
+              f: value4,
+              i: value8,
+              j: value9,
             },
           ],
           g: {
@@ -48,21 +70,26 @@ describe(`validateObjectWithConstraints`, () => {
               name: `a`,
               validator: v1,
               isRequired: true,
-              transformer: t1,
+              transformer: t1, // Value should be transformed
             },
             {
               name: `b`,
-              validator: v2,
+              validator: vNotCalled,
             },
             {
               name: `c`,
               validator: v3,
-              defaultValue: 20,
+              defaultValue: defaultValue1,
             },
             {
               name: `d`,
-              validator: v4,
-              defaultValue: value4,
+              validator: vNotCalled, // Not run because no value for d
+              defaultValue: value2, // Should be applied
+            },
+            {
+              name: `k`,
+              validator: vNotCalled, // Not run because no value for d
+              defaultValue: defaultValue1, // Should be applied
             },
             {
               name: `g`,
@@ -86,6 +113,17 @@ describe(`validateObjectWithConstraints`, () => {
                     validator: v5,
                     isRequired: true,
                   },
+                  {
+                    name: `i`,
+                    validator: v8,
+                    transformer: t2,
+                    isRequired: true,
+                  },
+                  {
+                    name: `j`,
+                    validator: v8,
+                    defaultValue: defaultValue2,
+                  },
                 ],
               },
             },
@@ -96,22 +134,39 @@ describe(`validateObjectWithConstraints`, () => {
         const validation = validator(o);
         expect(validation).toEqual(
           Success({
-            a: 2,
-            c: 3,
-            d: 4,
-            e: [{ f: 4 }],
+            a: transformedValue1,
+            c: value3,
+            d: value2,
+            k: defaultValue1,
             g: {
               h: `x`,
             },
+            e: [
+              {
+                f: value4,
+                i: transformedValue2,
+                j: defaultValue2,
+              },
+              {
+                f: value4,
+                i: transformedValue2,
+                j: value9,
+              },
+            ],
           })
         );
         expect(t1.calledWith(value1)).toBeTruthy();
+        expect(t2.calledWith(value8)).toBeTruthy();
         expect(v1.calledWith(value1)).toBeTruthy();
         expect(v3.calledWith(value3)).toBeTruthy();
-        expect(v2.notCalled).toBeTruthy();
-        expect(v4.notCalled).toBeTruthy();
+        expect(v5.calledWith(value4)).toBeTruthy();
+        expect(vNotCalled.notCalled).toBeTruthy();
       });
     });
+
+    // -------------------------------------------------------------------------
+    // One level of constraints
+    // -------------------------------------------------------------------------
 
     describe(`that doesn't satisfy constraints`, () => {
       describe(`empty object`, () => {
@@ -174,35 +229,6 @@ describe(`validateObjectWithConstraints`, () => {
             ])
           );
         });
-      });
-    });
-
-    describe(`with both isRequired and defaultValue keys present on an item`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const v1 = spy();
-        const o = {
-          a: 1,
-        };
-
-        const constraints = {
-          fields: [
-            {
-              name: `a`,
-              validator: v1,
-              isRequired: true,
-              defaultValue: true,
-            },
-          ],
-        };
-
-        const validator = validateObjectWithConstraints(constraints);
-        const validation = validator(o);
-        expect(validation).toEqual(
-          Failure([
-            `Constraints Object Invalid: for field 'fields': Object had more than one exlusive key: ['isRequired', 'defaultValue']`,
-          ])
-        );
-        expect(v1.notCalled).toBeTruthy();
       });
     });
   });

@@ -12,6 +12,7 @@ import {
   prop,
 } from 'ramda';
 import { validation as Validation } from 'folktale';
+// import prettyjson from 'prettyjson';
 import { constraintsForFieldsWithPropChildren } from './utils';
 import { validateObject } from './validateObjectWithConstraints';
 import { iReduce, reduceObjIndexed } from '../utils';
@@ -22,24 +23,31 @@ const { collect, Success } = Validation;
 // Replace Field Values
 // -----------------------------------------------------------------------------
 
-const replaceChildrenOfArrayField = (o, fieldToValidationsMap) =>
-  reduceObjIndexed(
-    (acc, [validation, fieldName]) => update(fieldName, validation.value, o),
+const replaceChildrenOfArrayField = (o, validations) => {
+  let i = -1;
+  return reduceObjIndexed(
+    // eslint-disable-next-line no-unused-vars, no-return-assign
+    (acc, [key, validation]) => update((i += 1), validation.value, acc),
     o,
-    fieldToValidationsMap
+    validations
   );
+};
 
-const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
-  reduceObjIndexed(
-    (acc, [fieldName, validation]) =>
-      assoc(
+const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) => {
+  const result = reduceObjIndexed(
+    (acc, [fieldName, validations]) => {
+      const x = assoc(
         fieldName,
-        replaceChildrenOfArrayField(prop(fieldName, acc), validation),
+        replaceChildrenOfArrayField(prop(fieldName, acc), validations),
         acc
-      ),
+      );
+      return x;
+    },
     o,
     fieldToValidationsMap
   );
+  return result;
+};
 
 // -----------------------------------------------------------------------------
 // Validate Field Values
