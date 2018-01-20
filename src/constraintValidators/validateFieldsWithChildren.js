@@ -15,7 +15,7 @@ import { validation as Validation } from 'folktale';
 // import prettyjson from 'prettyjson';
 import { constraintsForFieldsWithPropChildren } from './utils';
 import { validateObject } from './validateObjectWithConstraints';
-import { iReduce, reduceObjIndexed } from '../utils';
+import { reduceObjIndexed } from '../utils';
 
 const { collect, Success } = Validation;
 
@@ -58,14 +58,10 @@ const validateChildrenOfArrayField = (
   fieldValue,
   childConstraints
 ) =>
-  iReduce(
-    (acc, child, index) => {
-      if (isEmpty(child)) {
-        return acc;
-      }
-      acc[index] = validateObject(fieldName, childConstraints, child);
-      return acc;
-    },
+  reduce(
+    (acc, child) => isEmpty(child)
+        ? acc
+        : append(validateObject(fieldName, childConstraints, child), acc),
     [],
     fieldValue
   );
