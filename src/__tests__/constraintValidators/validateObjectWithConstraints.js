@@ -6,6 +6,7 @@ import {
   spy,
   stubReturns,
 } from '../testHelpers/sinon';
+import { FIELD_NAMES } from '../../constraints';
 
 const { Success, Failure } = Validation;
 
@@ -23,6 +24,26 @@ const transformedValue1 = `transformed1`;
 const transformedValue2 = `transformed2`;
 const defaultValue1 = `default1`;
 const defaultValue2 = `default2`;
+// const name1 = `name1`;
+// const name2 = `name2`;
+// const name3 = `name3`;
+// const name4 = `name4`;
+// const name5 = `name5`;
+// const name6 = `name6`;
+// const name7 = `name7`;
+// const name8 = `name8`;
+// const name9 = `name9`;
+
+const {
+  FIELDS,
+  NAME,
+  VALIDATOR,
+  TRANSFORMER,
+  IS_REQUIRED,
+  DEFAULT_VALUE,
+  VALUE,
+  CHILDREN,
+} = FIELD_NAMES;
 
 // Note: No need to test the validity of the constraints object itself as this
 // is well tested in `validateConstraints.js`. These tests should validate that
@@ -65,64 +86,64 @@ describe(`validateObjectWithConstraints`, () => {
         };
 
         const constraints = {
-          fields: [
+          [FIELDS]: [
             {
-              name: `a`,
-              validator: v1,
-              isRequired: true,
-              transformer: t1, // Value should be transformed
+              [NAME]: `a`,
+              [VALIDATOR]: v1,
+              [IS_REQUIRED]: true,
+              [TRANSFORMER]: t1, // Value should be transformed
             },
             {
-              name: `b`,
-              validator: vNotCalled,
+              [NAME]: `b`,
+              [VALIDATOR]: vNotCalled,
             },
             {
-              name: `c`,
-              validator: v3,
-              defaultValue: defaultValue1,
+              [NAME]: `c`,
+              [VALIDATOR]: v3,
+              [DEFAULT_VALUE]: defaultValue1,
             },
             {
-              name: `d`,
-              validator: vNotCalled, // Not run because no value for d
-              defaultValue: value2, // Should be applied
+              [NAME]: `d`,
+              [VALIDATOR]: vNotCalled, // Not run because no value
+              [DEFAULT_VALUE]: value2, // Should be applied instead
             },
             {
-              name: `k`,
-              validator: vNotCalled, // Not run because no value for d
-              defaultValue: defaultValue1, // Should be applied
+              [NAME]: `k`,
+              [VALIDATOR]: vNotCalled, // Not run because no value
+              [DEFAULT_VALUE]: defaultValue1, // Should be applied instead
             },
             {
-              name: `g`,
-              validator: v7,
-              value: {
-                fields: [
+              [NAME]: `g`,
+              [VALIDATOR]: v7,
+              [VALUE]: {
+                [FIELDS]: [
                   {
-                    name: `h`,
-                    validator: v6,
+                    [NAME]: `h`,
+                    [VALIDATOR]: v6,
                   },
                 ],
               },
             },
             {
-              name: `e`,
-              validator: v5,
-              children: {
-                fields: [
+              [NAME]: `e`,
+              [VALIDATOR]: v5,
+              [CHILDREN]: {
+                [FIELDS]: [
                   {
-                    name: `f`,
-                    validator: v5,
-                    isRequired: true,
+                    [NAME]: `f`,
+                    [VALIDATOR]: v5,
+                    [IS_REQUIRED]: true,
                   },
                   {
-                    name: `i`,
-                    validator: v8,
-                    transformer: t2,
-                    isRequired: true,
+                    [NAME]: `i`,
+                    [VALIDATOR]: v8,
+                    [TRANSFORMER]: t2,
+                    [IS_REQUIRED]: true,
                   },
                   {
-                    name: `j`,
-                    validator: v8,
-                    defaultValue: defaultValue2,
+                    [NAME]: `j`,
+                    [VALIDATOR]: v8,
+                    [DEFAULT_VALUE]: defaultValue2,
                   },
                 ],
               },
@@ -174,14 +195,14 @@ describe(`validateObjectWithConstraints`, () => {
         const value = {};
 
         const constraints = {
-          fields: [
+          [FIELDS]: [
             {
-              name: `a`,
-              validator: v1,
+              [NAME]: `a`,
+              [VALIDATOR]: v1,
             },
             {
-              name: `b`,
-              validator: v1,
+              [NAME]: `b`,
+              [VALIDATOR]: v1,
             },
           ],
         };
@@ -203,16 +224,16 @@ describe(`validateObjectWithConstraints`, () => {
           };
 
           const constraints = {
-            fields: [
+            [FIELDS]: [
               {
-                name: `a`,
-                validator: v1,
-                isRequired: true,
+                [NAME]: `a`,
+                [VALIDATOR]: v1,
+                [IS_REQUIRED]: true,
               },
               {
-                name: `b`,
-                validator: v2,
-                isRequired: true,
+                [NAME]: `b`,
+                [VALIDATOR]: v2,
+                [IS_REQUIRED]: true,
               },
             ],
           };
@@ -237,11 +258,11 @@ describe(`validateObjectWithConstraints`, () => {
           a: value1,
         };
         const constraints = {
-          fields: [
+          [FIELDS]: [
             {
-              name: `a`,
-              validator: v1,
-              children: {},
+              [NAME]: `a`,
+              [VALIDATOR]: v1,
+              [CHILDREN]: {},
             },
           ],
         };
@@ -260,11 +281,11 @@ describe(`validateObjectWithConstraints`, () => {
             a: value1,
           };
           const constraints = {
-            fields: [
+            [FIELDS]: [
               {
-                name: `a`,
-                validator: v1,
-                children: {},
+                [NAME]: `a`,
+                [VALIDATOR]: v1,
+                [CHILDREN]: {},
               },
             ],
           };
@@ -283,16 +304,16 @@ describe(`validateObjectWithConstraints`, () => {
             a: value1,
           };
           const constraints = {
-            fields: [
+            [FIELDS]: [
               {
-                name: `a`,
-                validator: v1,
-                isRequired: true,
+                [NAME]: `a`,
+                [VALIDATOR]: v1,
+                [IS_REQUIRED]: true,
               },
               {
-                name: `b`,
-                validator: v2,
-                isRequired: true,
+                [NAME]: `b`,
+                [VALIDATOR]: v2,
+                [IS_REQUIRED]: true,
               },
             ],
           };
