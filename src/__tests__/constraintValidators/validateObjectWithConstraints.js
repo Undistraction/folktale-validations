@@ -56,7 +56,7 @@ describe(`validateObjectWithConstraints`, () => {
 
   describe(`with a flat constraint object`, () => {
     describe(`that satisfies constraints`, () => {
-      it.only(`returns a Validation.Success with supplied value`, () => {
+      it(`returns a Validation.Success with supplied value`, () => {
         const v1 = stubReturnsSuccess(value1);
         const spyNotCalled1 = spy();
         const spyNotCalled2 = spy();

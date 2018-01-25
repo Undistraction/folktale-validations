@@ -1,4 +1,4 @@
-import { identity, curry } from 'ramda';
+import { identity, curry, equals } from 'ramda';
 import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
@@ -18,6 +18,8 @@ const { Failure } = Validation;
 
 const objectErrorMessageWrapper = fieldName =>
   wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
+
+const constraintsAreOwnConstraints = equals(CONSTRAINTS);
 
 export const validateObject = curry((fieldName, constraints, o) => {
   const result = untilFailureValidator([
@@ -49,8 +51,8 @@ const validateObjectWithConstraints = constraints => o => {
     return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);
   }
 
-  // Avoid recursion if we try and validate CONSTRAINTS with CONSTRAINTS
-  return constraints === CONSTRAINTS
+  // Avoid recursion if we try and validate CONSTRAINTS with itself
+  return constraintsAreOwnConstraints(constraints)
     ? validateObject(ROOT_FIELD, constraints, o)
     : validateConstraints(constraints).matchWith({
         Success: _ => validateObject(ROOT_FIELD, constraints, o),

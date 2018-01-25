@@ -9,12 +9,16 @@ import {
   addIndex,
   reduce,
   toPairs,
+  prop,
 } from 'ramda';
 import { validation as Validation } from 'folktale';
 
 const { Success } = Validation;
 
-// eslint-disable-next-line import/prefer-default-export
+// -----------------------------------------------------------------------------
+// Formatting
+// -----------------------------------------------------------------------------
+
 export const joinWithComma = join(`, `);
 export const joinWithAnd = join(` and `);
 export const joinWithOr = join(` or `);
@@ -22,11 +26,25 @@ export const joinWithColon = join(`: `);
 export const quote = value => `'${value}'`;
 export const wrapSB = value => `[${value}]`;
 export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));
+
+// -----------------------------------------------------------------------------
+// Objects
+// -----------------------------------------------------------------------------
+
 export const { freeze } = Object;
+
+// -----------------------------------------------------------------------------
+// Functional Utility
+// -----------------------------------------------------------------------------
+
 export const iReduce = addIndex(reduce);
 export const reduceObjIndexed = curry((f, acc, v) =>
   compose(reduce(f, acc), toPairs)(v)
 );
+
+// -----------------------------------------------------------------------------
+// Logging
+// -----------------------------------------------------------------------------
 
 const log = curry((loggingFunction, prefix) =>
   tap(
@@ -41,3 +59,9 @@ export const loggingValidator = message => validation => {
   logToConsole(message)(validation);
   return Success(validation);
 };
+
+// -----------------------------------------------------------------------------
+// Props / Lenses
+// -----------------------------------------------------------------------------
+
+export const propValue = prop(`value`);

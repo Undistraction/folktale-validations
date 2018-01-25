@@ -1,3 +1,4 @@
-import { compose, prop } from 'ramda';
+import { compose } from 'ramda';
+import { propValue } from '../utils';
 
-export default f => compose(f, prop(`value`));
+export default f => compose(f, propValue);
