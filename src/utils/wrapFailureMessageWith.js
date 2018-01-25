@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale';
-import { prop, compose, of } from 'ramda';
+import { compose, of } from 'ramda';
 import { propValue } from '../utils';
 
 const { Failure } = Validation;
