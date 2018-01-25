@@ -1,4 +1,4 @@
-import { isNumberWithUnit } from 'cssjs-units';
+import { isNumberWithUnit } from 'cssapi-units';
 import predicateValidator from './predicateValidator';
 import { numberWithUnitErrorMessage } from '../messages';
 

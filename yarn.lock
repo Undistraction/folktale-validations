@@ -1057,16 +1057,16 @@ cryptiles@3.x.x:
   dependencies:
     boom "5.x.x"
 
-cssbeautify@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/cssbeautify/-/cssbeautify-0.3.1.tgz#12dd1f734035c2e6faca67dcbdcef74e42811397"
-
-cssjs-units@^0.2.12:
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/cssjs-units/-/cssjs-units-0.2.12.tgz#2a21d1202f693d28f355064618108259e0eb19a8"
+cssapi-units@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/cssapi-units/-/cssapi-units-0.3.0.tgz#b930cd3359f9f468dcd487d449d4f3593b5a2832"
   dependencies:
     ramda "^0.25.0"
     ramda-adjunct "^2.2.0"
+
+cssbeautify@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/cssbeautify/-/cssbeautify-0.3.1.tgz#12dd1f734035c2e6faca67dcbdcef74e42811397"
 
 cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   version "0.3.2"
@@ -3091,9 +3091,13 @@ qs@~6.5.1:
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
 
-ramda-adjunct@^2.1.0, ramda-adjunct@^2.2.0:
+ramda-adjunct@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.2.0.tgz#3f56acd359d442041db70d302f4df8063e83fd9d"
+
+ramda-adjunct@^2.2.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.4.0.tgz#d53ed31350b9dfac59965095be0a3dd967ee8853"
 
 ramda@^0.25.0:
   version "0.25.0"
