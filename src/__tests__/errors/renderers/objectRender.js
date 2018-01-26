@@ -1,16 +1,15 @@
 import renderMessage from '../../../errors/renderers/objectRenderer';
 import {
   flatErrorMessage,
-  nestedErrorMessage,
+  nestedObjectErrorMessage,
+  nestedArrayErrorMessage,
 } from '../../testHelpers/fixtures';
-// eslint-disable-next-line no-unused-vars
-import toEqualWithoutWhitespace from '../../testHelpers/matchers/toEqualWithoutWhitespace';
 
 describe(`objectRenderer()`, () => {
   describe(`with a flat error object`, () => {
     it(`renders the correct error message`, () => {
       const result = renderMessage(flatErrorMessage);
-      expect(result).toEqualWithoutWhitespace(
+      expect(result).toEqualWithCompressedWhitespace(
         `Object included invalid value(s)
           – Key 'a': errorMessageForA
           – Key 'b': errorMessageForB
@@ -21,12 +20,30 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a nested error object`, () => {
     it(`renders the correct error message`, () => {
-      const result = renderMessage(nestedErrorMessage);
-      expect(result).toEqualWithoutWhitespace(
+      const result = renderMessage(nestedObjectErrorMessage);
+      expect(result).toEqualWithCompressedWhitespace(
         `Object included invalid value(s)
           – Key 'a': errorMessageForA
           – Key 'b': Object included invalid value(s)
-            – Key 'c': errorMessageForC`
+            – Key 'ba': errorMessageForBA
+          – Key 'c': errorMessageForC`
+      );
+    });
+  });
+
+  describe(`with a nested array of error objects`, () => {
+    it(`renders the correct error message`, () => {
+      const result = renderMessage(nestedArrayErrorMessage);
+      expect(result).toEqualWithCompressedWhitespace(
+        `Object included invalid value(s)
+          – Key 'a': errorMessageForA
+          – Key 'b': Array included invalid object(s)
+            – [0] Object included invalid value(s)
+              – Key 'b1a': errorMessageForB1A
+              – Key 'b1b': errorMessageForB1A
+            – [1] Object included invalid value(s)
+              – Key 'b2a': errorMessageForB2B
+          – Key 'c': errorMessageForC`
       );
     });
   });
