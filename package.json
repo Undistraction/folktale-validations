@@ -66,6 +66,6 @@
     "deep-freeze": "^0.0.1",
     "folktale": "^2.0.1",
     "ramda": "^0.25.0",
-    "ramda-adjunct": "^2.1.0"
+    "ramda-adjunct": "^2.4.1"
   }
 }

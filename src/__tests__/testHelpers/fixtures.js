@@ -1,3 +1,5 @@
+import { FIELD_NAMES } from '../../const';
+
 export const allValues = [
   [],
   {},
@@ -77,3 +79,16 @@ export const notFunctionValues = [
 ];
 
 export const func = () => {};
+
+export const flatErrorMessage = {
+  a: `errorMessageForA`,
+  b: `errorMessageForB`,
+  c: `errorMessageForC`,
+};
+
+export const nestedErrorMessage = {
+  a: `errorMessageForA`,
+  b: {
+    c: `errorMessageForC`,
+  },
+};

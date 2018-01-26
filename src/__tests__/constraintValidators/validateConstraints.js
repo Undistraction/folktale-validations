@@ -9,7 +9,7 @@ import {
   notArrayValues,
   func,
 } from '../testHelpers/fixtures';
-import { FIELD_NAMES } from '../../constraints';
+import { FIELD_NAMES } from '../../const';
 
 const { Success, Failure } = Validation;
 

@@ -7,19 +7,7 @@ import validateExclusiveKeys from './validators/validateExclusiveKeys';
 import validateIsObject from './validators/validateIsObject';
 import allOfValidator from './helpers/allOfValidator';
 import validateIsArrayOf from './validators/validateIsArrayOf';
-import { freeze } from './utils';
-
-export const FIELD_NAMES = freeze({
-  FIELDS: `fields`,
-  FIELDS_VALIDATOR: `fieldsValidator`,
-  NAME: `name`,
-  VALIDATOR: `validator`,
-  TRANSFORMER: `transformer`,
-  IS_REQUIRED: `isRequired`,
-  DEFAULT_VALUE: `defaultValue`,
-  VALUE: `value`,
-  CHILDREN: `children`,
-});
+import { FIELD_NAMES } from './const';
 
 const {
   FIELDS,

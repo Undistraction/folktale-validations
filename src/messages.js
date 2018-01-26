@@ -7,6 +7,8 @@ import {
   quoteAndJoinWithComma,
   quote,
   wrapSB,
+  tabsForLevel,
+  joinWithSpace,
 } from './utils';
 import { ROOT_FIELD } from './const';
 
@@ -40,8 +42,14 @@ export const invalidKeysErrorMessage = invalidKeys =>
     quote(wrapSB(joinWithComma(invalidKeys))),
   ]);
 
+export const prefixWithKey = (level, s) =>
+  joinWithSpace([`\n${tabsForLevel(level)} – Key`, s]);
+
 export const valueErrorMessage = name => value =>
   `Key ${joinWithColon([quote(name), value])}`;
+
+export const objectValueErrorMessage = (level, name) => value =>
+  prefixWithKey(level, joinWithColon([quote(name), value]));
 
 export const valuesErrorMessage = messages =>
   joinWithColon([`Object included invalid values(s)`, joinWithComma(messages)]);
@@ -74,6 +82,12 @@ export const exclusiveKeyErrorMessage = keys =>
     `Object had more than one exlusive key`,
     wrapSB(quoteAndJoinWithComma(keys)),
   ]);
+
+export const invalidObjectPrefix = always(`Object`);
+export const invalidObjectReasonInvalidValues = always(
+  `included invalid value(s)`
+);
+export const invalidObjectReasonInvalidKeys = always(`included invalid key(s)`);
 
 export const isEmptyErrorMessage = always(`Was Empty`);
 

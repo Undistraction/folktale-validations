@@ -15,7 +15,7 @@ import {
   toPairs,
 } from 'ramda';
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
-import { FIELD_NAMES } from '../constraints';
+import { FIELD_NAMES } from '../const';
 
 export const propName = prop(FIELD_NAMES.NAME);
 export const pluckName = pluck(FIELD_NAMES.NAME);

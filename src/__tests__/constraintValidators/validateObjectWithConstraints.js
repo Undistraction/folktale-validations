@@ -6,7 +6,7 @@ import {
   spy,
   stubReturns,
 } from '../testHelpers/sinon';
-import { FIELD_NAMES } from '../../constraints';
+import { FIELD_NAMES } from '../../const';
 
 const { Success, Failure } = Validation;
 

@@ -37,9 +37,6 @@ export default {
     // Allow CommonJS modules to be included in build.
     commonjs({
       namedExports: {
-        // left-hand side can be an absolute path, a path
-        // relative to the current directory, or the name
-        // of a module in node_modules
         'node_modules/folktale/index.js': [`validation`],
       },
     }),
