@@ -20,8 +20,12 @@ expect.extend({
     const message = pass
       ? () =>
           `${matcherHint(`.not.${name}`)}\n\n` +
+          `Uncompressed expected value:\n` +
+          `  ${printExpected(expected)}\n` +
           `Expected value with compressed whitespace to not equal:\n` +
           `  ${printExpected(expectedWithCompresssedWhitespace)}\n` +
+          `Uncompressed received value:\n` +
+          `  ${printExpected(received)}\n` +
           `Received value with compressed whitespace:\n` +
           `  ${printReceived(receivedWithCompresssedWhitespace)}`
       : () => {
@@ -34,8 +38,12 @@ expect.extend({
           );
           return (
             `${matcherHint(`.${name}`)}\n\n` +
+            `Uncompressed expected value:\n` +
+            `  ${printExpected(expected)}\n` +
             `Expected value with compressed whitespace to equal:\n` +
             `  ${printExpected(expectedWithCompresssedWhitespace)}\n` +
+            `Uncompressed received value:\n` +
+            `  ${printExpected(received)}\n` +
             `Received value with compressed whitespace:\n` +
             `  ${printReceived(receivedWithCompresssedWhitespace)}${
               diffString ? `\n\nDifference:\n\n${diffString}` : ``
