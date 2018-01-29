@@ -14,16 +14,16 @@ import {
   anyPass,
   has,
   repeat,
+  over,
+  lensIndex,
+  toUpper,
+  mapObjIndexed,
 } from 'ramda';
 import { isEmptyString, isEmptyArray, isUndefined } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { FIELD_NAMES } from './const';
 
 const { Success } = Validation;
-
-// -----------------------------------------------------------------------------
-// Predicates
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 // Formatting
@@ -55,14 +55,23 @@ export const tabsForLevel = compose(joinWithNoSpace, repeat(`\t`));
 export const { freeze } = Object;
 
 // -----------------------------------------------------------------------------
-// Functional Utility
+// String
 // -----------------------------------------------------------------------------
 
-export const iReduce = addIndex(reduce);
+export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper));
+
+// -----------------------------------------------------------------------------
+// Iteration
+// -----------------------------------------------------------------------------
+
 export const reduceObjIndexed = curry((f, acc, v) =>
   compose(reduce(f, acc), toPairs)(v)
 );
+
+export const reduceWithIndex = addIndex(reduce);
 export const mapWithIndex = addIndex(map);
+
+export const mapObjIndexedWithIndex = addIndex(mapObjIndexed);
 
 // -----------------------------------------------------------------------------
 // Logging

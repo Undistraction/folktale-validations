@@ -1,10 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
 import { validateIsLengthBetween } from '../../index';
-import {
-  lengthGreaterThanMessage,
-  lengthLessThanMessage,
-} from '../../messages';
 
 const { Success, Failure } = Validation;
 

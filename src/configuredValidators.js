@@ -1,15 +1,41 @@
-import validateIsBoolean from './validators/validateIsBoolean';
-import validateIsObject from './validators/validateIsObject';
-import validateIsFunction from './validators/validateIsFunction';
-import validateIsNotEmpty from './validators/validateIsNotEmpty';
-import validateIsNotUndefined from './validators/validateIsNotUndefined';
-import validateIsLengthBetween from './validators/validateIsLengthBetween';
-import validateIsString from './validators/validateIsString';
+import {
+  validateIsArray,
+  validateIsNotArray,
+  validateIsBoolean,
+  validateIsNotBoolean,
+  validateIsObject,
+  validateIsNotObject,
+  validateIsString,
+  validateIsNotString,
+  validateIsFunction,
+  validateIsNotFunction,
+  validateIsNumber,
+  validateIsNotNumber,
+  validateIsDate,
+  validateIsNotDate,
+  validateIsNaN,
+  validateIsNotNaN,
+  validateIsNil,
+  validateIsNull,
+  validateIsNotNull,
+  validateIsUndefined,
+  validateIsNotUndefined,
+  validateIsEmpty,
+  validateIsNotEmpty,
+  validateIsEmptyArray,
+  validateIsNonEmptyArray,
+  validateIsEmptyString,
+  validateIsNonEmptyString,
+  validateIsValidNumber,
+  validateIsNotValidNumber,
+  validateIsValidDate,
+  validateIsNotValidDate,
+} from './validators/generatedPredicateValidators';
+
 import validateIsLengthGreaterThan from './validators/validateIsLengthGreaterThan';
 import validateIsLengthLessThan from './validators/validateIsLengthLessThan';
+import validateIsLengthBetween from './validators/validateIsLengthBetween';
 import validateIsWhitelistedValue from './validators/validateIsWhitelistedValue';
-import validateIsValidNumber from './validators/validateIsValidNumber';
-import validateIsArray from './validators/validateIsArray';
 import validateObjectValues from './validators/validateObjectValues';
 import validateRequiredKeys from './validators/validateRequiredKeys';
 import validateWhitelistedKeys from './validators/validateWhitelistedKeys';
@@ -18,9 +44,7 @@ import validateExclusiveKeys from './validators/validateExclusiveKeys';
 import validateIsArrayOf from './validators/validateIsArrayOf';
 
 import {
-  isTypeMessage,
-  isNotEmptyMessage,
-  isValidNumberMessage,
+  predicateMessage,
   isWhitelistedStringMessage,
   isLengthGreaterThanMessage,
   isLengthLessThanMessage,
@@ -33,20 +57,77 @@ import {
   exclusiveKeyErrorMessage,
 } from './messages';
 
-import { TYPES } from './const';
+import { PREDICATES } from './const';
 
 export default {
-  // Basic Types
-  validateIsBoolean: validateIsBoolean(isTypeMessage(TYPES.Boolean)),
-  validateIsFunction: validateIsFunction(isTypeMessage(TYPES.Function)),
-  validateIsString: validateIsString(isTypeMessage(TYPES.String)),
-  validateIsArray: validateIsArray(isTypeMessage(TYPES.Array)),
-  validateIsObject: validateIsObject(isTypeMessage(TYPES.Object)),
-  validateIsNotEmpty: validateIsNotEmpty(isNotEmptyMessage()),
-  validateIsNotUndefined: validateIsNotUndefined(
-    isTypeMessage(TYPES.Undefined, true)
+  // Generated Predicates
+  validateIsArray: validateIsArray(predicateMessage(PREDICATES.Array)),
+  validateIsNotArray: validateIsNotArray(
+    predicateMessage(PREDICATES.Array, true)
   ),
-  validateIsValidNumber: validateIsValidNumber(isValidNumberMessage()),
+  validateIsBoolean: validateIsBoolean(predicateMessage(PREDICATES.Boolean)),
+  validateIsNotBoolean: validateIsNotBoolean(
+    predicateMessage(PREDICATES.Boolean, true)
+  ),
+  validateIsString: validateIsString(predicateMessage(PREDICATES.String)),
+  validateIsNotString: validateIsNotString(
+    predicateMessage(PREDICATES.String, true)
+  ),
+  validateIsObject: validateIsObject(predicateMessage(PREDICATES.Object)),
+  validateIsNotObject: validateIsNotObject(
+    predicateMessage(PREDICATES.Object, true)
+  ),
+  validateIsFunction: validateIsFunction(predicateMessage(PREDICATES.Function)),
+  validateIsNotFunction: validateIsNotFunction(
+    predicateMessage(PREDICATES.Function, true)
+  ),
+  validateIsNumber: validateIsNumber(predicateMessage(PREDICATES.Number)),
+  validateIsNotNumber: validateIsNotNumber(
+    predicateMessage(PREDICATES.Number, true)
+  ),
+  validateIsDate: validateIsDate(predicateMessage(PREDICATES.Date)),
+  validateIsNotDate: validateIsNotDate(predicateMessage(PREDICATES.Date, true)),
+  validateIsNaN: validateIsNaN(predicateMessage(PREDICATES.NaN)),
+  validateIsNotNaN: validateIsNotNaN(predicateMessage(PREDICATES.NaN, true)),
+  validateIsNil: validateIsNil(predicateMessage(PREDICATES.Nil)),
+  validateIsNull: validateIsNull(predicateMessage(PREDICATES.Null)),
+  validateIsNotNull: validateIsNotNull(predicateMessage(PREDICATES.Null, true)),
+  validateIsUndefined: validateIsUndefined(
+    predicateMessage(PREDICATES.Undefined)
+  ),
+  validateIsNotUndefined: validateIsNotUndefined(
+    predicateMessage(PREDICATES.Undefined, true)
+  ),
+  validateIsEmpty: validateIsEmpty(predicateMessage(PREDICATES.Empty)),
+  validateIsNotEmpty: validateIsNotEmpty(
+    predicateMessage(PREDICATES.Empty, true)
+  ),
+  validateIsEmptyString: validateIsEmptyString(
+    predicateMessage(PREDICATES.EmptyString)
+  ),
+  validateIsNotEmptyString: validateIsNonEmptyString(
+    predicateMessage(PREDICATES.EmptyString, true)
+  ),
+  validateIsEmptyArray: validateIsEmptyArray(
+    predicateMessage(PREDICATES.EmptyArray)
+  ),
+  validateIsNonEmptyArray: validateIsNonEmptyArray(
+    predicateMessage(PREDICATES.EmptyArray, true)
+  ),
+  validateIsValidNumber: validateIsValidNumber(
+    predicateMessage(PREDICATES.ValidNumber)
+  ),
+  validateIsNotValidNumber: validateIsNotValidNumber(
+    predicateMessage(PREDICATES.ValidNumber, true)
+  ),
+  validateIsValidDate: validateIsValidDate(
+    predicateMessage(PREDICATES.ValidDate)
+  ),
+  validateIsNotValidDate: validateIsNotValidDate(
+    predicateMessage(PREDICATES.ValidDate, true)
+  ),
+
+  // Custom predicates
   validateIsWhitelistedValue: validateIsWhitelistedValue(
     isWhitelistedStringMessage
   ),
@@ -67,7 +148,7 @@ export default {
   ),
   validateExclusiveKeys: validateExclusiveKeys(exclusiveKeyErrorMessage),
   validateIsArrayOf: validateIsArrayOf(
-    isTypeMessage(TYPES.Array),
+    predicateMessage(PREDICATES.Array),
     arrayElementsErrorMessage,
     arrayElementErrorMessage
   ),

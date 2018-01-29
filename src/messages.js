@@ -9,6 +9,7 @@ import {
   wrapSB,
   tabsForLevel,
   joinWithSpace,
+  joinWithNoSpace,
 } from './utils';
 import { ROOT_FIELD } from './const';
 
@@ -43,11 +44,10 @@ export const invalidArrayReasonInvalidObjects = always(
 // Validator Helper Messages
 // -----------------------------------------------------------------------------
 
-const prefixForTypeErrorMessage = complement =>
-  complement ? `Was type` : `Wasn't type`;
+const prefixForPredicateMessage = complement => (complement ? `Was` : `Wasn't`);
 
-export const isTypeMessage = (typeName, complement = false) =>
-  joinWithColon([prefixForTypeErrorMessage(complement), quote(typeName)]);
+export const predicateMessage = (typeName, complement = false) =>
+  joinWithSpace([prefixForPredicateMessage(complement), quote(typeName)]);
 
 // -----------------------------------------------------------------------------
 // Validator Messages

@@ -139,7 +139,7 @@ describe(`validateConstraints`, () => {
           map(value => {
             const validation = validateConstraints(value);
             expect(validation).toEqual(
-              Failure([`Constraints Object Invalid: Wasn't type: 'Object'`])
+              Failure([`Constraints Object Invalid: Wasn't 'Object'`])
             );
           }, typeData.withoutObjectValues);
         });
@@ -252,7 +252,7 @@ describe(`validateConstraints`, () => {
               const validation = validateConstraints(value);
               expect(validation).toEqual(
                 Failure([
-                  `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Wasn't type: 'Array'`,
+                  `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Wasn't 'Array'`,
                 ])
               );
             }, typeData.withoutArrayValues);
@@ -268,7 +268,7 @@ describe(`validateConstraints`, () => {
               const validation = validateConstraints(value);
               expect(validation).toEqual(
                 Failure([
-                  `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't type: 'Object'`,
+                  `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't 'Object'`,
                 ])
               );
             })(typeData.withoutObjectValues);
@@ -285,7 +285,7 @@ describe(`validateConstraints`, () => {
               const validation = validateConstraints(value);
               expect(validation).toEqual(
                 Failure([
-                  `Constraints Object Invalid: Object included invalid values(s): Key 'fieldsValidator': Wasn't type: 'Function'`,
+                  `Constraints Object Invalid: Object included invalid values(s): Key 'fieldsValidator': Wasn't 'Function'`,
                 ])
               );
             }, typeData.withoutFunctionValues);
@@ -308,7 +308,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'name': Wasn't type: 'String'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'name': Wasn't 'String'`,
                   ])
                 );
               }, typeData.withoutStringValues);
@@ -330,7 +330,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'validator': Wasn't type: 'Function'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'validator': Wasn't 'Function'`,
                   ])
                 );
               }, typeData.withoutFunctionValues);
@@ -353,7 +353,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't type: 'Function'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't 'Function'`,
                   ])
                 );
               }, typeData.withoutFunctionValues);
@@ -376,7 +376,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't type: 'Boolean'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't 'Boolean'`,
                   ])
                 );
               }, typeData.withoutBooleanValues);
@@ -398,7 +398,7 @@ describe(`validateConstraints`, () => {
               const validation = validateConstraints(value);
               expect(validation).toEqual(
                 Failure([
-                  `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'defaultValue': Was type: 'Undefined'`,
+                  `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'defaultValue': Was 'Undefined'`,
                 ])
               );
             });
@@ -420,7 +420,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'children': Wasn't 'Object'`,
                   ])
                 );
               }, typeData.withoutObjectValues);
@@ -443,7 +443,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
+                    `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'value': Wasn't 'Object'`,
                   ])
                 );
               }, typeData.withoutObjectValues);
@@ -537,7 +537,7 @@ describe(`validateConstraints`, () => {
               const validation = validateConstraints(value);
               expect(validation).toEqual(
                 Failure([
-                  `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
+                  `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't 'Object'`,
                 ])
               );
             }, typeData.withoutObjectValues);
@@ -567,7 +567,7 @@ describe(`validateConstraints`, () => {
                 const validation = validateConstraints(value);
                 expect(validation).toEqual(
                   Failure([
-                    `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
+                    `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't 'Object'`,
                   ])
                 );
               }, typeData.withoutObjectValues);
@@ -814,7 +814,7 @@ describe(`validateConstraints`, () => {
             const validation = validateConstraints(value);
             expect(validation).toEqual(
               Failure([
-                `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Wasn't type: 'Array'`,
+                `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Wasn't 'Array'`,
               ])
             );
           }, typeData.withoutArrayValues);
@@ -847,7 +847,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't type: 'Object'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't 'Object'`,
             ])
           );
         })(typeData.withoutObjectValues);
@@ -880,7 +880,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fieldsValidator': Wasn't type: 'Function'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fieldsValidator': Wasn't 'Function'`,
             ])
           );
         }, typeData.withoutFunctionValues);
@@ -910,7 +910,7 @@ describe(`validateConstraints`, () => {
             const validation = validateConstraints(value);
             expect(validation).toEqual(
               Failure([
-                `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'name': Wasn't type: 'String'`,
+                `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'name': Wasn't 'String'`,
               ])
             );
           }, typeData.withoutStringValues);
@@ -940,7 +940,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'validator': Wasn't type: 'Function'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'validator': Wasn't 'Function'`,
             ])
           );
         }, typeData.withoutFunctionValues);
@@ -970,7 +970,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't type: 'Function'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't 'Function'`,
             ])
           );
         }, typeData.withoutFunctionValues);
@@ -1000,7 +1000,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't type: 'Boolean'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't 'Boolean'`,
             ])
           );
         }, typeData.withoutBooleanValues);
@@ -1029,7 +1029,7 @@ describe(`validateConstraints`, () => {
         const validation = validateConstraints(value);
         expect(validation).toEqual(
           Failure([
-            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'defaultValue': Was type: 'Undefined'`,
+            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'defaultValue': Was 'Undefined'`,
           ])
         );
       });
@@ -1058,7 +1058,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't 'Object'`,
             ])
           );
         }, typeData.withoutObjectValues);
@@ -1088,7 +1088,7 @@ describe(`validateConstraints`, () => {
           const validation = validateConstraints(value);
           expect(validation).toEqual(
             Failure([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
+              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't 'Object'`,
             ])
           );
         }, typeData.withoutObjectValues);
