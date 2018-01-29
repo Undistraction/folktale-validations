@@ -1,5 +1,4 @@
 import { isBoolean } from 'ramda-adjunct';
-import { TYPES } from '../const';
-import typeValidator from '../helpers/typeValidator';
+import predicateValidator from '../helpers/predicateValidator';
 
-export default typeValidator(isBoolean, TYPES.Boolean);
+export default message => predicateValidator(message, isBoolean);

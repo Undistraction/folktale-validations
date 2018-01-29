@@ -1,3 +1,4 @@
+import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
 import validateObjectValues from '../../validators/validateObjectValues';
 import {
@@ -8,11 +9,26 @@ import {
 
 const { Success, Failure } = Validation;
 
-const key1 = 1;
-const key2 = 2;
-const key3 = 2;
-
 describe(`validateObjectValues()`, () => {
+  const key1 = 1;
+  const key2 = 2;
+  const key3 = 2;
+
+  const objectMessage = `objectMessage`;
+  const valueMessage = `valueMessage`;
+  let validatorWithMessage;
+  let objectMessageFunction;
+  let valueMessageFunction;
+
+  beforeEach(() => {
+    objectMessageFunction = stub().returns(objectMessage);
+    valueMessageFunction = stub().returns(valueMessage);
+    validatorWithMessage = validateObjectValues(
+      objectMessageFunction,
+      valueMessageFunction
+    );
+  });
+
   describe(`with valid values`, () => {
     describe(`with first value invalid`, () => {
       it(`returns a Validation.Failure with message`, () => {
@@ -27,11 +43,9 @@ describe(`validateObjectValues()`, () => {
           a: v1,
           b: v2,
         };
-        const validator = validateObjectValues(validators);
+        const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(
-          Failure([`Object included invalid values(s): Key 'a': message`])
-        );
+        expect(validation).toEqual(Failure([objectMessage]));
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();
       });
@@ -50,11 +64,9 @@ describe(`validateObjectValues()`, () => {
           a: v1,
           b: v2,
         };
-        const validator = validateObjectValues(validators);
+        const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(
-          Failure([`Object included invalid values(s): Key 'b': message`])
-        );
+        expect(validation).toEqual(Failure([objectMessage]));
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();
       });
@@ -78,13 +90,9 @@ describe(`validateObjectValues()`, () => {
           b: v2,
           c: v3,
         };
-        const validator = validateObjectValues(validators);
+        const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(
-          Failure([
-            `Object included invalid values(s): Key 'a': message1, Key 'b': message2, Key 'c': message3`,
-          ])
-        );
+        expect(validation).toEqual(Failure([objectMessage]));
         expect(v1.calledWith(key1)).toBeTruthy();
         expect(v2.calledWith(key2)).toBeTruthy();
         expect(v2.calledWith(key3)).toBeTruthy();
@@ -104,7 +112,7 @@ describe(`validateObjectValues()`, () => {
         a: v1,
         b: v2,
       };
-      const validator = validateObjectValues(validators);
+      const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.calledWith(key1)).toBeTruthy();
@@ -119,7 +127,7 @@ describe(`validateObjectValues()`, () => {
         a: key1,
       };
       const validators = {};
-      const validator = validateObjectValues(validators);
+      const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.notCalled).toBeTruthy();
@@ -135,7 +143,7 @@ describe(`validateObjectValues()`, () => {
       const validators = {
         b: v1,
       };
-      const validator = validateObjectValues(validators);
+      const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
       expect(v1.notCalled).toBeTruthy();

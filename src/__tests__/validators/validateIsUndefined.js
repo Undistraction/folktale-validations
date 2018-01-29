@@ -4,10 +4,11 @@ import { validateIsUndefined } from '../../index';
 const { Success, Failure } = Validation;
 
 describe(`validateIsUndefined()`, () => {
+  const message = `message`;
+  const validator = validateIsUndefined(message);
   describe(`when argument is undefined`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
-      const validation = validateIsUndefined();
-      expect(Success.hasInstance(validation)).toBeTruthy();
+      const validation = validator();
       expect(validation).toEqual(Success(undefined));
     });
   });
@@ -15,9 +16,8 @@ describe(`validateIsUndefined()`, () => {
   describe(`when argument is not undefined`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const value = true;
-      const validation = validateIsUndefined(value);
-      expect(Failure.hasInstance(validation)).toBeTruthy();
-      expect(validation).toEqual(Failure([`Wasn't type: 'Undefined'`]));
+      const validation = validator(value);
+      expect(validation).toEqual(Failure([message]));
     });
   });
 });

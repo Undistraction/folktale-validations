@@ -1,13 +1,7 @@
 import deepFreeze from 'deep-freeze';
-import validateIsString from './validators/validateIsString';
-import validateIsBoolean from './validators/validateIsBoolean';
-import validateIsFunction from './validators/validateIsFunction';
-import validateIsNotUndefined from './validators/validateIsNotUndefined';
-import validateExclusiveKeys from './validators/validateExclusiveKeys';
-import validateIsObject from './validators/validateIsObject';
 import allOfValidator from './helpers/allOfValidator';
-import validateIsArrayOf from './validators/validateIsArrayOf';
 import { FIELD_NAMES } from './const';
+import configuredValidators from './configuredValidators';
 
 const {
   FIELDS,
@@ -23,40 +17,40 @@ const {
 
 const nameField = {
   [NAME]: NAME,
-  [VALIDATOR]: validateIsString,
+  [VALIDATOR]: configuredValidators.validateIsString,
   [IS_REQUIRED]: true,
 };
 
 const validatorField = {
   [NAME]: VALIDATOR,
-  [VALIDATOR]: validateIsFunction,
+  [VALIDATOR]: configuredValidators.validateIsFunction,
   [IS_REQUIRED]: true,
 };
 
 const transformerField = {
   [NAME]: TRANSFORMER,
-  [VALIDATOR]: validateIsFunction,
+  [VALIDATOR]: configuredValidators.validateIsFunction,
 };
 
 const defaultValueField = {
   [NAME]: DEFAULT_VALUE,
-  [VALIDATOR]: validateIsNotUndefined,
+  [VALIDATOR]: configuredValidators.validateIsNotUndefined,
 };
 
 const isRequiredField = {
   [NAME]: IS_REQUIRED,
-  [VALIDATOR]: validateIsBoolean,
+  [VALIDATOR]: configuredValidators.validateIsBoolean,
   [DEFAULT_VALUE]: false,
 };
 
 const valueField = {
   [NAME]: VALUE,
-  [VALIDATOR]: validateIsObject,
+  [VALIDATOR]: configuredValidators.validateIsObject,
 };
 
 const childrenField = {
   [NAME]: CHILDREN,
-  [VALIDATOR]: validateIsObject,
+  [VALIDATOR]: configuredValidators.validateIsObject,
 };
 
 const fields = [
@@ -73,16 +67,18 @@ const fields = [
 
 const fieldsValidatorField = {
   [NAME]: FIELDS_VALIDATOR,
-  [VALIDATOR]: validateIsFunction,
+  [VALIDATOR]: configuredValidators.validateIsFunction,
 };
 
 const fieldsField = {
   [NAME]: FIELDS,
-  [VALIDATOR]: validateIsArrayOf(validateIsObject),
+  [VALIDATOR]: configuredValidators.validateIsArrayOf(
+    configuredValidators.validateIsObject
+  ),
   [CHILDREN]: {
     fieldsValidator: allOfValidator([
-      validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
-      validateExclusiveKeys([VALUE, CHILDREN]),
+      configuredValidators.validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
+      configuredValidators.validateExclusiveKeys([VALUE, CHILDREN]),
     ]),
     fields,
   },

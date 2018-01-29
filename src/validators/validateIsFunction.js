@@ -1,5 +1,4 @@
 import { isFunction } from 'ramda-adjunct';
-import { TYPES } from '../const';
-import typeValidator from '../helpers/typeValidator';
+import predicateValidator from '../helpers/predicateValidator';
 
-export default typeValidator(isFunction, TYPES.Function);
+export default message => predicateValidator(message, isFunction);

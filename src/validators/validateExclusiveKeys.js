@@ -1,13 +1,12 @@
 import { validation as Validation } from 'folktale';
-import { flip, has, filter } from 'ramda';
-import { exclusiveKeyErrorMessage } from '../messages';
+import { curry, flip, has, filter } from 'ramda';
 
 const { Success, Failure } = Validation;
 
-export default exclusiveKeys => o => {
+export default curry((message, exclusiveKeys) => o => {
   const collectExclusiveKeys = filter(flip(has)(o));
   const collectedExclusiveKeys = collectExclusiveKeys(exclusiveKeys);
   return collectedExclusiveKeys.length <= 1
     ? Success(o)
-    : Failure([exclusiveKeyErrorMessage(collectedExclusiveKeys)]);
-};
+    : Failure([message(collectedExclusiveKeys)]);
+});

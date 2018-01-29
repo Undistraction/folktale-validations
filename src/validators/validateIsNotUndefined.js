@@ -1,5 +1,4 @@
 import { isNotUndefined } from 'ramda-adjunct';
-import { TYPES } from '../const';
-import typeValidator from '../helpers/typeValidator';
+import predicateValidator from '../helpers/predicateValidator';
 
-export default typeValidator(isNotUndefined, TYPES.Undefined, true);
+export default message => predicateValidator(message, isNotUndefined);

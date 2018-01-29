@@ -2,17 +2,16 @@ import { identity, curry, equals } from 'ramda';
 import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
-import validateObjectValues from '../validators/validateObjectValues';
 import applyDefaultsWithConstraints from './applyDefaultsWithConstraints';
 import transformValuesWithConstraints from './transformValuesWithConstraints';
 import { validatorsMap } from './utils';
 import CONSTRAINTS from '../constraints';
-import validateIsObject from '../validators/validateIsObject';
 import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
 import { objectValidatorErrorMessage } from '../messages';
 import validateFieldsWithValue from './validateFieldsWithValue';
 import { ROOT_FIELD } from '../const';
 import validateFieldsWithChildren from './validateFieldsWithChildren';
+import configuredValidators from '../configuredValidators';
 
 const { Failure } = Validation;
 
@@ -24,12 +23,15 @@ const constraintsAreOwnConstraints = equals(CONSTRAINTS);
 export const validateObject = curry((fieldName, constraints, o) => {
   const result = untilFailureValidator([
     // Validate this object's keys
+
     validateObjectKeysWithConstraints(
       constraints.fieldsValidator,
       constraints.fields
     ),
     // Validate this object's values
-    validateObjectValues(validatorsMap(constraints.fields)),
+    configuredValidators.validateObjectValues(
+      validatorsMap(constraints.fields)
+    ),
     applyDefaultsWithConstraints(constraints.fields),
     transformValuesWithConstraints(constraints.fields),
     // Validate nested objects
@@ -45,7 +47,7 @@ const validateObjectWithConstraints = constraints => o => {
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
 
-  const objectValidation = validateIsObject(o);
+  const objectValidation = configuredValidators.validateIsObject(o);
 
   if (Failure.hasInstance(objectValidation)) {
     return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);

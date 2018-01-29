@@ -1,11 +1,15 @@
+import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import { validateIsWhitelistedString } from '../../index';
+import { validateIsWhitelistedValue } from '../../index';
 
 const { Success, Failure } = Validation;
 
-describe(`validateIsWhitelistedString()`, () => {
+describe(`validateIsWhitelistedValue()`, () => {
+  // Just return the whitelist so we know message has access to it
+  const message = `message`;
+  const messageFunction = stub().returns(message);
   const whitelist = [`a`, `b`, `c`];
-  const validator = validateIsWhitelistedString(whitelist);
+  const validator = validateIsWhitelistedValue(messageFunction, whitelist);
 
   describe(`when value is in the whitelist`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
@@ -35,9 +39,8 @@ describe(`validateIsWhitelistedString()`, () => {
     describe(`when no value is passed`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
-        expect(validation).toEqual(
-          Failure([`Value wasn't one of the accepted values: a, b, c`])
-        );
+        expect(validation).toEqual(Failure([message]));
+        expect(messageFunction.calledWith(whitelist)).toBeTruthy();
       });
     });
 
@@ -45,9 +48,8 @@ describe(`validateIsWhitelistedString()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const value = `d`;
         const validation = validator(value);
-        expect(validation).toEqual(
-          Failure([`Value wasn't one of the accepted values: a, b, c`])
-        );
+        expect(validation).toEqual(Failure([message]));
+        expect(messageFunction.calledWith(whitelist)).toBeTruthy();
       });
     });
   });

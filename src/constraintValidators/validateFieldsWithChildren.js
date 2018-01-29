@@ -12,10 +12,9 @@ import {
   prop,
 } from 'ramda';
 import { validation as Validation } from 'folktale';
-// import prettyjson from 'prettyjson';
 import { constraintsForFieldsWithPropChildren } from './utils';
-import { validateObject } from './validateObjectWithConstraints';
 import { reduceObjIndexed } from '../utils';
+import { validateObject } from './validateObjectWithConstraints';
 
 const { collect, Success } = Validation;
 
@@ -59,7 +58,8 @@ const validateChildrenOfArrayField = (
   childConstraints
 ) =>
   reduce(
-    (acc, child) => isEmpty(child)
+    (acc, child) =>
+      isEmpty(child)
         ? acc
         : append(validateObject(fieldName, childConstraints, child), acc),
     [],

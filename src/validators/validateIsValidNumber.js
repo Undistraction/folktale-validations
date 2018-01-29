@@ -1,5 +1,4 @@
 import { isValidNumber } from 'ramda-adjunct';
 import predicateValidator from '../helpers/predicateValidator';
-import { validNumberErrorMessage } from '../messages';
 
-export default predicateValidator(validNumberErrorMessage(), isValidNumber);
+export default message => predicateValidator(message, isValidNumber);

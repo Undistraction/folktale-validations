@@ -46,24 +46,34 @@ export const invalidArrayReasonInvalidObjects = always(
 const prefixForTypeErrorMessage = complement =>
   complement ? `Was type` : `Wasn't type`;
 
-export const typeErrorMessage = (typeName, complement = false) =>
+export const isTypeMessage = (typeName, complement = false) =>
   joinWithColon([prefixForTypeErrorMessage(complement), quote(typeName)]);
 
 // -----------------------------------------------------------------------------
 // Validator Messages
 // -----------------------------------------------------------------------------
 
-export const invalidObjectReasonInvalidKeys = always(`included invalid key(s)`);
-
-export const isEmptyErrorMessage = always(`Was Empty`);
-
-export const validNumberErrorMessage = always(`Wasn't a valid Number`);
-
-export const lengthGreaterThanErrorMessage = length =>
+export const isLengthGreaterThanMessage = length =>
   `Length must be greater than ${length}`;
 
-export const lengthLessThanErrorMessage = length =>
+export const isLengthLessThanMessage = length =>
   `Length must be less than ${length}`;
+
+export const isWhitelistedStringMessage = whitelist =>
+  joinWithColon([
+    `Value wasn't one of the accepted values`,
+    joinWithComma(whitelist),
+  ]);
+
+export const numberWithUnitMessage = unit =>
+  joinWithColon([`Wasn't number with unit`, quote(unit)]);
+
+export const objectValuesMessage = messages =>
+  joinWithColon([`Object included invalid values(s)`, joinWithComma(messages)]);
+
+export const isNotEmptyMessage = always(`Was Empty`);
+
+export const isValidNumberMessage = always(`Wasn't a valid Number`);
 
 export const arrayElementErrorMessage = (value, message) =>
   joinWithColon([quote(value), message]);
@@ -74,27 +84,15 @@ export const arrayElementsErrorMessage = elementErrorMessages =>
     joinWithComma(elementErrorMessages),
   ]);
 
-export const whitelistErrorMessage = whitelist =>
-  joinWithColon([
-    `Value wasn't one of the accepted values`,
-    joinWithComma(whitelist),
-  ]);
+// -----------------------------------------------------------------------------
+// Constraint Validator Messages
+// -----------------------------------------------------------------------------
 
 export const invalidKeysErrorMessage = invalidKeys =>
   joinWithColon([
     `Object included invalid key(s)`,
     quote(wrapSB(joinWithComma(invalidKeys))),
   ]);
-
-export const numberWithUnitErrorMessage = unit =>
-  joinWithColon([`Wasn't number with unit`, quote(unit)]);
-
-export const valuesErrorMessage = messages =>
-  joinWithColon([`Object included invalid values(s)`, joinWithComma(messages)]);
-
-// -----------------------------------------------------------------------------
-// Constraint Validator Messages
-// -----------------------------------------------------------------------------
 
 export const missingRequiredKeyErrorMessage = keys =>
   joinWithColon([
@@ -116,7 +114,7 @@ export const exclusiveKeyErrorMessage = keys =>
 export const fieldErrorMessage = (field, errorMessage) =>
   `Field ${joinWithColon([quote(field), errorMessage])}`;
 
-export const valueErrorMessage = name => value =>
+export const valueErrorMessage = (name, value) =>
   `Key ${joinWithColon([quote(name), value])}`;
 
 export const constraintValidatorErrorMessage = messages =>

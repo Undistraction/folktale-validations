@@ -13,7 +13,6 @@ export { default as predicateValidator } from './helpers/predicateValidator';
 export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator';
-export { default as typeValidator } from './helpers/typeValidator';
 
 // Validators
 export { default as validateIsFunction } from './validators/validateIsFunction';
@@ -35,8 +34,8 @@ export {
   default as validateIsValidNumber,
 } from './validators/validateIsValidNumber';
 export {
-  default as validateIsWhitelistedString,
-} from './validators/validateIsWhitelistedString';
+  default as validateIsWhitelistedValue,
+} from './validators/validateIsWhitelistedValue';
 export {
   default as validateWhitelistedKeys,
 } from './validators/validateWhitelistedKeys';
@@ -48,14 +47,14 @@ export {
 } from './validators/validateObjectValues';
 export { default as validateIsNotEmpty } from './validators/validateIsNotEmpty';
 export {
-  default as validateLengthGreaterThan,
-} from './validators/validateLengthGreaterThan';
+  default as validateIsLengthGreaterThan,
+} from './validators/validateIsLengthGreaterThan';
 export {
-  default as validateLengthLessThan,
-} from './validators/validateLengthLessThan';
+  default as validateIsLengthLessThan,
+} from './validators/validateIsLengthLessThan';
 export {
-  default as validateLengthBetween,
-} from './validators/validateLengthBetween';
+  default as validateIsLengthBetween,
+} from './validators/validateIsLengthBetween';
 
 // Constraint Validators
 export {
@@ -64,3 +63,6 @@ export {
 export {
   default as validateObjectKeysWithConstraints,
 } from './constraintValidators/validateObjectKeysWithConstraints';
+
+// Configured Validators
+export { default as configuredValidators } from './configuredValidators';

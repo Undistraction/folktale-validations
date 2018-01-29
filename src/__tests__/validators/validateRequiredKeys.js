@@ -1,19 +1,25 @@
+import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
 import { validateRequiredKeys } from '../../index';
-import { missingRequiredKeyErrorMessage } from '../../messages';
 
 const { Success, Failure } = Validation;
 
 describe(`validate required keys`, () => {
+  const message = `message`;
+  let messageFunction;
+  let validatorWithMessage;
+  beforeEach(() => {
+    messageFunction = stub().returns(message);
+    validatorWithMessage = validateRequiredKeys(messageFunction);
+  });
+
   describe(`with missing keys`, () => {
     it(`returns a Success.Failure with message`, () => {
       const requiredKeys = [`a`, `b`, `c`];
       const value = {};
-      const validator = validateRequiredKeys(requiredKeys);
+      const validator = validatorWithMessage(requiredKeys);
       const result = validator(value);
-      expect(result).toEqual(
-        Failure([missingRequiredKeyErrorMessage(requiredKeys)])
-      );
+      expect(result).toEqual(Failure([message]));
     });
   });
 
@@ -25,7 +31,7 @@ describe(`validate required keys`, () => {
         b: 2,
         c: 3,
       };
-      const validator = validateRequiredKeys(requiredKeys);
+      const validator = validatorWithMessage(requiredKeys);
       const result = validator(value);
       expect(result).toEqual(Success(value));
     });

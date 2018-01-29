@@ -24,15 +24,6 @@ const transformedValue1 = `transformed1`;
 const transformedValue2 = `transformed2`;
 const defaultValue1 = `default1`;
 const defaultValue2 = `default2`;
-// const name1 = `name1`;
-// const name2 = `name2`;
-// const name3 = `name3`;
-// const name4 = `name4`;
-// const name5 = `name5`;
-// const name6 = `name6`;
-// const name7 = `name7`;
-// const name8 = `name8`;
-// const name9 = `name9`;
 
 const {
   FIELDS,
@@ -183,6 +174,7 @@ describe(`validateObjectWithConstraints`, () => {
             ],
           })
         );
+
         expect(t1.calledWith(value1)).toBeTruthy();
         expect(t2.calledWith(value8)).toBeTruthy();
         expect(v1.calledWith(value1)).toBeTruthy();
