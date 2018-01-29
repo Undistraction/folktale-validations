@@ -1,14 +1,8 @@
 import { validation as Validation } from 'folktale';
 import { map } from 'ramda';
 import validateConstraints from '../../constraintValidators/validateConstraints';
-import {
-  notObjectValues,
-  notBooleanValues,
-  notFunctionValues,
-  notStringValues,
-  notArrayValues,
-  func,
-} from '../testHelpers/fixtures';
+import { func } from '../testHelpers/fixtures';
+import typeData from '../testHelpers/fixtures/typeData';
 import { FIELD_NAMES } from '../../const';
 
 const { Success, Failure } = Validation;
@@ -147,7 +141,7 @@ describe(`validateConstraints`, () => {
             expect(validation).toEqual(
               Failure([`Constraints Object Invalid: Wasn't type: 'Object'`])
             );
-          }, notObjectValues);
+          }, typeData.withoutObjectValues);
         });
       });
 
@@ -261,7 +255,7 @@ describe(`validateConstraints`, () => {
                   `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Wasn't type: 'Array'`,
                 ])
               );
-            }, notArrayValues);
+            }, typeData.withoutArrayValues);
           });
         });
 
@@ -277,7 +271,7 @@ describe(`validateConstraints`, () => {
                   `Constraints Object Invalid: Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't type: 'Object'`,
                 ])
               );
-            })(notObjectValues);
+            })(typeData.withoutObjectValues);
           });
         });
 
@@ -294,7 +288,7 @@ describe(`validateConstraints`, () => {
                   `Constraints Object Invalid: Object included invalid values(s): Key 'fieldsValidator': Wasn't type: 'Function'`,
                 ])
               );
-            }, notFunctionValues);
+            }, typeData.withoutFunctionValues);
           });
         });
 
@@ -317,7 +311,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'name': Wasn't type: 'String'`,
                   ])
                 );
-              }, notStringValues);
+              }, typeData.withoutStringValues);
             });
           });
 
@@ -339,7 +333,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'validator': Wasn't type: 'Function'`,
                   ])
                 );
-              }, notFunctionValues);
+              }, typeData.withoutFunctionValues);
             });
           });
 
@@ -362,7 +356,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't type: 'Function'`,
                   ])
                 );
-              }, notFunctionValues);
+              }, typeData.withoutFunctionValues);
             });
           });
 
@@ -385,7 +379,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't type: 'Boolean'`,
                   ])
                 );
-              }, notBooleanValues);
+              }, typeData.withoutBooleanValues);
             });
           });
 
@@ -429,7 +423,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
                   ])
                 );
-              }, notObjectValues);
+              }, typeData.withoutObjectValues);
             });
           });
 
@@ -452,7 +446,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
                   ])
                 );
-              }, notObjectValues);
+              }, typeData.withoutObjectValues);
             });
           });
         });
@@ -546,7 +540,7 @@ describe(`validateConstraints`, () => {
                   `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
                 ])
               );
-            }, notObjectValues);
+            }, typeData.withoutObjectValues);
           });
 
           describe(`for value`, () => {
@@ -576,7 +570,7 @@ describe(`validateConstraints`, () => {
                     `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
                   ])
                 );
-              }, notObjectValues);
+              }, typeData.withoutObjectValues);
             });
           });
         });
@@ -823,7 +817,7 @@ describe(`validateConstraints`, () => {
                 `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Wasn't type: 'Array'`,
               ])
             );
-          }, notArrayValues);
+          }, typeData.withoutArrayValues);
         });
       });
     });
@@ -856,7 +850,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't type: 'Object'`,
             ])
           );
-        })(notObjectValues);
+        })(typeData.withoutObjectValues);
       });
     });
 
@@ -889,7 +883,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fieldsValidator': Wasn't type: 'Function'`,
             ])
           );
-        }, notFunctionValues);
+        }, typeData.withoutFunctionValues);
       });
     });
 
@@ -919,7 +913,7 @@ describe(`validateConstraints`, () => {
                 `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'name': Wasn't type: 'String'`,
               ])
             );
-          }, notStringValues);
+          }, typeData.withoutStringValues);
         });
       });
     });
@@ -949,7 +943,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'validator': Wasn't type: 'Function'`,
             ])
           );
-        }, notFunctionValues);
+        }, typeData.withoutFunctionValues);
       });
     });
 
@@ -979,7 +973,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't type: 'Function'`,
             ])
           );
-        }, notFunctionValues);
+        }, typeData.withoutFunctionValues);
       });
     });
 
@@ -1009,7 +1003,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't type: 'Boolean'`,
             ])
           );
-        }, notBooleanValues);
+        }, typeData.withoutBooleanValues);
       });
     });
 
@@ -1067,7 +1061,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't type: 'Object'`,
             ])
           );
-        }, notObjectValues);
+        }, typeData.withoutObjectValues);
       });
     });
 
@@ -1097,7 +1091,7 @@ describe(`validateConstraints`, () => {
               `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't type: 'Object'`,
             ])
           );
-        }, notObjectValues);
+        }, typeData.withoutObjectValues);
       });
     });
   });
