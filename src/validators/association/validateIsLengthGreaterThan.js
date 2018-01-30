@@ -1,5 +1,5 @@
 import { flip, gt, compose, length, curry } from 'ramda';
-import predicateValidator from '../helpers/predicateValidator';
+import predicateValidator from '../../helpers/predicateValidator';
 
 export default curry((message, stringLength) =>
   predicateValidator(

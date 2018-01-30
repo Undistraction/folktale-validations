@@ -31,8 +31,8 @@ import {
   isValidNumber,
 } from 'ramda-adjunct';
 import { assoc, isNil, isEmpty } from 'ramda';
-import predicateValidator from '../helpers/predicateValidator';
-import { reduceObjIndexed, toTitle } from '../utils';
+import predicateValidator from '../../helpers/predicateValidator';
+import { reduceObjIndexed, toTitle } from '../../utils';
 
 const predicates = {
   isArray,

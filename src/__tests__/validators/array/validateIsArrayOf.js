@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
-import { validateIsArrayOf } from '../../index';
-import { spy, stubReturnsSuccess, stub } from '../testHelpers/sinon';
+import { validateIsArrayOf } from '../../../index';
+import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 

@@ -14,32 +14,42 @@ export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator';
 
-export { default as validateIsArrayOf } from './validators/validateIsArrayOf';
+export {
+  default as validateIsArrayOf,
+} from './validators/array/validateIsArrayOf';
+
 export {
   default as validateArrayElements,
-} from './validators/validateArrayElements';
+} from './validators/array/validateArrayElements';
 
 export {
   default as validateIsWhitelistedValue,
 } from './validators/validateIsWhitelistedValue';
-export {
-  default as validateWhitelistedKeys,
-} from './validators/validateWhitelistedKeys';
-export {
-  default as validateRequiredKeys,
-} from './validators/validateRequiredKeys';
-export {
-  default as validateObjectValues,
-} from './validators/validateObjectValues';
+
+// Predicate Validators
+export * from './validators/predicate/generatedPredicateValidators';
+
+// Association
 export {
   default as validateIsLengthGreaterThan,
-} from './validators/validateIsLengthGreaterThan';
+} from './validators/association/validateIsLengthGreaterThan';
 export {
   default as validateIsLengthLessThan,
-} from './validators/validateIsLengthLessThan';
+} from './validators/association/validateIsLengthLessThan';
 export {
   default as validateIsLengthBetween,
-} from './validators/validateIsLengthBetween';
+} from './validators/association/validateIsLengthBetween';
+
+// Object
+export {
+  default as validateObjectValues,
+} from './validators/object/validateObjectValues';
+export {
+  default as validateWhitelistedKeys,
+} from './validators/object/validateWhitelistedKeys';
+export {
+  default as validateRequiredKeys,
+} from './validators/object/validateRequiredKeys';
 
 // Constraint Validators
 export {
@@ -51,6 +61,3 @@ export {
 
 // Configured Validators
 export { default as configuredValidators } from './configuredValidators';
-
-// Generated Validators
-export * from './validators/generatedPredicateValidators';

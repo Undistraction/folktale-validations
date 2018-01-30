@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import { validateIsLengthBetween } from '../../index';
+import { validateIsLengthBetween } from '../../../index';
 
 const { Success, Failure } = Validation;
 

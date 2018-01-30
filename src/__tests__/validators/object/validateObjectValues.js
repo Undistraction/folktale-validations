@@ -1,11 +1,11 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import validateObjectValues from '../../validators/validateObjectValues';
+import validateObjectValues from '../../../validators/object/validateObjectValues';
 import {
   spy,
   stubReturnsFailure,
   stubReturnsSuccess,
-} from '../testHelpers/sinon';
+} from '../../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 

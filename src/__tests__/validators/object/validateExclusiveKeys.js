@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import exclusiveKeysValidator from '../../validators/validateExclusiveKeys';
+import validateExclusiveKeys from '../../../validators/object/validateExclusiveKeys';
 
 const { Success, Failure } = Validation;
 
@@ -21,7 +21,7 @@ describe(`validateExclusiveKeys`, () => {
 
   beforeEach(() => {
     messageFunction = stub().returns(message);
-    validatorWithMessage = exclusiveKeysValidator(messageFunction);
+    validatorWithMessage = validateExclusiveKeys(messageFunction);
   });
 
   describe(`with no exclusive keys defined`, () => {

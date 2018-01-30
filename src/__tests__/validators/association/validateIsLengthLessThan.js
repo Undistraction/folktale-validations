@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import { validateIsLengthLessThan } from '../../index';
+import { validateIsLengthLessThan } from '../../../index';
 
 const { Success, Failure } = Validation;
 

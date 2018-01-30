@@ -30,18 +30,18 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
-} from './validators/generatedPredicateValidators';
+} from './validators/predicate/generatedPredicateValidators';
 
-import validateIsLengthGreaterThan from './validators/validateIsLengthGreaterThan';
-import validateIsLengthLessThan from './validators/validateIsLengthLessThan';
-import validateIsLengthBetween from './validators/validateIsLengthBetween';
+import validateIsLengthGreaterThan from './validators/association/validateIsLengthGreaterThan';
+import validateIsLengthLessThan from './validators/association/validateIsLengthLessThan';
+import validateIsLengthBetween from './validators/association/validateIsLengthBetween';
 import validateIsWhitelistedValue from './validators/validateIsWhitelistedValue';
-import validateObjectValues from './validators/validateObjectValues';
-import validateRequiredKeys from './validators/validateRequiredKeys';
-import validateWhitelistedKeys from './validators/validateWhitelistedKeys';
-import validateArrayElements from './validators/validateArrayElements';
-import validateExclusiveKeys from './validators/validateExclusiveKeys';
-import validateIsArrayOf from './validators/validateIsArrayOf';
+import validateObjectValues from './validators/object/validateObjectValues';
+import validateRequiredKeys from './validators/object/validateRequiredKeys';
+import validateWhitelistedKeys from './validators/object/validateWhitelistedKeys';
+import validateExclusiveKeys from './validators/object/validateExclusiveKeys';
+import validateIsArrayOf from './validators/array/validateIsArrayOf';
+import validateArrayElements from './validators/array/validateArrayElements';
 
 import {
   predicateMessage,
@@ -55,6 +55,7 @@ import {
   arrayElementsErrorMessage,
   arrayElementErrorMessage,
   exclusiveKeyErrorMessage,
+  negatedPredicateMessage,
 } from './messages';
 
 import { PREDICATES } from './const';
@@ -63,68 +64,72 @@ export default {
   // Generated Predicates
   validateIsArray: validateIsArray(predicateMessage(PREDICATES.Array)),
   validateIsNotArray: validateIsNotArray(
-    predicateMessage(PREDICATES.Array, true)
+    negatedPredicateMessage(PREDICATES.Array)
   ),
   validateIsBoolean: validateIsBoolean(predicateMessage(PREDICATES.Boolean)),
   validateIsNotBoolean: validateIsNotBoolean(
-    predicateMessage(PREDICATES.Boolean, true)
+    negatedPredicateMessage(PREDICATES.Boolean)
   ),
   validateIsString: validateIsString(predicateMessage(PREDICATES.String)),
   validateIsNotString: validateIsNotString(
-    predicateMessage(PREDICATES.String, true)
+    negatedPredicateMessage(PREDICATES.String)
   ),
   validateIsObject: validateIsObject(predicateMessage(PREDICATES.Object)),
   validateIsNotObject: validateIsNotObject(
-    predicateMessage(PREDICATES.Object, true)
+    negatedPredicateMessage(PREDICATES.Object)
   ),
   validateIsFunction: validateIsFunction(predicateMessage(PREDICATES.Function)),
   validateIsNotFunction: validateIsNotFunction(
-    predicateMessage(PREDICATES.Function, true)
+    negatedPredicateMessage(PREDICATES.Function)
   ),
   validateIsNumber: validateIsNumber(predicateMessage(PREDICATES.Number)),
   validateIsNotNumber: validateIsNotNumber(
-    predicateMessage(PREDICATES.Number, true)
+    negatedPredicateMessage(PREDICATES.Number)
   ),
   validateIsDate: validateIsDate(predicateMessage(PREDICATES.Date)),
-  validateIsNotDate: validateIsNotDate(predicateMessage(PREDICATES.Date, true)),
+  validateIsNotDate: validateIsNotDate(
+    negatedPredicateMessage(PREDICATES.Date)
+  ),
   validateIsNaN: validateIsNaN(predicateMessage(PREDICATES.NaN)),
-  validateIsNotNaN: validateIsNotNaN(predicateMessage(PREDICATES.NaN, true)),
+  validateIsNotNaN: validateIsNotNaN(negatedPredicateMessage(PREDICATES.NaN)),
   validateIsNil: validateIsNil(predicateMessage(PREDICATES.Nil)),
   validateIsNull: validateIsNull(predicateMessage(PREDICATES.Null)),
-  validateIsNotNull: validateIsNotNull(predicateMessage(PREDICATES.Null, true)),
+  validateIsNotNull: validateIsNotNull(
+    negatedPredicateMessage(PREDICATES.Null)
+  ),
   validateIsUndefined: validateIsUndefined(
     predicateMessage(PREDICATES.Undefined)
   ),
   validateIsNotUndefined: validateIsNotUndefined(
-    predicateMessage(PREDICATES.Undefined, true)
+    negatedPredicateMessage(PREDICATES.Undefined)
   ),
   validateIsEmpty: validateIsEmpty(predicateMessage(PREDICATES.Empty)),
   validateIsNotEmpty: validateIsNotEmpty(
-    predicateMessage(PREDICATES.Empty, true)
+    negatedPredicateMessage(PREDICATES.Empty)
   ),
   validateIsEmptyString: validateIsEmptyString(
     predicateMessage(PREDICATES.EmptyString)
   ),
   validateIsNotEmptyString: validateIsNonEmptyString(
-    predicateMessage(PREDICATES.EmptyString, true)
+    negatedPredicateMessage(PREDICATES.EmptyString)
   ),
   validateIsEmptyArray: validateIsEmptyArray(
     predicateMessage(PREDICATES.EmptyArray)
   ),
   validateIsNonEmptyArray: validateIsNonEmptyArray(
-    predicateMessage(PREDICATES.EmptyArray, true)
+    negatedPredicateMessage(PREDICATES.EmptyArray)
   ),
   validateIsValidNumber: validateIsValidNumber(
     predicateMessage(PREDICATES.ValidNumber)
   ),
   validateIsNotValidNumber: validateIsNotValidNumber(
-    predicateMessage(PREDICATES.ValidNumber, true)
+    negatedPredicateMessage(PREDICATES.ValidNumber)
   ),
   validateIsValidDate: validateIsValidDate(
     predicateMessage(PREDICATES.ValidDate)
   ),
   validateIsNotValidDate: validateIsNotValidDate(
-    predicateMessage(PREDICATES.ValidDate, true)
+    negatedPredicateMessage(PREDICATES.ValidDate)
   ),
 
   // Custom predicates

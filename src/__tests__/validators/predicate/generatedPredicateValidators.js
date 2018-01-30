@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
 
 import { map, mapObjIndexed, prop, compose, reverse } from 'ramda';
-import typeData from '../testHelpers/fixtures/typeData';
+import typeData from '../../testHelpers/fixtures/typeData';
 
 import {
   validateIsArray,
@@ -33,111 +33,86 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
-} from '../../index';
+} from '../../../index';
 
-import { mapObjIndexedWithIndex } from '../../utils';
+import { mapObjIndexedWithIndex } from '../../../utils';
+import { PREDICATES } from '../../../const';
 
 const { Success, Failure } = Validation;
 
 const validators = {
   // Types
-  array: {
+  [PREDICATES.Array]: {
     validators: { validateIsArray, validateIsNotArray },
     values: [typeData.arrayValues, typeData.withoutArrayValues],
   },
-  object: {
+  [PREDICATES.Object]: {
     validators: { validateIsObject, validateIsNotObject },
     values: [typeData.objectValues, typeData.withoutObjectValues],
   },
-  boolean: {
+  [PREDICATES.Boolean]: {
     validators: { validateIsBoolean, validateIsNotBoolean },
     values: [typeData.booleanValues, typeData.withoutBooleanValues],
   },
-  number: {
+  [PREDICATES.Number]: {
     validators: { validateIsNumber, validateIsNotNumber },
     values: [typeData.numericValues, typeData.withoutNumericValues],
   },
-  function: {
+  [PREDICATES.Function]: {
     validators: { validateIsFunction, validateIsNotFunction },
     values: [typeData.functionValues, typeData.withoutFunctionValues],
   },
-  date: {
+  [PREDICATES.Date]: {
     validators: { validateIsDate, validateIsNotDate },
     values: [typeData.dateValues, typeData.withoutDateValues],
   },
-  nan: {
+  [PREDICATES.NaN]: {
     validators: { validateIsNaN, validateIsNotNaN },
     values: [NaN, typeData.withoutNaNValues],
   },
-  nil: {
+  [PREDICATES.Nil]: {
     validators: { validateIsNil },
     values: [[null, undefined], typeData.withoutNilValues],
   },
-  null: {
+  [PREDICATES.Null]: {
     validators: { validateIsNull, validateIsNotNull },
     values: [[null], typeData.withoutNullValues],
   },
-  undefined: {
+  [PREDICATES.Undefined]: {
     validators: { validateIsUndefined, validateIsNotUndefined },
     values: [[undefined], typeData.withoutUndefinedValues],
   },
   // Empty
-  empty: {
+  [PREDICATES.empty]: {
     validators: { validateIsEmpty, validateIsNotEmpty },
     values: [typeData.emptyValues, typeData.withoutEmptyValues],
   },
-  emptyString: {
+  [PREDICATES.emptyString]: {
     validators: { validateIsEmptyString, validateIsNonEmptyString },
     values: [typeData.emptyStringValues, typeData.nonEmptyStringValues],
   },
-  emptyArray: {
+  [PREDICATES.emptyArray]: {
     validators: { validateIsEmptyArray, validateIsNonEmptyArray },
     values: [typeData.emptyArrayValues, typeData.nonEmptyArrayValues],
   },
   // Valid
-  validNumber: {
+  [PREDICATES.validNumber]: {
     validators: { validateIsValidNumber, validateIsNotValidNumber },
     values: [typeData.validNumericValues, typeData.withoutValidNumericValues],
   },
-  validDate: {
+  [PREDICATES.validDate]: {
     validators: { validateIsValidDate, validateIsNotValidDate },
     values: [typeData.validDateValues, typeData.withoutValidDateValues],
   },
-
-  // isEmpty,
-  // isNotEmpty,
-  // isEmptyArray,
-  // isNonEmptyArray,
-  // isEmptyString,
-  // isNonEmptyString,
-  // isFalsy,
-  // isTruthy,
-  // isFinite,
-  // isNotFinite,
-  // isFloat,
-  // isNotFloat,
-
-  // isInteger,
-  // isNotInteger,
-  // isPair,
-  // isNotPair,
-  // isPlainObj,
-  // isNotPlainObj,
-  // isValidDate,
-  // isNotValidDate,
-  // isValidNumber,
-  // isNotValidNumber,
 };
 
-const pairToTestData = validatorPair =>
+const prepareTestData = validatorPair =>
   mapObjIndexedWithIndex((validator, name, o, i) => {
     const testValues =
       i === 0
         ? prop(`values`, validatorPair)
         : compose(reverse, prop(`values`))(validatorPair);
-
-    const r = [name, validator, ...testValues];
-    return r;
+    return [name, validator, ...testValues];
   }, prop(`validators`, validatorPair));
 
 mapObjIndexed((validatorPair, name) => {
@@ -166,6 +141,6 @@ mapObjIndexed((validatorPair, name) => {
           });
         });
       });
-    }, pairToTestData(validatorPair));
+    }, prepareTestData(validatorPair));
   });
 }, validators);

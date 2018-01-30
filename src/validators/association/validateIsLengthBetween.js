@@ -1,5 +1,5 @@
 import { curry } from 'ramda';
-import untilFailureValidator from '../helpers/untilFailureValidator';
+import untilFailureValidator from '../../helpers/untilFailureValidator';
 import validateIsLengthGreaterThan from './validateIsLengthGreaterThan';
 import validateIsLengthLessThan from './validateIsLengthLessThan';
 

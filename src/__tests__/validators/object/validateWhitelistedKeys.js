@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import { validateWhitelistedKeys } from '../../index';
+import { validateWhitelistedKeys } from '../../../index';
 
 const { Success, Failure } = Validation;
 
