@@ -43,20 +43,6 @@ import validateExclusiveKeys from '../validators/object/validateExclusiveKeys';
 import validateIsArrayOf from '../validators/array/validateIsArrayOf';
 import validateArrayElements from '../validators/array/validateArrayElements';
 
-// import {
-//     isWhitelistedStringMessage,
-//     isLengthGreaterThanMessage,
-//     isLengthLessThanMessage,
-//     objectValuesMessage,
-//     valueErrorMessage,
-//     missingRequiredKeyErrorMessage,
-//     invalidKeysErrorMessage,
-//     arrayElementsErrorMessage,
-//     arrayElementErrorMessage,
-//     exclusiveKeyErrorMessage,
-//     negatedPredicateMessage,
-// } from '../../messages';
-
 import { PREDICATES } from '../const';
 
 export default messages => {

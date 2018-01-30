@@ -21,7 +21,7 @@ import {
 } from 'ramda';
 import { isEmptyString, isEmptyArray, isUndefined } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { FIELD_NAMES } from './const';
+import { CONSTRAINT_FIELD_NAMES, PREDICATE_DATA_FIELD_NAMES } from './const';
 
 const { Success } = Validation;
 
@@ -29,11 +29,11 @@ const { Success } = Validation;
 // Formatting
 // -----------------------------------------------------------------------------
 
-export const joinDefined = s => v => {
+export const joinDefined = withString => values => {
   const remaining = reject(anyPass([isEmptyString, isEmptyArray, isUndefined]))(
-    v
+    values
   );
-  const result = join(s, remaining);
+  const result = join(withString, remaining);
   return result;
 };
 
@@ -72,6 +72,7 @@ export const reduceWithIndex = addIndex(reduce);
 export const mapWithIndex = addIndex(map);
 
 export const mapObjIndexedWithIndex = addIndex(mapObjIndexed);
+export const reduceObjIndexedWithIndex = addIndex(reduceObjIndexed);
 
 // -----------------------------------------------------------------------------
 // Logging
@@ -100,9 +101,11 @@ export const loggingValidator = message => validation => {
 // Props / Lenses
 // -----------------------------------------------------------------------------
 
-export const propValue = prop(`value`);
-export const propName = prop(FIELD_NAMES.NAME);
-export const propReason = prop(FIELD_NAMES.REASON);
-export const propFields = prop(FIELD_NAMES.FIELDS);
+export const propValue = prop(PREDICATE_DATA_FIELD_NAMES.VALUE);
+export const propValues = prop(PREDICATE_DATA_FIELD_NAMES.VALUES);
+export const propValidators = prop(PREDICATE_DATA_FIELD_NAMES.VALIDATORS);
+export const propName = prop(CONSTRAINT_FIELD_NAMES.NAME);
+export const propReason = prop(CONSTRAINT_FIELD_NAMES.REASON);
+export const propFields = prop(CONSTRAINT_FIELD_NAMES.FIELDS);
 
-export const hasPropReason = has(FIELD_NAMES.REASON);
+export const hasPropReason = has(CONSTRAINT_FIELD_NAMES.REASON);

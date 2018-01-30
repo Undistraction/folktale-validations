@@ -15,38 +15,67 @@ import {
   toPairs,
 } from 'ramda';
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
-import { FIELD_NAMES } from '../const';
+import { CONSTRAINT_FIELD_NAMES } from '../const';
 
-export const propName = prop(FIELD_NAMES.NAME);
-export const pluckName = pluck(FIELD_NAMES.NAME);
-export const propEqName = propEq(FIELD_NAMES.NAME);
-export const hasIsRequired = has(FIELD_NAMES.IS_REQUIRED);
+// -----------------------------------------------------------------------------
+// Properties
+// -----------------------------------------------------------------------------
+
+export const propName = prop(CONSTRAINT_FIELD_NAMES.NAME);
+export const pluckName = pluck(CONSTRAINT_FIELD_NAMES.NAME);
+export const propEqName = propEq(CONSTRAINT_FIELD_NAMES.NAME);
+export const hasIsRequired = has(CONSTRAINT_FIELD_NAMES.IS_REQUIRED);
+
+// -----------------------------------------------------------------------------
+// Predicates
+// -----------------------------------------------------------------------------
 
 const hasIsRequiredKey = both(
   hasIsRequired,
-  compose(isTruthy, propSatisfies(isTruthy, FIELD_NAMES.IS_REQUIRED))
+  compose(isTruthy, propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
 );
 
-export const requiredKeys = compose(map(propName), filter(hasIsRequiredKey));
+// -----------------------------------------------------------------------------
+// Extract data from validated object
+// -----------------------------------------------------------------------------
 
-export const validatorsMap = reduce(
+export const listRequiredKeys = compose(
+  map(propName),
+  filter(hasIsRequiredKey)
+);
+
+export const buildValidatorsMap = reduce(
   (acc, { name, validator }) => assoc(name, validator, acc),
   {}
 );
 
-export const transformersMap = reduce(
+export const buildTransformersMap = reduce(
   (acc, { name, transformer }) =>
     isNotUndefined(transformer) ? assoc(name, transformer, acc) : acc,
   {}
 );
 
-export const defaultsMap = reduce(
+export const buildDefaultsMap = reduce(
   (acc, { name, defaultValue }) =>
     isNotUndefined(defaultValue) ? assoc(name, defaultValue, acc) : acc,
   {}
 );
 
-//
+// -----------------------------------------------------------------------------
+// Update data on validated object
+// -----------------------------------------------------------------------------
+
+export const replaceFieldsWithValidationValues = (fieldsToValidationsMap, o) =>
+  reduce(
+    (acc, [fieldName, validation]) => assoc(fieldName, validation.value, o),
+    o,
+    toPairs(fieldsToValidationsMap)
+  );
+
+// -----------------------------------------------------------------------------
+// Extract data from constraints object
+// -----------------------------------------------------------------------------
+
 export const constraintsForFieldsWithProp = name => constraints => (
   acc,
   [fieldName, fieldValue]
@@ -65,21 +94,14 @@ export const constraintsForFieldsWithProp = name => constraints => (
 
 export const constraintsForFieldsWithPropChildren = constraints => o =>
   reduce(
-    constraintsForFieldsWithProp(FIELD_NAMES.CHILDREN)(constraints),
+    constraintsForFieldsWithProp(CONSTRAINT_FIELD_NAMES.CHILDREN)(constraints),
     [],
     toPairs(o)
   );
 
 export const constraintsForFieldsWithPropValue = constraints => o =>
   reduce(
-    constraintsForFieldsWithProp(FIELD_NAMES.VALUE)(constraints),
+    constraintsForFieldsWithProp(CONSTRAINT_FIELD_NAMES.VALUE)(constraints),
     [],
     toPairs(o)
-  );
-
-export const replaceFieldsWithValidationValues = (fieldsToValidationsMap, o) =>
-  reduce(
-    (acc, [fieldName, validation]) => assoc(fieldName, validation.value, o),
-    o,
-    toPairs(fieldsToValidationsMap)
   );

@@ -10,11 +10,11 @@ import {
 } from 'ramda';
 import { isNotEmpty, isUndefined } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { transformersMap } from './utils';
+import { buildTransformersMap } from './utils';
 
 const { Success } = Validation;
 
-const transformValues = transformers =>
+const transformValues = transformersMap =>
   compose(
     Success,
     reduce(
@@ -25,11 +25,11 @@ const transformValues = transformers =>
           compose(assoc(name, __, acc), transformer)
         )(prop(name, acc)),
       __,
-      toPairs(transformers)
+      toPairs(transformersMap)
     )
   );
 
-export default constraints =>
-  ifElse(isNotEmpty, transformValues, always(Success))(
-    transformersMap(constraints)
-  );
+export default compose(
+  ifElse(isNotEmpty, transformValues, always(Success)),
+  buildTransformersMap
+);

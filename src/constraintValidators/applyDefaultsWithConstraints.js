@@ -11,7 +11,7 @@ import {
 } from 'ramda';
 import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { defaultsMap } from './utils';
+import { buildDefaultsMap } from './utils';
 
 const { Success } = Validation;
 
@@ -26,5 +26,7 @@ const applyDefaults = defaults =>
     )
   );
 
-export default constraints =>
-  ifElse(isNotEmpty, applyDefaults, always(Success))(defaultsMap(constraints));
+export default compose(
+  ifElse(isNotEmpty, applyDefaults, always(Success)),
+  buildDefaultsMap
+);

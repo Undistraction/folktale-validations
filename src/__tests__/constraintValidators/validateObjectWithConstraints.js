@@ -5,7 +5,7 @@ import {
   spy,
   stubReturns,
 } from '../testHelpers/sinon';
-import { FIELD_NAMES } from '../../const';
+import { CONSTRAINT_FIELD_NAMES } from '../../const';
 
 const value1 = `value1`;
 const value2 = `value2`;
@@ -31,7 +31,7 @@ const {
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
-} = FIELD_NAMES;
+} = CONSTRAINT_FIELD_NAMES;
 
 // Note: No need to test the validity of the constraints object itself as this
 // is well tested in `validateConstraints.js`. These tests should validate that

@@ -1,10 +1,10 @@
-import { identity, curry, equals } from 'ramda';
+import { identity, curry, equals, always, compose } from 'ramda';
 import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../helpers/untilFailureValidator';
 import validateObjectKeysWithConstraints from './validateObjectKeysWithConstraints';
 import applyDefaultsWithConstraints from './applyDefaultsWithConstraints';
 import transformValuesWithConstraints from './transformValuesWithConstraints';
-import { validatorsMap } from './utils';
+import { buildValidatorsMap } from './utils';
 import CONSTRAINTS from '../constraints';
 import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
 import { objectValidatorErrorMessage } from '../messages';
@@ -21,45 +21,38 @@ const objectErrorMessageWrapper = fieldName =>
 const constraintsAreOwnConstraints = equals(CONSTRAINTS);
 
 export const validateObject = curry((fieldName, constraints, o) => {
-  const result = untilFailureValidator([
-    // Validate this object's keys
+  const { fields, fieldsValidator } = constraints;
 
-    validateObjectKeysWithConstraints(
-      constraints.fieldsValidator,
-      constraints.fields
-    ),
-    // Validate this object's values
-    validatorsWithMessages.validateObjectValues(
-      validatorsMap(constraints.fields)
-    ),
-    applyDefaultsWithConstraints(constraints.fields),
-    transformValuesWithConstraints(constraints.fields),
-    // Validate nested objects
-    validateFieldsWithValue(constraints.fields),
-    validateFieldsWithChildren(constraints.fields),
+  const result = untilFailureValidator([
+    validateObjectKeysWithConstraints(fieldsValidator, fields),
+    validatorsWithMessages.validateObjectValues(buildValidatorsMap(fields)),
+    applyDefaultsWithConstraints(fields),
+    transformValuesWithConstraints(fields),
+    validateFieldsWithValue(fields),
+    validateFieldsWithChildren(fields),
   ])(o);
-  return result.orElse(v => objectErrorMessageWrapper(fieldName)(Failure(v)));
+  return result.orElse(compose(objectErrorMessageWrapper(fieldName), Failure));
 });
 
-const validateObjectWithConstraints = constraints => o => {
+const validateObjectWithConstraints = curry((constraints, o) => {
   // Work around cyclical dependency between this file and constraints using
   // a late import.
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
-
   const objectValidation = validatorsWithMessages.validateIsObject(o);
 
   if (Failure.hasInstance(objectValidation)) {
     return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);
   }
 
-  // Avoid recursion if we try and validate CONSTRAINTS with itself
+  // If we try and validate our own constraint object with itself we enter an
+  // infinite loop, so skip validation for our own constraints.
   return constraintsAreOwnConstraints(constraints)
     ? validateObject(ROOT_FIELD, constraints, o)
     : validateConstraints(constraints).matchWith({
-        Success: _ => validateObject(ROOT_FIELD, constraints, o),
+        Success: always(validateObject(ROOT_FIELD, constraints, o)),
         Failure: identity,
       });
-};
+});
 
 export default validateObjectWithConstraints;

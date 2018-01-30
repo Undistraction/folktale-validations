@@ -1,3 +1,4 @@
+import { always } from 'ramda';
 import { validation as Validation } from 'folktale';
 import CONSTRAINTS from '../constraints';
 import validateObjectWithConstraints from './validateObjectWithConstraints';
@@ -11,10 +12,10 @@ const constraintErrorMessageWrapper = wrapFailureMessageWith(
 );
 
 export default o => {
-  const result = validateObjectWithConstraints(CONSTRAINTS)(o);
+  const result = validateObjectWithConstraints(CONSTRAINTS, o);
 
   return result.matchWith({
-    Success: _ => Success(o),
+    Success: always(Success(o)),
     Failure: constraintErrorMessageWrapper,
   });
 };

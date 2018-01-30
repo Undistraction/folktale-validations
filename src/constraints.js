@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
 import allOfValidator from './helpers/allOfValidator';
-import { FIELD_NAMES } from './const';
+import { CONSTRAINT_FIELD_NAMES } from './const';
 import validatorsWithMessages from './defaults/validatorsWithMessages';
 
 const {
@@ -13,7 +13,7 @@ const {
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
-} = FIELD_NAMES;
+} = CONSTRAINT_FIELD_NAMES;
 
 const nameField = {
   [NAME]: NAME,

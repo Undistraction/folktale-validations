@@ -13,7 +13,7 @@ import {
 } from 'ramda';
 import { validation as Validation } from 'folktale';
 import { constraintsForFieldsWithPropChildren } from './utils';
-import { reduceObjIndexed } from '../utils';
+import { reduceObjIndexed, reduceObjIndexedWithIndex } from '../utils';
 import { validateObject } from './validateObjectWithConstraints';
 
 const { collect, Success } = Validation;
@@ -22,31 +22,25 @@ const { collect, Success } = Validation;
 // Replace Field Values
 // -----------------------------------------------------------------------------
 
-const replaceChildrenOfArrayField = (o, validations) => {
-  let i = -1;
-  return reduceObjIndexed(
+const replaceChildrenOfArrayField = (o, validations) =>
+  reduceObjIndexedWithIndex(
     // eslint-disable-next-line no-unused-vars, no-return-assign
-    (acc, [key, validation]) => update((i += 1), validation.value, acc),
+    (acc, [key, validation], i) => update(i, validation.value, acc),
     o,
     validations
   );
-};
 
-const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) => {
-  const result = reduceObjIndexed(
-    (acc, [fieldName, validations]) => {
-      const x = assoc(
+const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
+  reduceObjIndexed(
+    (acc, [fieldName, validations]) =>
+      assoc(
         fieldName,
         replaceChildrenOfArrayField(prop(fieldName, acc), validations),
         acc
-      );
-      return x;
-    },
+      ),
     o,
     fieldToValidationsMap
   );
-  return result;
-};
 
 // -----------------------------------------------------------------------------
 // Validate Field Values
@@ -87,8 +81,8 @@ const validateChildrenOfArrayFields = reduce(
 const collectAllValidationsFromChildren = compose(
   // eslint-disable-next-line no-unused-vars
   reduce((acc, [key, value]) => {
-    const its = reduce((acc2, v) => append(v, acc2), [], value);
-    return concat(its, acc);
+    const validations = reduce((acc2, v) => append(v, acc2), [], value);
+    return concat(validations, acc);
   }, []),
   toPairs
 );

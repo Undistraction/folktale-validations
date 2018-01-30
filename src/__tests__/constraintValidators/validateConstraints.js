@@ -2,7 +2,7 @@ import { map } from 'ramda';
 import validateConstraints from '../../constraintValidators/validateConstraints';
 import { func } from '../testHelpers/fixtures';
 import typeData from '../testHelpers/fixtures/typeData';
-import { FIELD_NAMES } from '../../const';
+import { CONSTRAINT_FIELD_NAMES } from '../../const';
 
 const {
   FIELDS,
@@ -14,7 +14,7 @@ const {
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
-} = FIELD_NAMES;
+} = CONSTRAINT_FIELD_NAMES;
 
 describe(`validateConstraints`, () => {
   // ---------------------------------------------------------------------------
