@@ -1,6 +1,10 @@
 module.exports = {
-  extends: ['eslint-config-airbnb-base', 'prettier'],
-  plugins: ['prettier'],
+  extends: [
+    'eslint-config-airbnb-base',
+    'prettier',
+    'plugin:ramda/recommended',
+  ],
+  plugins: ['prettier', 'eslint-plugin-ramda'],
   env: {
     browser: true,
     jest: true,
@@ -35,5 +39,9 @@ module.exports = {
         argsIgnorePattern: '^_$',
       },
     ],
+    'ramda/always-simplification': ['error'],
+    'ramda/compose-simplification': ['error'],
+    'ramda/eq-by-simplification': ['error'],
+    'ramda/prefer-complement': ['error'],
   },
 };
