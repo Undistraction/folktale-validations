@@ -31,7 +31,7 @@ describe(`transformValuesWithConstraints`, () => {
       a: `t1 transformed ${value1}`,
       b: `t2 transformed ${value2}`,
     });
-    expect(t1.calledWith(value1)).toEqual(true);
-    expect(t2.calledWith(value2)).toEqual(true);
+    expect(t1.calledWith(value1)).toBeTrue();
+    expect(t2.calledWith(value2)).toBeTrue();
   });
 });

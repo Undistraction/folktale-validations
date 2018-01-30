@@ -17,7 +17,7 @@ describe(`withField()`, () => {
       expect(validation).toEqualFailureWithValue(
         fieldErrorMessage(field, message)
       );
-      expect(v1.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
     });
   });
 
@@ -31,7 +31,7 @@ describe(`withField()`, () => {
 
       expect(validation).toEqual(validation);
       expect(validation).toEqualSuccessWithValue(value);
-      expect(v1.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
     });
   });
 });

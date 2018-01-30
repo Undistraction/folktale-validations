@@ -14,8 +14,8 @@ describe(`andValidator()`, () => {
       const validator = andValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqualSuccessWithValue(value);
-      expect(v1.calledWith(value)).toEqual(true);
-      expect(v1.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
+      expect(v1.calledWith(value)).toBeTrue();
     });
   });
   describe(`with an invalid value`, () => {
@@ -26,8 +26,8 @@ describe(`andValidator()`, () => {
         const validator = andValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqualFailureWithValue([message1]);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
       });
     });
   });
@@ -39,8 +39,8 @@ describe(`andValidator()`, () => {
       const validator = andValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqualFailureWithValue([message1]);
-      expect(v1.calledWith(value)).toEqual(true);
-      expect(v2.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
+      expect(v2.calledWith(value)).toBeTrue();
     });
   });
 
@@ -53,8 +53,8 @@ describe(`andValidator()`, () => {
       expect(validation).toEqualFailureWithValue([
         joinMessagesWithAnd([message1, message2]),
       ]);
-      expect(v1.calledWith(value)).toEqual(true);
-      expect(v2.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
+      expect(v2.calledWith(value)).toBeTrue();
     });
   });
 });

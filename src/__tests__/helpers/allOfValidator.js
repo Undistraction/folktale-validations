@@ -18,9 +18,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
   });
@@ -34,9 +34,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualFailureWithValue([message1]);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
 
@@ -49,9 +49,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualFailureWithValue([message1]);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
     describe(`with third validation failing`, () => {
@@ -63,9 +63,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualFailureWithValue([message1]);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
 
@@ -80,9 +80,9 @@ describe(`allOfValidator()`, () => {
         expect(validation).toEqualFailureWithValue([
           joinMessagesWithAnd([message1, message2, message3]),
         ]);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
   });

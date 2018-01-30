@@ -19,8 +19,8 @@ describe(`orValidator()`, () => {
         const validator = orValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.notCalled).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.notCalled).toBeTrue();
       });
     });
     describe(`with second validation succeeding`, () => {
@@ -30,8 +30,8 @@ describe(`orValidator()`, () => {
         const validator = orValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
       });
     });
   });
@@ -44,8 +44,8 @@ describe(`orValidator()`, () => {
       expect(validation).toEqualFailureWithValue([
         joinMessagesWithAnd([message1, message2]),
       ]);
-      expect(v1.calledWith(value)).toEqual(true);
-      expect(v2.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
+      expect(v2.calledWith(value)).toBeTrue();
     });
   });
 });

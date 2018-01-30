@@ -29,7 +29,7 @@ describe(`validateArrayElements()`, () => {
       const validator = validatorWithMessages(v1);
       const validation = validator(value);
       expect(validation).toEqualSuccessWithValue(value);
-      expect(v1.notCalled).toEqual(true);
+      expect(v1.notCalled).toBeTrue();
     });
   });
 
@@ -40,10 +40,10 @@ describe(`validateArrayElements()`, () => {
       const validator = validatorWithMessages(v1);
       const validation = validator(value);
       expect(validation).toEqualSuccessWithValue(value);
-      expect(v1.calledThrice).toEqual(true);
-      expect(v1.calledWith(1)).toEqual(true);
-      expect(v1.calledWith(2)).toEqual(true);
-      expect(v1.calledWith(3)).toEqual(true);
+      expect(v1.calledThrice).toBeTrue();
+      expect(v1.calledWith(1)).toBeTrue();
+      expect(v1.calledWith(2)).toBeTrue();
+      expect(v1.calledWith(3)).toBeTrue();
     });
   });
 
@@ -61,10 +61,10 @@ describe(`validateArrayElements()`, () => {
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
-        expect(v1.calledWith(1)).toEqual(true);
-        expect(v1.calledWith(2)).toEqual(true);
-        expect(v1.calledWith(3)).toEqual(true);
-        expect(v1.calledThrice).toEqual(true);
+        expect(v1.calledWith(1)).toBeTrue();
+        expect(v1.calledWith(2)).toBeTrue();
+        expect(v1.calledWith(3)).toBeTrue();
+        expect(v1.calledThrice).toBeTrue();
       });
     });
 
@@ -81,9 +81,9 @@ describe(`validateArrayElements()`, () => {
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
-        expect(v1.calledWith(1)).toEqual(true);
-        expect(v1.calledWith(2)).toEqual(true);
-        expect(v1.calledWith(3)).toEqual(true);
+        expect(v1.calledWith(1)).toBeTrue();
+        expect(v1.calledWith(2)).toBeTrue();
+        expect(v1.calledWith(3)).toBeTrue();
       });
     });
 
@@ -100,10 +100,10 @@ describe(`validateArrayElements()`, () => {
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
-        expect(v1.calledWith(1)).toEqual(true);
-        expect(v1.calledWith(2)).toEqual(true);
-        expect(v1.calledWith(3)).toEqual(true);
-        expect(v1.calledThrice).toEqual(true);
+        expect(v1.calledWith(1)).toBeTrue();
+        expect(v1.calledWith(2)).toBeTrue();
+        expect(v1.calledWith(3)).toBeTrue();
+        expect(v1.calledThrice).toBeTrue();
       });
     });
 
@@ -119,11 +119,11 @@ describe(`validateArrayElements()`, () => {
         expect(validation).toEqualFailureWithValue([elementsMessage]);
         expect(
           elementsMessageFunction.calledWith([elementMessage, elementMessage])
-        ).toEqual(true);
-        expect(v1.calledWith(1)).toEqual(true);
-        expect(v1.calledWith(2)).toEqual(true);
-        expect(v1.calledWith(3)).toEqual(true);
-        expect(v1.calledThrice).toEqual(true);
+        ).toBeTrue();
+        expect(v1.calledWith(1)).toBeTrue();
+        expect(v1.calledWith(2)).toBeTrue();
+        expect(v1.calledWith(3)).toBeTrue();
+        expect(v1.calledThrice).toBeTrue();
       });
     });
   });

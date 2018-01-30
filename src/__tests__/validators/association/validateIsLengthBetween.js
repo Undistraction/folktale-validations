@@ -47,7 +47,7 @@ describe(`validateIsLengthBetween()`, () => {
       const validator = validatorWithMessage(minimumLength, maximumLength);
       const validation = validator(value);
       expect(validation).toEqualFailureWithValue([message]);
-      expect(lessThanMessageFunction.calledWith(maximumLength)).toEqual(true);
+      expect(lessThanMessageFunction.calledWith(maximumLength)).toBeTrue();
     });
   });
 });

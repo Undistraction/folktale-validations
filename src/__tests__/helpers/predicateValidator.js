@@ -10,8 +10,8 @@ describe(`predicateValidator`, () => {
       const validator = predicateValidator(message, p);
       const validation = validator(value);
       expect(validation).toEqualSuccessWithValue(value);
-      expect(p.calledOnce).toEqual(true);
-      expect(p.calledWith(true)).toEqual(true);
+      expect(p.calledOnce).toBeTrue();
+      expect(p.calledWith(true)).toBeTrue();
     });
   });
 
@@ -23,8 +23,8 @@ describe(`predicateValidator`, () => {
       const validator = predicateValidator(message, p);
       const validation = validator(value);
       expect(validation).toEqualFailureWithValue([message]);
-      expect(p.calledOnce).toEqual(true);
-      expect(p.calledWith(true)).toEqual(true);
+      expect(p.calledOnce).toBeTrue();
+      expect(p.calledWith(true)).toBeTrue();
     });
   });
 });

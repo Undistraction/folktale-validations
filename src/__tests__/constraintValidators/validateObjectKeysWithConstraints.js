@@ -46,7 +46,7 @@ describe(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints(null, constraints);
         const validation = validator(o);
         expect(validation).toEqual(Success(o));
-        expect(v1.notCalled).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
       });
 
       describe(`with mssing optional keys`, () => {
@@ -69,9 +69,9 @@ describe(`validateObjectKeysWithConstraints()`, () => {
 
         const validator = validateObjectKeysWithConstraints(null, constraints);
         const validation = validator(o);
-        expect(Success.hasInstance(validation)).toEqual(true);
+        expect(Success.hasInstance(validation)).toBeTrue();
         expect(validation).toEqual(Success(o));
-        expect(v1.notCalled).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
       });
 
       describe(`not satisfied`, () => {
@@ -103,7 +103,7 @@ describe(`validateObjectKeysWithConstraints()`, () => {
           expect(validation).toEqual(
             Failure([`Object included invalid key(s): '[c]'`])
           );
-          expect(v1.notCalled).toEqual(true);
+          expect(v1.notCalled).toBeTrue();
         });
       });
     });
@@ -146,7 +146,7 @@ describe(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints(null, constraints);
         const validation = validator(o);
         expect(validation).toEqual(Success(o));
-        expect(v1.notCalled).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
       });
 
       describe(`with mssing optional keys`, () => {
@@ -169,9 +169,9 @@ describe(`validateObjectKeysWithConstraints()`, () => {
 
         const validator = validateObjectKeysWithConstraints(null, constraints);
         const validation = validator(o);
-        expect(Success.hasInstance(validation)).toEqual(true);
+        expect(Success.hasInstance(validation)).toBeTrue();
         expect(validation).toEqual(Success(o));
-        expect(v1.notCalled).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
       });
 
       describe(`not satisfied`, () => {
@@ -203,7 +203,7 @@ describe(`validateObjectKeysWithConstraints()`, () => {
           expect(validation).toEqual(
             Failure([`Object included invalid key(s): '[c]'`])
           );
-          expect(v1.notCalled).toEqual(true);
+          expect(v1.notCalled).toBeTrue();
         });
       });
     });
@@ -234,8 +234,8 @@ describe(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints(v2, constraints);
         const validation = validator(o);
         expect(validation).toEqual(Success(o));
-        expect(v1.notCalled).toEqual(true);
-        expect(v2.calledWith(o)).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
+        expect(v2.calledWith(o)).toBeTrue();
       });
     });
 
@@ -264,8 +264,8 @@ describe(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints(v2, constraints);
         const validation = validator(o);
         expect(validation).toEqualFailureWithValue([message]);
-        expect(v1.notCalled).toEqual(true);
-        expect(v2.calledWith(o)).toEqual(true);
+        expect(v1.notCalled).toBeTrue();
+        expect(v2.calledWith(o)).toBeTrue();
       });
     });
   });

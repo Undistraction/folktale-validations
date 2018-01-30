@@ -16,8 +16,8 @@ describe(`chain()`, () => {
       const validator = spy();
       const result = chain(acc, validator);
       expect(result).toEqualFailureWithValue(message);
-      expect(result.equals(acc)).toEqual(true);
-      expect(validator.notCalled).toEqual(true);
+      expect(result.equals(acc)).toBeTrue();
+      expect(validator.notCalled).toBeTrue();
     });
   });
 
@@ -30,7 +30,7 @@ describe(`chain()`, () => {
         const validator = stubReturnsFailure(message);
         const result = chain(acc, validator);
         expect(result).toEqualFailureWithValue([message]);
-        expect(validator.calledWith(value)).toEqual(true);
+        expect(validator.calledWith(value)).toBeTrue();
       });
     });
 
@@ -41,7 +41,7 @@ describe(`chain()`, () => {
         const validator = stubReturnsSuccess(value);
         const result = chain(acc, validator);
         expect(result).toEqualSuccessWithValue(value);
-        expect(validator.calledWith(value)).toEqual(true);
+        expect(validator.calledWith(value)).toBeTrue();
       });
     });
   });

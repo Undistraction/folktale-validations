@@ -37,7 +37,7 @@ describe(`validateIsWhitelistedValue()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
         expect(validation).toEqualFailureWithValue([message]);
-        expect(messageFunction.calledWith(whitelist)).toEqual(true);
+        expect(messageFunction.calledWith(whitelist)).toBeTrue();
       });
     });
 
@@ -46,7 +46,7 @@ describe(`validateIsWhitelistedValue()`, () => {
         const value = `d`;
         const validation = validator(value);
         expect(validation).toEqualFailureWithValue([message]);
-        expect(messageFunction.calledWith(whitelist)).toEqual(true);
+        expect(messageFunction.calledWith(whitelist)).toBeTrue();
       });
     });
   });

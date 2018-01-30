@@ -17,9 +17,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.notCalled).toEqual(true);
-        expect(v3.notCalled).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.notCalled).toBeTrue();
+        expect(v3.notCalled).toBeTrue();
       });
     });
     describe(`with second validation succeeding`, () => {
@@ -32,9 +32,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.notCalled).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.notCalled).toBeTrue();
       });
     });
     describe(`with third validation succeeding`, () => {
@@ -47,9 +47,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
-        expect(v1.calledWith(value)).toEqual(true);
-        expect(v2.calledWith(value)).toEqual(true);
-        expect(v3.calledWith(value)).toEqual(true);
+        expect(v1.calledWith(value)).toBeTrue();
+        expect(v2.calledWith(value)).toBeTrue();
+        expect(v3.calledWith(value)).toBeTrue();
       });
     });
   });
@@ -65,8 +65,8 @@ describe(`anyOfValidator()`, () => {
       expect(validation).toEqualFailureWithValue([
         joinMessagesWithAnd([errorMessage1, errorMessage2]),
       ]);
-      expect(v1.calledWith(value)).toEqual(true);
-      expect(v2.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toBeTrue();
+      expect(v2.calledWith(value)).toBeTrue();
     });
   });
 });

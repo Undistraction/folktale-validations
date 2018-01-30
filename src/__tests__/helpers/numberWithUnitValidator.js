@@ -24,7 +24,7 @@ describe(`numberWithUnitValidator`, () => {
         const validator = validatorWithMessage(unit);
         const result = validator(value);
         expect(result).toEqualSuccessWithValue(value);
-        expect(messageFunction.calledWith(unit)).toEqual(true);
+        expect(messageFunction.calledWith(unit)).toBeTrue();
       })(numbers);
     });
   });
@@ -39,7 +39,7 @@ describe(`numberWithUnitValidator`, () => {
           const validator = validatorWithMessage(unit);
           const result = validator(value);
           expect(result).toEqualFailureWithValue([message]);
-          expect(messageFunction.calledWith(unit)).toEqual(true);
+          expect(messageFunction.calledWith(unit)).toBeTrue();
         })(numbers);
       });
     });
@@ -52,9 +52,9 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = validatorWithMessage(unit);
           const result = validator(value);
-          expect(Failure.hasInstance(result)).toEqual(true);
+          expect(Failure.hasInstance(result)).toBeTrue();
           expect(result).toEqualFailureWithValue([message]);
-          expect(messageFunction.calledWith(unit)).toEqual(true);
+          expect(messageFunction.calledWith(unit)).toBeTrue();
         })(numbers);
       });
     });
@@ -68,7 +68,7 @@ describe(`numberWithUnitValidator`, () => {
           const validator = validatorWithMessage(unit);
           const result = validator(value);
           expect(result).toEqualFailureWithValue([message]);
-          expect(messageFunction.calledWith(unit)).toEqual(true);
+          expect(messageFunction.calledWith(unit)).toBeTrue();
         })(numbers);
       });
     });

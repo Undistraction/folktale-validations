@@ -54,7 +54,7 @@ describe(`validateExclusiveKeys`, () => {
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
       expect(validation).toEqualFailureWithValue([message]);
-      expect(messageFunction.calledWith([key1, key2])).toEqual(true);
+      expect(messageFunction.calledWith([key1, key2])).toBeTrue();
     });
   });
 
@@ -64,7 +64,7 @@ describe(`validateExclusiveKeys`, () => {
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
       expect(validation).toEqualFailureWithValue([message]);
-      expect(messageFunction.calledWith([key1, key2, key3])).toEqual(true);
+      expect(messageFunction.calledWith([key1, key2, key3])).toBeTrue();
     });
   });
 });
