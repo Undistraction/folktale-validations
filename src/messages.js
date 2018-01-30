@@ -26,7 +26,6 @@ export const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value);
 
 export const invalidObjectPrefix = always(`Object`);
-
 export const invalidArrayPrefix = always(`Array`);
 
 export const invalidObjectReasonInvalidValues = always(

@@ -1,5 +1,3 @@
-import { validation as Validation } from 'folktale';
-
 import { map, mapObjIndexed, prop, compose, reverse } from 'ramda';
 import typeData from '../../testHelpers/fixtures/typeData';
 
@@ -37,8 +35,6 @@ import {
 
 import { mapObjIndexedWithIndex } from '../../../utils';
 import { PREDICATES } from '../../../const';
-
-const { Success, Failure } = Validation;
 
 const validators = {
   // Types
@@ -127,7 +123,7 @@ mapObjIndexed((validatorPair, name) => {
             it(`returns a Validation.Success with the supplied value`, () => {
               map(value => {
                 const validation = validatorWithMessage(value);
-                expect(validation).toEqual(Success(value));
+                expect(validation).toEqualSuccessWithValue(value);
               }, validValues);
             });
           });
@@ -135,7 +131,7 @@ mapObjIndexed((validatorPair, name) => {
             it(`returns a Validation.Failure with an error message`, () => {
               map(value => {
                 const validation = validatorWithMessage(value);
-                expect(validation).toEqual(Failure([message]));
+                expect(validation).toEqualFailureWithValue([message]);
               }, invalidValues);
             });
           });

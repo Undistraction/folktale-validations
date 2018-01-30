@@ -263,7 +263,7 @@ describe(`validateObjectKeysWithConstraints()`, () => {
         ];
         const validator = validateObjectKeysWithConstraints(v2, constraints);
         const validation = validator(o);
-        expect(validation).toEqual(Failure([message]));
+        expect(validation).toEqualFailureWithValue([message]);
         expect(v1.notCalled).toEqual(true);
         expect(v2.calledWith(o)).toEqual(true);
       });

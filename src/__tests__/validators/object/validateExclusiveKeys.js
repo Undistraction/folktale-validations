@@ -1,8 +1,5 @@
 import { stub } from 'sinon';
-import { validation as Validation } from 'folktale';
 import validateExclusiveKeys from '../../../validators/object/validateExclusiveKeys';
-
-const { Success, Failure } = Validation;
 
 describe(`validateExclusiveKeys`, () => {
   const key1 = `a`;
@@ -29,7 +26,7 @@ describe(`validateExclusiveKeys`, () => {
       const exlusiveKeys = [];
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -38,7 +35,7 @@ describe(`validateExclusiveKeys`, () => {
       const exlusiveKeys = [`d`];
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -47,7 +44,7 @@ describe(`validateExclusiveKeys`, () => {
       const exlusiveKeys = [key1];
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -56,7 +53,7 @@ describe(`validateExclusiveKeys`, () => {
       const exlusiveKeys = [key1, key2];
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(messageFunction.calledWith([key1, key2])).toEqual(true);
     });
   });
@@ -66,7 +63,7 @@ describe(`validateExclusiveKeys`, () => {
       const exlusiveKeys = [key1, key2, key3];
       const validator = validatorWithMessage(exlusiveKeys);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(messageFunction.calledWith([key1, key2, key3])).toEqual(true);
     });
   });

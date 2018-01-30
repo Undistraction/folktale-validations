@@ -14,7 +14,9 @@ describe(`withField()`, () => {
       const v1 = sinon.stub().returns(Failure(message));
       const validator = withField(field, v1);
       const validation = validator(value);
-      expect(validation).toEqual(Failure(fieldErrorMessage(field, message)));
+      expect(validation).toEqualFailureWithValue(
+        fieldErrorMessage(field, message)
+      );
       expect(v1.calledWith(value)).toEqual(true);
     });
   });
@@ -28,7 +30,7 @@ describe(`withField()`, () => {
       const validation = validator(value);
 
       expect(validation).toEqual(validation);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
       expect(v1.calledWith(value)).toEqual(true);
     });
   });

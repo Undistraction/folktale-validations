@@ -3,8 +3,6 @@ import { allOfValidator } from '../../index';
 import { joinMessagesWithAnd } from '../../messages';
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
 
-const { Success, Failure } = Validation;
-
 const message1 = `message1`;
 const message2 = `message2`;
 const message3 = `message3`;
@@ -19,7 +17,7 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -35,7 +33,7 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([message1]));
+        expect(validation).toEqualFailureWithValue([message1]);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -50,7 +48,7 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsSuccess(value);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([message1]));
+        expect(validation).toEqualFailureWithValue([message1]);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -64,7 +62,7 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsFailure(message1);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([message1]));
+        expect(validation).toEqualFailureWithValue([message1]);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -79,9 +77,9 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsFailure(message3);
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(
-          Failure([joinMessagesWithAnd([message1, message2, message3])])
-        );
+        expect(validation).toEqualFailureWithValue([
+          joinMessagesWithAnd([message1, message2, message3]),
+        ]);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);

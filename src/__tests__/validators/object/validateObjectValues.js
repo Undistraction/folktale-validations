@@ -7,7 +7,7 @@ import {
   stubReturnsSuccess,
 } from '../../testHelpers/sinon';
 
-const { Success, Failure } = Validation;
+const { Failure } = Validation;
 
 describe(`validateObjectValues()`, () => {
   const key1 = 1;
@@ -46,8 +46,8 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toEqual(true);
-        expect(v2.calledWith(key2)).toEqual(true);
+        expect(v1.calledWith(key1)).toBeTrue();
+        expect(v2.calledWith(key2)).toBeTrue();
       });
     });
 
@@ -67,8 +67,8 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toEqual(true);
-        expect(v2.calledWith(key2)).toEqual(true);
+        expect(v1.calledWith(key1)).toBeTrue();
+        expect(v2.calledWith(key2)).toBeTrue();
       });
     });
 
@@ -76,6 +76,7 @@ describe(`validateObjectValues()`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const message1 = `message1`;
         const message2 = `message2`;
+
         const message3 = `message3`;
         const v1 = stubReturnsFailure(message1);
         const v2 = stubReturnsFailure(message2);
@@ -93,9 +94,9 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toEqual(true);
-        expect(v2.calledWith(key2)).toEqual(true);
-        expect(v2.calledWith(key3)).toEqual(true);
+        expect(v1.calledWith(key1)).toBeTrue();
+        expect(v2.calledWith(key2)).toBeTrue();
+        expect(v2.calledWith(key3)).toBeTrue();
       });
     });
   });
@@ -114,9 +115,9 @@ describe(`validateObjectValues()`, () => {
       };
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
-      expect(v1.calledWith(key1)).toEqual(true);
-      expect(v2.calledWith(key2)).toEqual(true);
+      expect(validation).toEqualSuccessWithValue(value);
+      expect(v1.calledWith(key1)).toBeTrue();
+      expect(v2.calledWith(key2)).toBeTrue();
     });
   });
 
@@ -129,8 +130,8 @@ describe(`validateObjectValues()`, () => {
       const validators = {};
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
-      expect(v1.notCalled).toEqual(true);
+      expect(validation).toEqualSuccessWithValue(value);
+      expect(v1.notCalled).toBeTrue();
     });
   });
 
@@ -145,8 +146,8 @@ describe(`validateObjectValues()`, () => {
       };
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
-      expect(v1.notCalled).toEqual(true);
+      expect(validation).toEqualSuccessWithValue(value);
+      expect(v1.notCalled).toBeTrue();
     });
   });
 });

@@ -1,8 +1,5 @@
-import { validation as Validation } from 'folktale';
 import sinon from 'sinon';
 import transformValuesWithConstraints from '../../constraintValidators/transformValuesWithConstraints';
-
-const { Success } = Validation;
 
 describe(`transformValuesWithConstraints`, () => {
   it(`returns a Validation.Success with transformed values`, () => {
@@ -30,12 +27,10 @@ describe(`transformValuesWithConstraints`, () => {
 
     const validator = transformValuesWithConstraints(constraints);
     const validation = validator(o);
-    expect(validation).toEqual(
-      Success({
-        a: `t1 transformed ${value1}`,
-        b: `t2 transformed ${value2}`,
-      })
-    );
+    expect(validation).toEqualSuccessWithValue({
+      a: `t1 transformed ${value1}`,
+      b: `t2 transformed ${value2}`,
+    });
     expect(t1.calledWith(value1)).toEqual(true);
     expect(t2.calledWith(value2)).toEqual(true);
   });

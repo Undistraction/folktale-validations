@@ -1,4 +1,3 @@
-import { validation as Validation } from 'folktale';
 import { anyOfValidator } from '../../index';
 import { joinMessagesWithAnd } from '../../messages';
 import {
@@ -6,8 +5,6 @@ import {
   stubReturnsSuccess,
   stubReturnsFailure,
 } from '../testHelpers/sinon';
-
-const { Success, Failure } = Validation;
 
 describe(`anyOfValidator()`, () => {
   describe(`with a valid value`, () => {
@@ -19,7 +16,7 @@ describe(`anyOfValidator()`, () => {
         const v3 = spy();
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.notCalled).toEqual(true);
         expect(v3.notCalled).toEqual(true);
@@ -34,7 +31,7 @@ describe(`anyOfValidator()`, () => {
         const v3 = spy();
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.notCalled).toEqual(true);
@@ -49,7 +46,7 @@ describe(`anyOfValidator()`, () => {
         const v3 = stubReturnsSuccess(value);
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -65,9 +62,9 @@ describe(`anyOfValidator()`, () => {
       const v2 = stubReturnsFailure(errorMessage2);
       const validator = anyOfValidator([v1, v2]);
       const validation = validator(value);
-      expect(validation).toEqual(
-        Failure([joinMessagesWithAnd([errorMessage1, errorMessage2])])
-      );
+      expect(validation).toEqualFailureWithValue([
+        joinMessagesWithAnd([errorMessage1, errorMessage2]),
+      ]);
       expect(v1.calledWith(value)).toEqual(true);
       expect(v2.calledWith(value)).toEqual(true);
     });

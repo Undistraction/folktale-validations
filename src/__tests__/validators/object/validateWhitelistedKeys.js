@@ -2,7 +2,7 @@ import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
 import { validateWhitelistedKeys } from '../../../index';
 
-const { Success, Failure } = Validation;
+const { Success } = Validation;
 
 describe(`validateWhitelistedKeys()`, () => {
   const validObject = {
@@ -42,7 +42,7 @@ describe(`validateWhitelistedKeys()`, () => {
   describe(`when object has only invalid keys`, () => {
     it(`returns a Validation.Failure with a value of an array of the invalid keys`, () => {
       const validation = validateWhitelistedKeysWithKeys(invalidObject);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(messageFunction.calledWith([`delta`, `echo`])).toEqual(true);
     });
   });

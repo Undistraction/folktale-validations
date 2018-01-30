@@ -1,8 +1,5 @@
 import sinon from 'sinon';
-import { validation as Validation } from 'folktale';
 import predicateValidator from '../../helpers/predicateValidator';
-
-const { Success, Failure } = Validation;
 
 describe(`predicateValidator`, () => {
   describe(`with a valid value`, () => {
@@ -12,7 +9,7 @@ describe(`predicateValidator`, () => {
       const message = `message`;
       const validator = predicateValidator(message, p);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
       expect(p.calledOnce).toEqual(true);
       expect(p.calledWith(true)).toEqual(true);
     });
@@ -25,7 +22,7 @@ describe(`predicateValidator`, () => {
       const message = `message`;
       const validator = predicateValidator(message, p);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(p.calledOnce).toEqual(true);
       expect(p.calledWith(true)).toEqual(true);
     });

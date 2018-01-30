@@ -15,7 +15,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.spy();
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(result).toEqual(Failure(failureMessage));
+        expect(result).toEqualFailureWithValue(failureMessage);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.notCalled).toEqual(true);
         expect(v3.notCalled).toEqual(true);
@@ -31,7 +31,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.spy();
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(result).toEqual(Failure(failureMessage));
+        expect(result).toEqualFailureWithValue(failureMessage);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.notCalled).toEqual(true);
@@ -47,7 +47,7 @@ describe(`untilFailureValidator()`, () => {
         const v3 = sinon.stub().returns(Failure(failureMessage));
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
-        expect(result).toEqual(Failure(failureMessage));
+        expect(result).toEqualFailureWithValue(failureMessage);
         expect(v1.calledWith(value)).toEqual(true);
         expect(v2.calledWith(value)).toEqual(true);
         expect(v3.calledWith(value)).toEqual(true);
@@ -63,7 +63,7 @@ describe(`untilFailureValidator()`, () => {
       const v3 = sinon.stub().returns(Success(value));
       const validator = untilFailureValidator([v1, v2, v3]);
       const result = validator(value);
-      expect(result).toEqual(Success(value));
+      expect(result).toEqualSuccessWithValue(value);
       expect(v1.calledWith(value)).toEqual(true);
       expect(v2.calledWith(value)).toEqual(true);
       expect(v3.calledWith(value)).toEqual(true);

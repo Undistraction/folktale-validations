@@ -1,8 +1,6 @@
 import { stub } from 'sinon';
-import { validation as Validation } from 'folktale';
 import { validateIsLengthGreaterThan } from '../../../index';
 
-const { Success, Failure } = Validation;
 const value = `xxx`;
 
 describe(`validateIsLengthGreaterThan()`, () => {
@@ -20,7 +18,7 @@ describe(`validateIsLengthGreaterThan()`, () => {
       const length = 2;
       const validator = validatorWithMessage(length);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -29,7 +27,7 @@ describe(`validateIsLengthGreaterThan()`, () => {
       const length = 3;
       const validator = validatorWithMessage(length);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(messageFunction.calledWith(length)).toEqual(true);
     });
   });
@@ -39,7 +37,7 @@ describe(`validateIsLengthGreaterThan()`, () => {
       const length = 4;
       const validator = validatorWithMessage(length);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(messageFunction.calledWith(length)).toEqual(true);
     });
   });

@@ -1,8 +1,5 @@
 import { stub } from 'sinon';
-import { validation as Validation } from 'folktale';
 import { validateIsWhitelistedValue } from '../../../index';
-
-const { Success, Failure } = Validation;
 
 describe(`validateIsWhitelistedValue()`, () => {
   // Just return the whitelist so we know message has access to it
@@ -15,14 +12,14 @@ describe(`validateIsWhitelistedValue()`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const value = `b`;
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
 
     describe(`when value is first item`, () => {
       it(`returns a Validation.Success with the supplied value`, () => {
         const value = `a`;
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
       });
     });
 
@@ -30,7 +27,7 @@ describe(`validateIsWhitelistedValue()`, () => {
       it(`returns a Validation.Success with the supplied value`, () => {
         const value = `c`;
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
       });
     });
   });
@@ -39,7 +36,7 @@ describe(`validateIsWhitelistedValue()`, () => {
     describe(`when no value is passed`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
-        expect(validation).toEqual(Failure([message]));
+        expect(validation).toEqualFailureWithValue([message]);
         expect(messageFunction.calledWith(whitelist)).toEqual(true);
       });
     });
@@ -48,7 +45,7 @@ describe(`validateIsWhitelistedValue()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const value = `d`;
         const validation = validator(value);
-        expect(validation).toEqual(Failure([message]));
+        expect(validation).toEqualFailureWithValue([message]);
         expect(messageFunction.calledWith(whitelist)).toEqual(true);
       });
     });

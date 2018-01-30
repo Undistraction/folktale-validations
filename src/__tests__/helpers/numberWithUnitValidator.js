@@ -3,7 +3,7 @@ import { validation as Validation } from 'folktale';
 import { map } from 'ramda';
 import { numberWithUnitValidator } from '../../index';
 
-const { Success, Failure } = Validation;
+const { Failure } = Validation;
 
 describe(`numberWithUnitValidator`, () => {
   const message = `message`;
@@ -23,7 +23,7 @@ describe(`numberWithUnitValidator`, () => {
         const value = `${number}${unit}`;
         const validator = validatorWithMessage(unit);
         const result = validator(value);
-        expect(result).toEqual(Success(value));
+        expect(result).toEqualSuccessWithValue(value);
         expect(messageFunction.calledWith(unit)).toEqual(true);
       })(numbers);
     });
@@ -38,7 +38,7 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = validatorWithMessage(unit);
           const result = validator(value);
-          expect(result).toEqual(Failure([message]));
+          expect(result).toEqualFailureWithValue([message]);
           expect(messageFunction.calledWith(unit)).toEqual(true);
         })(numbers);
       });
@@ -53,7 +53,7 @@ describe(`numberWithUnitValidator`, () => {
           const validator = validatorWithMessage(unit);
           const result = validator(value);
           expect(Failure.hasInstance(result)).toEqual(true);
-          expect(result).toEqual(Failure([message]));
+          expect(result).toEqualFailureWithValue([message]);
           expect(messageFunction.calledWith(unit)).toEqual(true);
         })(numbers);
       });
@@ -67,7 +67,7 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = validatorWithMessage(unit);
           const result = validator(value);
-          expect(result).toEqual(Failure([message]));
+          expect(result).toEqualFailureWithValue([message]);
           expect(messageFunction.calledWith(unit)).toEqual(true);
         })(numbers);
       });

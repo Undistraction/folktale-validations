@@ -1,7 +1,4 @@
-import { validation as Validation } from 'folktale';
 import applyDefaultsWithConstraints from '../../constraintValidators/applyDefaultsWithConstraints';
-
-const { Success } = Validation;
 
 describe(`applyDefaultsWithConstraints()`, () => {
   describe(`with no defaults`, () => {
@@ -21,7 +18,7 @@ describe(`applyDefaultsWithConstraints()`, () => {
 
       const validator = applyDefaultsWithConstraints(constraints);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -50,7 +47,7 @@ describe(`applyDefaultsWithConstraints()`, () => {
 
       const validator = applyDefaultsWithConstraints(constraints);
       const validation = validator(value);
-      expect(validation).toEqual(Success(expected));
+      expect(validation).toEqualSuccessWithValue(expected);
     });
   });
 
@@ -74,7 +71,7 @@ describe(`applyDefaultsWithConstraints()`, () => {
 
       const validator = applyDefaultsWithConstraints(constraints);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 });

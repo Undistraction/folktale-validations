@@ -210,7 +210,7 @@ describe(`validateObjectWithConstraints`, () => {
 
         const validator = validateObjectWithConstraints(constraints);
         const validation = validator(value);
-        expect(validation).toEqual(Success(value));
+        expect(validation).toEqualSuccessWithValue(value);
         expect(v1.notCalled).toEqual(true);
       });
     });
@@ -241,11 +241,9 @@ describe(`validateObjectWithConstraints`, () => {
 
           const validator = validateObjectWithConstraints(constraints);
           const validation = validator(o);
-          expect(validation).toEqual(
-            Failure([
-              `Object Invalid: Object was missing required key(s): ['b']`,
-            ])
-          );
+          expect(validation).toEqualFailureWithValue([
+            `Object Invalid: Object was missing required key(s): ['b']`,
+          ]);
         });
       });
     });
@@ -269,7 +267,7 @@ describe(`validateObjectWithConstraints`, () => {
         };
         const validator = validateObjectWithConstraints(constraints);
         const validation = validator(o);
-        expect(validation).toEqual(Success(o));
+        expect(validation).toEqualSuccessWithValue(o);
         expect(v1.calledWith(value1)).toEqual(true);
       });
     });
@@ -292,7 +290,7 @@ describe(`validateObjectWithConstraints`, () => {
           };
           const validator = validateObjectWithConstraints(constraints);
           const validation = validator(o);
-          expect(validation).toEqual(Success(o));
+          expect(validation).toEqualSuccessWithValue(o);
           expect(v1.calledWith(value1)).toEqual(true);
         });
       });
@@ -320,11 +318,9 @@ describe(`validateObjectWithConstraints`, () => {
           };
           const validator = validateObjectWithConstraints(constraints);
           const validation = validator(o);
-          expect(validation).toEqual(
-            Failure([
-              `Object Invalid: Object was missing required key(s): ['b']`,
-            ])
-          );
+          expect(validation).toEqualFailureWithValue([
+            `Object Invalid: Object was missing required key(s): ['b']`,
+          ]);
         });
       });
     });

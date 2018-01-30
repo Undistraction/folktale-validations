@@ -1,8 +1,5 @@
 import { stub } from 'sinon';
-import { validation as Validation } from 'folktale';
 import { validateRequiredKeys } from '../../../index';
-
-const { Success, Failure } = Validation;
 
 describe(`validate required keys`, () => {
   const message = `message`;
@@ -19,7 +16,7 @@ describe(`validate required keys`, () => {
       const value = {};
       const validator = validatorWithMessage(requiredKeys);
       const result = validator(value);
-      expect(result).toEqual(Failure([message]));
+      expect(result).toEqualFailureWithValue([message]);
     });
   });
 
@@ -33,7 +30,7 @@ describe(`validate required keys`, () => {
       };
       const validator = validatorWithMessage(requiredKeys);
       const result = validator(value);
-      expect(result).toEqual(Success(value));
+      expect(result).toEqualSuccessWithValue(value);
     });
   });
 });

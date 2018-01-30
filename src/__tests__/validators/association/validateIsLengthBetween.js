@@ -1,8 +1,5 @@
 import { stub } from 'sinon';
-import { validation as Validation } from 'folktale';
 import { validateIsLengthBetween } from '../../../index';
-
-const { Success, Failure } = Validation;
 
 describe(`validateIsLengthBetween()`, () => {
   const value = `xxx`;
@@ -26,7 +23,7 @@ describe(`validateIsLengthBetween()`, () => {
       const maximumLength = 4;
       const validator = validatorWithMessage(minimumLength, maximumLength);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
     });
   });
 
@@ -36,7 +33,7 @@ describe(`validateIsLengthBetween()`, () => {
       const maximumLength = 6;
       const validator = validatorWithMessage(minimumLength, maximumLength);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(greaterThanMessageFunction.calledWith(minimumLength)).toEqual(
         true
       );
@@ -49,7 +46,7 @@ describe(`validateIsLengthBetween()`, () => {
       const maximumLength = 3;
       const validator = validatorWithMessage(minimumLength, maximumLength);
       const validation = validator(value);
-      expect(validation).toEqual(Failure([message]));
+      expect(validation).toEqualFailureWithValue([message]);
       expect(lessThanMessageFunction.calledWith(maximumLength)).toEqual(true);
     });
   });

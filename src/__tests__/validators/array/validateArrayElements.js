@@ -28,7 +28,7 @@ describe(`validateArrayElements()`, () => {
       const v1 = spy();
       const validator = validatorWithMessages(v1);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
       expect(v1.notCalled).toEqual(true);
     });
   });
@@ -39,7 +39,7 @@ describe(`validateArrayElements()`, () => {
       const v1 = stubReturnsSuccess();
       const validator = validatorWithMessages(v1);
       const validation = validator(value);
-      expect(validation).toEqual(Success(value));
+      expect(validation).toEqualSuccessWithValue(value);
       expect(v1.calledThrice).toEqual(true);
       expect(v1.calledWith(1)).toEqual(true);
       expect(v1.calledWith(2)).toEqual(true);
@@ -57,7 +57,7 @@ describe(`validateArrayElements()`, () => {
         v1.onThirdCall().returns(Success(message1));
         const validator = validatorWithMessages(v1);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([elementsMessage]));
+        expect(validation).toEqualFailureWithValue([elementsMessage]);
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
@@ -77,7 +77,7 @@ describe(`validateArrayElements()`, () => {
         v1.onThirdCall().returns(Success());
         const validator = validatorWithMessages(v1);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([elementsMessage]));
+        expect(validation).toEqualFailureWithValue([elementsMessage]);
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
@@ -96,7 +96,7 @@ describe(`validateArrayElements()`, () => {
         v1.onThirdCall().returns(Failure(message1));
         const validator = validatorWithMessages(v1);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([elementsMessage]));
+        expect(validation).toEqualFailureWithValue([elementsMessage]);
         expect(elementsMessageFunction.calledWith([elementMessage])).toEqual(
           true
         );
@@ -116,7 +116,7 @@ describe(`validateArrayElements()`, () => {
         v1.onThirdCall().returns(Failure(message2));
         const validator = validatorWithMessages(v1);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([elementsMessage]));
+        expect(validation).toEqualFailureWithValue([elementsMessage]);
         expect(
           elementsMessageFunction.calledWith([elementMessage, elementMessage])
         ).toEqual(true);
