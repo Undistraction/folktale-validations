@@ -1,4 +1,4 @@
-import applyDefaultsWithConstraints from '../../constraintValidators/applyDefaultsWithConstraints';
+import applyDefaultsWithConstraints from '../../constraints/applyDefaultsWithConstraints';
 
 describe(`applyDefaultsWithConstraints()`, () => {
   describe(`with no defaults`, () => {

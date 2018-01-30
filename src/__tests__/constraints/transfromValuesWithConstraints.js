@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import transformValuesWithConstraints from '../../constraintValidators/transformValuesWithConstraints';
+import transformValuesWithConstraints from '../../constraints/transformValuesWithConstraints';
 
 describe(`transformValuesWithConstraints`, () => {
   it(`returns a Validation.Success with transformed values`, () => {

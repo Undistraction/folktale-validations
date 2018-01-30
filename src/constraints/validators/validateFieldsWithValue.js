@@ -4,7 +4,7 @@ import { validateObject } from './validateObjectWithConstraints';
 import {
   constraintsForFieldsWithPropValue,
   replaceFieldsWithValidationValues,
-} from './utils';
+} from '../utils';
 
 const { collect, Success } = Validation;
 

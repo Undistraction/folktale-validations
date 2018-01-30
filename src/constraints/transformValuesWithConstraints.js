@@ -14,7 +14,7 @@ import { buildTransformersMap } from './utils';
 
 const { Success } = Validation;
 
-const transformValues = transformersMap =>
+const transformObjectValues = transformersMap =>
   compose(
     Success,
     reduce(
@@ -30,6 +30,6 @@ const transformValues = transformersMap =>
   );
 
 export default compose(
-  ifElse(isNotEmpty, transformValues, always(Success)),
+  ifElse(isNotEmpty, transformObjectValues, always(Success)),
   buildTransformersMap
 );

@@ -1,8 +1,9 @@
 import { map } from 'ramda';
-import validateConstraints from '../../constraintValidators/validateConstraints';
-import { func } from '../testHelpers/fixtures';
-import typeData from '../testHelpers/fixtures/typeData';
-import { CONSTRAINT_FIELD_NAMES } from '../../const';
+
+import validateConstraints from '../../../constraints/validators/validateConstraints';
+import { func } from '../../testHelpers/fixtures';
+import typeData from '../../testHelpers/fixtures/typeData';
+import { CONSTRAINT_FIELD_NAMES } from '../../../const';
 
 const {
   FIELDS,

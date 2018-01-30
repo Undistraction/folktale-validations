@@ -1,10 +1,10 @@
 import { validation as Validation } from 'folktale';
-import { validateObjectKeysWithConstraints } from '../../index';
+import { validateObjectKeysWithConstraints } from '../../../index';
 import {
   spy,
   stubReturnsSuccess,
   stubReturnsFailure,
-} from '../testHelpers/sinon';
+} from '../../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
 

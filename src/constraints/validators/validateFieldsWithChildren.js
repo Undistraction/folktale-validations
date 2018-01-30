@@ -12,8 +12,9 @@ import {
   prop,
 } from 'ramda';
 import { validation as Validation } from 'folktale';
-import { constraintsForFieldsWithPropChildren } from './utils';
-import { reduceObjIndexed, reduceObjIndexedWithIndex } from '../utils';
+import { constraintsForFieldsWithPropChildren } from '../utils';
+import { reduceObjIndexed, reduceObjIndexedWithIndex } from '../../utils';
+
 import { validateObject } from './validateObjectWithConstraints';
 
 const { collect, Success } = Validation;

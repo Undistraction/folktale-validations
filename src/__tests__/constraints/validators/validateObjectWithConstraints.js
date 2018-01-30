@@ -1,11 +1,11 @@
-import { validateObjectWithConstraints } from '../../index';
+import { validateObjectWithConstraints } from '../../../index';
 import {
   stubReturnsSuccess,
   stubReturnsFailure,
   spy,
   stubReturns,
-} from '../testHelpers/sinon';
-import { CONSTRAINT_FIELD_NAMES } from '../../const';
+} from '../../testHelpers/sinon';
+import { CONSTRAINT_FIELD_NAMES } from '../../../const';
 
 const value1 = `value1`;
 const value2 = `value2`;

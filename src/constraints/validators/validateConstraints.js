@@ -1,9 +1,9 @@
 import { always } from 'ramda';
 import { validation as Validation } from 'folktale';
-import CONSTRAINTS from '../constraints';
+import CONSTRAINTS from '../../constraints';
 import validateObjectWithConstraints from './validateObjectWithConstraints';
-import wrapFailureMessageWith from '../utils/wrapFailureMessageWith';
-import { constraintValidatorErrorMessage } from '../messages';
+import wrapFailureMessageWith from '../../utils/wrapFailureMessageWith';
+import { constraintValidatorErrorMessage } from '../../messages';
 
 const { Success } = Validation;
 
