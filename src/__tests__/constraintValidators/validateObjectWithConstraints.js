@@ -1,4 +1,3 @@
-import { validation as Validation } from 'folktale';
 import { validateObjectWithConstraints } from '../../index';
 import {
   stubReturnsSuccess,
@@ -7,8 +6,6 @@ import {
   stubReturns,
 } from '../testHelpers/sinon';
 import { FIELD_NAMES } from '../../const';
-
-const { Success, Failure } = Validation;
 
 const value1 = `value1`;
 const value2 = `value2`;
@@ -151,29 +148,27 @@ describe(`validateObjectWithConstraints`, () => {
 
         const validator = validateObjectWithConstraints(constraints);
         const validation = validator(o);
-        expect(validation).toEqual(
-          Success({
-            a: transformedValue1,
-            c: value3,
-            d: value2,
-            k: defaultValue1,
-            g: {
-              h: `x`,
+        expect(validation).toEqualSuccessWithValue({
+          a: transformedValue1,
+          c: value3,
+          d: value2,
+          k: defaultValue1,
+          g: {
+            h: `x`,
+          },
+          e: [
+            {
+              f: value4,
+              i: transformedValue2,
+              j: defaultValue2,
             },
-            e: [
-              {
-                f: value4,
-                i: transformedValue2,
-                j: defaultValue2,
-              },
-              {
-                f: value4,
-                i: transformedValue2,
-                j: value9,
-              },
-            ],
-          })
-        );
+            {
+              f: value4,
+              i: transformedValue2,
+              j: value9,
+            },
+          ],
+        });
 
         expect(t1.calledWith(value1)).toBeTrue();
         expect(t2.calledWith(value8)).toBeTrue();

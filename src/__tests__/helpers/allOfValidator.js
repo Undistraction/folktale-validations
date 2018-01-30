@@ -1,4 +1,3 @@
-import { validation as Validation } from 'folktale';
 import { allOfValidator } from '../../index';
 import { joinMessagesWithAnd } from '../../messages';
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
