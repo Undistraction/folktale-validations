@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import { anyOfValidator } from '../../index';
-import { andErrorMessages } from '../../messages';
+import { joinMessagesWithAnd } from '../../messages';
 import {
   spy,
   stubReturnsSuccess,
@@ -20,9 +20,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.notCalled).toBeTruthy();
-        expect(v3.notCalled).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.notCalled).toEqual(true);
+        expect(v3.notCalled).toEqual(true);
       });
     });
     describe(`with second validation succeeding`, () => {
@@ -35,9 +35,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.notCalled).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.notCalled).toEqual(true);
       });
     });
     describe(`with third validation succeeding`, () => {
@@ -50,9 +50,9 @@ describe(`anyOfValidator()`, () => {
         const validator = anyOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
   });
@@ -66,10 +66,10 @@ describe(`anyOfValidator()`, () => {
       const validator = anyOfValidator([v1, v2]);
       const validation = validator(value);
       expect(validation).toEqual(
-        Failure([andErrorMessages([errorMessage1, errorMessage2])])
+        Failure([joinMessagesWithAnd([errorMessage1, errorMessage2])])
       );
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v2.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v2.calledWith(value)).toEqual(true);
     });
   });
 });

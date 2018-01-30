@@ -31,7 +31,7 @@ describe(`validateIsArrayOf()`, () => {
         const validator = validatorWithMessage(v1);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.notCalled).toBeTruthy();
+        expect(v1.notCalled).toEqual(true);
       });
     });
   });
@@ -42,7 +42,7 @@ describe(`validateIsArrayOf()`, () => {
       const validator = validatorWithMessage(v1);
       const validation = validator();
       expect(validation).toEqual(Failure([isArrayMessage]));
-      expect(v1.notCalled).toBeTruthy();
+      expect(v1.notCalled).toEqual(true);
     });
   });
 
@@ -53,10 +53,10 @@ describe(`validateIsArrayOf()`, () => {
       const validator = validatorWithMessage(v1);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
-      expect(v1.calledThrice).toBeTruthy();
-      expect(v1.calledWith(1)).toBeTruthy();
-      expect(v1.calledWith(2)).toBeTruthy();
-      expect(v1.calledWith(3)).toBeTruthy();
+      expect(v1.calledThrice).toEqual(true);
+      expect(v1.calledWith(1)).toEqual(true);
+      expect(v1.calledWith(2)).toEqual(true);
+      expect(v1.calledWith(3)).toEqual(true);
     });
   });
 
@@ -73,10 +73,10 @@ describe(`validateIsArrayOf()`, () => {
       expect(
         arrayElementsMessageFunction.calledWith([arrayElementMessage])
       ).toEqual(true);
-      expect(v1.calledWith(1)).toBeTruthy();
-      expect(v1.calledWith(2)).toBeTruthy();
-      expect(v1.calledWith(3)).toBeTruthy();
-      expect(v1.calledThrice).toBeTruthy();
+      expect(v1.calledWith(1)).toEqual(true);
+      expect(v1.calledWith(2)).toEqual(true);
+      expect(v1.calledWith(3)).toEqual(true);
+      expect(v1.calledThrice).toEqual(true);
     });
   });
 });

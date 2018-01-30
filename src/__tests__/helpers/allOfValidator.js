@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import { allOfValidator } from '../../index';
-import { andErrorMessages } from '../../messages';
+import { joinMessagesWithAnd } from '../../messages';
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
 
 const { Success, Failure } = Validation;
@@ -20,9 +20,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
   });
@@ -36,9 +36,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Failure([message1]));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
 
@@ -51,9 +51,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Failure([message1]));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
     describe(`with third validation failing`, () => {
@@ -65,9 +65,9 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(Failure([message1]));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
 
@@ -80,11 +80,11 @@ describe(`allOfValidator()`, () => {
         const validator = allOfValidator([v1, v2, v3]);
         const validation = validator(value);
         expect(validation).toEqual(
-          Failure([andErrorMessages([message1, message2, message3])])
+          Failure([joinMessagesWithAnd([message1, message2, message3])])
         );
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
   });

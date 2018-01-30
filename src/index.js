@@ -24,7 +24,7 @@ export {
 
 export {
   default as validateIsWhitelistedValue,
-} from './validators/validateIsWhitelistedValue';
+} from './validators/other/validateIsWhitelistedValue';
 
 // Predicate Validators
 export * from './validators/predicate/generatedPredicateValidators';
@@ -60,4 +60,6 @@ export {
 } from './constraintValidators/validateObjectKeysWithConstraints';
 
 // Configured Validators
-export { default as configuredValidators } from './configuredValidators';
+export {
+  default as validatorsWithMessages,
+} from './defaults/validatorsWithMessages';

@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
 import { andValidator } from '../../index';
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon';
-import { andErrorMessages } from '../../messages';
+import { joinMessagesWithAnd } from '../../messages';
 
 const { Success, Failure } = Validation;
 const value = 1;
@@ -16,8 +16,8 @@ describe(`andValidator()`, () => {
       const validator = andValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v1.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v1.calledWith(value)).toEqual(true);
     });
   });
   describe(`with an invalid value`, () => {
@@ -28,8 +28,8 @@ describe(`andValidator()`, () => {
         const validator = andValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqual(Failure([message1]));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
       });
     });
   });
@@ -41,8 +41,8 @@ describe(`andValidator()`, () => {
       const validator = andValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqual(Failure([message1]));
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v2.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v2.calledWith(value)).toEqual(true);
     });
   });
 
@@ -53,10 +53,10 @@ describe(`andValidator()`, () => {
       const validator = andValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqual(
-        Failure([andErrorMessages([message1, message2])])
+        Failure([joinMessagesWithAnd([message1, message2])])
       );
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v2.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v2.calledWith(value)).toEqual(true);
     });
   });
 });

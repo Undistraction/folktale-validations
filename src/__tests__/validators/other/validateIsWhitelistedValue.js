@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 import { validation as Validation } from 'folktale';
-import { validateIsWhitelistedValue } from '../../index';
+import { validateIsWhitelistedValue } from '../../../index';
 
 const { Success, Failure } = Validation;
 
@@ -40,7 +40,7 @@ describe(`validateIsWhitelistedValue()`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
         const validation = validator();
         expect(validation).toEqual(Failure([message]));
-        expect(messageFunction.calledWith(whitelist)).toBeTruthy();
+        expect(messageFunction.calledWith(whitelist)).toEqual(true);
       });
     });
 
@@ -49,7 +49,7 @@ describe(`validateIsWhitelistedValue()`, () => {
         const value = `d`;
         const validation = validator(value);
         expect(validation).toEqual(Failure([message]));
-        expect(messageFunction.calledWith(whitelist)).toBeTruthy();
+        expect(messageFunction.calledWith(whitelist)).toEqual(true);
       });
     });
   });

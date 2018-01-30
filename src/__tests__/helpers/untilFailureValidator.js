@@ -16,9 +16,9 @@ describe(`untilFailureValidator()`, () => {
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
         expect(result).toEqual(Failure(failureMessage));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.notCalled).toBeTruthy();
-        expect(v3.notCalled).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.notCalled).toEqual(true);
+        expect(v3.notCalled).toEqual(true);
       });
     });
 
@@ -32,9 +32,9 @@ describe(`untilFailureValidator()`, () => {
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
         expect(result).toEqual(Failure(failureMessage));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.notCalled).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.notCalled).toEqual(true);
       });
     });
 
@@ -48,9 +48,9 @@ describe(`untilFailureValidator()`, () => {
         const validator = untilFailureValidator([v1, v2, v3]);
         const result = validator(value);
         expect(result).toEqual(Failure(failureMessage));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
-        expect(v3.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
+        expect(v3.calledWith(value)).toEqual(true);
       });
     });
   });
@@ -64,9 +64,9 @@ describe(`untilFailureValidator()`, () => {
       const validator = untilFailureValidator([v1, v2, v3]);
       const result = validator(value);
       expect(result).toEqual(Success(value));
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v2.calledWith(value)).toBeTruthy();
-      expect(v3.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v2.calledWith(value)).toEqual(true);
+      expect(v3.calledWith(value)).toEqual(true);
     });
   });
 });

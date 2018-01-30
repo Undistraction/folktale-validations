@@ -15,7 +15,7 @@ describe(`withField()`, () => {
       const validator = withField(field, v1);
       const validation = validator(value);
       expect(validation).toEqual(Failure(fieldErrorMessage(field, message)));
-      expect(v1.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
     });
   });
 
@@ -29,7 +29,7 @@ describe(`withField()`, () => {
 
       expect(validation).toEqual(validation);
       expect(validation).toEqual(Success(value));
-      expect(v1.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
     });
   });
 });

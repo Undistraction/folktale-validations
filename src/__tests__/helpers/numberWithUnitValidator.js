@@ -52,7 +52,7 @@ describe(`numberWithUnitValidator`, () => {
           const value = `${number}`;
           const validator = validatorWithMessage(unit);
           const result = validator(value);
-          expect(Failure.hasInstance(result)).toBeTruthy();
+          expect(Failure.hasInstance(result)).toEqual(true);
           expect(result).toEqual(Failure([message]));
           expect(messageFunction.calledWith(unit)).toEqual(true);
         })(numbers);

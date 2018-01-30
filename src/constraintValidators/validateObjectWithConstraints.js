@@ -11,7 +11,7 @@ import { objectValidatorErrorMessage } from '../messages';
 import validateFieldsWithValue from './validateFieldsWithValue';
 import { ROOT_FIELD } from '../const';
 import validateFieldsWithChildren from './validateFieldsWithChildren';
-import configuredValidators from '../configuredValidators';
+import validatorsWithMessages from '../defaults/validatorsWithMessages';
 
 const { Failure } = Validation;
 
@@ -29,7 +29,7 @@ export const validateObject = curry((fieldName, constraints, o) => {
       constraints.fields
     ),
     // Validate this object's values
-    configuredValidators.validateObjectValues(
+    validatorsWithMessages.validateObjectValues(
       validatorsMap(constraints.fields)
     ),
     applyDefaultsWithConstraints(constraints.fields),
@@ -47,7 +47,7 @@ const validateObjectWithConstraints = constraints => o => {
   // eslint-disable-next-line global-require
   const validateConstraints = require(`./validateConstraints`).default;
 
-  const objectValidation = configuredValidators.validateIsObject(o);
+  const objectValidation = validatorsWithMessages.validateIsObject(o);
 
   if (Failure.hasInstance(objectValidation)) {
     return objectErrorMessageWrapper(ROOT_FIELD)(objectValidation);

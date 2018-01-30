@@ -1,7 +1,7 @@
 import deepFreeze from 'deep-freeze';
 import allOfValidator from './helpers/allOfValidator';
 import { FIELD_NAMES } from './const';
-import configuredValidators from './configuredValidators';
+import validatorsWithMessages from './defaults/validatorsWithMessages';
 
 const {
   FIELDS,
@@ -17,40 +17,40 @@ const {
 
 const nameField = {
   [NAME]: NAME,
-  [VALIDATOR]: configuredValidators.validateIsString,
+  [VALIDATOR]: validatorsWithMessages.validateIsString,
   [IS_REQUIRED]: true,
 };
 
 const validatorField = {
   [NAME]: VALIDATOR,
-  [VALIDATOR]: configuredValidators.validateIsFunction,
+  [VALIDATOR]: validatorsWithMessages.validateIsFunction,
   [IS_REQUIRED]: true,
 };
 
 const transformerField = {
   [NAME]: TRANSFORMER,
-  [VALIDATOR]: configuredValidators.validateIsFunction,
+  [VALIDATOR]: validatorsWithMessages.validateIsFunction,
 };
 
 const defaultValueField = {
   [NAME]: DEFAULT_VALUE,
-  [VALIDATOR]: configuredValidators.validateIsNotUndefined,
+  [VALIDATOR]: validatorsWithMessages.validateIsNotUndefined,
 };
 
 const isRequiredField = {
   [NAME]: IS_REQUIRED,
-  [VALIDATOR]: configuredValidators.validateIsBoolean,
+  [VALIDATOR]: validatorsWithMessages.validateIsBoolean,
   [DEFAULT_VALUE]: false,
 };
 
 const valueField = {
   [NAME]: VALUE,
-  [VALIDATOR]: configuredValidators.validateIsObject,
+  [VALIDATOR]: validatorsWithMessages.validateIsObject,
 };
 
 const childrenField = {
   [NAME]: CHILDREN,
-  [VALIDATOR]: configuredValidators.validateIsObject,
+  [VALIDATOR]: validatorsWithMessages.validateIsObject,
 };
 
 const fields = [
@@ -67,18 +67,21 @@ const fields = [
 
 const fieldsValidatorField = {
   [NAME]: FIELDS_VALIDATOR,
-  [VALIDATOR]: configuredValidators.validateIsFunction,
+  [VALIDATOR]: validatorsWithMessages.validateIsFunction,
 };
 
 const fieldsField = {
   [NAME]: FIELDS,
-  [VALIDATOR]: configuredValidators.validateIsArrayOf(
-    configuredValidators.validateIsObject
+  [VALIDATOR]: validatorsWithMessages.validateIsArrayOf(
+    validatorsWithMessages.validateIsObject
   ),
   [CHILDREN]: {
     fieldsValidator: allOfValidator([
-      configuredValidators.validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
-      configuredValidators.validateExclusiveKeys([VALUE, CHILDREN]),
+      validatorsWithMessages.validateExclusiveKeys([
+        IS_REQUIRED,
+        DEFAULT_VALUE,
+      ]),
+      validatorsWithMessages.validateExclusiveKeys([VALUE, CHILDREN]),
     ]),
     fields,
   },

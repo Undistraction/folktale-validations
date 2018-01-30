@@ -35,7 +35,7 @@ describe(`validateWhitelistedKeys()`, () => {
     it(`returns a Validation.Success with a value of the object`, () => {
       const validation = validateWhitelistedKeysWithKeys(validObject);
       expect(validation).toEqual(Success(validObject));
-      expect(messageFunction.notCalled).toBeTruthy();
+      expect(messageFunction.notCalled).toEqual(true);
     });
   });
 
@@ -43,7 +43,7 @@ describe(`validateWhitelistedKeys()`, () => {
     it(`returns a Validation.Failure with a value of an array of the invalid keys`, () => {
       const validation = validateWhitelistedKeysWithKeys(invalidObject);
       expect(validation).toEqual(Failure([message]));
-      expect(messageFunction.calledWith([`delta`, `echo`])).toBeTruthy();
+      expect(messageFunction.calledWith([`delta`, `echo`])).toEqual(true);
     });
   });
 

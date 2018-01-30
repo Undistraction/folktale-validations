@@ -30,7 +30,7 @@ describe(`validateIsLengthGreaterThan()`, () => {
       const validator = validatorWithMessage(length);
       const validation = validator(value);
       expect(validation).toEqual(Failure([message]));
-      expect(messageFunction.calledWith(length)).toBeTruthy();
+      expect(messageFunction.calledWith(length)).toEqual(true);
     });
   });
 
@@ -40,7 +40,7 @@ describe(`validateIsLengthGreaterThan()`, () => {
       const validator = validatorWithMessage(length);
       const validation = validator(value);
       expect(validation).toEqual(Failure([message]));
-      expect(messageFunction.calledWith(length)).toBeTruthy();
+      expect(messageFunction.calledWith(length)).toEqual(true);
     });
   });
 });

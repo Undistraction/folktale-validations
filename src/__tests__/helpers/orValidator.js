@@ -5,7 +5,7 @@ import {
   spy,
   stubReturnsFailure,
 } from '../testHelpers/sinon';
-import { andErrorMessages } from '../../messages';
+import { joinMessagesWithAnd } from '../../messages';
 
 const { Success, Failure } = Validation;
 const value = 1;
@@ -21,8 +21,8 @@ describe(`orValidator()`, () => {
         const validator = orValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.notCalled).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.notCalled).toEqual(true);
       });
     });
     describe(`with second validation succeeding`, () => {
@@ -32,8 +32,8 @@ describe(`orValidator()`, () => {
         const validator = orValidator(v1, v2);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.calledWith(value)).toBeTruthy();
-        expect(v2.calledWith(value)).toBeTruthy();
+        expect(v1.calledWith(value)).toEqual(true);
+        expect(v2.calledWith(value)).toEqual(true);
       });
     });
   });
@@ -44,10 +44,10 @@ describe(`orValidator()`, () => {
       const validator = orValidator(v1, v2);
       const validation = validator(value);
       expect(validation).toEqual(
-        Failure([andErrorMessages([message1, message2])])
+        Failure([joinMessagesWithAnd([message1, message2])])
       );
-      expect(v1.calledWith(value)).toBeTruthy();
-      expect(v2.calledWith(value)).toBeTruthy();
+      expect(v1.calledWith(value)).toEqual(true);
+      expect(v2.calledWith(value)).toEqual(true);
     });
   });
 });

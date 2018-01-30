@@ -175,14 +175,14 @@ describe(`validateObjectWithConstraints`, () => {
           })
         );
 
-        expect(t1.calledWith(value1)).toBeTruthy();
-        expect(t2.calledWith(value8)).toBeTruthy();
-        expect(v1.calledWith(value1)).toBeTruthy();
-        expect(v3.calledWith(value3)).toBeTruthy();
-        expect(v5.calledWith(value4)).toBeTruthy();
-        expect(spyNotCalled1.notCalled).toBeTruthy();
-        expect(spyNotCalled2.notCalled).toBeTruthy();
-        expect(spyNotCalled3.notCalled).toBeTruthy();
+        expect(t1.calledWith(value1)).toEqual(true);
+        expect(t2.calledWith(value8)).toEqual(true);
+        expect(v1.calledWith(value1)).toEqual(true);
+        expect(v3.calledWith(value3)).toEqual(true);
+        expect(v5.calledWith(value4)).toEqual(true);
+        expect(spyNotCalled1.notCalled).toEqual(true);
+        expect(spyNotCalled2.notCalled).toEqual(true);
+        expect(spyNotCalled3.notCalled).toEqual(true);
       });
     });
 
@@ -211,7 +211,7 @@ describe(`validateObjectWithConstraints`, () => {
         const validator = validateObjectWithConstraints(constraints);
         const validation = validator(value);
         expect(validation).toEqual(Success(value));
-        expect(v1.notCalled).toBeTruthy();
+        expect(v1.notCalled).toEqual(true);
       });
     });
 
@@ -270,7 +270,7 @@ describe(`validateObjectWithConstraints`, () => {
         const validator = validateObjectWithConstraints(constraints);
         const validation = validator(o);
         expect(validation).toEqual(Success(o));
-        expect(v1.calledWith(value1)).toBeTruthy();
+        expect(v1.calledWith(value1)).toEqual(true);
       });
     });
 
@@ -293,7 +293,7 @@ describe(`validateObjectWithConstraints`, () => {
           const validator = validateObjectWithConstraints(constraints);
           const validation = validator(o);
           expect(validation).toEqual(Success(o));
-          expect(v1.calledWith(value1)).toBeTruthy();
+          expect(v1.calledWith(value1)).toEqual(true);
         });
       });
 

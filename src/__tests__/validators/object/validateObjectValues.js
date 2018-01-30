@@ -46,8 +46,8 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toBeTruthy();
-        expect(v2.calledWith(key2)).toBeTruthy();
+        expect(v1.calledWith(key1)).toEqual(true);
+        expect(v2.calledWith(key2)).toEqual(true);
       });
     });
 
@@ -67,8 +67,8 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toBeTruthy();
-        expect(v2.calledWith(key2)).toBeTruthy();
+        expect(v1.calledWith(key1)).toEqual(true);
+        expect(v2.calledWith(key2)).toEqual(true);
       });
     });
 
@@ -93,9 +93,9 @@ describe(`validateObjectValues()`, () => {
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
         expect(validation).toEqual(Failure([objectMessage]));
-        expect(v1.calledWith(key1)).toBeTruthy();
-        expect(v2.calledWith(key2)).toBeTruthy();
-        expect(v2.calledWith(key3)).toBeTruthy();
+        expect(v1.calledWith(key1)).toEqual(true);
+        expect(v2.calledWith(key2)).toEqual(true);
+        expect(v2.calledWith(key3)).toEqual(true);
       });
     });
   });
@@ -115,8 +115,8 @@ describe(`validateObjectValues()`, () => {
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
-      expect(v1.calledWith(key1)).toBeTruthy();
-      expect(v2.calledWith(key2)).toBeTruthy();
+      expect(v1.calledWith(key1)).toEqual(true);
+      expect(v2.calledWith(key2)).toEqual(true);
     });
   });
 
@@ -130,7 +130,7 @@ describe(`validateObjectValues()`, () => {
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
-      expect(v1.notCalled).toBeTruthy();
+      expect(v1.notCalled).toEqual(true);
     });
   });
 
@@ -146,7 +146,7 @@ describe(`validateObjectValues()`, () => {
       const validator = validatorWithMessage(validators);
       const validation = validator(value);
       expect(validation).toEqual(Success(value));
-      expect(v1.notCalled).toBeTruthy();
+      expect(v1.notCalled).toEqual(true);
     });
   });
 });
