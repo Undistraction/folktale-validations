@@ -151,11 +151,6 @@ describe(`validateObjectWithConstraints`, () => {
         expect(validation).toEqualSuccessWithValue({
           a: transformedValue1,
           c: value3,
-          d: value2,
-          k: defaultValue1,
-          g: {
-            h: `x`,
-          },
           e: [
             {
               f: value4,
@@ -168,6 +163,11 @@ describe(`validateObjectWithConstraints`, () => {
               j: value9,
             },
           ],
+          g: {
+            h: `x`,
+          },
+          d: value2,
+          k: defaultValue1,
         });
 
         expect(t1.calledWith(value1)).toBeTrue();
