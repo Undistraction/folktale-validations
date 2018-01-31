@@ -74,6 +74,13 @@ export const mapWithIndex = addIndex(map);
 export const mapObjIndexedWithIndex = addIndex(mapObjIndexed);
 export const reduceObjIndexedWithIndex = addIndex(reduceObjIndexed);
 
+const predicateIterator = (predicate, iterator) => (acc, v) =>
+  predicate(v) ? iterator(acc, v) : acc;
+
+export const reduceIf = curry((predicate, iterator, acc, v) =>
+  reduce(predicateIterator(predicate, iterator), acc, v)
+);
+
 // -----------------------------------------------------------------------------
 // Logging
 // -----------------------------------------------------------------------------

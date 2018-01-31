@@ -11,25 +11,25 @@ import {
   always,
   prop,
 } from 'ramda';
+import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { constraintsForFieldsWithPropChildren } from '../utils';
-import { reduceObjIndexed, reduceObjIndexedWithIndex } from '../../utils';
-
+import {
+  reduceObjIndexed,
+  reduceObjIndexedWithIndex,
+  reduceIf,
+} from '../../utils';
 import { validateObject } from './validateObjectWithConstraints';
 
 const { collect, Success } = Validation;
 
 // -----------------------------------------------------------------------------
-// Replace Field Values
+// Replace the children with the validated (possibly transformed) versions.
 // -----------------------------------------------------------------------------
 
-const replaceChildrenOfArrayField = (o, validations) =>
-  reduceObjIndexedWithIndex(
-    // eslint-disable-next-line no-unused-vars, no-return-assign
-    (acc, [key, validation], i) => update(i, validation.value, acc),
-    o,
-    validations
-  );
+const replaceChildrenOfArrayField = reduceObjIndexedWithIndex(
+  (acc, [, validation], i) => update(i, validation.value, acc)
+);
 
 const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
   reduceObjIndexed(
@@ -44,7 +44,7 @@ const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
   );
 
 // -----------------------------------------------------------------------------
-// Validate Field Values
+// Validate each child and collect their validations.
 // -----------------------------------------------------------------------------
 
 const validateChildrenOfArrayField = (
@@ -52,11 +52,10 @@ const validateChildrenOfArrayField = (
   fieldValue,
   childConstraints
 ) =>
-  reduce(
+  reduceIf(
+    isNotEmpty,
     (acc, child) =>
-      isEmpty(child)
-        ? acc
-        : append(validateObject(fieldName, childConstraints, child), acc),
+      append(validateObject(fieldName, childConstraints, child), acc),
     [],
     fieldValue
   );
@@ -76,12 +75,11 @@ const validateChildrenOfArrayFields = reduce(
 );
 
 // -----------------------------------------------------------------------------
-// Process Fields that have children - that have a value that is an array
+// Process Fields that have children (that have a value that is an array)
 // -----------------------------------------------------------------------------
 
 const collectAllValidationsFromChildren = compose(
-  // eslint-disable-next-line no-unused-vars
-  reduce((acc, [key, value]) => {
+  reduce((acc, [, value]) => {
     const validations = reduce((acc2, v) => append(v, acc2), [], value);
     return concat(validations, acc);
   }, []),
@@ -98,11 +96,9 @@ export default constraints => o => {
     return Success(o);
   }
 
-  const allValidations = collectAllValidationsFromChildren(
-    fieldToValidationsMap
-  );
-
-  return collect(allValidations).matchWith({
+  return collect(
+    collectAllValidationsFromChildren(fieldToValidationsMap)
+  ).matchWith({
     Success: always(
       Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o))
     ),

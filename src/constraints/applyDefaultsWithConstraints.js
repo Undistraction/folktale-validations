@@ -15,18 +15,18 @@ import { buildDefaultsMap } from './utils';
 
 const { Success } = Validation;
 
-const applyDefaults = defaults =>
-  compose(
-    Success,
-    reduce(
-      (acc, [name, defaultValue]) =>
-        unless(has(name), assoc(name, defaultValue))(acc),
-      __,
-      toPairs(defaults)
-    )
+const applyDefaultsToFields = defaultsMap =>
+  reduce(
+    (acc, [propName, defaultValue]) =>
+      unless(has(propName), assoc(propName, defaultValue))(acc),
+    __,
+    toPairs(defaultsMap)
   );
 
+const applyDefaultsToObject = defaultsMap =>
+  compose(Success, applyDefaultsToFields(defaultsMap));
+
 export default compose(
-  ifElse(isNotEmpty, applyDefaults, always(Success)),
+  ifElse(isNotEmpty, applyDefaultsToObject, always(Success)),
   buildDefaultsMap
 );

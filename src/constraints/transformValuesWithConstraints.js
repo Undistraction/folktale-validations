@@ -14,20 +14,20 @@ import { buildTransformersMap } from './utils';
 
 const { Success } = Validation;
 
-const transformObjectValues = transformersMap =>
-  compose(
-    Success,
-    reduce(
-      (acc, [name, transformer]) =>
-        ifElse(
-          isUndefined,
-          always(acc),
-          compose(assoc(name, __, acc), transformer)
-        )(prop(name, acc)),
-      __,
-      toPairs(transformersMap)
-    )
+const transformValues = transformersMap =>
+  reduce(
+    (acc, [name, transformer]) =>
+      ifElse(
+        isUndefined,
+        always(acc),
+        compose(assoc(name, __, acc), transformer)
+      )(prop(name, acc)),
+    __,
+    toPairs(transformersMap)
   );
+
+const transformObjectValues = transformersMap =>
+  compose(Success, transformValues(transformersMap));
 
 export default compose(
   ifElse(isNotEmpty, transformObjectValues, always(Success)),

@@ -32,7 +32,7 @@ export const hasIsRequired = has(CONSTRAINT_FIELD_NAMES.IS_REQUIRED);
 
 const hasIsRequiredKey = both(
   hasIsRequired,
-  compose(isTruthy, propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
+  compose(propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
 );
 
 // -----------------------------------------------------------------------------
@@ -76,12 +76,11 @@ export const replaceFieldsWithValidationValues = (fieldsToValidationsMap, o) =>
 // Extract data from constraints object
 // -----------------------------------------------------------------------------
 
-export const constraintsForFieldsWithProp = name => constraints => (
+export const constraintsForFieldsWithPropReducer = (name, constraints) => (
   acc,
   [fieldName, fieldValue]
 ) => {
   const childConstraints = prop(name, find(propEqName(fieldName), constraints));
-
   if (
     isNotUndefined(childConstraints) &&
     isNotEmpty(childConstraints) &&
@@ -92,16 +91,15 @@ export const constraintsForFieldsWithProp = name => constraints => (
   return acc;
 };
 
-export const constraintsForFieldsWithPropChildren = constraints => o =>
-  reduce(
-    constraintsForFieldsWithProp(CONSTRAINT_FIELD_NAMES.CHILDREN)(constraints),
-    [],
-    toPairs(o)
+export const constraintsForFieldsWithProp = fieldName => constraints =>
+  compose(
+    reduce(constraintsForFieldsWithPropReducer(fieldName, constraints), []),
+    toPairs
   );
 
-export const constraintsForFieldsWithPropValue = constraints => o =>
-  reduce(
-    constraintsForFieldsWithProp(CONSTRAINT_FIELD_NAMES.VALUE)(constraints),
-    [],
-    toPairs(o)
-  );
+export const constraintsForFieldsWithPropChildren = constraintsForFieldsWithProp(
+  CONSTRAINT_FIELD_NAMES.CHILDREN
+);
+export const constraintsForFieldsWithPropValue = constraintsForFieldsWithProp(
+  CONSTRAINT_FIELD_NAMES.VALUE
+);
