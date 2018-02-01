@@ -45,7 +45,7 @@ import validateArrayElements from '../validators/array/validateArrayElements';
 
 import { PREDICATES } from '../const';
 
-export default messages => {
+const configuredValidators = messages => {
   const {
     // Predicate
     predicateMessage,
@@ -169,3 +169,9 @@ export default messages => {
     ),
   };
 };
+
+// const validateObjectWithValidators = validateObject({
+
+// })
+
+export default configuredValidators;

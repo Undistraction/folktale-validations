@@ -1,7 +1,6 @@
 import { always } from 'ramda';
 import { validation as Validation } from 'folktale';
 import CONSTRAINTS from '../../constraints';
-import validateObjectWithConstraints from './validateObjectWithConstraints';
 import wrapFailureMessageWith from '../../utils/wrapFailureMessageWith';
 import { constraintValidatorErrorMessage } from '../../messages';
 
@@ -11,7 +10,7 @@ const constraintErrorMessageWrapper = wrapFailureMessageWith(
   constraintValidatorErrorMessage
 );
 
-export default o => {
+export default validateObjectWithConstraints => o => {
   const result = validateObjectWithConstraints(CONSTRAINTS, o);
 
   return result.matchWith({
