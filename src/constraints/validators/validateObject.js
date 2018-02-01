@@ -21,7 +21,7 @@ const defaultFieldValidators = juxt([
 const fieldsValidators = (fields, fieldsValidator) =>
   compose(concat(defaultFieldValidators(fields)), compact, of)(fieldsValidator);
 
-export default curry((fieldName, constraints, o) => {
+const validateObject = curry((fieldName, constraints, o) => {
   const { fields, fieldsValidator } = constraints;
   return untilFailureValidator([
     validatorsWithMessages.validateIsObject,
@@ -29,7 +29,9 @@ export default curry((fieldName, constraints, o) => {
     validatorsWithMessages.validateObjectValues(buildValidatorsMap(fields)),
     applyDefaultsWithConstraints(fields),
     transformValuesWithConstraints(fields),
-    validateFieldsWithValue(fields),
-    validateFieldsWithChildren(fields),
+    validateFieldsWithValue(validateObject, fields),
+    validateFieldsWithChildren(validateObject, fields),
   ])(o).orElse(compose(objectErrorMessageWrapper(fieldName), Failure));
 });
+
+export default validateObject;

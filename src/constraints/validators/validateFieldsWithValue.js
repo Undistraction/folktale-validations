@@ -1,6 +1,5 @@
 import { validation as Validation } from 'folktale';
 import { reduce, identity, assoc, values, isEmpty } from 'ramda';
-import validateObject from './validateObject';
 import {
   constraintsForFieldsWithPropValue,
   replaceFieldsWithValidationValues,
@@ -8,22 +7,25 @@ import {
 
 const { collect, Success } = Validation;
 
-const validateValues = reduce(
-  (acc, [fieldName, fieldValue, childConstraints]) =>
-    assoc(
-      fieldName,
-      validateObject(fieldName, childConstraints, fieldValue),
-      acc
-    ),
-  {}
-);
+const validateValues = validateObject =>
+  reduce(
+    (acc, [fieldName, fieldValue, childConstraints]) =>
+      assoc(
+        fieldName,
+        validateObject(fieldName, childConstraints, fieldValue),
+        acc
+      ),
+    {}
+  );
 
-export default constraints => o => {
+export default (validateObject, constraints) => o => {
   const fieldsWithPropConstraints = constraintsForFieldsWithPropValue(
     constraints
   )(o);
 
-  const childValidations = validateValues(fieldsWithPropConstraints);
+  const childValidations = validateValues(validateObject)(
+    fieldsWithPropConstraints
+  );
   if (isEmpty(childValidations)) {
     return Success(o);
   }

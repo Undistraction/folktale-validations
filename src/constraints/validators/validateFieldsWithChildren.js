@@ -19,7 +19,6 @@ import {
   reduceObjIndexedWithIndex,
   reduceIf,
 } from '../../utils';
-import validateObject from './validateObject';
 
 const { collect, Success } = Validation;
 
@@ -48,6 +47,7 @@ const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
 // -----------------------------------------------------------------------------
 
 const validateChildrenOfArrayField = (
+  validateObject,
   fieldName,
   fieldValue,
   childConstraints
@@ -60,9 +60,10 @@ const validateChildrenOfArrayField = (
     fieldValue
   );
 
-const validateChildrenOfArrayFields = reduce(
-  (acc, [fieldName, fieldValue, childConstraints]) => {
+const validateChildrenOfArrayFields = validateObject =>
+  reduce((acc, [fieldName, fieldValue, childConstraints]) => {
     const childValidations = validateChildrenOfArrayField(
+      validateObject,
       fieldName,
       fieldValue,
       childConstraints
@@ -70,9 +71,7 @@ const validateChildrenOfArrayFields = reduce(
     return isEmpty(childValidations)
       ? acc
       : assoc(fieldName, childValidations, acc);
-  },
-  {}
-);
+  }, {});
 
 // -----------------------------------------------------------------------------
 // Process Fields that have children (that have a value that is an array)
@@ -86,9 +85,9 @@ const collectAllValidationsFromChildren = compose(
   toPairs
 );
 
-export default constraints => o => {
+export default (validateObject, constraints) => o => {
   const fieldToValidationsMap = compose(
-    validateChildrenOfArrayFields,
+    validateChildrenOfArrayFields(validateObject),
     constraintsForFieldsWithPropChildren(constraints)
   )(o);
 
