@@ -49,9 +49,6 @@ export default (received, expected) => {
           }`
         );
       };
-  // Passing the the actual and expected objects so that a custom reporter
-  // could access them, for example in order to display a custom visual diff,
-  // or create a different error message
   return {
     actual: received,
     expected,

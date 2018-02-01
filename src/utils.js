@@ -18,8 +18,14 @@ import {
   lensIndex,
   toUpper,
   mapObjIndexed,
+  filter,
 } from 'ramda';
-import { isEmptyString, isEmptyArray, isUndefined } from 'ramda-adjunct';
+import {
+  isEmptyString,
+  isEmptyArray,
+  isUndefined,
+  isNotUndefined,
+} from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { CONSTRAINT_FIELD_NAMES, PREDICATE_DATA_FIELD_NAMES } from './const';
 
@@ -53,6 +59,12 @@ export const tabsForLevel = compose(joinWithNoSpace, repeat(`\t`));
 // -----------------------------------------------------------------------------
 
 export const { freeze } = Object;
+
+// -----------------------------------------------------------------------------
+// Array
+// -----------------------------------------------------------------------------
+
+export const compact = filter(isNotUndefined);
 
 // -----------------------------------------------------------------------------
 // String

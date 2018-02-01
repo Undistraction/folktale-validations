@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import { reduce, identity, assoc, values, isEmpty } from 'ramda';
-import { validateObject } from './validateObjectWithConstraints';
+import validateObject from './validateObject';
 import {
   constraintsForFieldsWithPropValue,
   replaceFieldsWithValidationValues,

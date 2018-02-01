@@ -8,6 +8,7 @@ import {
   joinWithSpace,
 } from './utils';
 import { ROOT_FIELD } from './const';
+import wrapFailureMessageWith from './utils/wrapFailureMessageWith';
 
 // -----------------------------------------------------------------------------
 // Message Renderers
@@ -49,6 +50,9 @@ export const fieldErrorMessage = (field, errorMessage) =>
 
 export const constraintValidatorErrorMessage = messages =>
   `Constraints ${messages}`;
+
+export const objectErrorMessageWrapper = fieldName =>
+  wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
 
 // -----------------------------------------------------------------------------
 // Utilities

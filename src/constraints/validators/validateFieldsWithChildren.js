@@ -19,7 +19,7 @@ import {
   reduceObjIndexedWithIndex,
   reduceIf,
 } from '../../utils';
-import { validateObject } from './validateObjectWithConstraints';
+import validateObject from './validateObject';
 
 const { collect, Success } = Validation;
 
