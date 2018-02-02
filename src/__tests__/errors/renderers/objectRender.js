@@ -6,6 +6,22 @@ import {
 } from '../../testHelpers/fixtures';
 
 describe(`objectRenderer()`, () => {
+  describe(`with a single error string`, () => {
+    it(`renders the correct error message`, () => {
+      const result = renderMessage(`errorMessage`);
+      expect(result).toEqualWithCompressedWhitespace(`errorMessage`);
+    });
+  });
+
+  describe(`with an array of error strings`, () => {
+    it(`renders the correct error message`, () => {
+      const result = renderMessage([`errorMessage1`, `errorMessage2`]);
+      expect(result).toEqualWithCompressedWhitespace(
+        `errorMessage1 and errorMessage2`
+      );
+    });
+  });
+
   describe(`with a flat error object`, () => {
     it(`renders the correct error message`, () => {
       const result = renderMessage(flatErrorMessage);

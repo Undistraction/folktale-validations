@@ -1,5 +1,23 @@
-import { cond, curry, inc, prop, append, concat } from 'ramda';
-import { isString, isPlainObj, isArray, isNotNull } from 'ramda-adjunct';
+import {
+  curry,
+  inc,
+  prop,
+  append,
+  either,
+  ifElse,
+  compose,
+  when,
+  always,
+  of,
+  prepend,
+} from 'ramda';
+import {
+  isString,
+  isArray,
+  isNotNull,
+  isNotUndefined,
+  concatRight,
+} from 'ramda-adjunct';
 import {
   joinWithColon,
   reduceObjIndexed,
@@ -8,6 +26,8 @@ import {
   quote,
   mapWithIndex,
   propFields,
+  propChildren,
+  hasPropChildren,
 } from '../../utils';
 import {
   invalidObjectPrefix,
@@ -20,37 +40,13 @@ import {
   fieldsErrorMessage,
 } from '../../messages';
 
-const buildObjMessage = curry((level, fieldName, o) => {
-  const hasFieldName = isNotNull(fieldName);
-  const fields = propFields(o);
-  const fieldsError = prop(`fieldsError`, o);
-
-  // Different formatting if root or field
-  const prefix = hasFieldName
-    ? joinWithColon([quote(fieldName), invalidObjectPrefix()])
-    : invalidObjectPrefix();
-
-  let a = [prefix];
-  if (fieldsError) {
-    a = append(fieldsErrorMessage(level, fieldsError), a);
-  }
-  if (fields) {
-    a = concat(a, [
-      invalidObjectReasonInvalidValues(level),
-      // eslint-disable-next-line no-use-before-define
-      parseObj(inc(level))(o),
-    ]);
-  }
-  const result = joinWithSpace(a);
-  return hasFieldName ? prefixWithKey(level, result) : result;
-});
-
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   const hasFieldName = isNotNull(fieldName);
-  // Different formatting if root or field
-  const prefix = hasFieldName
-    ? joinWithColon([quote(fieldName), invalidArrayPrefix()])
-    : invalidArrayPrefix();
+
+  const prefix = when(
+    always(isNotNull(fieldName)),
+    compose(joinWithColon, prepend(quote(fieldName)), of)
+  )(invalidArrayPrefix());
 
   const result = joinWithSpace([
     prefix,
@@ -61,25 +57,55 @@ const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   return hasFieldName ? prefixWithKey(level, result) : result;
 });
 
-const parseFieldValue = (level, fieldName, fieldValue) =>
-  cond([
-    [isString, objectValueErrorMessage(level, fieldName)],
-    [isPlainObj, buildObjMessage(level, fieldName)],
-    [isArray, buildArrayMessage(level, fieldName)],
-  ])(fieldValue);
+const buildObjMessage = curry((level, fieldName, o) => {
+  const hasChildren = hasPropChildren(o);
+  if (hasChildren) {
+    return buildArrayMessage(level, fieldName, propChildren(o));
+  }
 
-const parseObj = level => o => {
   const fields = propFields(o);
+  const fieldsError = prop(`fieldsError`, o);
 
-  return reduceObjIndexed((acc, [fieldName, fieldValue]) => {
-    const result = parseFieldValue(level, fieldName, fieldValue);
-    return joinWithNoSpace([acc, result]);
-  }, ``)(fields);
+  return compose(
+    when(always(isNotNull(fieldName)), prefixWithKey(level)),
+    joinWithSpace,
+    when(
+      always(isNotUndefined(fields)),
+      concatRight([
+        invalidObjectReasonInvalidValues(level),
+        // eslint-disable-next-line no-use-before-define
+        parseFields(level)(fields),
+      ])
+    ),
+    when(
+      always(isNotUndefined(fieldsError)),
+      append(fieldsErrorMessage(level, fieldsError))
+    ),
+    of,
+    when(
+      always(isNotNull(fieldName)),
+      compose(joinWithColon, prepend(quote(fieldName)), of)
+    )
+  )(invalidObjectPrefix());
+});
+
+const parseFieldValue = (level, fieldName, fieldValue) =>
+  ifElse(
+    either(isString, isArray),
+    objectValueErrorMessage(level, fieldName),
+    buildObjMessage(level, fieldName)
+  )(fieldValue);
+
+const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
+  const result = parseFieldValue(level, fieldName, fieldValue);
+  return joinWithNoSpace([acc, result]);
 };
+
+const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``);
 
 const parseArray = level =>
   mapWithIndex((o, index) =>
-    arrayValueErrorMessage(level, index, parseFieldValue(level, null, o))
+    arrayValueErrorMessage(level, index, parseFieldValue(inc(level), null, o))
   );
 
 export default o => parseFieldValue(0, null, o);

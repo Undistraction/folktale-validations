@@ -18,27 +18,29 @@ export const nestedObjectErrorMessage = {
         ba: `errorMessageForBA`,
       },
     },
-    c: `errorMessageForC`,
+    c: [`errorMessageForC`],
   },
 };
 
 export const nestedArrayErrorMessage = {
   fields: {
     a: `errorMessageForA`,
-    b: [
-      {
-        fields: {
-          b1a: `errorMessageForB1A`,
-          b1b: `errorMessageForB1A`,
+    b: {
+      children: [
+        {
+          fields: {
+            b1a: `errorMessageForB1A`,
+            b1b: `errorMessageForB1A`,
+          },
         },
-      },
-      {
-        fieldsError: `fieldsMessageForB2`,
-        fields: {
-          b2a: `errorMessageForB2B`,
+        {
+          fieldsError: `fieldsMessageForB2`,
+          fields: {
+            b2a: `errorMessageForB2B`,
+          },
         },
-      },
-    ],
+      ],
+    },
     c: `errorMessageForC`,
   },
 };

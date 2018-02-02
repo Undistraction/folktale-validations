@@ -1,4 +1,5 @@
-import { always } from 'ramda';
+import { isNotNull, isNotString, isArray } from 'ramda-adjunct';
+import { always, curry, ifElse, when } from 'ramda';
 import {
   joinWithColon,
   joinWithOr,
@@ -14,14 +15,21 @@ import wrapFailureMessageWith from './utils/wrapFailureMessageWith';
 // Message Renderers
 // -----------------------------------------------------------------------------
 
-export const prefixWithKey = (level, s) =>
-  joinWithSpace([`\n${tabsForLevel(level)} – Key`, s]);
+export const prefixWithKey = curry((level, s) =>
+  joinWithSpace([`\n${tabsForLevel(level)} – Key`, s])
+);
 
 export const prefixWithIndex = (level, index, s) =>
   joinWithSpace([`\n${tabsForLevel(level)} – [${index}]`, s]);
 
-export const objectValueErrorMessage = (level, name) => value =>
-  prefixWithKey(level, joinWithColon([quote(name), value]));
+export const objectValueErrorMessage = (level, name) => value => {
+  const s = when(isArray, joinWithAnd)(value);
+  return ifElse(
+    isNotNull,
+    _ => prefixWithKey(level, joinWithColon([quote(name), s])),
+    always(s)
+  )(name);
+};
 
 export const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value);
