@@ -16,6 +16,7 @@ export default (received, expected) => {
     receivedWithCompresssedWhitespace,
     expectedWithCompresssedWhitespace
   );
+
   const message = pass
     ? () =>
         `${matcherHint(`.not.${name}`)}\n\n` +
@@ -24,16 +25,13 @@ export default (received, expected) => {
         `Expected value with compressed whitespace to not equal:\n` +
         `  ${printExpected(expectedWithCompresssedWhitespace)}\n` +
         `Uncompressed received value:\n` +
-        `  ${printExpected(received)}\n` +
+        `  ${printReceived(received)}\n` +
         `Received value with compressed whitespace:\n` +
         `  ${printReceived(receivedWithCompresssedWhitespace)}`
     : () => {
         const diffString = diff(
           expectedWithCompresssedWhitespace,
-          receivedWithCompresssedWhitespace,
-          {
-            expand: this.expand,
-          }
+          receivedWithCompresssedWhitespace
         );
         return (
           `${matcherHint(`.${name}`)}\n\n` +
@@ -42,7 +40,7 @@ export default (received, expected) => {
           `Expected value with compressed whitespace to equal:\n` +
           `  ${printExpected(expectedWithCompresssedWhitespace)}\n` +
           `Uncompressed received value:\n` +
-          `  ${printExpected(received)}\n` +
+          `  ${printReceived(received)}\n` +
           `Received value with compressed whitespace:\n` +
           `  ${printReceived(receivedWithCompresssedWhitespace)}${
             diffString ? `\n\nDifference:\n\n${diffString}` : ``
