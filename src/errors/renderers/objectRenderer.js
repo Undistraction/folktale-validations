@@ -10,6 +10,7 @@ import {
   always,
   of,
   prepend,
+  defaultTo,
 } from 'ramda';
 import {
   isString,
@@ -39,6 +40,10 @@ import {
   invalidArrayReasonInvalidObjects,
   fieldsErrorMessage,
 } from '../../messages';
+import { propName } from '../../constraints/utils';
+import { FAILURE_FIELD_NAMES } from '../../const';
+
+const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
 
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   const hasFieldName = isNotNull(fieldName);
@@ -64,7 +69,7 @@ const buildObjMessage = curry((level, fieldName, o) => {
   }
 
   const fields = propFields(o);
-  const fieldsError = prop(`fieldsError`, o);
+  const fieldsError = prop(FIELDS_FAILURE_MESSAGE, o);
 
   return compose(
     when(always(isNotNull(fieldName)), prefixWithKey(level)),
@@ -86,7 +91,7 @@ const buildObjMessage = curry((level, fieldName, o) => {
       always(isNotNull(fieldName)),
       compose(joinWithColon, prepend(quote(fieldName)), of)
     )
-  )(invalidObjectPrefix());
+  )(defaultTo(invalidObjectPrefix(), propName(o)));
 });
 
 const parseFieldValue = (level, fieldName, fieldValue) =>

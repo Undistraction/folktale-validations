@@ -1,8 +1,9 @@
-import { always } from 'ramda';
+import { always, compose } from 'ramda';
 import { validation as Validation } from 'folktale';
-import { constraintErrorMessageWrapper } from '../../messages';
+import { toConstraintsError } from '../../errors/utils';
+import { propValue } from '../../utils';
 
-const { Success } = Validation;
+const { Failure, Success } = Validation;
 
 export default (
   ownConstraints,
@@ -13,5 +14,5 @@ export default (
     constraintsToValidate
   ).matchWith({
     Success: always(Success(constraintsToValidate)),
-    Failure: constraintErrorMessageWrapper,
+    Failure: compose(Failure, toConstraintsError, propValue),
   });

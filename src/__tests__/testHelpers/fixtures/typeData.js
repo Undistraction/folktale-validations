@@ -24,6 +24,8 @@ const emptyValues = [
   ...emptyObjValues,
   ...emptyStringValues,
 ];
+const undefinedValues = [undefined];
+const nullValues = [null];
 
 const allValues = [
   ...arrayValues,
@@ -35,8 +37,8 @@ const allValues = [
   ...numericValues,
   ...booleanValues,
   ...dateValues,
-  null,
-  undefined,
+  ...nullValues,
+  ...undefinedValues,
 ];
 
 const withoutBooleanValues = without(booleanValues, allValues);
@@ -74,6 +76,8 @@ export default {
   validNumericValues,
   validDateValues,
   invalidDateValues,
+  undefinedValues,
+  nullValues,
   withoutBooleanValues,
   withoutNumericValues,
   withoutArrayValues,

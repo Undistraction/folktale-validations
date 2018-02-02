@@ -6,6 +6,7 @@ import {
   stubReturnsFailure,
   stubReturnsSuccess,
 } from '../../testHelpers/sinon';
+import { toObjectError } from '../../../errors/utils';
 
 const { Failure } = Validation;
 
@@ -45,7 +46,10 @@ describe(`validateObjectValues()`, () => {
         };
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([objectMessage]));
+
+        const expectedValue = toObjectError([[`a`, [message]]]);
+
+        expect(validation).toEqualFailureWithValue(expectedValue);
         expect(v1.calledWith(key1)).toBeTrue();
         expect(v2.calledWith(key2)).toBeTrue();
       });
@@ -66,7 +70,10 @@ describe(`validateObjectValues()`, () => {
         };
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([objectMessage]));
+
+        const expectedValue = toObjectError([[`b`, [message]]]);
+
+        expect(validation).toEqualFailureWithValue(expectedValue);
         expect(v1.calledWith(key1)).toBeTrue();
         expect(v2.calledWith(key2)).toBeTrue();
       });
@@ -76,7 +83,6 @@ describe(`validateObjectValues()`, () => {
       it(`returns a Validation.Failure with message`, () => {
         const message1 = `message1`;
         const message2 = `message2`;
-
         const message3 = `message3`;
         const v1 = stubReturnsFailure(message1);
         const v2 = stubReturnsFailure(message2);
@@ -93,7 +99,14 @@ describe(`validateObjectValues()`, () => {
         };
         const validator = validatorWithMessage(validators);
         const validation = validator(value);
-        expect(validation).toEqual(Failure([objectMessage]));
+
+        const expectedValue = toObjectError([
+          [`a`, [message1]],
+          [`b`, [message2]],
+          [`c`, [message3]],
+        ]);
+
+        expect(validation).toEqualFailureWithValue(expectedValue);
         expect(v1.calledWith(key1)).toBeTrue();
         expect(v2.calledWith(key2)).toBeTrue();
         expect(v2.calledWith(key3)).toBeTrue();

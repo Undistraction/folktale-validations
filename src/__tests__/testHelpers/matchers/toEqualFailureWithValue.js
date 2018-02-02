@@ -2,6 +2,7 @@ import { equals } from 'ramda';
 import { validation as Validation } from 'folktale';
 import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils';
 import diff from 'jest-diff';
+import CircularJSON from 'circular-json';
 
 const { Failure } = Validation;
 
@@ -9,10 +10,9 @@ const name = `toEqualFailureWithValue`;
 
 export default (received, expected) => {
   const expectedAsFailure = Failure(expected);
-
   const pass = equals(
-    JSON.stringify(received),
-    JSON.stringify(expectedAsFailure)
+    CircularJSON.stringify(received),
+    CircularJSON.stringify(expectedAsFailure)
   );
   const message = pass
     ? () =>

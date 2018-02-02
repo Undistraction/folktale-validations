@@ -1,4 +1,4 @@
-import { isNotNull, isNotString, isArray } from 'ramda-adjunct';
+import { isNotNull, isArray } from 'ramda-adjunct';
 import { always, curry, ifElse, when } from 'ramda';
 import {
   joinWithColon,
@@ -50,6 +50,8 @@ export const invalidArrayReasonInvalidObjects = always(
 // -----------------------------------------------------------------------------
 // Constraint Validator Messages
 // -----------------------------------------------------------------------------
+
+export const constraintsObjPrefix = always(`constraints`);
 
 export const objectValidatorErrorMessage = fieldName => messages =>
   fieldName === ROOT_FIELD

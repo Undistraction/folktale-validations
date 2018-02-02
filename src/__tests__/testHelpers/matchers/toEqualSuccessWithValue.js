@@ -2,6 +2,7 @@ import { equals } from 'ramda';
 import { validation as Validation } from 'folktale';
 import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils';
 import diff from 'jest-diff';
+import CircularJSON from 'circular-json';
 
 const { Success } = Validation;
 
@@ -11,8 +12,8 @@ export default (received, expected) => {
   const expectedAsSuccess = Success(expected);
 
   const pass = equals(
-    JSON.stringify(received),
-    JSON.stringify(expectedAsSuccess)
+    CircularJSON.stringify(received),
+    CircularJSON.stringify(expectedAsSuccess)
   );
 
   const message = pass

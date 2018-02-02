@@ -1,6 +1,7 @@
 import { validation as Validation } from 'folktale';
-import { compose, reduce, toPairs, always, curry } from 'ramda';
+import { compose, reduce, toPairs, always, curry, pair } from 'ramda';
 import { isNotUndefined } from 'ramda-adjunct';
+import { toObjectError } from '../../errors/utils';
 
 const { Success, Failure } = Validation;
 
@@ -10,8 +11,7 @@ const validate = (valueErrorMessage, validatorsMap) => (acc, [name, v]) => {
   return isNotUndefined(validator)
     ? validator(v).matchWith({
         Success: always(acc),
-        Failure: ({ value }) =>
-          acc.concat(Failure([valueErrorMessage(name, value)])),
+        Failure: ({ value }) => acc.concat(Failure([pair(name, value)])),
       })
     : acc;
 };
@@ -21,5 +21,5 @@ export default curry(
     compose(
       reduce(validate(valueErrorMessage, validatorsMap), Success(o)),
       toPairs
-    )(o).orElse(message => Failure([objectValuesMessage(message)]))
+    )(o).orElse(compose(Failure, toObjectError))
 );

@@ -65,7 +65,6 @@
   },
   "dependencies": {
     "cssapi-units": "^0.3.0",
-    "deep-diff": "^0.3.8",
     "deep-freeze": "^0.0.1",
     "folktale": "^2.0.1",
     "ramda": "^0.25.0",

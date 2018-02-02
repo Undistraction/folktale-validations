@@ -1,7 +1,11 @@
+import { FAILURE_FIELD_NAMES } from '../../const';
+
+const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
+
 export const func = () => {};
 
 export const flatErrorMessage = {
-  fieldsError: `fieldsMessageForRoot`,
+  [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForRoot`,
   fields: {
     a: `errorMessageForA`,
     b: `errorMessageForB`,
@@ -13,7 +17,7 @@ export const nestedObjectErrorMessage = {
   fields: {
     a: `errorMessageForA`,
     b: {
-      fieldsError: `fieldsMessageForB`,
+      [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForB`,
       fields: {
         ba: `errorMessageForBA`,
       },
@@ -34,7 +38,7 @@ export const nestedArrayErrorMessage = {
           },
         },
         {
-          fieldsError: `fieldsMessageForB2`,
+          [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForB2`,
           fields: {
             b2a: `errorMessageForB2B`,
           },

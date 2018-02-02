@@ -1,5 +1,4 @@
 import { curry, compose, juxt, of, concat } from 'ramda';
-import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../../helpers/untilFailureValidator';
 import validateObjectKeys from './validateObjectKeys';
 import applyDefaultsWithConstraints from '../applyDefaultsWithConstraints';
@@ -8,9 +7,6 @@ import { buildValidatorsMap, pluckName, listRequiredKeys } from '../utils';
 import { compact } from '../../utils';
 import validateFieldsWithValue from './validateFieldsWithValue';
 import validateFieldsWithChildren from './validateFieldsWithChildren';
-import { objectErrorMessageWrapper } from '../../messages';
-
-const { Failure } = Validation;
 
 const defaultFieldValidators = validators =>
   juxt([
@@ -23,8 +19,10 @@ const fieldsValidators = (validators, fields, fieldsValidator) =>
     fieldsValidator
   );
 
-const validateObject = validators => curry((fieldName, constraints, o) => {
+const validateObject = validators =>
+  curry((fieldName, constraints, o) => {
     const { fields, fieldsValidator } = constraints;
+
     return untilFailureValidator([
       validators.validateIsObject,
       validateObjectKeys(fieldsValidators(validators, fields, fieldsValidator)),
@@ -33,6 +31,10 @@ const validateObject = validators => curry((fieldName, constraints, o) => {
       transformValuesWithConstraints(fields),
       validateFieldsWithValue(validateObject(validators), fields),
       validateFieldsWithChildren(validateObject(validators), fields),
-    ])(o).orElse(compose(objectErrorMessageWrapper(fieldName), Failure));
+    ])(o);
   });
 export default validateObject;
+
+// 1. Not Object Error
+// 2. keys Errors: [asda, asddadsa]
+// 3. object Values error : { a: 1, b: 2}
