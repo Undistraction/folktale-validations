@@ -1,13 +1,14 @@
 import { validation as Validation } from 'folktale';
-import { compose, when, reduce, flip, append } from 'ramda';
+import { compose, when, reduce } from 'ramda';
 import { isArray } from 'ramda-adjunct';
 import { joinMessagesWithAnd } from '../messages';
+import { appendRight } from '../utils';
 
 const { Success, Failure } = Validation;
 
 const toErr = compose(
   Failure,
-  flip(append)([]),
+  appendRight([]),
   when(isArray, joinMessagesWithAnd)
 );
 

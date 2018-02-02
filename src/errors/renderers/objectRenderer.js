@@ -1,4 +1,4 @@
-import { cond, curry, inc } from 'ramda';
+import { cond, curry, inc, prop, append, concat } from 'ramda';
 import { isString, isPlainObj, isArray, isNotNull } from 'ramda-adjunct';
 import {
   joinWithColon,
@@ -17,20 +17,31 @@ import {
   invalidArrayPrefix,
   arrayValueErrorMessage,
   invalidArrayReasonInvalidObjects,
+  fieldsErrorMessage,
 } from '../../messages';
 
-const buildObjMessage = curry((level, fieldName, fieldValue) => {
+const buildObjMessage = curry((level, fieldName, o) => {
   const hasFieldName = isNotNull(fieldName);
+  const fields = propFields(o);
+  const fieldsError = prop(`fieldsError`, o);
+
   // Different formatting if root or field
   const prefix = hasFieldName
     ? joinWithColon([quote(fieldName), invalidObjectPrefix()])
     : invalidObjectPrefix();
-  const result = joinWithSpace([
-    prefix,
-    invalidObjectReasonInvalidValues(),
-    // eslint-disable-next-line no-use-before-define
-    parseObj(inc(level))(fieldValue),
-  ]);
+
+  let a = [prefix];
+  if (fieldsError) {
+    a = append(fieldsErrorMessage(level, fieldsError), a);
+  }
+  if (fields) {
+    a = concat(a, [
+      invalidObjectReasonInvalidValues(level),
+      // eslint-disable-next-line no-use-before-define
+      parseObj(inc(level))(o),
+    ]);
+  }
+  const result = joinWithSpace(a);
   return hasFieldName ? prefixWithKey(level, result) : result;
 });
 
@@ -54,12 +65,10 @@ const parseFieldValue = (level, fieldName, fieldValue) =>
   cond([
     [isString, objectValueErrorMessage(level, fieldName)],
     [isPlainObj, buildObjMessage(level, fieldName)],
-    // eslint-disable-next-line no-use-before-define
     [isArray, buildArrayMessage(level, fieldName)],
   ])(fieldValue);
 
 const parseObj = level => o => {
-  console.log(o);
   const fields = propFields(o);
 
   return reduceObjIndexed((acc, [fieldName, fieldValue]) => {

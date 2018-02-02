@@ -1,6 +1,7 @@
 export const func = () => {};
 
 export const flatErrorMessage = {
+  fieldsError: `fieldsMessageForRoot`,
   fields: {
     a: `errorMessageForA`,
     b: `errorMessageForB`,
@@ -12,6 +13,7 @@ export const nestedObjectErrorMessage = {
   fields: {
     a: `errorMessageForA`,
     b: {
+      fieldsError: `fieldsMessageForB`,
       fields: {
         ba: `errorMessageForBA`,
       },
@@ -31,6 +33,7 @@ export const nestedArrayErrorMessage = {
         },
       },
       {
+        fieldsError: `fieldsMessageForB2`,
         fields: {
           b2a: `errorMessageForB2B`,
         },
@@ -56,7 +59,7 @@ export const deeplyNestedErrorMessage = {
       },
       {
         fields: {
-          b2a: `errorMessageForBB`,
+          b2a: `errorMessageForB2a`,
           b2b: [
             {
               b2b1a: `errorMessageForB2B1A`,

@@ -10,10 +10,12 @@ describe(`objectRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderMessage(flatErrorMessage);
       expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
-          – Key 'a': errorMessageForA
-          – Key 'b': errorMessageForB
-          – Key 'c': errorMessageForC`
+        `Object 
+          – fieldsMessageForRoot
+          – included invalid value(s)
+            – Key 'a': errorMessageForA
+            – Key 'b': errorMessageForB
+            – Key 'c': errorMessageForC`
       );
     });
   });
@@ -22,11 +24,14 @@ describe(`objectRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderMessage(nestedObjectErrorMessage);
       expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
-          – Key 'a': errorMessageForA
-          – Key 'b': Object included invalid value(s)
-            – Key 'ba': errorMessageForBA
-          – Key 'c': errorMessageForC`
+        `Object 
+          – included invalid value(s)
+            – Key 'a': errorMessageForA
+            – Key 'b': Object 
+              – fieldsMessageForB
+              – included invalid value(s)
+                –  Key 'ba': errorMessageForBA
+            – Key 'c': errorMessageForC`
       );
     });
   });
@@ -35,15 +40,19 @@ describe(`objectRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderMessage(nestedArrayErrorMessage);
       expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
-          – Key 'a': errorMessageForA
-          – Key 'b': Array included invalid object(s)
-            – [0] Object included invalid value(s)
-              – Key 'b1a': errorMessageForB1A
-              – Key 'b1b': errorMessageForB1A
-            – [1] Object included invalid value(s)
-              – Key 'b2a': errorMessageForB2B
-          – Key 'c': errorMessageForC`
+        `Object 
+          – included invalid value(s)
+            – Key 'a': errorMessageForA
+            – Key 'b': Array included invalid object(s)
+              – [0] Object 
+                – included invalid value(s)
+                  – Key 'b1a': errorMessageForB1A
+                  – Key 'b1b': errorMessageForB1A
+              – [1] Object 
+                – fieldsMessageForB2
+                – included invalid value(s)
+                  – Key 'b2a': errorMessageForB2B
+            – Key 'c': errorMessageForC`
       );
     });
   });

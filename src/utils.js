@@ -65,6 +65,7 @@ export const { freeze } = Object;
 // -----------------------------------------------------------------------------
 
 export const compact = filter(isNotUndefined);
+export const appendRight = flip(append);
 
 // -----------------------------------------------------------------------------
 // String
@@ -102,7 +103,7 @@ const log = curry((loggingFunction, prefix) =>
     compose(
       loggingFunction,
       joinWithColon,
-      flip(append)([prefix]),
+      appendRight([prefix]),
       JSON.stringify
     )
   )

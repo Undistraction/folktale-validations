@@ -26,12 +26,15 @@ export const objectValueErrorMessage = (level, name) => value =>
 export const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value);
 
+export const fieldsErrorMessage = (level, value) =>
+  `\n${tabsForLevel(level)} – ${value}`;
+
 export const invalidObjectPrefix = always(`Object`);
 export const invalidArrayPrefix = always(`Array`);
 
-export const invalidObjectReasonInvalidValues = always(
-  `included invalid value(s)`
-);
+export const invalidObjectReasonInvalidValues = level =>
+  `\n${tabsForLevel(level)} – included invalid value(s)`;
+
 export const invalidArrayReasonInvalidObjects = always(
   `included invalid object(s)`
 );
