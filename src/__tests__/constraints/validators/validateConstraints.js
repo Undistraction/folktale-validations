@@ -5,6 +5,8 @@ import { func } from '../../testHelpers/fixtures';
 import typeData from '../../testHelpers/fixtures/typeData';
 import { CONSTRAINT_FIELD_NAMES } from '../../../const';
 import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints';
+import constraints from '../../../constraints';
+import validatorsWithMessages from '../../../defaults/validatorsWithMessages';
 
 const {
   FIELDS,
@@ -18,9 +20,12 @@ const {
   CHILDREN,
 } = CONSTRAINT_FIELD_NAMES;
 
-describe(`validateConstraintsConfigured`, () => {
+describe(`validateConstraints`, () => {
+  const validators = validatorsWithMessages;
+  const configuredContraints = constraints(validators);
   const validateConstraintsConfigured = validateConstraints(
-    validateObjectWithConstraints
+    configuredContraints,
+    validateObjectWithConstraints(validators)
   );
 
   // ---------------------------------------------------------------------------
