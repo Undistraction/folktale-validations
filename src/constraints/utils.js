@@ -13,11 +13,9 @@ import {
   find,
   append,
   toPairs,
-  equals,
 } from 'ramda';
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
 import { CONSTRAINT_FIELD_NAMES } from '../const';
-import CONSTRAINTS from '../constraints';
 
 // -----------------------------------------------------------------------------
 // Properties
@@ -36,8 +34,6 @@ const hasIsRequiredKey = both(
   hasIsRequired,
   compose(propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
 );
-
-export const constraintsAreOwnConstraints = equals(CONSTRAINTS);
 
 // -----------------------------------------------------------------------------
 // Extract data from validated object

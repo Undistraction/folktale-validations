@@ -7,6 +7,7 @@ import {
   joinWithSpace,
   quote,
   mapWithIndex,
+  propFields,
 } from '../../utils';
 import {
   invalidObjectPrefix,
@@ -46,7 +47,6 @@ const buildArrayMessage = curry((level, fieldName, fieldValue) => {
     // eslint-disable-next-line no-use-before-define
     joinWithNoSpace(parseArray(inc(level))(fieldValue)),
   ]);
-
   return hasFieldName ? prefixWithKey(level, result) : result;
 });
 
@@ -58,11 +58,15 @@ const parseFieldValue = (level, fieldName, fieldValue) =>
     [isArray, buildArrayMessage(level, fieldName)],
   ])(fieldValue);
 
-const parseObj = level =>
-  reduceObjIndexed((acc, [fieldName, fieldValue]) => {
+const parseObj = level => o => {
+  console.log(o);
+  const fields = propFields(o);
+
+  return reduceObjIndexed((acc, [fieldName, fieldValue]) => {
     const result = parseFieldValue(level, fieldName, fieldValue);
     return joinWithNoSpace([acc, result]);
-  }, ``);
+  }, ``)(fields);
+};
 
 const parseArray = level =>
   mapWithIndex((o, index) =>

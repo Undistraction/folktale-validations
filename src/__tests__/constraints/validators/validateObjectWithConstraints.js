@@ -6,6 +6,7 @@ import {
   stubReturns,
 } from '../../testHelpers/sinon';
 import { CONSTRAINT_FIELD_NAMES } from '../../../const';
+import validatorsWithMessages from '../../../defaults/validatorsWithMessages';
 
 const value1 = `value1`;
 const value2 = `value2`;
@@ -38,6 +39,11 @@ const {
 // given a valid constraint object, the constraints are appled correctly.
 
 describe(`validateObjectWithConstraints`, () => {
+  const validators = validatorsWithMessages;
+  const validateObjectWithConstraintsConfigured = validateObjectWithConstraints(
+    validators
+  );
+
   // ---------------------------------------------------------------------------
   // Full nested constraint object with all features
   // ---------------------------------------------------------------------------
@@ -146,7 +152,7 @@ describe(`validateObjectWithConstraints`, () => {
           ],
         };
 
-        const validator = validateObjectWithConstraints(constraints);
+        const validator = validateObjectWithConstraintsConfigured(constraints);
         const validation = validator(o);
         expect(validation).toEqualSuccessWithValue({
           a: transformedValue1,
@@ -203,7 +209,7 @@ describe(`validateObjectWithConstraints`, () => {
           ],
         };
 
-        const validator = validateObjectWithConstraints(constraints);
+        const validator = validateObjectWithConstraintsConfigured(constraints);
         const validation = validator(value);
         expect(validation).toEqualSuccessWithValue(value);
         expect(v1.notCalled).toBeTrue();
@@ -234,7 +240,9 @@ describe(`validateObjectWithConstraints`, () => {
             ],
           };
 
-          const validator = validateObjectWithConstraints(constraints);
+          const validator = validateObjectWithConstraintsConfigured(
+            constraints
+          );
           const validation = validator(o);
           expect(validation).toEqualFailureWithValue([
             `Object Invalid: Object was missing required key(s): ['b']`,
@@ -260,7 +268,7 @@ describe(`validateObjectWithConstraints`, () => {
             },
           ],
         };
-        const validator = validateObjectWithConstraints(constraints);
+        const validator = validateObjectWithConstraintsConfigured(constraints);
         const validation = validator(o);
         expect(validation).toEqualSuccessWithValue(o);
         expect(v1.calledWith(value1)).toBeTrue();
@@ -283,7 +291,9 @@ describe(`validateObjectWithConstraints`, () => {
               },
             ],
           };
-          const validator = validateObjectWithConstraints(constraints);
+          const validator = validateObjectWithConstraintsConfigured(
+            constraints
+          );
           const validation = validator(o);
           expect(validation).toEqualSuccessWithValue(o);
           expect(v1.calledWith(value1)).toBeTrue();
@@ -311,7 +321,9 @@ describe(`validateObjectWithConstraints`, () => {
               },
             ],
           };
-          const validator = validateObjectWithConstraints(constraints);
+          const validator = validateObjectWithConstraintsConfigured(
+            constraints
+          );
           const validation = validator(o);
           expect(validation).toEqualFailureWithValue([
             `Object Invalid: Object was missing required key(s): ['b']`,

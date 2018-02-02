@@ -18,8 +18,10 @@ export const PREDICATES = Object.freeze({
 });
 
 export const ROOT_FIELD = `root`;
+export const OWN_CONSTRAINTS = `___Own Constaints___`;
 
 export const CONSTRAINT_FIELD_NAMES = Object.freeze({
+  ID: OWN_CONSTRAINTS,
   FIELDS: `fields`,
   FIELDS_VALIDATOR: `fieldsValidator`,
   NAME: `name`,

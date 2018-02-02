@@ -54,6 +54,10 @@ export const constraintValidatorErrorMessage = messages =>
 export const objectErrorMessageWrapper = fieldName =>
   wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
 
+export const constraintErrorMessageWrapper = wrapFailureMessageWith(
+  constraintValidatorErrorMessage
+);
+
 // -----------------------------------------------------------------------------
 // Utilities
 // -----------------------------------------------------------------------------

@@ -1,21 +1,35 @@
-import { identity, curry, always } from 'ramda';
-import { ROOT_FIELD } from '../../const';
+import { identity, curry, always, propEq } from 'ramda';
+import {
+  ROOT_FIELD,
+  CONSTRAINT_FIELD_NAMES,
+  OWN_CONSTRAINTS,
+} from '../../const';
 import validateObject from './validateObject';
-import { constraintsAreOwnConstraints } from '../utils';
 import validateConstraints from './validateConstraints';
+import CONSTRAINTS from '../../constraints';
 
-const validateObjectWithConstraints = curry(
-  (constraints, o) =>
-    // If we try and validate our own constraint object with itself we enter an
-    // infinite loop, so skip validation for our own constraints.
-    constraintsAreOwnConstraints(constraints)
-      ? validateObject(ROOT_FIELD, constraints, o)
-      : validateConstraints(validateObjectWithConstraints)(
-          constraints
-        ).matchWith({
-          Success: always(validateObject(ROOT_FIELD, constraints, o)),
-          Failure: identity,
-        })
+const constraintsAreOwnConstraints = propEq(
+  CONSTRAINT_FIELD_NAMES.ID,
+  OWN_CONSTRAINTS
 );
+
+const validateObjectWithConstraints = validators => {
+  const configuredConstraints = CONSTRAINTS(validators);
+  const configuredValidateObject = validateObject(validators);
+  return curry(
+    (constraints, o) =>
+      constraintsAreOwnConstraints(constraints)
+        ? configuredValidateObject(ROOT_FIELD, constraints, o)
+        : validateConstraints(
+            configuredConstraints,
+            validateObjectWithConstraints(validators)
+          )(constraints).matchWith({
+            Success: always(
+              configuredValidateObject(ROOT_FIELD, constraints, o)
+            ),
+            Failure: identity,
+          })
+  );
+};
 
 export default validateObjectWithConstraints;

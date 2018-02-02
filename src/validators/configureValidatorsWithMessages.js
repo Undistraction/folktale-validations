@@ -1,3 +1,4 @@
+import { assoc } from 'ramda';
 import {
   validateIsArray,
   validateIsNotArray,
@@ -44,8 +45,9 @@ import validateIsArrayOf from '../validators/array/validateIsArrayOf';
 import validateArrayElements from '../validators/array/validateArrayElements';
 
 import { PREDICATES } from '../const';
+import validateObjectWithConstraints from '../constraints/validators/validateConstraints';
 
-const configuredValidators = messages => {
+export default messages => {
   const {
     // Predicate
     predicateMessage,
@@ -66,7 +68,7 @@ const configuredValidators = messages => {
     isWhitelistedStringMessage,
   } = messages;
 
-  return {
+  const configuredValidators = {
     // Generated Predicates
     validateIsArray: validateIsArray(predicateMessage(PREDICATES.Array)),
     validateIsNotArray: validateIsNotArray(
@@ -168,10 +170,10 @@ const configuredValidators = messages => {
       arrayElementErrorMessage
     ),
   };
+
+  return assoc(
+    `validateObjectWithConstraints`,
+    validateObjectWithConstraints(configuredValidators),
+    configuredValidators
+  );
 };
-
-// const validateObjectWithValidators = validateObject({
-
-// })
-
-export default configuredValidators;
