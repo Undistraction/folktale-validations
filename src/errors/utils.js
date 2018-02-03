@@ -1,7 +1,7 @@
 import { fromPairs, compose, mergeAll, objOf, assoc, of, map } from 'ramda';
 import { constraintsObjPrefix } from '../messages';
 import { FAILURE_FIELD_NAMES } from '../const';
-import { propValue } from '../utils';
+import { propValue } from '../utils/failures';
 
 const { FIELDS_FAILURE_MESSAGE, FIELDS, CHILDREN, NAME } = FAILURE_FIELD_NAMES;
 

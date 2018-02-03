@@ -3,10 +3,11 @@ import untilFailureValidator from '../../helpers/untilFailureValidator';
 import validateObjectKeys from './validateObjectKeys';
 import applyDefaultsWithConstraints from '../applyDefaultsWithConstraints';
 import transformValuesWithConstraints from '../transformValuesWithConstraints';
-import { buildValidatorsMap, pluckName, listRequiredKeys } from '../utils';
+import { buildValidatorsMap, listRequiredKeys } from '../utils';
 import { compact } from '../../utils';
 import validateFieldsWithValue from './validateFieldsWithValue';
 import validateFieldsWithChildren from './validateFieldsWithChildren';
+import { pluckName } from '../../utils/constraints';
 
 const defaultFieldValidators = validators =>
   juxt([
@@ -36,7 +37,3 @@ const validateObject = validators =>
     return r;
   });
 export default validateObject;
-
-// 1. Not Object Error
-// 2. keys Errors: [asda, asddadsa]
-// 3. object Values error : { a: 1, b: 2}

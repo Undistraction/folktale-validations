@@ -1,11 +1,8 @@
 import { map, mapObjIndexed, compose, reverse } from 'ramda';
 
-import {
-  mapObjIndexedWithIndex,
-  propValues,
-  propValidators,
-} from '../../../utils';
+import { mapObjIndexedWithIndex } from '../../../utils';
 import validators from '../../testHelpers/validators';
+import { propValues, propValidators } from '../../../utils/predicates';
 
 const prepareTestData = validatorPair =>
   mapObjIndexedWithIndex((validator, name, o, i) => {

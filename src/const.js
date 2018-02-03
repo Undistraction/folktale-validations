@@ -19,6 +19,7 @@ export const PREDICATES = Object.freeze({
 
 export const ROOT_FIELD = `root`;
 export const OWN_CONSTRAINTS = `___Own Constaints___`;
+export const VALIDATION_VALUE_KEY = `value`;
 
 export const CONSTRAINT_FIELD_NAMES = Object.freeze({
   ID: OWN_CONSTRAINTS,

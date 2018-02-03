@@ -1,7 +1,6 @@
 import {
   curry,
   inc,
-  prop,
   append,
   either,
   ifElse,
@@ -26,9 +25,6 @@ import {
   joinWithSpace,
   quote,
   mapWithIndex,
-  propFields,
-  propChildren,
-  hasPropChildren,
 } from '../../utils';
 import {
   invalidObjectPrefix,
@@ -40,10 +36,13 @@ import {
   invalidArrayReasonInvalidObjects,
   fieldsErrorMessage,
 } from '../../messages';
-import { propName } from '../../constraints/utils';
-import { FAILURE_FIELD_NAMES } from '../../const';
-
-const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
+import {
+  propName,
+  propFields,
+  propChildren,
+  propFieldsFailiureMessage,
+  hasPropChildren,
+} from '../../utils/failures';
 
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   const hasFieldName = isNotNull(fieldName);
@@ -69,7 +68,7 @@ const buildObjMessage = curry((level, fieldName, o) => {
   }
 
   const fields = propFields(o);
-  const fieldsError = prop(FIELDS_FAILURE_MESSAGE, o);
+  const fieldsError = propFieldsFailiureMessage(o);
 
   return compose(
     when(always(isNotNull(fieldName)), prefixWithKey(level)),

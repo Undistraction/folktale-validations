@@ -143,50 +143,25 @@ describe(`validateConstraints`, () => {
       const validation = validateConstraintsConfigured(value);
       expect(validation).toEqualSuccessWithValue(value);
     });
-
-    describe(`empty values`, () => {
-      describe(`with empty children object`, () => {
-        it.only(`returns a Validation.Success with supplied`, () => {
-          const value = {
-            [FIELDS]: [
-              {
-                ...validRequiredFields,
-                [CHILDREN]: {},
-              },
-            ],
-          };
-          const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualSuccessWithValue(value);
-        });
-      });
-
-      describe(`with empty value object`, () => {
-        it.only(`returns a Validation.Success with supplied`, () => {
-          const value = {
-            [FIELDS]: [
-              {
-                ...validRequiredFields,
-                [VALUE]: {},
-              },
-            ],
-          };
-          const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualSuccessWithValue(value);
-        });
-      });
-    });
   });
 
-  describe(`with one level of constraints`, () => {
-    describe(`with empty constraint object`, () => {
-      it.only(`returns a Validation.Success with supplied value`, () => {
-        const value = {};
-        const validation = validateConstraintsConfigured(value);
-        expect(validation).toEqualSuccessWithValue(value);
-      });
-    });
+  // ---------------------------------------------------------------------------
+  // With one level of constraints
+  // ---------------------------------------------------------------------------
 
-    describe(`with invalid constraints`, () => {
+  describe(`with one level of constraints`, () => {
+    // -----------------------------------------------------------------------
+    // 1. Value itself
+    // -----------------------------------------------------------------------
+    describe(`value itself`, () => {
+      describe(`with empty object`, () => {
+        it.only(`returns a Validation.Success with supplied value`, () => {
+          const value = {};
+          const validation = validateConstraintsConfigured(value);
+          expect(validation).toEqualSuccessWithValue(value);
+        });
+      });
+
       describe(`with invalid value`, () => {
         it.only(`returns a Validation.Failure with message`, () => {
           map(value => {
@@ -200,6 +175,10 @@ describe(`validateConstraints`, () => {
           }, typeData.withoutObjectValues);
         });
       });
+
+      // -----------------------------------------------------------------------
+      // 1.1 Value Keys
+      // -----------------------------------------------------------------------
 
       describe(`with additional keys`, () => {
         it.only(`returns a Validation.Failure with message`, () => {
@@ -260,7 +239,7 @@ describe(`validateConstraints`, () => {
         })(exclusiveKeys);
       });
 
-      describe(`with missing requried keys`, () => {
+      describe(`with missing required keys`, () => {
         map(fieldName => {
           describe(fieldName, () => {
             it.only(`returns a Validation.Failure with message`, () => {
@@ -294,8 +273,12 @@ describe(`validateConstraints`, () => {
         })(requiredKeys);
       });
 
-      describe(`with invalid field values`, () => {
-        describe(`with non-array value for 'fields'`, () => {
+      // -----------------------------------------------------------------------
+      // 1.2 fields
+      // -----------------------------------------------------------------------
+
+      describe(`'fields'`, () => {
+        describe(`non-array value`, () => {
           it.only(`returns a Validation.Failure with message`, () => {
             map(fieldValue => {
               const value = {
@@ -315,7 +298,7 @@ describe(`validateConstraints`, () => {
           });
         });
 
-        describe(`with 'fields' array containing non-object values`, () => {
+        describe(`array containing non-object values`, () => {
           it.only(`returns a Validation.Failure with message`, () => {
             map(fieldValue => {
               const value = {
@@ -338,29 +321,7 @@ describe(`validateConstraints`, () => {
           });
         });
 
-        describe(`with non-function value for 'fieldsValidator'`, () => {
-          it.only(`returns a Validation.Failure with message`, () => {
-            map(fieldValue => {
-              const value = {
-                [FIELDS_VALIDATOR]: fieldValue,
-                [FIELDS]: [],
-              };
-
-              const expected = {
-                [CONSTRAINTS]: {
-                  [FIELDS]: {
-                    [FIELDS_VALIDATOR]: [`Wasn't 'Function'`],
-                  },
-                },
-              };
-
-              const validation = validateConstraintsConfigured(value);
-              expect(validation).toEqualFailureWithValue(expected);
-            }, typeData.withoutFunctionValues);
-          });
-        });
-
-        describe(`for fields array values`, () => {
+        describe(`fields object values`, () => {
           map(([fieldName, expectedValidationMessage, typeDataValues]) => {
             describe(`with invalid value for '${fieldName}'`, () => {
               it.only(`returns a Validation.Failure with message`, () => {
@@ -399,6 +360,74 @@ describe(`validateConstraints`, () => {
             });
           })(fieldErrors);
         });
+
+        // ---------------------------------------------------------------------
+        // 1.3 fieldsValidator
+        // ---------------------------------------------------------------------
+
+        describe(`'fieldsValidator'`, () => {
+          describe(`with non-function value`, () => {
+            it.only(`returns a Validation.Failure with message`, () => {
+              map(fieldValue => {
+                const value = {
+                  [FIELDS_VALIDATOR]: fieldValue,
+                  [FIELDS]: [],
+                };
+
+                const expected = {
+                  [CONSTRAINTS]: {
+                    [FIELDS]: {
+                      [FIELDS_VALIDATOR]: [`Wasn't 'Function'`],
+                    },
+                  },
+                };
+
+                const validation = validateConstraintsConfigured(value);
+                expect(validation).toEqualFailureWithValue(expected);
+              }, typeData.withoutFunctionValues);
+            });
+          });
+        });
+
+        // ---------------------------------------------------------------------
+        // 1.4 children
+        // ---------------------------------------------------------------------
+
+        describe(`children`, () => {
+          describe(`empty object`, () => {
+            it.only(`returns a Validation.Success with supplied value`, () => {
+              const value = {
+                [FIELDS]: [
+                  {
+                    ...validRequiredFields,
+                    [CHILDREN]: {},
+                  },
+                ],
+              };
+              const validation = validateConstraintsConfigured(value);
+              expect(validation).toEqualSuccessWithValue(value);
+            });
+          });
+        });
+
+        // ---------------------------------------------------------------------
+        // 1.5 value
+        // ---------------------------------------------------------------------
+
+        describe(`with empty value object`, () => {
+          it.only(`returns a Validation.Success with supplied value`, () => {
+            const value = {
+              [FIELDS]: [
+                {
+                  ...validRequiredFields,
+                  [VALUE]: {},
+                },
+              ],
+            };
+            const validation = validateConstraintsConfigured(value);
+            expect(validation).toEqualSuccessWithValue(value);
+          });
+        });
       });
     });
   });
@@ -411,7 +440,7 @@ describe(`validateConstraints`, () => {
     describe(`with valid constraints`, () => {
       describe(`empty values`, () => {
         describe(`children`, () => {
-          it.only(`returns a Validation.Success with supplied`, () => {
+          it.only(`returns a Validation.Success with supplied value`, () => {
             const value = {
               [FIELDS]: [
                 {
@@ -435,7 +464,7 @@ describe(`validateConstraints`, () => {
         });
 
         describe(`object`, () => {
-          it.only(`returns a Validation.Success with supplied`, () => {
+          it.only(`returns a Validation.Success with supplied value`, () => {
             const value = {
               [FIELDS]: [
                 {

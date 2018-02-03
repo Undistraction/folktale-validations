@@ -12,7 +12,6 @@ import {
   prop,
   reject,
   anyPass,
-  has,
   repeat,
   over,
   lensIndex,
@@ -27,7 +26,7 @@ import {
   isNotUndefined,
 } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { CONSTRAINT_FIELD_NAMES, PREDICATE_DATA_FIELD_NAMES } from './const';
+import { VALIDATION_VALUE_KEY } from './const';
 
 const { Success } = Validation;
 
@@ -118,16 +117,7 @@ export const loggingValidator = message => validation => {
 };
 
 // -----------------------------------------------------------------------------
-// Props / Lenses
+// Properties
 // -----------------------------------------------------------------------------
 
-export const propValue = prop(PREDICATE_DATA_FIELD_NAMES.VALUE);
-export const propValues = prop(PREDICATE_DATA_FIELD_NAMES.VALUES);
-export const propValidators = prop(PREDICATE_DATA_FIELD_NAMES.VALIDATORS);
-export const propName = prop(CONSTRAINT_FIELD_NAMES.NAME);
-export const propReason = prop(CONSTRAINT_FIELD_NAMES.REASON);
-export const propFields = prop(CONSTRAINT_FIELD_NAMES.FIELDS);
-export const propChildren = prop(CONSTRAINT_FIELD_NAMES.CHILDREN);
-export const hasPropChildren = has(CONSTRAINT_FIELD_NAMES.CHILDREN);
-
-export const hasPropReason = has(CONSTRAINT_FIELD_NAMES.REASON);
+export const propValue = prop(VALIDATION_VALUE_KEY);

@@ -4,6 +4,16 @@ import { CONSTRAINT_FIELD_NAMES, OWN_CONSTRAINTS } from './const';
 
 export default validators => {
   const {
+    validateIsString,
+    validateIsFunction,
+    validateIsNotUndefined,
+    validateIsBoolean,
+    validateIsObject,
+    validateIsArrayOf,
+    validateExclusiveKeys,
+  } = validators;
+
+  const {
     ID,
     FIELDS,
     FIELDS_VALIDATOR,
@@ -18,40 +28,40 @@ export default validators => {
 
   const nameField = {
     [NAME]: NAME,
-    [VALIDATOR]: validators.validateIsString,
+    [VALIDATOR]: validateIsString,
     [IS_REQUIRED]: true,
   };
 
   const validatorField = {
     [NAME]: VALIDATOR,
-    [VALIDATOR]: validators.validateIsFunction,
+    [VALIDATOR]: validateIsFunction,
     [IS_REQUIRED]: true,
   };
 
   const transformerField = {
     [NAME]: TRANSFORMER,
-    [VALIDATOR]: validators.validateIsFunction,
+    [VALIDATOR]: validateIsFunction,
   };
 
   const defaultValueField = {
     [NAME]: DEFAULT_VALUE,
-    [VALIDATOR]: validators.validateIsNotUndefined,
+    [VALIDATOR]: validateIsNotUndefined,
   };
 
   const isRequiredField = {
     [NAME]: IS_REQUIRED,
-    [VALIDATOR]: validators.validateIsBoolean,
+    [VALIDATOR]: validateIsBoolean,
     [DEFAULT_VALUE]: false,
   };
 
   const valueField = {
     [NAME]: VALUE,
-    [VALIDATOR]: validators.validateIsObject,
+    [VALIDATOR]: validateIsObject,
   };
 
   const childrenField = {
     [NAME]: CHILDREN,
-    [VALIDATOR]: validators.validateIsObject,
+    [VALIDATOR]: validateIsObject,
   };
 
   const fields = [
@@ -64,20 +74,18 @@ export default validators => {
     childrenField,
   ];
 
-  // -----------------------------------------------------------------------------
-
   const fieldsValidatorField = {
     [NAME]: FIELDS_VALIDATOR,
-    [VALIDATOR]: validators.validateIsFunction,
+    [VALIDATOR]: validateIsFunction,
   };
 
   const fieldsField = {
     [NAME]: FIELDS,
-    [VALIDATOR]: validators.validateIsArrayOf(validators.validateIsObject),
+    [VALIDATOR]: validateIsArrayOf(validateIsObject),
     [CHILDREN]: {
-      fieldsValidator: allOfValidator([
-        validators.validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
-        validators.validateExclusiveKeys([VALUE, CHILDREN]),
+      [FIELDS_VALIDATOR]: allOfValidator([
+        validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),
+        validateExclusiveKeys([VALUE, CHILDREN]),
       ]),
       fields,
     },

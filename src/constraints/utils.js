@@ -1,6 +1,4 @@
 import {
-  has,
-  pluck,
   prop,
   compose,
   filter,
@@ -9,7 +7,6 @@ import {
   assoc,
   both,
   propSatisfies,
-  propEq,
   find,
   append,
   toPairs,
@@ -18,24 +15,16 @@ import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
 import { CONSTRAINT_FIELD_NAMES } from '../const';
 import { mapWithIndex } from '../../lib/utils';
+import { propEqName, propName, hasPropIsRequired } from '../utils/constraints';
 
 const { Failure } = Validation;
-
-// -----------------------------------------------------------------------------
-// Properties
-// -----------------------------------------------------------------------------
-
-export const propName = prop(CONSTRAINT_FIELD_NAMES.NAME);
-export const pluckName = pluck(CONSTRAINT_FIELD_NAMES.NAME);
-export const propEqName = propEq(CONSTRAINT_FIELD_NAMES.NAME);
-export const hasIsRequired = has(CONSTRAINT_FIELD_NAMES.IS_REQUIRED);
 
 // -----------------------------------------------------------------------------
 // Predicates
 // -----------------------------------------------------------------------------
 
 const hasIsRequiredKey = both(
-  hasIsRequired,
+  hasPropIsRequired,
   compose(propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
 );
 
