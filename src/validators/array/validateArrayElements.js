@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
 import { reduce, always, curry } from 'ramda';
 
-import wrapFailureMessageWith from '../../utils/wrapFailureMessageWith';
+import { wrapFailureMessageWith } from '../../messages';
 
 const { Success, Failure } = Validation;
 

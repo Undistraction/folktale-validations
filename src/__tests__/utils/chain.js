@@ -1,10 +1,11 @@
 import { validation as Validation } from 'folktale';
-import chain from '../../utils/chain';
+import { chain } from '../../utils/validations';
 import {
   spy,
   stubReturnsFailure,
   stubReturnsSuccess,
 } from '../testHelpers/sinon';
+import { value1 } from '../testHelpers/fixtures/constraintValues';
 
 const { Success, Failure } = Validation;
 
@@ -25,7 +26,7 @@ describe(`chain()`, () => {
     describe(`when validator succeeds`, () => {
       it(`returns a Validation.Success`, () => {
         const message = `message`;
-        const value = `x`;
+        const value = value1;
         const acc = Success(value);
         const validator = stubReturnsFailure(message);
         const result = chain(acc, validator);
@@ -36,7 +37,7 @@ describe(`chain()`, () => {
 
     describe(`when validator fails`, () => {
       it(`returns a Validation.Failure with message`, () => {
-        const value = `x`;
+        const value = value1;
         const acc = Success(value);
         const validator = stubReturnsSuccess(value);
         const result = chain(acc, validator);

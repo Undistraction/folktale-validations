@@ -1,5 +1,5 @@
 // Utils
-export { default as withField } from './utils/withField';
+export { withField } from './utils/validations';
 
 // Helpers
 export { default as anyOfValidator } from './helpers/anyOfValidator';

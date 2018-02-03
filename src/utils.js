@@ -5,7 +5,6 @@ import {
   append,
   flip,
   curry,
-  tap,
   addIndex,
   reduce,
   toPairs,
@@ -25,10 +24,7 @@ import {
   isUndefined,
   isNotUndefined,
 } from 'ramda-adjunct';
-import { validation as Validation } from 'folktale';
 import { VALIDATION_VALUE_KEY } from './const';
-
-const { Success } = Validation;
 
 // -----------------------------------------------------------------------------
 // Formatting
@@ -92,29 +88,6 @@ const predicateIterator = (predicate, iterator) => (acc, v) =>
 export const reduceIf = curry((predicate, iterator, acc, v) =>
   reduce(predicateIterator(predicate, iterator), acc, v)
 );
-
-// -----------------------------------------------------------------------------
-// Logging
-// -----------------------------------------------------------------------------
-
-const log = curry((loggingFunction, prefix) =>
-  tap(
-    compose(
-      loggingFunction,
-      joinWithColon,
-      appendRight([prefix]),
-      JSON.stringify
-    )
-  )
-);
-
-// eslint-disable-next-line no-console
-export const logToConsole = log(console.log);
-
-export const loggingValidator = message => validation => {
-  logToConsole(message)(validation);
-  return Success(validation);
-};
 
 // -----------------------------------------------------------------------------
 // Properties

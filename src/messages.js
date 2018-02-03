@@ -1,5 +1,6 @@
 import { isNotNull, isArray } from 'ramda-adjunct';
-import { always, curry, ifElse, when } from 'ramda';
+import { always, curry, ifElse, when, compose, of } from 'ramda';
+import { validation as Validation } from 'folktale';
 import {
   joinWithColon,
   joinWithOr,
@@ -7,9 +8,21 @@ import {
   quote,
   tabsForLevel,
   joinWithSpace,
+  propValue,
 } from './utils';
 import { ROOT_FIELD } from './const';
-import wrapFailureMessageWith from './utils/wrapFailureMessageWith';
+
+const { Failure } = Validation;
+
+// -----------------------------------------------------------------------------
+// Utilities
+// -----------------------------------------------------------------------------
+
+export const joinMessagesWithAnd = joinWithAnd;
+export const joinMessagesWithOr = joinWithOr;
+
+export const wrapFailureMessageWith = messageWrapper =>
+  compose(Failure, of, messageWrapper, propValue);
 
 // -----------------------------------------------------------------------------
 // Message Renderers
@@ -70,10 +83,3 @@ export const objectErrorMessageWrapper = fieldName =>
 export const constraintErrorMessageWrapper = wrapFailureMessageWith(
   constraintValidatorErrorMessage
 );
-
-// -----------------------------------------------------------------------------
-// Utilities
-// -----------------------------------------------------------------------------
-
-export const joinMessagesWithAnd = joinWithAnd;
-export const joinMessagesWithOr = joinWithOr;

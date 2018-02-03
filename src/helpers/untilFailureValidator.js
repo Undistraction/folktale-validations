@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale';
 import { reduce } from 'ramda';
-import chain from '../utils/chain';
+import { chain } from '../utils/validations';
 
 const { Success } = Validation;
 
