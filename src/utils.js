@@ -17,12 +17,24 @@ import {
   toUpper,
   mapObjIndexed,
   filter,
+  either,
+  of,
+  prepend,
+  when,
+  always,
+  lte,
+  __,
+  length,
 } from 'ramda';
 import {
   isEmptyString,
   isEmptyArray,
   isUndefined,
   isNotUndefined,
+  isString,
+  isArray,
+  isNull,
+  isNaN,
 } from 'ramda-adjunct';
 import { VALIDATION_VALUE_KEY } from './const';
 
@@ -30,24 +42,50 @@ import { VALIDATION_VALUE_KEY } from './const';
 // Formatting
 // -----------------------------------------------------------------------------
 
-export const joinDefined = withString => values => {
-  const remaining = reject(anyPass([isEmptyString, isEmptyArray, isUndefined]))(
-    values
+const NEWLINE = `\n`;
+const TAB = `\t`;
+
+const stringRepresentationIfNil = compose(
+  when(isNull, always(`null`)),
+  when(isUndefined, always(`undefined`)),
+  when(isNaN, always(`NaN`))
+);
+
+export const joinDefined = withString =>
+  compose(
+    join(withString),
+    reject(anyPass([isEmptyString, isEmptyArray, isUndefined]))
   );
-  const result = join(withString, remaining);
-  return result;
-};
 
 export const joinWithComma = joinDefined(`, `);
 export const joinWithAnd = joinDefined(` and `);
 export const joinWithOr = joinDefined(` or `);
+export const joinWithEmDash = joinDefined(` – `);
 export const joinWithColon = joinDefined(`: `);
 export const joinWithSpace = joinDefined(` `);
 export const joinWithNoSpace = joinDefined(``);
-export const quote = value => `'${value}'`;
-export const wrapSB = value => `[${value}]`;
-export const quoteAndJoinWithComma = compose(joinWithComma, map(quote));
-export const tabsForLevel = compose(joinWithNoSpace, repeat(`\t`));
+
+export const wrapWith = (a, b = a) =>
+  compose(
+    joinWithNoSpace,
+    prepend(a),
+    append(b),
+    of,
+    stringRepresentationIfNil
+  );
+export const wrapWithSingleQuotes = wrapWith(`'`);
+export const wrapWithSquareBrackets = wrapWith(`[`, `]`);
+
+export const quoteAndJoinWithComma = compose(
+  joinWithComma,
+  map(wrapWithSingleQuotes)
+);
+export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB));
+
+export const newlineAndTabsForLevel = level =>
+  joinWithNoSpace([NEWLINE, tabsForLevel(level)]);
+
+export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper));
 
 // -----------------------------------------------------------------------------
 // Objects
@@ -61,12 +99,7 @@ export const { freeze } = Object;
 
 export const compact = filter(isNotUndefined);
 export const appendRight = flip(append);
-
-// -----------------------------------------------------------------------------
-// String
-// -----------------------------------------------------------------------------
-
-export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper));
+export const hasOneChildMax = compose(lte(__, 1), length);
 
 // -----------------------------------------------------------------------------
 // Iteration
@@ -94,3 +127,5 @@ export const reduceIf = curry((predicate, iterator, acc, v) =>
 // -----------------------------------------------------------------------------
 
 export const propValue = prop(VALIDATION_VALUE_KEY);
+
+export const isStringOrArray = either(isString, isArray);

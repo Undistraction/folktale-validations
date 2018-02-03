@@ -2,7 +2,6 @@ import {
   curry,
   inc,
   append,
-  either,
   ifElse,
   compose,
   when,
@@ -11,20 +10,15 @@ import {
   prepend,
   defaultTo,
 } from 'ramda';
-import {
-  isString,
-  isArray,
-  isNotNull,
-  isNotUndefined,
-  concatRight,
-} from 'ramda-adjunct';
+import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct';
 import {
   joinWithColon,
   reduceObjIndexed,
   joinWithNoSpace,
   joinWithSpace,
-  quote,
+  wrapWithSingleQuotes,
   mapWithIndex,
+  isStringOrArray,
 } from '../../utils';
 import {
   invalidObjectPrefix,
@@ -45,12 +39,13 @@ import {
 } from '../../utils/failures';
 
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
-  const hasFieldName = isNotNull(fieldName);
-
-  const prefix = when(
-    always(isNotNull(fieldName)),
-    compose(joinWithColon, prepend(quote(fieldName)), of)
-  )(invalidArrayPrefix());
+  const prefix = compose(
+    joinWithColon,
+    append(invalidArrayPrefix()),
+    of,
+    wrapWithSingleQuotes,
+    defaultTo(``)
+  )(fieldName);
 
   const result = joinWithSpace([
     prefix,
@@ -58,7 +53,7 @@ const buildArrayMessage = curry((level, fieldName, fieldValue) => {
     // eslint-disable-next-line no-use-before-define
     joinWithNoSpace(parseArray(inc(level))(fieldValue)),
   ]);
-  return hasFieldName ? prefixWithKey(level, result) : result;
+  return isNotUndefined(fieldName) ? prefixWithKey(level, result) : result;
 });
 
 const buildObjMessage = curry((level, fieldName, o) => {
@@ -88,14 +83,14 @@ const buildObjMessage = curry((level, fieldName, o) => {
     of,
     when(
       always(isNotNull(fieldName)),
-      compose(joinWithColon, prepend(quote(fieldName)), of)
+      compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
     )
   )(defaultTo(invalidObjectPrefix(), propName(o)));
 });
 
 const parseFieldValue = (level, fieldName, fieldValue) =>
   ifElse(
-    either(isString, isArray),
+    isStringOrArray,
     objectValueErrorMessage(level, fieldName),
     buildObjMessage(level, fieldName)
   )(fieldValue);

@@ -24,7 +24,7 @@ const validateObject = validators =>
   curry((fieldName, constraints, o) => {
     const { fields, fieldsValidator } = constraints;
 
-    const r = untilFailureValidator([
+    return untilFailureValidator([
       validators.validateIsObject,
       validateObjectKeys(fieldsValidators(validators, fields, fieldsValidator)),
       validators.validateObjectValues(buildValidatorsMap(fields)),
@@ -33,7 +33,5 @@ const validateObject = validators =>
       validateFieldsWithValue(validateObject(validators), fields),
       validateFieldsWithChildren(validateObject(validators), fields),
     ])(o);
-
-    return r;
   });
 export default validateObject;

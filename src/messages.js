@@ -5,14 +5,19 @@ import {
   joinWithColon,
   joinWithOr,
   joinWithAnd,
-  quote,
-  tabsForLevel,
+  wrapWithSingleQuotes,
   joinWithSpace,
   propValue,
+  joinWithEmDash,
+  wrapWithSquareBrackets,
+  newlineAndTabsForLevel,
 } from './utils';
 import { ROOT_FIELD } from './const';
+import { TYPES } from '../lib/const';
 
 const { Failure } = Validation;
+
+const KEY = `Key`;
 
 // -----------------------------------------------------------------------------
 // Utilities
@@ -28,19 +33,30 @@ export const wrapFailureMessageWith = messageWrapper =>
 // Message Renderers
 // -----------------------------------------------------------------------------
 
-export const prefixWithKey = curry((level, s) =>
-  joinWithSpace([`\n${tabsForLevel(level)} – Key`, s])
+export const prefixWithKey = curry((level, value) =>
+  joinWithSpace([joinWithEmDash([newlineAndTabsForLevel(level), KEY]), value])
 );
 
-export const prefixWithIndex = (level, index, s) =>
-  joinWithSpace([`\n${tabsForLevel(level)} – [${index}]`, s]);
+export const prefixWithIndex = (level, index, value) =>
+  joinWithSpace([
+    joinWithEmDash([
+      newlineAndTabsForLevel(level),
+      wrapWithSquareBrackets(index),
+    ]),
+    value,
+  ]);
 
 export const objectValueErrorMessage = (level, name) => value => {
-  const s = when(isArray, joinWithAnd)(value);
+  const stringValue = when(isArray, joinWithAnd)(value);
   return ifElse(
     isNotNull,
-    _ => prefixWithKey(level, joinWithColon([quote(name), s])),
-    always(s)
+    always(
+      prefixWithKey(
+        level,
+        joinWithColon([wrapWithSingleQuotes(name), stringValue])
+      )
+    ),
+    always(stringValue)
   )(name);
 };
 
@@ -48,13 +64,13 @@ export const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value);
 
 export const fieldsErrorMessage = (level, value) =>
-  `\n${tabsForLevel(level)} – ${value}`;
+  joinWithEmDash([newlineAndTabsForLevel(level), value]);
 
-export const invalidObjectPrefix = always(`Object`);
-export const invalidArrayPrefix = always(`Array`);
+export const invalidObjectPrefix = always(TYPES.Object);
+export const invalidArrayPrefix = always(TYPES.Array);
 
 export const invalidObjectReasonInvalidValues = level =>
-  `\n${tabsForLevel(level)} – included invalid value(s)`;
+  joinWithEmDash([newlineAndTabsForLevel(level), `included invalid value(s)`]);
 
 export const invalidArrayReasonInvalidObjects = always(
   `included invalid object(s)`
@@ -64,18 +80,18 @@ export const invalidArrayReasonInvalidObjects = always(
 // Constraint Validator Messages
 // -----------------------------------------------------------------------------
 
-export const constraintsObjPrefix = always(`constraints`);
+export const constraintsObjPrefix = always(`Constraints`);
 
 export const objectValidatorErrorMessage = fieldName => messages =>
   fieldName === ROOT_FIELD
     ? joinWithColon([`Object Invalid`, messages])
-    : `for field ${joinWithColon([quote(fieldName), messages])}`;
+    : `for field ${joinWithColon([wrapWithSingleQuotes(fieldName), messages])}`;
 
 export const fieldErrorMessage = (field, errorMessage) =>
-  `Field ${joinWithColon([quote(field), errorMessage])}`;
+  `Field ${joinWithColon([wrapWithSingleQuotes(field), errorMessage])}`;
 
 export const constraintValidatorErrorMessage = messages =>
-  `Constraints ${messages}`;
+  joinWithSpace(constraintsObjPrefix(), messages);
 
 export const objectErrorMessageWrapper = fieldName =>
   wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));

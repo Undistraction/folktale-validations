@@ -2,8 +2,8 @@ import {
   joinWithComma,
   joinWithColon,
   quoteAndJoinWithComma,
-  quote,
-  wrapSB,
+  wrapWithSingleQuotes,
+  wrapWithSquareBrackets,
   joinWithSpace,
 } from '../utils';
 
@@ -11,8 +11,10 @@ import {
 // Predicate
 // -----------------------------------------------------------------------------
 
-const predicateMessage = name => joinWithSpace([`Wasn't`, quote(name)]);
-const negatedPredicateMessage = name => joinWithSpace([`Was`, quote(name)]);
+const predicateMessage = name =>
+  joinWithSpace([`Wasn't`, wrapWithSingleQuotes(name)]);
+const negatedPredicateMessage = name =>
+  joinWithSpace([`Was`, wrapWithSingleQuotes(name)]);
 
 // -----------------------------------------------------------------------------
 // Association
@@ -38,7 +40,7 @@ const isWhitelistedStringMessage = whitelist =>
 // -----------------------------------------------------------------------------
 
 const numberWithUnitMessage = unit =>
-  joinWithColon([`Wasn't number with unit`, quote(unit)]);
+  joinWithColon([`Wasn't number with unit`, wrapWithSingleQuotes(unit)]);
 
 // -----------------------------------------------------------------------------
 // Object
@@ -53,23 +55,23 @@ const objectValuesMessage = valueErrorMessages =>
 const invalidKeysErrorMessage = invalidKeys =>
   joinWithColon([
     `Object included invalid key(s)`,
-    quote(wrapSB(joinWithComma(invalidKeys))),
+    wrapWithSingleQuotes(wrapWithSquareBrackets(joinWithComma(invalidKeys))),
   ]);
 
 const missingRequiredKeyErrorMessage = keys =>
   joinWithColon([
     `Object was missing required key(s)`,
-    wrapSB(quoteAndJoinWithComma(keys)),
+    wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
   ]);
 
 const exclusiveKeyErrorMessage = keys =>
   joinWithColon([
     `Object had more than one exlusive key`,
-    wrapSB(quoteAndJoinWithComma(keys)),
+    wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
   ]);
 
 const objectValueErrorMessage = (name, value) =>
-  `Key ${joinWithColon([quote(name), value])}`;
+  `Key ${joinWithColon([wrapWithSingleQuotes(name), value])}`;
 
 // -----------------------------------------------------------------------------
 // Array
@@ -82,7 +84,7 @@ const arrayElementsErrorMessage = elementErrorMessages =>
   ]);
 
 const arrayElementErrorMessage = (value, message) =>
-  joinWithColon([quote(value), message]);
+  joinWithColon([wrapWithSingleQuotes(value), message]);
 
 export default {
   // Predicate

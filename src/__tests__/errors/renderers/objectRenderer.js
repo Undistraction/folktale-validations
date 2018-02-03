@@ -98,3 +98,10 @@ describe(`objectRenderer()`, () => {
     });
   });
 });
+
+// doSomething()
+//   – missingRequiredArgs: [a, b]
+//   – invalidArgs
+//     – 'a': errorMessageForA
+//     – 'b': errorMessageForB
+//     – 'c': errorMessageForC
