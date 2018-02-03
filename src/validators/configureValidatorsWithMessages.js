@@ -69,7 +69,10 @@ export default messages => {
   } = messages;
 
   const configuredValidators = {
+    // -------------------------------------------------------------------------
     // Generated Predicates
+    //--------------------------------------------------------------------------
+
     validateIsArray: validateIsArray(predicateMessage(PREDICATES.Array)),
     validateIsNotArray: validateIsNotArray(
       negatedPredicateMessage(PREDICATES.Array)
@@ -142,7 +145,10 @@ export default messages => {
       negatedPredicateMessage(PREDICATES.ValidDate)
     ),
 
-    // Custom predicates
+    // -------------------------------------------------------------------------
+    // Custom Predicates
+    // -------------------------------------------------------------------------
+
     validateIsWhitelistedValue: validateIsWhitelistedValue(
       isWhitelistedStringMessage
     ),

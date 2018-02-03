@@ -177,10 +177,6 @@ describe(`validateConstraints`, () => {
     });
   });
 
-  // ---------------------------------------------------------------------------
-  // One level of constraints
-  // ---------------------------------------------------------------------------
-
   describe(`with one level of constraints`, () => {
     describe(`with empty constraint object`, () => {
       it.only(`returns a Validation.Success with supplied value`, () => {
