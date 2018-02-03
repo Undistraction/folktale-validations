@@ -1,4 +1,4 @@
-import { map, without, assoc, of, compose } from 'ramda';
+import { keys, map, without, assoc, of, compose } from 'ramda';
 
 import validateConstraints from '../../../constraints/validators/validateConstraints';
 import { func } from '../../testHelpers/fixtures';
@@ -8,6 +8,21 @@ import validateObjectWithConstraints from '../../../constraints/validators/valid
 import constraints from '../../../constraints';
 import validatorsWithMessages from '../../../defaults/validatorsWithMessages';
 import { constraintsObjPrefix } from '../../../messages';
+import {
+  value1,
+  value2,
+  value3,
+  value4,
+  value5,
+  value6,
+  value7,
+  value8,
+  name1,
+  name2,
+  invalidKeyValue,
+  invalidKeyName,
+} from '../../testHelpers/fixtures/constraintValues';
+import { joinWithAnd } from '../../../utils';
 
 const CONSTRAINTS = constraintsObjPrefix();
 
@@ -27,23 +42,21 @@ const requiredKeys = [NAME, VALIDATOR];
 
 const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
 
-const valueA = `a`;
-const valueB = `b`;
-const valueC = `c`;
-const valueD = `d`;
-const valueE = `e`;
-const valueF = `f`;
-const valueG = `g`;
-const valueH = `h`;
-const name1 = `name1`;
-const name2 = `name2`;
-const invalidKeyValue = `invalidKeyValue`;
-const invalidKeyName = `invalidKeyName`;
-
 const validRequiredFields = {
   [NAME]: name1,
   [VALIDATOR]: func,
 };
+
+const exclusiveKeys = [
+  {
+    [DEFAULT_VALUE]: value1,
+    [IS_REQUIRED]: true,
+  },
+  {
+    [CHILDREN]: {},
+    [VALUE]: {},
+  },
+];
 
 const fieldErrors = [
   // [NAME, `Wasn't 'String'`, typeData.withoutStringValues],
@@ -54,6 +67,9 @@ const fieldErrors = [
   [VALUE, `Wasn't 'Object'`, typeData.withoutObjectValues],
   [CHILDREN, `Wasn't 'Object'`, typeData.withoutObjectValues],
 ];
+
+const requiredKeysWithout = fieldName =>
+  compose(map(v => assoc(v, func, {})), without(of(fieldName)))(requiredKeys);
 
 describe(`validateConstraints`, () => {
   const validators = validatorsWithMessages;
@@ -67,47 +83,47 @@ describe(`validateConstraints`, () => {
   // Full nested constraint object with all features
   // ---------------------------------------------------------------------------
 
-  describe.only(`with valid constraints`, () => {
-    it(`returns a Validation.Success with supplied value`, () => {
+  describe(`with valid constraints`, () => {
+    it.only(`returns a Validation.Success with supplied value`, () => {
       const value = {
         [FIELDS]: [
           {
-            [NAME]: valueA,
+            [NAME]: value1,
             [VALIDATOR]: func,
             [IS_REQUIRED]: true,
             [TRANSFORMER]: func,
             [CHILDREN]: {
               [FIELDS]: [
                 {
-                  [NAME]: valueC,
+                  [NAME]: value3,
                   [VALIDATOR]: func,
                   [CHILDREN]: {}, // Allow empty object as value of childrn
                 },
                 {
-                  [NAME]: valueD,
+                  [NAME]: value4,
                   [VALIDATOR]: func,
                   [CHILDREN]: {
                     [FIELDS]: [], // Allow empty array as value of fields
                   },
                 },
                 {
-                  [NAME]: valueE,
+                  [NAME]: value5,
                   [VALIDATOR]: func,
                   [VALUE]: {}, // Allow empty object as value of value
                 },
                 {
-                  [NAME]: valueF,
+                  [NAME]: value6,
                   [VALIDATOR]: func,
                   [DEFAULT_VALUE]: true,
                   [TRANSFORMER]: func,
                   [CHILDREN]: {
                     [FIELDS]: [
                       {
-                        [NAME]: valueG,
+                        [NAME]: value7,
                         [VALIDATOR]: func,
                       },
                       {
-                        [NAME]: valueH,
+                        [NAME]: value8,
                         [VALIDATOR]: func,
                       },
                     ],
@@ -117,7 +133,7 @@ describe(`validateConstraints`, () => {
             },
           },
           {
-            [NAME]: valueB,
+            [NAME]: value2,
             [VALIDATOR]: func,
             [DEFAULT_VALUE]: true,
             [TRANSFORMER]: func,
@@ -130,7 +146,7 @@ describe(`validateConstraints`, () => {
 
     describe(`empty values`, () => {
       describe(`with empty children object`, () => {
-        it(`returns a Validation.Success with supplied`, () => {
+        it.only(`returns a Validation.Success with supplied`, () => {
           const value = {
             [FIELDS]: [
               {
@@ -145,7 +161,7 @@ describe(`validateConstraints`, () => {
       });
 
       describe(`with empty value object`, () => {
-        it(`returns a Validation.Success with supplied`, () => {
+        it.only(`returns a Validation.Success with supplied`, () => {
           const value = {
             [FIELDS]: [
               {
@@ -165,9 +181,9 @@ describe(`validateConstraints`, () => {
   // One level of constraints
   // ---------------------------------------------------------------------------
 
-  describe.only(`with one level of constraints`, () => {
+  describe(`with one level of constraints`, () => {
     describe(`with empty constraint object`, () => {
-      it(`returns a Validation.Success with supplied value`, () => {
+      it.only(`returns a Validation.Success with supplied value`, () => {
         const value = {};
         const validation = validateConstraintsConfigured(value);
         expect(validation).toEqualSuccessWithValue(value);
@@ -176,7 +192,7 @@ describe(`validateConstraints`, () => {
 
     describe(`with invalid constraints`, () => {
       describe(`with invalid value`, () => {
-        it(`returns a Validation.Failure with message`, () => {
+        it.only(`returns a Validation.Failure with message`, () => {
           map(value => {
             const validation = validateConstraintsConfigured(value);
 
@@ -190,7 +206,7 @@ describe(`validateConstraints`, () => {
       });
 
       describe(`with additional keys`, () => {
-        it(`returns a Validation.Failure with message`, () => {
+        it.only(`returns a Validation.Failure with message`, () => {
           const value = {
             [invalidKeyName]: invalidKeyValue,
           };
@@ -208,69 +224,51 @@ describe(`validateConstraints`, () => {
         });
       });
 
-      describe(`with two exclusive keys:`, () => {
-        describe(`'defaultValue' and 'isRequired'`, () => {
-          it(`returns a Validation.Failure with message`, () => {
-            const value = {
-              [FIELDS]: [
-                {
-                  [NAME]: valueA,
-                  [VALIDATOR]: func,
-                  [DEFAULT_VALUE]: true, // Exclusive
-                  [IS_REQUIRED]: true, // Exclusive
-                },
-              ],
-            };
-            const validation = validateConstraintsConfigured(value);
-
-            const expectedValue = {
-              [CONSTRAINTS]: {
-                [FIELDS_FAILURE_MESSAGE]: [
-                  `Object had more than one exlusive key: ['${IS_REQUIRED}', '${DEFAULT_VALUE}']`,
+      describe(`with exclusive keys:`, () => {
+        map(keyPair => {
+          const keyNames = keys(keyPair);
+          describe(`${joinWithAnd(keyNames)}`, () => {
+            it.only(`returns a Validation.Failure with message`, () => {
+              const value = {
+                [FIELDS]: [
+                  {
+                    [NAME]: value1,
+                    [VALIDATOR]: func,
+                    ...keyPair,
+                  },
                 ],
-              },
-            };
+              };
+              const validation = validateConstraintsConfigured(value);
 
-            expect(validation).toEqualFailureWithValue(expectedValue);
-          });
-        });
-
-        describe(`'value' and 'children'`, () => {
-          it(`returns a Validation.Failure with message`, () => {
-            const value = {
-              [FIELDS]: [
-                {
-                  [NAME]: valueA,
-                  [VALIDATOR]: func,
-                  [VALUE]: {}, // Exclusive
-                  [CHILDREN]: [], // Exclusive
+              const expectedValue = {
+                [CONSTRAINTS]: {
+                  [FIELDS]: {
+                    [FIELDS]: {
+                      [CHILDREN]: [
+                        {
+                          [FIELDS_FAILURE_MESSAGE]: [
+                            `Object had more than one exlusive key: ['${
+                              keyNames[1]
+                            }', '${keyNames[0]}']`,
+                          ],
+                        },
+                      ],
+                    },
+                  },
                 },
-              ],
-            };
+              };
 
-            const expectedValue = {
-              [CONSTRAINTS]: {
-                [FIELDS_FAILURE_MESSAGE]: [
-                  `Object had more than one exlusive key: ['${VALUE}', '${CHILDREN}']`,
-                ],
-              },
-            };
-
-            const validation = validateConstraintsConfigured(value);
-
-            expect(validation).toEqualFailureWithValue(expectedValue);
+              expect(validation).toEqualFailureWithValue(expectedValue);
+            });
           });
-        });
+        })(exclusiveKeys);
       });
 
       describe(`with missing requried keys`, () => {
         map(fieldName => {
           describe(fieldName, () => {
-            it(`returns a Validation.Failure with message`, () => {
-              const fields = compose(
-                map(v => assoc(v, func, {})),
-                without(of(fieldName))
-              )(requiredKeys);
+            it.only(`returns a Validation.Failure with message`, () => {
+              const fields = requiredKeysWithout(fieldName);
 
               const value = {
                 [FIELDS]: fields,
@@ -278,9 +276,17 @@ describe(`validateConstraints`, () => {
 
               const expectedValue = {
                 [CONSTRAINTS]: {
-                  [FIELDS_FAILURE_MESSAGE]: [
-                    `Object was missing required key(s): ['${fieldName}']`,
-                  ],
+                  [FIELDS]: {
+                    [FIELDS]: {
+                      [CHILDREN]: [
+                        {
+                          [FIELDS_FAILURE_MESSAGE]: [
+                            `Object was missing required key(s): ['${fieldName}']`,
+                          ],
+                        },
+                      ],
+                    },
+                  },
                 },
               };
 
@@ -294,7 +300,7 @@ describe(`validateConstraints`, () => {
 
       describe(`with invalid field values`, () => {
         describe(`with non-array value for 'fields'`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
             map(fieldValue => {
               const value = {
                 [FIELDS]: fieldValue,
@@ -314,7 +320,7 @@ describe(`validateConstraints`, () => {
         });
 
         describe(`with 'fields' array containing non-object values`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
             map(fieldValue => {
               const value = {
                 [FIELDS]: [fieldValue],
@@ -337,7 +343,7 @@ describe(`validateConstraints`, () => {
         });
 
         describe(`with non-function value for 'fieldsValidator'`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
             map(fieldValue => {
               const value = {
                 [FIELDS_VALIDATOR]: fieldValue,
@@ -361,7 +367,7 @@ describe(`validateConstraints`, () => {
         describe(`for fields array values`, () => {
           map(([fieldName, expectedValidationMessage, typeDataValues]) => {
             describe(`with invalid value for '${fieldName}'`, () => {
-              it(`returns a Validation.Failure with message`, () => {
+              it.only(`returns a Validation.Failure with message`, () => {
                 map(fieldValue => {
                   const requiredFields = assoc(
                     fieldName,
@@ -377,7 +383,15 @@ describe(`validateConstraints`, () => {
                   const expected = {
                     [CONSTRAINTS]: {
                       [FIELDS]: {
-                        [fieldName]: [expectedValidationMessage],
+                        [FIELDS]: {
+                          [CHILDREN]: [
+                            {
+                              [FIELDS]: {
+                                [fieldName]: [expectedValidationMessage],
+                              },
+                            },
+                          ],
+                        },
                       },
                     },
                   };
@@ -400,8 +414,8 @@ describe(`validateConstraints`, () => {
   describe(`with two levels of constraints`, () => {
     describe(`with valid constraints`, () => {
       describe(`empty values`, () => {
-        describe(`with empty children object`, () => {
-          it(`returns a Validation.Success with supplied`, () => {
+        describe(`children`, () => {
+          it.only(`returns a Validation.Success with supplied`, () => {
             const value = {
               [FIELDS]: [
                 {
@@ -424,8 +438,8 @@ describe(`validateConstraints`, () => {
           });
         });
 
-        describe(`with empty value object`, () => {
-          it(`returns a Validation.Success with supplied`, () => {
+        describe(`object`, () => {
+          it.only(`returns a Validation.Success with supplied`, () => {
             const value = {
               [FIELDS]: [
                 {
@@ -451,9 +465,9 @@ describe(`validateConstraints`, () => {
     });
 
     describe(`with invalid constraints`, () => {
-      describe(`with invalid value`, () => {
+      describe(`with invalid values`, () => {
         describe(`for children`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
             map(invalidValue => {
               const value = {
                 [FIELDS]: [
@@ -473,15 +487,42 @@ describe(`validateConstraints`, () => {
                 ],
               };
 
+              const expectedValue = {
+                [CONSTRAINTS]: {
+                  [FIELDS]: {
+                    [FIELDS]: {
+                      [CHILDREN]: [
+                        {
+                          [FIELDS]: {
+                            [CHILDREN]: {
+                              [FIELDS]: {
+                                [FIELDS]: {
+                                  [CHILDREN]: [
+                                    {
+                                      [FIELDS]: {
+                                        [CHILDREN]: [`Wasn't 'Object'`],
+                                      },
+                                    },
+                                  ],
+                                },
+                              },
+                            },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
+              };
+
               const validation = validateConstraintsConfigured(value);
-              expect(validation).toEqualFailureWithValue([
-                `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't 'Object'`,
-              ]);
+
+              expect(validation).toEqualFailureWithValue(expectedValue);
             }, typeData.withoutObjectValues);
           });
 
           describe(`for value`, () => {
-            it(`returns a Validation.Failure with message`, () => {
+            it.only(`returns a Validation.Failure with message`, () => {
               map(invalidValue => {
                 const value = {
                   [FIELDS]: [
@@ -501,18 +542,46 @@ describe(`validateConstraints`, () => {
                   ],
                 };
 
+                const expectedValue = {
+                  [CONSTRAINTS]: {
+                    [FIELDS]: {
+                      [FIELDS]: {
+                        [CHILDREN]: [
+                          {
+                            [FIELDS]: {
+                              [CHILDREN]: {
+                                [FIELDS]: {
+                                  [FIELDS]: {
+                                    [CHILDREN]: [
+                                      {
+                                        [FIELDS]: {
+                                          [VALUE]: [`Wasn't 'Object'`],
+                                        },
+                                      },
+                                    ],
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                };
+
                 const validation = validateConstraintsConfigured(value);
-                expect(validation).toEqualFailureWithValue([
-                  `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't 'Object'`,
-                ]);
+
+                expect(validation).toEqualFailureWithValue(expectedValue);
               }, typeData.withoutObjectValues);
             });
           });
         });
       });
+
       describe(`with additional keys`, () => {
         describe(`for children`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
             const value = {
               [FIELDS]: [
                 {
@@ -532,10 +601,40 @@ describe(`validateConstraints`, () => {
                 },
               ],
             };
+
+            const expectedValue = {
+              [CONSTRAINTS]: {
+                [FIELDS]: {
+                  [FIELDS]: {
+                    [CHILDREN]: [
+                      {
+                        [FIELDS]: {
+                          [CHILDREN]: {
+                            [FIELDS]: {
+                              [FIELDS]: {
+                                [CHILDREN]: [
+                                  {
+                                    [FIELDS]: {
+                                      [CHILDREN]: {
+                                        [FIELDS_FAILURE_MESSAGE]: [
+                                          `Object included invalid key(s): '[${invalidKeyName}]'`,
+                                        ],
+                                      },
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            };
             const validation = validateConstraintsConfigured(value);
-            expect(validation).toEqualFailureWithValue([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'children': Object included invalid key(s): '[${invalidKeyName}]'`,
-            ]);
+            expect(validation).toEqualFailureWithValue(expectedValue);
           });
         });
 
@@ -560,18 +659,49 @@ describe(`validateConstraints`, () => {
                 },
               ],
             };
+
+            const expectedValue = {
+              [CONSTRAINTS]: {
+                [FIELDS]: {
+                  [FIELDS]: {
+                    [CHILDREN]: [
+                      {
+                        [FIELDS]: {
+                          [CHILDREN]: {
+                            [FIELDS]: {
+                              [FIELDS]: {
+                                [CHILDREN]: [
+                                  {
+                                    [FIELDS]: {
+                                      [VALUE]: {
+                                        [FIELDS_FAILURE_MESSAGE]: [
+                                          `Object included invalid key(s): '[${invalidKeyName}]'`,
+                                        ],
+                                      },
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            };
+
             const validation = validateConstraintsConfigured(value);
-            expect(validation).toEqualFailureWithValue([
-              `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid key(s): '[${invalidKeyName}]'`,
-            ]);
+            expect(validation).toEqualFailureWithValue(expectedValue);
           });
         });
       });
     });
 
     describe(`with two exclusive keys`, () => {
-      describe(`['defaultValue' and 'isRequired']`, () => {
-        it(`returns a Validation.Failure with message`, () => {
+      describe(`'defaultValue' and 'isRequired'`, () => {
+        it.only(`returns a Validation.Failure with message`, () => {
           const value = {
             [FIELDS]: [
               {
@@ -584,7 +714,7 @@ describe(`validateConstraints`, () => {
                       [VALUE]: {
                         [FIELDS]: [
                           {
-                            [NAME]: valueA,
+                            [NAME]: value1,
                             [VALIDATOR]: func,
                             [DEFAULT_VALUE]: true, // Exclusive
                             [IS_REQUIRED]: true, // Exclusive
@@ -597,15 +727,54 @@ describe(`validateConstraints`, () => {
               },
             ],
           };
+
+          const expectedValue = {
+            [CONSTRAINTS]: {
+              [FIELDS]: {
+                [FIELDS]: {
+                  [CHILDREN]: [
+                    {
+                      [FIELDS]: {
+                        [CHILDREN]: {
+                          [FIELDS]: {
+                            [FIELDS]: {
+                              [CHILDREN]: [
+                                {
+                                  [FIELDS]: {
+                                    [VALUE]: {
+                                      [FIELDS]: {
+                                        [FIELDS]: {
+                                          [CHILDREN]: [
+                                            {
+                                              [FIELDS_FAILURE_MESSAGE]: [
+                                                `Object had more than one exlusive key: ['${IS_REQUIRED}', '${DEFAULT_VALUE}']`,
+                                              ],
+                                            },
+                                          ],
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          };
+
           const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualFailureWithValue([
-            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': for field 'fields': Object had more than one exlusive key: ['isRequired', 'defaultValue']`,
-          ]);
+          expect(validation).toEqualFailureWithValue(expectedValue);
         });
       });
 
       describe(`['value' and 'children']`, () => {
-        it(`returns a Validation.Failure with message`, () => {
+        it.only(`returns a Validation.Failure with message`, () => {
           const value = {
             [FIELDS]: [
               {
@@ -618,10 +787,10 @@ describe(`validateConstraints`, () => {
                       [VALUE]: {
                         [FIELDS]: [
                           {
-                            [NAME]: valueA,
+                            [NAME]: value1,
                             [VALIDATOR]: func,
-                            [CHILDREN]: true, // Exclusive
-                            [VALUE]: true, // Exclusive
+                            [CHILDREN]: {}, // Exclusive
+                            [VALUE]: {}, // Exclusive
                           },
                         ],
                       },
@@ -631,76 +800,104 @@ describe(`validateConstraints`, () => {
               },
             ],
           };
+
+          const expectedValue = {
+            [CONSTRAINTS]: {
+              [FIELDS]: {
+                [FIELDS]: {
+                  [CHILDREN]: [
+                    {
+                      [FIELDS]: {
+                        [CHILDREN]: {
+                          [FIELDS]: {
+                            [FIELDS]: {
+                              [CHILDREN]: [
+                                {
+                                  [FIELDS]: {
+                                    [VALUE]: {
+                                      [FIELDS]: {
+                                        [FIELDS]: {
+                                          [CHILDREN]: [
+                                            {
+                                              [FIELDS_FAILURE_MESSAGE]: [
+                                                `Object had more than one exlusive key: ['${VALUE}', '${CHILDREN}']`,
+                                              ],
+                                            },
+                                          ],
+                                        },
+                                      },
+                                    },
+                                  },
+                                },
+                              ],
+                            },
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          };
+
           const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualFailureWithValue([
-            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': for field 'fields': Object had more than one exlusive key: ['value', 'children']`,
-          ]);
+          expect(validation).toEqualFailureWithValue(expectedValue);
         });
       });
     });
 
     describe(`with missing requried keys`, () => {
-      describe(`name`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const value = {
-            [FIELDS]: [
-              {
-                ...validRequiredFields,
-                [CHILDREN]: {
-                  [FIELDS]: [
-                    {
-                      [VALIDATOR]: func,
-                    },
-                  ],
+      map(fieldName => {
+        describe(fieldName, () => {
+          it.only(`returns a Validation.Failure with message`, () => {
+            const fields = requiredKeysWithout(fieldName);
+
+            const value = {
+              [FIELDS]: [
+                {
+                  ...validRequiredFields,
+                  [CHILDREN]: {
+                    [FIELDS]: fields,
+                  },
+                },
+              ],
+            };
+
+            const expectedValue = {
+              [CONSTRAINTS]: {
+                [FIELDS]: {
+                  [FIELDS]: {
+                    [CHILDREN]: [
+                      {
+                        [FIELDS]: {
+                          [CHILDREN]: {
+                            [FIELDS]: {
+                              [FIELDS]: {
+                                [CHILDREN]: [
+                                  {
+                                    [FIELDS_FAILURE_MESSAGE]: [
+                                      `Object was missing required key(s): ['${fieldName}']`,
+                                    ],
+                                  },
+                                ],
+                              },
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
                 },
               },
-            ],
-          };
-          const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualFailureWithValue([
-            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object was missing required key(s): ['name']`,
-          ]);
-        });
-      });
+            };
 
-      describe(`validator`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const value = {
-            [FIELDS]: [
-              {
-                ...validRequiredFields,
-                [CHILDREN]: {
-                  [FIELDS]: [
-                    {
-                      [NAME]: name1,
-                    },
-                  ],
-                },
-              },
-            ],
-          };
-          const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualFailureWithValue([
-            `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object was missing required key(s): ['validator']`,
-          ]);
-        });
-      });
+            const validation = validateConstraintsConfigured(value);
 
-      describe(`validator`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const value = {
-            [FIELDS]: [
-              {
-                [NAME]: name1,
-              },
-            ],
-          };
-          const validation = validateConstraintsConfigured(value);
-          expect(validation).toEqualFailureWithValue([
-            `Constraints Object Invalid: for field 'fields': Object was missing required key(s): ['validator']`,
-          ]);
+            expect(validation).toEqualFailureWithValue(expectedValue);
+          });
         });
-      });
+      })(requiredKeys);
     });
 
     describe(`with invalid field values`, () => {

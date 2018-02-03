@@ -1,12 +1,12 @@
 import { FAILURE_FIELD_NAMES } from '../../const';
 
-const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
+const { FIELDS_FAILURE_MESSAGE, FIELDS, CHILDREN } = FAILURE_FIELD_NAMES;
 
 export const func = () => {};
 
 export const flatErrorMessage = {
   [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForRoot`,
-  fields: {
+  [FIELDS]: {
     a: `errorMessageForA`,
     b: `errorMessageForB`,
     c: `errorMessageForC`,
@@ -14,11 +14,11 @@ export const flatErrorMessage = {
 };
 
 export const nestedObjectErrorMessage = {
-  fields: {
+  [FIELDS]: {
     a: `errorMessageForA`,
     b: {
       [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForB`,
-      fields: {
+      [FIELDS]: {
         ba: `errorMessageForBA`,
       },
     },
@@ -27,19 +27,19 @@ export const nestedObjectErrorMessage = {
 };
 
 export const nestedArrayErrorMessage = {
-  fields: {
+  [FIELDS]: {
     a: `errorMessageForA`,
     b: {
-      children: [
+      [CHILDREN]: [
         {
-          fields: {
+          [FIELDS]: {
             b1a: `errorMessageForB1A`,
             b1b: `errorMessageForB1A`,
           },
         },
         {
           [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForB2`,
-          fields: {
+          [FIELDS]: {
             b2a: `errorMessageForB2B`,
           },
         },
@@ -49,32 +49,32 @@ export const nestedArrayErrorMessage = {
   },
 };
 
-export const deeplyNestedErrorMessage = {
-  fields: {
-    a: `errorMessageForA`,
-    b: [
-      {
-        fields: {
-          b1a: `errorMessageForBA`,
-          b1b: {
-            fields: {
-              b1ba: `errorMessageForB1BA`,
-            },
-          },
-        },
-      },
-      {
-        fields: {
-          b2a: `errorMessageForB2a`,
-          b2b: [
-            {
-              b2b1a: `errorMessageForB2B1A`,
-              b2b1b: `errorMessageForB2B1B`,
-            },
-          ],
-        },
-      },
-    ],
-    c: `errorMessageForC`,
-  },
-};
+// export const deeplyNestedErrorMessage = {
+//   [FIELDS]: {
+//     a: `errorMessageForA`,
+//     b: [
+//       {
+//         [FIELDS]: {
+//           b1a: `errorMessageForBA`,
+//           b1b: {
+//             [FIELDS]: {
+//               b1ba: `errorMessageForB1BA`,
+//             },
+//           },
+//         },
+//       },
+//       {
+//         [FIELDS]: {
+//           b2a: `errorMessageForB2a`,
+//           b2b: [
+//             {
+//               b2b1a: `errorMessageForB2B1A`,
+//               b2b1b: `errorMessageForB2B1B`,
+//             },
+//           ],
+//         },
+//       },
+//     ],
+//     c: `errorMessageForC`,
+//   },
+// };

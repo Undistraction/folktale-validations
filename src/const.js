@@ -43,4 +43,6 @@ export const PREDICATE_DATA_FIELD_NAMES = Object.freeze({
 export const FAILURE_FIELD_NAMES = Object.freeze({
   FIELDS_FAILURE_MESSAGE: `fieldsFailureMessage`,
   FIELDS: `fields`,
+  CHILDREN: `children`,
+  NAME: `name`,
 });

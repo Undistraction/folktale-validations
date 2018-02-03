@@ -1,26 +1,24 @@
 import {
   reduce,
   isEmpty,
-  identity,
   update,
   assoc,
-  concat,
   append,
-  toPairs,
   compose,
-  always,
   prop,
+  filter,
 } from 'ramda';
 import { isNotEmpty } from 'ramda-adjunct';
 import { validation as Validation } from 'folktale';
-import { constraintsForFieldsWithPropChildren } from '../utils';
+import { constraintsForFieldsWithPropChildren, filterFailures } from '../utils';
 import {
   reduceObjIndexed,
   reduceObjIndexedWithIndex,
   reduceIf,
 } from '../../utils';
+import { toChildrenFieldsError } from '../../errors/utils';
 
-const { collect, Success } = Validation;
+const { Failure, Success } = Validation;
 
 // -----------------------------------------------------------------------------
 // Replace the children with the validated (possibly transformed) versions.
@@ -77,14 +75,6 @@ const validateChildrenOfArrayFields = validateObject =>
 // Process Fields that have children (that have a value that is an array)
 // -----------------------------------------------------------------------------
 
-const collectAllValidationsFromChildren = compose(
-  reduce((acc, [, value]) => {
-    const validations = reduce((acc2, v) => append(v, acc2), [], value);
-    return concat(validations, acc);
-  }, []),
-  toPairs
-);
-
 export default (validateObject, constraints) => o => {
   const fieldToValidationsMap = compose(
     validateChildrenOfArrayFields(validateObject),
@@ -95,12 +85,16 @@ export default (validateObject, constraints) => o => {
     return Success(o);
   }
 
-  return collect(
-    collectAllValidationsFromChildren(fieldToValidationsMap)
-  ).matchWith({
-    Success: always(
-      Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o))
-    ),
-    Failure: identity,
-  });
+  const failures = filter(
+    compose(isNotEmpty, filterFailures),
+    fieldToValidationsMap
+  );
+
+  if (isEmpty(failures)) {
+    return Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o));
+  }
+
+  const out = toChildrenFieldsError(failures);
+
+  return Failure(out);
 };

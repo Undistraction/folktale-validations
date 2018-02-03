@@ -15,7 +15,11 @@ import {
   toPairs,
 } from 'ramda';
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct';
+import { validation as Validation } from 'folktale';
 import { CONSTRAINT_FIELD_NAMES } from '../const';
+import { mapWithIndex } from '../../lib/utils';
+
+const { Failure } = Validation;
 
 // -----------------------------------------------------------------------------
 // Properties
@@ -103,3 +107,13 @@ export const constraintsForFieldsWithPropChildren = constraintsForFieldsWithProp
 export const constraintsForFieldsWithPropValue = constraintsForFieldsWithProp(
   CONSTRAINT_FIELD_NAMES.VALUE
 );
+
+// -----------------------------------------------------------------------------
+// Validations
+// -----------------------------------------------------------------------------
+
+export const filterFailures = filter(Failure.hasInstance);
+export const extractFailureValues = mapWithIndex(([key, failure]) => [
+  key,
+  failure.value,
+]);

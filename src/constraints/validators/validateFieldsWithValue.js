@@ -1,11 +1,13 @@
 import { validation as Validation } from 'folktale';
-import { reduce, identity, assoc, values, isEmpty } from 'ramda';
+import { compose, reduce, assoc, isEmpty, toPairs } from 'ramda';
 import {
   constraintsForFieldsWithPropValue,
-  replaceFieldsWithValidationValues,
+  filterFailures,
+  extractFailureValues,
 } from '../utils';
+import { toObjectError } from '../../errors/utils';
 
-const { collect, Success } = Validation;
+const { Failure, Success } = Validation;
 
 const validateValues = validateObject =>
   reduce(
@@ -26,12 +28,14 @@ export default (validateObject, constraints) => o => {
   const childValidations = validateValues(validateObject)(
     fieldsWithPropConstraints
   );
-  if (isEmpty(childValidations)) {
+
+  const failures = filterFailures(childValidations);
+
+  if (isEmpty(failures)) {
     return Success(o);
   }
-  return collect(values(childValidations)).matchWith({
-    Success: _ =>
-      Success(replaceFieldsWithValidationValues(childValidations, o)),
-    Failure: identity,
-  });
+
+  return compose(Failure, toObjectError, extractFailureValues, toPairs)(
+    failures
+  );
 };
