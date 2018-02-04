@@ -13,4 +13,5 @@ module.exports = {
     `featureValues.js`,
     `testHelpers/`,
   ],
-};
+  unmockedModulePathPatterns: [`jasmine-expect`],
+}
