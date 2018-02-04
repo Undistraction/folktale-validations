@@ -1,17 +1,4 @@
-import {
-  keys,
-  map,
-  without,
-  assoc,
-  of,
-  compose,
-  when,
-  __,
-  always,
-  inc,
-  ifElse,
-} from 'ramda'
-import { isNotNull } from 'ramda-adjunct'
+import { keys, map, without, assoc, of, compose } from 'ramda'
 import validateConstraints from '../../../constraints/validators/validateConstraints'
 import { func } from '../../testHelpers/fixtures'
 import typeData from '../../testHelpers/fixtures/typeData'
@@ -32,11 +19,8 @@ import {
   invalidKeyValue,
   invalidKeyName,
 } from '../../testHelpers/fixtures/constraintValues'
-import { mapWithIndex } from '../../../utils'
 import { pluralise, joinWithAnd } from '../../../utils/formatting'
-import levels from '../../testHelpers/levels'
-import { replaceTokenWith } from '../../testHelpers/utils'
-import { constraintsObjName } from '../../../messages'
+import testLevels from '../../testHelpers/testLevels'
 
 const {
   FIELDS,
@@ -161,19 +145,7 @@ describe(`validateConstraints`, () => {
   // Perform tests for multiple levels of nesting
   // ---------------------------------------------------------------------------
 
-  mapWithIndex(([valueRoot, expectedRoot], index) => {
-    const level = inc(index)
-
-    const withValueRoot = when(
-      always(isNotNull(valueRoot)),
-      replaceTokenWith(__, valueRoot)
-    )
-    const withExpectedRoot = ifElse(
-      always(isNotNull(expectedRoot)),
-      replaceTokenWith(__, expectedRoot),
-      assoc(NAME, constraintsObjName())
-    )
-
+  testLevels((level, withValueRoot, withExpectedRoot) => {
     describe(`with ${level} constraint ${pluralise(`level`, level)}`, () => {
       // -----------------------------------------------------------------------
       // 1. Value itself
@@ -323,9 +295,9 @@ describe(`validateConstraints`, () => {
           })(requiredKeys)
         })
 
-        // -----------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 1.2 fields
-        // -----------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         describe(`'fields'`, () => {
           describe(`non-array value`, () => {
@@ -456,5 +428,5 @@ describe(`validateConstraints`, () => {
         })
       })
     })
-  })(levels)
+  })
 })
