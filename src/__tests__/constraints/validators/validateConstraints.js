@@ -197,9 +197,9 @@ describe(`validateConstraints`, () => {
           });
         });
 
-        // -----------------------------------------------------------------------
-        // 1.1 Value Keys
-        // -----------------------------------------------------------------------
+        // ---------------------------------------------------------------------
+        // 1.1 Keys
+        // ---------------------------------------------------------------------
 
         describe(`with additional keys`, () => {
           it(`returns a Validation.Failure with message`, () => {
@@ -216,6 +216,37 @@ describe(`validateConstraints`, () => {
             const validation = validateConstraintsConfigured(value);
             expect(validation).toEqualFailureWithValue(expectedValue);
           });
+        });
+
+        describe(`with missing required keys`, () => {
+          map(fieldName => {
+            describe(fieldName, () => {
+              it(`returns a Validation.Failure with message`, () => {
+                const fields = requiredKeysWithout(fieldName);
+                const value = withValueRoot({
+                  [FIELDS]: fields,
+                });
+
+                const expectedValue = withExpectedRoot({
+                  [FIELDS]: {
+                    [FIELDS]: {
+                      [CHILDREN]: [
+                        {
+                          [FIELDS_FAILURE_MESSAGE]: [
+                            `Object was missing required key(s): ['${fieldName}']`,
+                          ],
+                        },
+                      ],
+                    },
+                  },
+                });
+
+                const validation = validateConstraintsConfigured(value);
+
+                expect(validation).toEqualFailureWithValue(expectedValue);
+              });
+            });
+          })(requiredKeys);
         });
 
         describe(`with exclusive keys:`, () => {
@@ -332,7 +363,7 @@ describe(`validateConstraints`, () => {
             });
           });
 
-          describe(`fields object values`, () => {
+          describe(`key values`, () => {
             map(([fieldName, expectedValidationMessage, typeDataValues]) => {
               describe(`with invalid value for '${fieldName}'`, () => {
                 it(`returns a Validation.Failure with message`, () => {
@@ -370,9 +401,9 @@ describe(`validateConstraints`, () => {
             })(fieldErrors);
           });
 
-          // ---------------------------------------------------------------------
+          // -------------------------------------------------------------------
           // 1.3 fieldsValidator
-          // ---------------------------------------------------------------------
+          // -------------------------------------------------------------------
 
           describe(`'fieldsValidator'`, () => {
             describe(`with non-function value`, () => {
@@ -396,821 +427,30 @@ describe(`validateConstraints`, () => {
             });
           });
 
-          // ---------------------------------------------------------------------
-          // 1.4 children
-          // ---------------------------------------------------------------------
+          // -------------------------------------------------------------------
+          // 1.4 children and value
+          // -------------------------------------------------------------------
 
-          describe(`children`, () => {
-            describe(`empty object`, () => {
-              it(`returns a Validation.Success with supplied value`, () => {
-                const value = withValueRoot({
-                  [FIELDS]: [
-                    {
-                      ...validRequiredFields,
-                      [CHILDREN]: {},
-                    },
-                  ],
+          map(fieldName => {
+            describe(fieldName, () => {
+              describe(`empty object`, () => {
+                it(`returns a Validation.Success with supplied value`, () => {
+                  const value = withValueRoot({
+                    [FIELDS]: [
+                      {
+                        ...validRequiredFields,
+                        [fieldName]: {},
+                      },
+                    ],
+                  });
+                  const validation = validateConstraintsConfigured(value);
+                  expect(validation).toEqualSuccessWithValue(value);
                 });
-                const validation = validateConstraintsConfigured(value);
-                expect(validation).toEqualSuccessWithValue(value);
               });
             });
-          });
-
-          // ---------------------------------------------------------------------
-          // 1.5 value
-          // ---------------------------------------------------------------------
-
-          describe(`with empty value object`, () => {
-            it(`returns a Validation.Success with supplied value`, () => {
-              const value = withValueRoot({
-                [FIELDS]: [
-                  {
-                    ...validRequiredFields,
-                    [VALUE]: {},
-                  },
-                ],
-              });
-              const validation = validateConstraintsConfigured(value);
-              expect(validation).toEqualSuccessWithValue(value);
-            });
-          });
+          })([CHILDREN, VALUE]);
         });
       });
     });
   })(levels);
-
-  // ---------------------------------------------------------------------------
-  // With two levels of constraints
-  // ---------------------------------------------------------------------------
-
-  // describe(`with two levels of constraints`, () => {
-  //   describe(`with valid constraints`, () => {
-  //     describe(`empty values`, () => {
-  //       describe(`children`, () => {
-  //         it(`returns a Validation.Success with supplied value`, () => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: name2,
-  //                       [VALIDATOR]: func,
-  //                       [CHILDREN]: {},
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualSuccessWithValue(value);
-  //         });
-  //       });
-
-  //       describe(`object`, () => {
-  //         it(`returns a Validation.Success with supplied value`, () => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [VALUE]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: name2,
-  //                       [VALIDATOR]: func,
-  //                       [VALUE]: {},
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualSuccessWithValue(value);
-  //         });
-  //       });
-  //     });
-  //   });
-
-  //   describe(`with invalid constraints`, () => {
-  //     describe(`with invalid values`, () => {
-  //       describe(`for children`, () => {
-  //         it(`returns a Validation.Failure with message`, () => {
-  //           map(invalidValue => {
-  //             const value = {
-  //               [FIELDS]: [
-  //                 {
-  //                   [NAME]: name1,
-  //                   [VALIDATOR]: func,
-  //                   [CHILDREN]: {
-  //                     [FIELDS]: [
-  //                       {
-  //                         [NAME]: name2,
-  //                         [VALIDATOR]: func,
-  //                         [CHILDREN]: invalidValue,
-  //                       },
-  //                     ],
-  //                   },
-  //                 },
-  //               ],
-  //             };
-
-  //             const expectedValue = {
-  //               [CONSTRAINTS]: {
-  //                 [FIELDS]: {
-  //                   [FIELDS]: {
-  //                     [CHILDREN]: [
-  //                       {
-  //                         [FIELDS]: {
-  //                           [CHILDREN]: {
-  //                             [FIELDS]: {
-  //                               [FIELDS]: {
-  //                                 [CHILDREN]: [
-  //                                   {
-  //                                     [FIELDS]: {
-  //                                       [CHILDREN]: [`Wasn't 'Object'`],
-  //                                     },
-  //                                   },
-  //                                 ],
-  //                               },
-  //                             },
-  //                           },
-  //                         },
-  //                       },
-  //                     ],
-  //                   },
-  //                 },
-  //               },
-  //             };
-
-  //             const validation = validateConstraintsConfigured(value);
-
-  //             expect(validation).toEqualFailureWithValue(expectedValue);
-  //           }, typeData.withoutObjectValues);
-  //         });
-
-  //         describe(`for value`, () => {
-  //           it(`returns a Validation.Failure with message`, () => {
-  //             map(invalidValue => {
-  //               const value = {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name1,
-  //                     [VALIDATOR]: func,
-  //                     [CHILDREN]: {
-  //                       [FIELDS]: [
-  //                         {
-  //                           [NAME]: name2,
-  //                           [VALIDATOR]: func,
-  //                           [VALUE]: invalidValue,
-  //                         },
-  //                       ],
-  //                     },
-  //                   },
-  //                 ],
-  //               };
-
-  //               const expectedValue = {
-  //                 [CONSTRAINTS]: {
-  //                   [FIELDS]: {
-  //                     [FIELDS]: {
-  //                       [CHILDREN]: [
-  //                         {
-  //                           [FIELDS]: {
-  //                             [CHILDREN]: {
-  //                               [FIELDS]: {
-  //                                 [FIELDS]: {
-  //                                   [CHILDREN]: [
-  //                                     {
-  //                                       [FIELDS]: {
-  //                                         [VALUE]: [`Wasn't 'Object'`],
-  //                                       },
-  //                                     },
-  //                                   ],
-  //                                 },
-  //                               },
-  //                             },
-  //                           },
-  //                         },
-  //                       ],
-  //                     },
-  //                   },
-  //                 },
-  //               };
-
-  //               const validation = validateConstraintsConfigured(value);
-
-  //               expect(validation).toEqualFailureWithValue(expectedValue);
-  //             }, typeData.withoutObjectValues);
-  //           });
-  //         });
-  //       });
-  //     });
-
-  //     describe(`with additional keys`, () => {
-  //       describe(`for children`, () => {
-  //         it(`returns a Validation.Failure with message`, () => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: name2,
-  //                       [VALIDATOR]: func,
-  //                       [CHILDREN]: {
-  //                         [invalidKeyName]: invalidKeyValue,
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-
-  //           const expectedValue = {
-  //             [CONSTRAINTS]: {
-  //               [FIELDS]: {
-  //                 [FIELDS]: {
-  //                   [CHILDREN]: [
-  //                     {
-  //                       [FIELDS]: {
-  //                         [CHILDREN]: {
-  //                           [FIELDS]: {
-  //                             [FIELDS]: {
-  //                               [CHILDREN]: [
-  //                                 {
-  //                                   [FIELDS]: {
-  //                                     [CHILDREN]: {
-  //                                       [FIELDS_FAILURE_MESSAGE]: [
-  //                                         `Object included invalid key(s): '[${invalidKeyName}]'`,
-  //                                       ],
-  //                                     },
-  //                                   },
-  //                                 },
-  //                               ],
-  //                             },
-  //                           },
-  //                         },
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             },
-  //           };
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualFailureWithValue(expectedValue);
-  //         });
-  //       });
-
-  //       describe(`for value`, () => {
-  //         it(`returns a Validation.Failure with message`, () => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: name2,
-  //                       [VALIDATOR]: func,
-  //                       [VALUE]: {
-  //                         [invalidKeyName]: invalidKeyValue,
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-
-  //           const expectedValue = {
-  //             [CONSTRAINTS]: {
-  //               [FIELDS]: {
-  //                 [FIELDS]: {
-  //                   [CHILDREN]: [
-  //                     {
-  //                       [FIELDS]: {
-  //                         [CHILDREN]: {
-  //                           [FIELDS]: {
-  //                             [FIELDS]: {
-  //                               [CHILDREN]: [
-  //                                 {
-  //                                   [FIELDS]: {
-  //                                     [VALUE]: {
-  //                                       [FIELDS_FAILURE_MESSAGE]: [
-  //                                         `Object included invalid key(s): '[${invalidKeyName}]'`,
-  //                                       ],
-  //                                     },
-  //                                   },
-  //                                 },
-  //                               ],
-  //                             },
-  //                           },
-  //                         },
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             },
-  //           };
-
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualFailureWithValue(expectedValue);
-  //         });
-  //       });
-  //     });
-  //   });
-
-  //   describe(`with two exclusive keys`, () => {
-  //     describe(`'defaultValue' and 'isRequired'`, () => {
-  //       it(`returns a Validation.Failure with message`, () => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [VALUE]: {
-  //                       [FIELDS]: [
-  //                         {
-  //                           [NAME]: value1,
-  //                           [VALIDATOR]: func,
-  //                           [DEFAULT_VALUE]: true, // Exclusive
-  //                           [IS_REQUIRED]: true, // Exclusive
-  //                         },
-  //                       ],
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-
-  //         const expectedValue = {
-  //           [CONSTRAINTS]: {
-  //             [FIELDS]: {
-  //               [FIELDS]: {
-  //                 [CHILDREN]: [
-  //                   {
-  //                     [FIELDS]: {
-  //                       [CHILDREN]: {
-  //                         [FIELDS]: {
-  //                           [FIELDS]: {
-  //                             [CHILDREN]: [
-  //                               {
-  //                                 [FIELDS]: {
-  //                                   [VALUE]: {
-  //                                     [FIELDS]: {
-  //                                       [FIELDS]: {
-  //                                         [CHILDREN]: [
-  //                                           {
-  //                                             [FIELDS_FAILURE_MESSAGE]: [
-  //                                               `Object had more than one exlusive key: ['${IS_REQUIRED}', '${DEFAULT_VALUE}']`,
-  //                                             ],
-  //                                           },
-  //                                         ],
-  //                                       },
-  //                                     },
-  //                                   },
-  //                                 },
-  //                               },
-  //                             ],
-  //                           },
-  //                         },
-  //                       },
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           },
-  //         };
-
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue(expectedValue);
-  //       });
-  //     });
-
-  //     describe(`['value' and 'children']`, () => {
-  //       it(`returns a Validation.Failure with message`, () => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [VALUE]: {
-  //                       [FIELDS]: [
-  //                         {
-  //                           [NAME]: value1,
-  //                           [VALIDATOR]: func,
-  //                           [CHILDREN]: {}, // Exclusive
-  //                           [VALUE]: {}, // Exclusive
-  //                         },
-  //                       ],
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-
-  //         const expectedValue = {
-  //           [CONSTRAINTS]: {
-  //             [FIELDS]: {
-  //               [FIELDS]: {
-  //                 [CHILDREN]: [
-  //                   {
-  //                     [FIELDS]: {
-  //                       [CHILDREN]: {
-  //                         [FIELDS]: {
-  //                           [FIELDS]: {
-  //                             [CHILDREN]: [
-  //                               {
-  //                                 [FIELDS]: {
-  //                                   [VALUE]: {
-  //                                     [FIELDS]: {
-  //                                       [FIELDS]: {
-  //                                         [CHILDREN]: [
-  //                                           {
-  //                                             [FIELDS_FAILURE_MESSAGE]: [
-  //                                               `Object had more than one exlusive key: ['${VALUE}', '${CHILDREN}']`,
-  //                                             ],
-  //                                           },
-  //                                         ],
-  //                                       },
-  //                                     },
-  //                                   },
-  //                                 },
-  //                               },
-  //                             ],
-  //                           },
-  //                         },
-  //                       },
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           },
-  //         };
-
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue(expectedValue);
-  //       });
-  //     });
-  //   });
-
-  //   describe(`with missing requried keys`, () => {
-  //     map(fieldName => {
-  //       describe(fieldName, () => {
-  //         it(`returns a Validation.Failure with message`, () => {
-  //           const fields = requiredKeysWithout(fieldName);
-
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 ...validRequiredFields,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: fields,
-  //                 },
-  //               },
-  //             ],
-  //           };
-
-  //           const expectedValue = {
-  //             [CONSTRAINTS]: {
-  //               [FIELDS]: {
-  //                 [FIELDS]: {
-  //                   [CHILDREN]: [
-  //                     {
-  //                       [FIELDS]: {
-  //                         [CHILDREN]: {
-  //                           [FIELDS]: {
-  //                             [FIELDS]: {
-  //                               [CHILDREN]: [
-  //                                 {
-  //                                   [FIELDS_FAILURE_MESSAGE]: [
-  //                                     `Object was missing required key(s): ['${fieldName}']`,
-  //                                   ],
-  //                                 },
-  //                               ],
-  //                             },
-  //                           },
-  //                         },
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             },
-  //           };
-
-  //           const validation = validateConstraintsConfigured(value);
-
-  //           expect(validation).toEqualFailureWithValue(expectedValue);
-  //         });
-  //       });
-  //     })(requiredKeys);
-  //   });
-
-  //   describe(`with invalid field values`, () => {
-  //     describe(`with non-array value for 'fields'`, () => {
-  //       it(`returns a Validation.Failure with message`, () => {
-  //         map(fieldValue => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: name2,
-  //                       [VALIDATOR]: func,
-  //                       [VALUE]: {
-  //                         [FIELDS]: fieldValue,
-  //                       },
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualFailureWithValue([
-  //             `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Wasn't 'Array'`,
-  //           ]);
-  //         }, typeData.withoutArrayValues);
-  //       });
-  //     });
-  //   });
-
-  //   describe(`with 'fields' array containing non-object values`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [VALUE]: {
-  //                       [FIELDS]: [fieldValue],
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fields': Array contained invalid element(s): '${fieldValue}': Wasn't 'Object'`,
-  //         ]);
-  //       })(typeData.withoutObjectValues);
-  //     });
-  //   });
-
-  //   describe(`with non-function value for 'fieldsValidator'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [VALUE]: {
-  //                       [FIELDS_VALIDATOR]: fieldValue,
-  //                       [FIELDS]: [],
-  //                     },
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': for field 'value': Object included invalid values(s): Key 'fieldsValidator': Wasn't 'Function'`,
-  //         ]);
-  //       }, typeData.withoutFunctionValues);
-  //     });
-  //   });
-
-  //   describe(`for fields array values`, () => {
-  //     describe(`with non-string value for 'name'`, () => {
-  //       it(`returns a Validation.Failure with message`, () => {
-  //         map(fieldValue => {
-  //           const value = {
-  //             [FIELDS]: [
-  //               {
-  //                 [NAME]: name1,
-  //                 [VALIDATOR]: func,
-  //                 [CHILDREN]: {
-  //                   [FIELDS]: [
-  //                     {
-  //                       [NAME]: fieldValue,
-  //                       [VALIDATOR]: func,
-  //                     },
-  //                   ],
-  //                 },
-  //               },
-  //             ],
-  //           };
-  //           const validation = validateConstraintsConfigured(value);
-  //           expect(validation).toEqualFailureWithValue([
-  //             `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'name': Wasn't 'String'`,
-  //           ]);
-  //         }, typeData.withoutStringValues);
-  //       });
-  //     });
-  //   });
-
-  //   describe(`with non-function value for 'validator'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: fieldValue,
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'validator': Wasn't 'Function'`,
-  //         ]);
-  //       }, typeData.withoutFunctionValues);
-  //     });
-  //   });
-
-  //   describe(`with non-function value for 'transformer'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [TRANSFORMER]: fieldValue,
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'transformer': Wasn't 'Function'`,
-  //         ]);
-  //       }, typeData.withoutFunctionValues);
-  //     });
-  //   });
-
-  //   describe(`with non-boolean value for 'isRequired'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [IS_REQUIRED]: fieldValue,
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'isRequired': Wasn't 'Boolean'`,
-  //         ]);
-  //       }, typeData.withoutBooleanValues);
-  //     });
-  //   });
-
-  //   describe(`with undefined value for 'defaultValue'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       const value = {
-  //         [FIELDS]: [
-  //           {
-  //             [NAME]: name1,
-  //             [VALIDATOR]: func,
-  //             [CHILDREN]: {
-  //               [FIELDS]: [
-  //                 {
-  //                   [NAME]: name2,
-  //                   [VALIDATOR]: func,
-  //                   [DEFAULT_VALUE]: undefined,
-  //                 },
-  //               ],
-  //             },
-  //           },
-  //         ],
-  //       };
-  //       const validation = validateConstraintsConfigured(value);
-  //       expect(validation).toEqualFailureWithValue([
-  //         `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'defaultValue': Was 'Undefined'`,
-  //       ]);
-  //     });
-  //   });
-
-  //   describe(`with non-object value for 'children'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [CHILDREN]: fieldValue,
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'children': Wasn't 'Object'`,
-  //         ]);
-  //       }, typeData.withoutObjectValues);
-  //     });
-  //   });
-
-  //   describe(`with non-object value for 'value'`, () => {
-  //     it(`returns a Validation.Failure with message`, () => {
-  //       map(fieldValue => {
-  //         const value = {
-  //           [FIELDS]: [
-  //             {
-  //               ...validRequiredFields,
-  //               [CHILDREN]: {
-  //                 [FIELDS]: [
-  //                   {
-  //                     [NAME]: name2,
-  //                     [VALIDATOR]: func,
-  //                     [VALUE]: fieldValue,
-  //                   },
-  //                 ],
-  //               },
-  //             },
-  //           ],
-  //         };
-  //         const validation = validateConstraintsConfigured(value);
-  //         expect(validation).toEqualFailureWithValue([
-  //           `Constraints Object Invalid: for field 'fields': for field 'children': for field 'fields': Object included invalid values(s): Key 'value': Wasn't 'Object'`,
-  //         ]);
-  //       }, typeData.withoutObjectValues);
-  //     });
-  //   });
-  // });
 });
