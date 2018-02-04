@@ -96,6 +96,10 @@ ansi-styles@^3.1.0, ansi-styles@^3.2.0:
   dependencies:
     color-convert "^1.9.0"
 
+ansi-styles@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-1.0.0.tgz#cb102df1c56f5123eab8b67cd7b98027a0279178"
+
 any-promise@^1.0.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
@@ -821,6 +825,13 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
+bossy@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/bossy/-/bossy-3.0.4.tgz#f9ae9f26e81b41a318f4ee0d83686e4a5c2507b9"
+  dependencies:
+    hoek "4.x.x"
+    joi "10.x.x"
+
 brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
@@ -899,6 +910,14 @@ center-align@^0.1.1:
   dependencies:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
+
+chalk@0.4.x:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-0.4.0.tgz#5199a3ddcd0c1efe23bc08c1b027b06176e0c64f"
+  dependencies:
+    ansi-styles "~1.0.0"
+    has-color "~0.1.0"
+    strip-ansi "~0.1.0"
 
 chalk@^1.0.0, chalk@^1.1.1, chalk@^1.1.3:
   version "1.1.3"
@@ -1163,6 +1182,12 @@ deep-freeze@^0.0.1:
 deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
+
+deep-replace-in-object@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/deep-replace-in-object/-/deep-replace-in-object-1.1.7.tgz#9ab861454ba6ce4cf01ca5dec92c4e676ae7ab2c"
+  dependencies:
+    ramda "^0.24.1"
 
 default-require-extensions@^1.0.0:
   version "1.0.0"
@@ -1995,6 +2020,10 @@ has-ansi@^2.0.0:
   dependencies:
     ansi-regex "^2.0.0"
 
+has-color@~0.1.0:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/has-color/-/has-color-0.1.7.tgz#67144a5260c34fc3cca677d041daf52fe7b78b2f"
+
 has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
@@ -2299,6 +2328,14 @@ isarray@1.0.0, isarray@^1.0.0, isarray@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-1.0.0.tgz#bb935d48582cba168c06834957a54a3e07124f11"
 
+isemail@1.x.x:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/isemail/-/isemail-1.2.0.tgz#be03df8cc3e29de4d2c5df6501263f1fa4595e9a"
+
+isemail@2.x.x:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/isemail/-/isemail-2.2.1.tgz#0353d3d9a62951080c262c2aa0a42b8ea8e9e2a6"
+
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
@@ -2382,6 +2419,10 @@ istanbul-reports@^1.1.3:
   resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-1.1.3.tgz#3b9e1e8defb6d18b1d425da8e8b32c5a163f2d10"
   dependencies:
     handlebars "^4.0.3"
+
+items@2.x.x:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
 jest-changed-files@^22.1.4:
   version "22.1.4"
@@ -2636,6 +2677,24 @@ jest@^22.1.4:
   resolved "https://registry.yarnpkg.com/jest/-/jest-22.1.4.tgz#9ec71373a38f40ff92a3e5e96ae85687c181bb72"
   dependencies:
     jest-cli "^22.1.4"
+
+joi@10.x.x:
+  version "10.6.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-10.6.0.tgz#52587f02d52b8b75cdb0c74f0b164a191a0e1fc2"
+  dependencies:
+    hoek "4.x.x"
+    isemail "2.x.x"
+    items "2.x.x"
+    topo "2.x.x"
+
+joi@6.x.x:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-6.10.1.tgz#4d50c318079122000fe5f16af1ff8e1917b77e06"
+  dependencies:
+    hoek "2.x.x"
+    isemail "1.x.x"
+    moment "2.x.x"
+    topo "1.x.x"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
@@ -2989,6 +3048,10 @@ module-lookup-amd@^4.0.2:
     find "0.2.6"
     requirejs "~2.2.0"
     requirejs-config-file "~2.0.0"
+
+moment@2.x.x:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 ms@0.7.1:
   version "0.7.1"
@@ -3452,6 +3515,15 @@ punycode@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.0.tgz#5f863edc89b96db09074bad7947bf09056ca4e7d"
 
+purdy@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/purdy/-/purdy-3.0.2.tgz#301e64f683a31f550a56b65948cc9f54c776160e"
+  dependencies:
+    bossy "^3.0.4"
+    chalk "0.4.x"
+    hoek "2.x.x"
+    joi "6.x.x"
+
 qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
@@ -3471,6 +3543,10 @@ ramda-adjunct@^2.4.1:
 ramda@0.25.0, ramda@^0.25.0:
   version "0.25.0"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
+
+ramda@^0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
 
 randomatic@^1.1.3:
   version "1.1.7"
@@ -4040,6 +4116,10 @@ strip-ansi@^4.0.0:
   dependencies:
     ansi-regex "^3.0.0"
 
+strip-ansi@~0.1.0:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-0.1.1.tgz#39e8a98d044d150660abe4a6808acf70bb7bc991"
+
 strip-bom@3.0.0, strip-bom@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/strip-bom/-/strip-bom-3.0.0.tgz#2334c18e9c759f7bdd56fdef7e9ae3d588e68ed3"
@@ -4177,6 +4257,18 @@ tmpl@1.0.x:
 to-fast-properties@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+
+topo@1.x.x:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/topo/-/topo-1.1.0.tgz#e9d751615d1bb87dc865db182fa1ca0a5ef536d5"
+  dependencies:
+    hoek "2.x.x"
+
+topo@2.x.x:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/topo/-/topo-2.0.2.tgz#cd5615752539057c0dc0491a621c3bc6fbe1d182"
+  dependencies:
+    hoek "4.x.x"
 
 tough-cookie@>=2.3.3, tough-cookie@^2.3.3, tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   version "2.3.3"

@@ -25,6 +25,8 @@ import {
   lte,
   __,
   length,
+  gt,
+  allPass,
 } from 'ramda';
 import {
   isEmptyString,
@@ -35,6 +37,9 @@ import {
   isArray,
   isNull,
   isNaN,
+  isObj,
+  isNotDate,
+  isFunction,
 } from 'ramda-adjunct';
 import { VALIDATION_VALUE_KEY } from './const';
 
@@ -49,6 +54,11 @@ const stringRepresentationIfNil = compose(
   when(isNull, always(`null`)),
   when(isUndefined, always(`undefined`)),
   when(isNaN, always(`NaN`))
+);
+
+const stringRepresentationIfFunction = when(
+  isFunction,
+  always(`function () {}`)
 );
 
 export const joinDefined = withString =>
@@ -71,7 +81,8 @@ export const wrapWith = (a, b = a) =>
     prepend(a),
     append(b),
     of,
-    stringRepresentationIfNil
+    stringRepresentationIfNil,
+    stringRepresentationIfFunction
   );
 export const wrapWithSingleQuotes = wrapWith(`'`);
 export const wrapWithSquareBrackets = wrapWith(`[`, `]`);
@@ -87,11 +98,33 @@ export const newlineAndTabsForLevel = level =>
 
 export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper));
 
+export const pluralise = (value, count) =>
+  gt(count, 1) ? joinWithNoSpace(value, `s`) : value;
+
+// -----------------------------------------------------------------------------
+// Predicates
+// -----------------------------------------------------------------------------
+
+export const isNotRegex = v => !(v instanceof RegExp);
+export const isVanillaObj = allPass([isObj, isNotRegex, isNotDate]);
+
+export const isVanillaObjectOrArray = either(isVanillaObj, isArray);
+
 // -----------------------------------------------------------------------------
 // Objects
 // -----------------------------------------------------------------------------
 
 export const { freeze } = Object;
+
+export const deepReplace = curry((pred, replacement, o) =>
+  when(
+    isVanillaObjectOrArray,
+    compose(
+      map(a => deepReplace(pred, replacement)(a)),
+      map(when(pred, always(replacement)))
+    )
+  )(o)
+);
 
 // -----------------------------------------------------------------------------
 // Array
