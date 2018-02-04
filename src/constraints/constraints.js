@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze'
-import allOfValidator from './helpers/allOfValidator'
-import { CONSTRAINT_FIELD_NAMES, OWN_CONSTRAINTS } from './const'
+import allOfValidator from '../helpers/allOfValidator'
+import { CONSTRAINT_FIELD_NAMES, OWN_CONSTRAINTS } from '../const'
 
 export default validators => {
   const {

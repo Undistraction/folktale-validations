@@ -32,7 +32,7 @@ import {
 } from 'ramda-adjunct'
 import { assoc, isNil, isEmpty } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
-import { reduceObjIndexed } from '../../utils'
+import { reduceObjIndexed } from '../../utils/iteration'
 import { toTitle } from '../../utils/formatting'
 
 const predicates = {

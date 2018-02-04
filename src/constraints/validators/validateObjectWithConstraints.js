@@ -6,7 +6,7 @@ import {
 } from '../../const'
 import validateObject from './validateObject'
 import validateConstraints from './validateConstraints'
-import CONSTRAINTS from '../../constraints'
+import CONSTRAINTS from '../constraints'
 
 const constraintsAreOwnConstraints = propEq(
   CONSTRAINT_FIELD_NAMES.ID,

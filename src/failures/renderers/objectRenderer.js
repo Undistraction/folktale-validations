@@ -11,7 +11,8 @@ import {
   defaultTo,
 } from 'ramda'
 import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct'
-import { reduceObjIndexed, mapWithIndex, isStringOrArray } from '../../utils'
+import { isStringOrArray } from '../../utils/predicates'
+import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
   invalidObjectPrefix,
   invalidObjectReasonInvalidValues,

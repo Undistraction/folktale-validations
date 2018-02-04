@@ -1,6 +1,6 @@
 import { map, mapObjIndexed, compose, reverse } from 'ramda'
 
-import { mapObjIndexedWithIndex } from '../../../utils'
+import { mapObjIndexedWithIndex } from '../../../utils/iteration'
 import validators from '../../testHelpers/validators'
 import { propValues, propValidators } from '../../../utils/predicateData'
 

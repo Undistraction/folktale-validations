@@ -4,7 +4,7 @@ import { func } from '../../testHelpers/fixtures'
 import typeData from '../../testHelpers/fixtures/typeData'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
 import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints'
-import constraints from '../../../constraints'
+import constraints from '../../../constraints/constraints'
 import validatorsWithMessages from '../../../defaults/validatorsWithMessages'
 import {
   value1,

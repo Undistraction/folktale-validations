@@ -14,7 +14,7 @@ import {
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
 import { CONSTRAINT_FIELD_NAMES } from '../const'
-import { mapWithIndex } from '../../lib/utils'
+import { mapWithIndex } from '../utils/iteration'
 import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
 
 const { Failure } = Validation

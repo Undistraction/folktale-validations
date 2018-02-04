@@ -1,6 +1,6 @@
 import { validation as Validation } from 'folktale'
 import { curry, flip, has, filter, always, of, ifElse, compose } from 'ramda'
-import { hasOneChildMax } from '../../utils'
+import { hasOneChildMax } from '../../utils/predicates'
 
 const { Success, Failure } = Validation
 

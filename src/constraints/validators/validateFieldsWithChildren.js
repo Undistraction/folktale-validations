@@ -15,7 +15,7 @@ import {
   reduceObjIndexed,
   reduceObjIndexedWithIndex,
   reduceIf,
-} from '../../utils'
+} from '../../utils/iteration'
 import { toChildrenFieldsError } from '../../failures/utils'
 
 const { Failure, Success } = Validation

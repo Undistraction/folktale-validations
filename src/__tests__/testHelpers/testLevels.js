@@ -5,7 +5,7 @@ import { name1 } from './fixtures/constraintValues'
 import { constraintsObjName } from '../../messages'
 import { func } from './fixtures'
 import { REPLACE_TOKEN } from './const'
-import { mapWithIndex } from '../../utils'
+import { mapWithIndex } from '../../utils/iteration'
 import { replaceTokenWith } from './utils'
 
 const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES

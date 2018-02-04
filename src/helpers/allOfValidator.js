@@ -2,7 +2,7 @@ import { validation as Validation } from 'folktale'
 import { compose, when, reduce } from 'ramda'
 import { isArray } from 'ramda-adjunct'
 import { joinMessagesWithAnd } from '../messages'
-import { appendRight } from '../utils'
+import { appendRight } from '../utils/array'
 
 const { Success, Failure } = Validation
 
