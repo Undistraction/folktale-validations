@@ -9,6 +9,7 @@ import {
   __,
   always,
   inc,
+  ifElse,
 } from 'ramda';
 import { isNotNull } from 'ramda-adjunct';
 import validateConstraints from '../../../constraints/validators/validateConstraints';
@@ -159,16 +160,17 @@ describe(`validateConstraints`, () => {
   // ---------------------------------------------------------------------------
 
   mapWithIndex(([valueRoot, expectedRoot], index) => {
+    const level = inc(index);
+
     const withValueRoot = when(
       always(isNotNull(valueRoot)),
       replaceTokenWith(__, valueRoot)
     );
-    const withExpectedRoot = when(
+    const withExpectedRoot = ifElse(
       always(isNotNull(expectedRoot)),
-      replaceTokenWith(__, expectedRoot)
+      replaceTokenWith(__, expectedRoot),
+      assoc(NAME, `constraints`)
     );
-
-    const level = inc(index);
 
     describe(`with ${level} constraint ${pluralise(`level`, level)}`, () => {
       // -----------------------------------------------------------------------

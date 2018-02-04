@@ -8,9 +8,9 @@ const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES;
 
 const CONSTRAINTS = constraintsObjPrefix();
 
-const level1Expected = {
-  [CONSTRAINTS]: REPLACE_TOKEN,
-};
+const level1Expected = null;
+
+const level1Value = null;
 
 const level2Value = {
   [FIELDS]: [
@@ -23,17 +23,16 @@ const level2Value = {
 };
 
 const level2Expected = {
-  [CONSTRAINTS]: {
+  [NAME]: `constraints`,
+  [FIELDS]: {
     [FIELDS]: {
-      [FIELDS]: {
-        [CHILDREN]: [
-          {
-            [FIELDS]: {
-              [CHILDREN]: REPLACE_TOKEN,
-            },
+      [CHILDREN]: [
+        {
+          [FIELDS]: {
+            [CHILDREN]: REPLACE_TOKEN,
           },
-        ],
-      },
+        },
+      ],
     },
   },
 };
@@ -57,35 +56,34 @@ const level3Value = {
 };
 
 const level3Expected = {
-  [CONSTRAINTS]: {
+  [NAME]: `constraints`,
+  [FIELDS]: {
     [FIELDS]: {
-      [FIELDS]: {
-        [CHILDREN]: [
-          {
-            [FIELDS]: {
-              [CHILDREN]: {
+      [CHILDREN]: [
+        {
+          [FIELDS]: {
+            [CHILDREN]: {
+              [FIELDS]: {
                 [FIELDS]: {
-                  [FIELDS]: {
-                    [CHILDREN]: [
-                      {
-                        [FIELDS]: {
-                          [CHILDREN]: REPLACE_TOKEN,
-                        },
+                  [CHILDREN]: [
+                    {
+                      [FIELDS]: {
+                        [CHILDREN]: REPLACE_TOKEN,
                       },
-                    ],
-                  },
+                    },
+                  ],
                 },
               },
             },
           },
-        ],
-      },
+        },
+      ],
     },
   },
 };
 
 export default [
-  [null, level1Expected],
+  [level1Value, level1Expected],
   [level2Value, level2Expected],
   [level3Value, level3Expected],
 ];
