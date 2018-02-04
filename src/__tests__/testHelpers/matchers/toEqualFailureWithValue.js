@@ -1,8 +1,7 @@
-import { equals } from 'ramda';
 import { validation as Validation } from 'folktale';
 import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils';
 import diff from 'jest-diff';
-import CircularJSON from 'circular-json';
+import deepEql from 'deep-eql';
 
 const { Failure } = Validation;
 
@@ -10,10 +9,10 @@ const name = `toEqualFailureWithValue`;
 
 export default (received, expected) => {
   const expectedAsFailure = Failure(expected);
-  const pass = equals(
-    CircularJSON.stringify(received),
-    CircularJSON.stringify(expectedAsFailure)
-  );
+
+  const pass =
+    Failure.hasInstance(received) && deepEql(received.value, expected);
+
   const message = pass
     ? () =>
         `${matcherHint(`.not.\${name}`)}\n\n` +
