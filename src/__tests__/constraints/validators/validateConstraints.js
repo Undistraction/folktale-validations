@@ -10,15 +10,15 @@ import {
   always,
   inc,
   ifElse,
-} from 'ramda';
-import { isNotNull } from 'ramda-adjunct';
-import validateConstraints from '../../../constraints/validators/validateConstraints';
-import { func } from '../../testHelpers/fixtures';
-import typeData from '../../testHelpers/fixtures/typeData';
-import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const';
-import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints';
-import constraints from '../../../constraints';
-import validatorsWithMessages from '../../../defaults/validatorsWithMessages';
+} from 'ramda'
+import { isNotNull } from 'ramda-adjunct'
+import validateConstraints from '../../../constraints/validators/validateConstraints'
+import { func } from '../../testHelpers/fixtures'
+import typeData from '../../testHelpers/fixtures/typeData'
+import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
+import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints'
+import constraints from '../../../constraints'
+import validatorsWithMessages from '../../../defaults/validatorsWithMessages'
 import {
   value1,
   value2,
@@ -31,12 +31,12 @@ import {
   name1,
   invalidKeyValue,
   invalidKeyName,
-} from '../../testHelpers/fixtures/constraintValues';
-import { mapWithIndex } from '../../../utils';
-import { pluralise, joinWithAnd } from '../../../utils/formatting';
-import levels from '../../testHelpers/levels';
-import { replaceTokenWith } from '../../testHelpers/utils';
-import { constraintsObjName } from '../../../messages';
+} from '../../testHelpers/fixtures/constraintValues'
+import { mapWithIndex } from '../../../utils'
+import { pluralise, joinWithAnd } from '../../../utils/formatting'
+import levels from '../../testHelpers/levels'
+import { replaceTokenWith } from '../../testHelpers/utils'
+import { constraintsObjName } from '../../../messages'
 
 const {
   FIELDS,
@@ -48,16 +48,16 @@ const {
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
-} = CONSTRAINT_FIELD_NAMES;
+} = CONSTRAINT_FIELD_NAMES
 
-const requiredKeys = [NAME, VALIDATOR];
+const requiredKeys = [NAME, VALIDATOR]
 
-const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES;
+const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES
 
 const validRequiredFields = {
   [NAME]: name1,
   [VALIDATOR]: func,
-};
+}
 
 const exclusiveKeys = [
   {
@@ -68,7 +68,7 @@ const exclusiveKeys = [
     [CHILDREN]: {},
     [VALUE]: {},
   },
-];
+]
 
 const fieldErrors = [
   // [NAME, `Wasn't 'String'`, typeData.withoutStringValues],
@@ -78,18 +78,18 @@ const fieldErrors = [
   [DEFAULT_VALUE, `Was 'Undefined'`, typeData.undefinedValues],
   [VALUE, `Wasn't 'Object'`, typeData.withoutObjectValues],
   [CHILDREN, `Wasn't 'Object'`, typeData.withoutObjectValues],
-];
+]
 
 const requiredKeysWithout = fieldName =>
-  compose(map(v => assoc(v, func, {})), without(of(fieldName)))(requiredKeys);
+  compose(map(v => assoc(v, func, {})), without(of(fieldName)))(requiredKeys)
 
 describe(`validateConstraints`, () => {
-  const validators = validatorsWithMessages;
-  const configuredContraints = constraints(validators);
+  const validators = validatorsWithMessages
+  const configuredContraints = constraints(validators)
   const validateConstraintsConfigured = validateConstraints(
     configuredContraints,
     validateObjectWithConstraints(validators)
-  );
+  )
 
   // ---------------------------------------------------------------------------
   // Full nested constraint object with all features
@@ -151,28 +151,28 @@ describe(`validateConstraints`, () => {
             [TRANSFORMER]: func,
           },
         ],
-      };
-      const validation = validateConstraintsConfigured(value);
-      expect(validation).toEqualSuccessWithValue(value);
-    });
-  });
+      }
+      const validation = validateConstraintsConfigured(value)
+      expect(validation).toEqualSuccessWithValue(value)
+    })
+  })
 
   // ---------------------------------------------------------------------------
   // Perform tests for multiple levels of nesting
   // ---------------------------------------------------------------------------
 
   mapWithIndex(([valueRoot, expectedRoot], index) => {
-    const level = inc(index);
+    const level = inc(index)
 
     const withValueRoot = when(
       always(isNotNull(valueRoot)),
       replaceTokenWith(__, valueRoot)
-    );
+    )
     const withExpectedRoot = ifElse(
       always(isNotNull(expectedRoot)),
       replaceTokenWith(__, expectedRoot),
       assoc(NAME, constraintsObjName())
-    );
+    )
 
     describe(`with ${level} constraint ${pluralise(`level`, level)}`, () => {
       // -----------------------------------------------------------------------
@@ -181,25 +181,25 @@ describe(`validateConstraints`, () => {
       describe(`value itself`, () => {
         describe(`with empty object`, () => {
           it(`returns a Validation.Success with supplied value`, () => {
-            const value = withValueRoot({});
-            const validation = validateConstraintsConfigured(value);
-            expect(validation).toEqualSuccessWithValue(value);
-          });
-        });
+            const value = withValueRoot({})
+            const validation = validateConstraintsConfigured(value)
+            expect(validation).toEqualSuccessWithValue(value)
+          })
+        })
 
         describe(`with invalid value`, () => {
           it(`returns a Validation.Failure with message`, () => {
             map(value => {
               const validation = validateConstraintsConfigured(
                 withValueRoot(value)
-              );
+              )
 
-              const expectedValue = withExpectedRoot([`Wasn't 'Object'`]);
+              const expectedValue = withExpectedRoot([`Wasn't 'Object'`])
 
-              expect(validation).toEqualFailureWithValue(expectedValue);
-            }, typeData.withoutObjectValues);
-          });
-        });
+              expect(validation).toEqualFailureWithValue(expectedValue)
+            }, typeData.withoutObjectValues)
+          })
+        })
 
         // ---------------------------------------------------------------------
         // 1.1 Keys
@@ -209,27 +209,27 @@ describe(`validateConstraints`, () => {
           it(`returns a Validation.Failure with message`, () => {
             const value = withValueRoot({
               [invalidKeyName]: invalidKeyValue,
-            });
+            })
 
             const expectedValue = withExpectedRoot({
               [FIELDS_FAILURE_MESSAGE]: [
                 `Object included invalid key(s): '[${invalidKeyName}]'`,
               ],
-            });
+            })
 
-            const validation = validateConstraintsConfigured(value);
-            expect(validation).toEqualFailureWithValue(expectedValue);
-          });
-        });
+            const validation = validateConstraintsConfigured(value)
+            expect(validation).toEqualFailureWithValue(expectedValue)
+          })
+        })
 
         describe(`with missing required keys`, () => {
           map(fieldName => {
             describe(fieldName, () => {
               it(`returns a Validation.Failure with message`, () => {
-                const fields = requiredKeysWithout(fieldName);
+                const fields = requiredKeysWithout(fieldName)
                 const value = withValueRoot({
                   [FIELDS]: fields,
-                });
+                })
 
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
@@ -243,19 +243,19 @@ describe(`validateConstraints`, () => {
                       ],
                     },
                   },
-                });
+                })
 
-                const validation = validateConstraintsConfigured(value);
+                const validation = validateConstraintsConfigured(value)
 
-                expect(validation).toEqualFailureWithValue(expectedValue);
-              });
-            });
-          })(requiredKeys);
-        });
+                expect(validation).toEqualFailureWithValue(expectedValue)
+              })
+            })
+          })(requiredKeys)
+        })
 
         describe(`with exclusive keys:`, () => {
           map(keyPair => {
-            const keyNames = keys(keyPair);
+            const keyNames = keys(keyPair)
             describe(`${joinWithAnd(keyNames)}`, () => {
               it(`returns a Validation.Failure with message`, () => {
                 const value = withValueRoot({
@@ -266,8 +266,8 @@ describe(`validateConstraints`, () => {
                       ...keyPair,
                     },
                   ],
-                });
-                const validation = validateConstraintsConfigured(value);
+                })
+                const validation = validateConstraintsConfigured(value)
 
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
@@ -283,23 +283,23 @@ describe(`validateConstraints`, () => {
                       ],
                     },
                   },
-                });
+                })
 
-                expect(validation).toEqualFailureWithValue(expectedValue);
-              });
-            });
-          })(exclusiveKeys);
-        });
+                expect(validation).toEqualFailureWithValue(expectedValue)
+              })
+            })
+          })(exclusiveKeys)
+        })
 
         describe(`with missing required keys`, () => {
           map(fieldName => {
             describe(fieldName, () => {
               it(`returns a Validation.Failure with message`, () => {
-                const fields = requiredKeysWithout(fieldName);
+                const fields = requiredKeysWithout(fieldName)
 
                 const value = withValueRoot({
                   [FIELDS]: fields,
-                });
+                })
 
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
@@ -313,15 +313,15 @@ describe(`validateConstraints`, () => {
                       ],
                     },
                   },
-                });
+                })
 
-                const validation = validateConstraintsConfigured(value);
+                const validation = validateConstraintsConfigured(value)
 
-                expect(validation).toEqualFailureWithValue(expectedValue);
-              });
-            });
-          })(requiredKeys);
-        });
+                expect(validation).toEqualFailureWithValue(expectedValue)
+              })
+            })
+          })(requiredKeys)
+        })
 
         // -----------------------------------------------------------------------
         // 1.2 fields
@@ -333,26 +333,26 @@ describe(`validateConstraints`, () => {
               map(fieldValue => {
                 const value = withValueRoot({
                   [FIELDS]: fieldValue,
-                });
+                })
 
                 const expected = withExpectedRoot({
                   [FIELDS]: {
                     [FIELDS]: [`Wasn't 'Array'`],
                   },
-                });
-                const validation = validateConstraintsConfigured(value);
-                expect(validation).toEqualFailureWithValue(expected);
-              }, typeData.withoutArrayValues);
-            });
-          });
+                })
+                const validation = validateConstraintsConfigured(value)
+                expect(validation).toEqualFailureWithValue(expected)
+              }, typeData.withoutArrayValues)
+            })
+          })
 
           describe(`array containing non-object values`, () => {
             it(`returns a Validation.Failure with message`, () => {
               map(fieldValue => {
                 const value = withValueRoot({
                   [FIELDS]: [fieldValue],
-                });
-                const validation = validateConstraintsConfigured(value);
+                })
+                const validation = validateConstraintsConfigured(value)
 
                 const expected = withExpectedRoot({
                   [FIELDS]: {
@@ -360,12 +360,12 @@ describe(`validateConstraints`, () => {
                       `Array contained invalid element(s): '${fieldValue}': Wasn't 'Object'`,
                     ],
                   },
-                });
+                })
 
-                expect(validation).toEqualFailureWithValue(expected);
-              })(typeData.withoutObjectValues);
-            });
-          });
+                expect(validation).toEqualFailureWithValue(expected)
+              })(typeData.withoutObjectValues)
+            })
+          })
 
           describe(`key values`, () => {
             map(([fieldName, expectedValidationMessage, typeDataValues]) => {
@@ -376,12 +376,12 @@ describe(`validateConstraints`, () => {
                       fieldName,
                       fieldValue,
                       validRequiredFields
-                    );
+                    )
 
                     const value = withValueRoot({
                       [FIELDS_VALIDATOR]: func,
                       [FIELDS]: [requiredFields],
-                    });
+                    })
 
                     const expected = withExpectedRoot({
                       [FIELDS]: {
@@ -395,15 +395,15 @@ describe(`validateConstraints`, () => {
                           ],
                         },
                       },
-                    });
+                    })
 
-                    const validation = validateConstraintsConfigured(value);
-                    expect(validation).toEqualFailureWithValue(expected);
-                  }, typeDataValues);
-                });
-              });
-            })(fieldErrors);
-          });
+                    const validation = validateConstraintsConfigured(value)
+                    expect(validation).toEqualFailureWithValue(expected)
+                  }, typeDataValues)
+                })
+              })
+            })(fieldErrors)
+          })
 
           // -------------------------------------------------------------------
           // 1.3 fieldsValidator
@@ -416,20 +416,20 @@ describe(`validateConstraints`, () => {
                   const value = withValueRoot({
                     [FIELDS_VALIDATOR]: fieldValue,
                     [FIELDS]: [],
-                  });
+                  })
 
                   const expected = withExpectedRoot({
                     [FIELDS]: {
                       [FIELDS_VALIDATOR]: [`Wasn't 'Function'`],
                     },
-                  });
+                  })
 
-                  const validation = validateConstraintsConfigured(value);
-                  expect(validation).toEqualFailureWithValue(expected);
-                }, typeData.withoutFunctionValues);
-              });
-            });
-          });
+                  const validation = validateConstraintsConfigured(value)
+                  expect(validation).toEqualFailureWithValue(expected)
+                }, typeData.withoutFunctionValues)
+              })
+            })
+          })
 
           // -------------------------------------------------------------------
           // 1.4 children and value
@@ -446,15 +446,15 @@ describe(`validateConstraints`, () => {
                         [fieldName]: {},
                       },
                     ],
-                  });
-                  const validation = validateConstraintsConfigured(value);
-                  expect(validation).toEqualSuccessWithValue(value);
-                });
-              });
-            });
-          })([CHILDREN, VALUE]);
-        });
-      });
-    });
-  })(levels);
-});
+                  })
+                  const validation = validateConstraintsConfigured(value)
+                  expect(validation).toEqualSuccessWithValue(value)
+                })
+              })
+            })
+          })([CHILDREN, VALUE])
+        })
+      })
+    })
+  })(levels)
+})

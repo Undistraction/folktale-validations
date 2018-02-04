@@ -7,18 +7,18 @@ import {
   compose,
   prop,
   filter,
-} from 'ramda';
-import { isNotEmpty } from 'ramda-adjunct';
-import { validation as Validation } from 'folktale';
-import { constraintsForFieldsWithPropChildren, filterFailures } from '../utils';
+} from 'ramda'
+import { isNotEmpty } from 'ramda-adjunct'
+import { validation as Validation } from 'folktale'
+import { constraintsForFieldsWithPropChildren, filterFailures } from '../utils'
 import {
   reduceObjIndexed,
   reduceObjIndexedWithIndex,
   reduceIf,
-} from '../../utils';
-import { toChildrenFieldsError } from '../../failures/utils';
+} from '../../utils'
+import { toChildrenFieldsError } from '../../failures/utils'
 
-const { Failure, Success } = Validation;
+const { Failure, Success } = Validation
 
 // -----------------------------------------------------------------------------
 // Replace the children with the validated (possibly transformed) versions.
@@ -26,7 +26,7 @@ const { Failure, Success } = Validation;
 
 const replaceChildrenOfArrayField = reduceObjIndexedWithIndex(
   (acc, [, validation], i) => update(i, validation.value, acc)
-);
+)
 
 const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
   reduceObjIndexed(
@@ -38,7 +38,7 @@ const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
       ),
     o,
     fieldToValidationsMap
-  );
+  )
 
 // -----------------------------------------------------------------------------
 // Validate each child and collect their validations.
@@ -56,7 +56,7 @@ const validateChildrenOfArrayField = (
       append(validateObject(fieldName, childConstraints, child), acc),
     [],
     fieldValue
-  );
+  )
 
 const validateChildrenOfArrayFields = validateObject =>
   reduce((acc, [fieldName, fieldValue, childConstraints]) => {
@@ -65,11 +65,11 @@ const validateChildrenOfArrayFields = validateObject =>
       fieldName,
       fieldValue,
       childConstraints
-    );
+    )
     return isEmpty(childValidations)
       ? acc
-      : assoc(fieldName, childValidations, acc);
-  }, {});
+      : assoc(fieldName, childValidations, acc)
+  }, {})
 
 // -----------------------------------------------------------------------------
 // Process Fields that have children (that have a value that is an array)
@@ -79,22 +79,22 @@ export default (validateObject, constraints) => o => {
   const fieldToValidationsMap = compose(
     validateChildrenOfArrayFields(validateObject),
     constraintsForFieldsWithPropChildren(constraints)
-  )(o);
+  )(o)
 
   if (isEmpty(fieldToValidationsMap)) {
-    return Success(o);
+    return Success(o)
   }
 
   const failures = filter(
     compose(isNotEmpty, filterFailures),
     fieldToValidationsMap
-  );
+  )
 
   if (isEmpty(failures)) {
-    return Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o));
+    return Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o))
   }
 
-  const out = toChildrenFieldsError(failures);
+  const out = toChildrenFieldsError(failures)
 
-  return Failure(out);
-};
+  return Failure(out)
+}

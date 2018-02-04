@@ -1,4 +1,4 @@
-import { validation as Validation } from 'folktale';
+import { validation as Validation } from 'folktale'
 import {
   compose,
   flip,
@@ -9,14 +9,14 @@ import {
   ifElse,
   always,
   of,
-} from 'ramda';
+} from 'ramda'
 
-const { Success, Failure } = Validation;
+const { Success, Failure } = Validation
 
 export default curry((message, requiredKeys) => o => {
-  const collectInvalidKeys = reject(flip(has)(o));
-  const invalidKeys = collectInvalidKeys(requiredKeys);
+  const collectInvalidKeys = reject(flip(has)(o))
+  const invalidKeys = collectInvalidKeys(requiredKeys)
   return ifElse(isEmpty, always(Success(o)), compose(Failure, of, message))(
     invalidKeys
-  );
-});
+  )
+})

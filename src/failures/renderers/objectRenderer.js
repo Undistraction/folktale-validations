@@ -9,9 +9,9 @@ import {
   of,
   prepend,
   defaultTo,
-} from 'ramda';
-import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct';
-import { reduceObjIndexed, mapWithIndex, isStringOrArray } from '../../utils';
+} from 'ramda'
+import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct'
+import { reduceObjIndexed, mapWithIndex, isStringOrArray } from '../../utils'
 import {
   invalidObjectPrefix,
   invalidObjectReasonInvalidValues,
@@ -21,20 +21,20 @@ import {
   arrayValueErrorMessage,
   invalidArrayReasonInvalidObjects,
   fieldsErrorMessage,
-} from '../../messages';
+} from '../../messages'
 import {
   propName,
   propFields,
   propChildren,
   propFieldsFailiureMessage,
   hasPropChildren,
-} from '../../utils/failures';
+} from '../../utils/failures'
 import {
   joinWithColon,
   joinWithNoSpace,
   joinWithSpace,
   wrapWithSingleQuotes,
-} from '../../utils/formatting';
+} from '../../utils/formatting'
 
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   const prefix = compose(
@@ -43,24 +43,24 @@ const buildArrayMessage = curry((level, fieldName, fieldValue) => {
     of,
     wrapWithSingleQuotes,
     defaultTo(``)
-  )(fieldName);
+  )(fieldName)
 
   const result = joinWithSpace([
     prefix,
     invalidArrayReasonInvalidObjects(),
     // eslint-disable-next-line no-use-before-define
     joinWithNoSpace(parseArray(inc(level))(fieldValue)),
-  ]);
-  return isNotUndefined(fieldName) ? prefixWithKey(level, result) : result;
-});
+  ])
+  return isNotUndefined(fieldName) ? prefixWithKey(level, result) : result
+})
 
 const buildObjMessage = curry((level, fieldName, o) => {
   if (hasPropChildren(o)) {
-    return buildArrayMessage(level, fieldName, propChildren(o));
+    return buildArrayMessage(level, fieldName, propChildren(o))
   }
 
-  const fields = propFields(o);
-  const fieldsError = propFieldsFailiureMessage(o);
+  const fields = propFields(o)
+  const fieldsError = propFieldsFailiureMessage(o)
 
   return compose(
     when(always(isNotNull(fieldName)), prefixWithKey(level)),
@@ -82,26 +82,26 @@ const buildObjMessage = curry((level, fieldName, o) => {
       always(isNotNull(fieldName)),
       compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
     )
-  )(defaultTo(invalidObjectPrefix(), propName(o)));
-});
+  )(defaultTo(invalidObjectPrefix(), propName(o)))
+})
 
 const parseFieldValue = (level, fieldName, fieldValue) =>
   ifElse(
     isStringOrArray,
     objectValueErrorMessage(level, fieldName),
     buildObjMessage(level, fieldName)
-  )(fieldValue);
+  )(fieldValue)
 
 const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
-  const result = parseFieldValue(level, fieldName, fieldValue);
-  return joinWithNoSpace([acc, result]);
-};
+  const result = parseFieldValue(level, fieldName, fieldValue)
+  return joinWithNoSpace([acc, result])
+}
 
-const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``);
+const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``)
 
 const parseArray = level =>
   mapWithIndex((o, index) =>
     arrayValueErrorMessage(level, index, parseFieldValue(inc(level), null, o))
-  );
+  )
 
-export default o => parseFieldValue(0, null, o);
+export default o => parseFieldValue(0, null, o)

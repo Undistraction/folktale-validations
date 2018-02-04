@@ -1,13 +1,13 @@
-import { validation as Validation } from 'folktale';
-import { compose, reduce, assoc, isEmpty, toPairs } from 'ramda';
+import { validation as Validation } from 'folktale'
+import { compose, reduce, assoc, isEmpty, toPairs } from 'ramda'
 import {
   constraintsForFieldsWithPropValue,
   filterFailures,
   extractFailureValues,
-} from '../utils';
-import { toObjectError } from '../../failures/utils';
+} from '../utils'
+import { toObjectError } from '../../failures/utils'
 
-const { Failure, Success } = Validation;
+const { Failure, Success } = Validation
 
 const validateValues = validateObject =>
   reduce(
@@ -18,24 +18,24 @@ const validateValues = validateObject =>
         acc
       ),
     {}
-  );
+  )
 
 export default (validateObject, constraints) => o => {
   const fieldsWithPropConstraints = constraintsForFieldsWithPropValue(
     constraints
-  )(o);
+  )(o)
 
   const childValidations = validateValues(validateObject)(
     fieldsWithPropConstraints
-  );
+  )
 
-  const failures = filterFailures(childValidations);
+  const failures = filterFailures(childValidations)
 
   if (isEmpty(failures)) {
-    return Success(o);
+    return Success(o)
   }
 
   return compose(Failure, toObjectError, extractFailureValues, toPairs)(
     failures
-  );
-};
+  )
+}

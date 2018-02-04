@@ -1,6 +1,6 @@
-import deepFreeze from 'deep-freeze';
-import allOfValidator from './helpers/allOfValidator';
-import { CONSTRAINT_FIELD_NAMES, OWN_CONSTRAINTS } from './const';
+import deepFreeze from 'deep-freeze'
+import allOfValidator from './helpers/allOfValidator'
+import { CONSTRAINT_FIELD_NAMES, OWN_CONSTRAINTS } from './const'
 
 export default validators => {
   const {
@@ -11,7 +11,7 @@ export default validators => {
     validateIsObject,
     validateIsArrayOf,
     validateExclusiveKeys,
-  } = validators;
+  } = validators
 
   const {
     ID,
@@ -24,45 +24,45 @@ export default validators => {
     DEFAULT_VALUE,
     VALUE,
     CHILDREN,
-  } = CONSTRAINT_FIELD_NAMES;
+  } = CONSTRAINT_FIELD_NAMES
 
   const nameField = {
     [NAME]: NAME,
     [VALIDATOR]: validateIsString,
     [IS_REQUIRED]: true,
-  };
+  }
 
   const validatorField = {
     [NAME]: VALIDATOR,
     [VALIDATOR]: validateIsFunction,
     [IS_REQUIRED]: true,
-  };
+  }
 
   const transformerField = {
     [NAME]: TRANSFORMER,
     [VALIDATOR]: validateIsFunction,
-  };
+  }
 
   const defaultValueField = {
     [NAME]: DEFAULT_VALUE,
     [VALIDATOR]: validateIsNotUndefined,
-  };
+  }
 
   const isRequiredField = {
     [NAME]: IS_REQUIRED,
     [VALIDATOR]: validateIsBoolean,
     [DEFAULT_VALUE]: false,
-  };
+  }
 
   const valueField = {
     [NAME]: VALUE,
     [VALIDATOR]: validateIsObject,
-  };
+  }
 
   const childrenField = {
     [NAME]: CHILDREN,
     [VALIDATOR]: validateIsObject,
-  };
+  }
 
   const fields = [
     nameField,
@@ -72,12 +72,12 @@ export default validators => {
     isRequiredField,
     valueField,
     childrenField,
-  ];
+  ]
 
   const fieldsValidatorField = {
     [NAME]: FIELDS_VALIDATOR,
     [VALIDATOR]: validateIsFunction,
-  };
+  }
 
   const fieldsField = {
     [NAME]: FIELDS,
@@ -89,17 +89,17 @@ export default validators => {
       ]),
       fields,
     },
-  };
+  }
 
   const constraintRoot = {
     [ID]: OWN_CONSTRAINTS,
     [FIELDS]: [fieldsValidatorField, fieldsField],
-  };
+  }
 
   // Set up a pointer pack to the rootmost object
-  childrenField.value = constraintRoot;
-  valueField.value = constraintRoot;
+  childrenField.value = constraintRoot
+  valueField.value = constraintRoot
 
   // eslint-disable-next-line import/prefer-default-export
-  return deepFreeze(constraintRoot);
-};
+  return deepFreeze(constraintRoot)
+}

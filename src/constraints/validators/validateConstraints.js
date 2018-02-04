@@ -1,9 +1,9 @@
-import { always, compose } from 'ramda';
-import { validation as Validation } from 'folktale';
-import { toConstraintsError } from '../../failures/utils';
-import { propValue } from '../../utils';
+import { always, compose } from 'ramda'
+import { validation as Validation } from 'folktale'
+import { toConstraintsError } from '../../failures/utils'
+import { propValue } from '../../utils'
 
-const { Failure, Success } = Validation;
+const { Failure, Success } = Validation
 
 export default (
   ownConstraints,
@@ -15,4 +15,4 @@ export default (
   ).matchWith({
     Success: always(Success(constraintsToValidate)),
     Failure: compose(Failure, toConstraintsError, propValue),
-  });
+  })

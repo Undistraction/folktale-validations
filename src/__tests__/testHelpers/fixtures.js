@@ -1,8 +1,8 @@
-import { FAILURE_FIELD_NAMES } from '../../const';
+import { FAILURE_FIELD_NAMES } from '../../const'
 
-const { FIELDS_FAILURE_MESSAGE, FIELDS, CHILDREN } = FAILURE_FIELD_NAMES;
+const { FIELDS_FAILURE_MESSAGE, FIELDS, CHILDREN } = FAILURE_FIELD_NAMES
 
-export const func = () => {};
+export const func = () => {}
 
 export const flatErrorMessage = {
   [FIELDS_FAILURE_MESSAGE]: `fieldsMessageForRoot`,
@@ -11,7 +11,7 @@ export const flatErrorMessage = {
     b: `errorMessageForB`,
     c: `errorMessageForC`,
   },
-};
+}
 
 export const nestedObjectErrorMessage = {
   [FIELDS]: {
@@ -24,7 +24,7 @@ export const nestedObjectErrorMessage = {
     },
     c: [`errorMessageForC`],
   },
-};
+}
 
 export const nestedArrayErrorMessage = {
   [FIELDS]: {
@@ -47,7 +47,7 @@ export const nestedArrayErrorMessage = {
     },
     c: `errorMessageForC`,
   },
-};
+}
 
 // export const deeplyNestedErrorMessage = {
 //   [FIELDS]: {

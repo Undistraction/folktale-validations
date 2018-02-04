@@ -1,7 +1,7 @@
-import { curry } from 'ramda';
-import untilFailureValidator from '../../helpers/untilFailureValidator';
-import validateIsLengthGreaterThan from './validateIsLengthGreaterThan';
-import validateIsLengthLessThan from './validateIsLengthLessThan';
+import { curry } from 'ramda'
+import untilFailureValidator from '../../helpers/untilFailureValidator'
+import validateIsLengthGreaterThan from './validateIsLengthGreaterThan'
+import validateIsLengthLessThan from './validateIsLengthLessThan'
 
 export default curry(
   (
@@ -14,4 +14,4 @@ export default curry(
       validateIsLengthGreaterThan(isLengthGreaterThanMessage, minimumLength),
       validateIsLengthLessThan(isLengthLessThanMessage, maximumLength),
     ])
-);
+)

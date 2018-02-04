@@ -1,9 +1,9 @@
-import { validation as Validation } from 'folktale';
-import { reduce, always, curry } from 'ramda';
+import { validation as Validation } from 'folktale'
+import { reduce, always, curry } from 'ramda'
 
-import { wrapFailureMessageWith } from '../../messages';
+import { wrapFailureMessageWith } from '../../messages'
 
-const { Success, Failure } = Validation;
+const { Success, Failure } = Validation
 
 const validateAllWith = (elementMessage, validator) => o =>
   reduce(
@@ -15,13 +15,13 @@ const validateAllWith = (elementMessage, validator) => o =>
       ),
     Success(),
     o
-  );
+  )
 
 export default curry((elementsMessage, elementMessage, validator) => o => {
-  const v = validateAllWith(elementMessage, validator);
-  const validation = v(o);
+  const v = validateAllWith(elementMessage, validator)
+  const validation = v(o)
   return validation.matchWith({
     Success: always(Success(o)),
     Failure: wrapFailureMessageWith(elementsMessage),
-  });
-});
+  })
+})

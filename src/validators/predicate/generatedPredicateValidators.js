@@ -29,11 +29,11 @@ import {
   isNotValidDate,
   isNotValidNumber,
   isValidNumber,
-} from 'ramda-adjunct';
-import { assoc, isNil, isEmpty } from 'ramda';
-import predicateValidator from '../../helpers/predicateValidator';
-import { reduceObjIndexed } from '../../utils';
-import { toTitle } from '../../utils/formatting';
+} from 'ramda-adjunct'
+import { assoc, isNil, isEmpty } from 'ramda'
+import predicateValidator from '../../helpers/predicateValidator'
+import { reduceObjIndexed } from '../../utils'
+import { toTitle } from '../../utils/formatting'
 
 const predicates = {
   isArray,
@@ -68,16 +68,16 @@ const predicates = {
   isNotValidDate,
   isValidNumber,
   isNotValidNumber,
-};
+}
 
 const buildValidator = (acc, [key, predicate]) =>
   assoc(
     `validate${toTitle(key)}`,
     message => predicateValidator(message, predicate),
     acc
-  );
+  )
 
-const validators = reduceObjIndexed(buildValidator, {}, predicates);
+const validators = reduceObjIndexed(buildValidator, {}, predicates)
 
 export const {
   validateIsArray,
@@ -111,4 +111,4 @@ export const {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
-} = validators;
+} = validators

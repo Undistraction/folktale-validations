@@ -1,21 +1,21 @@
-import { identity, curry, always, propEq } from 'ramda';
+import { identity, curry, always, propEq } from 'ramda'
 import {
   ROOT_FIELD,
   CONSTRAINT_FIELD_NAMES,
   OWN_CONSTRAINTS,
-} from '../../const';
-import validateObject from './validateObject';
-import validateConstraints from './validateConstraints';
-import CONSTRAINTS from '../../constraints';
+} from '../../const'
+import validateObject from './validateObject'
+import validateConstraints from './validateConstraints'
+import CONSTRAINTS from '../../constraints'
 
 const constraintsAreOwnConstraints = propEq(
   CONSTRAINT_FIELD_NAMES.ID,
   OWN_CONSTRAINTS
-);
+)
 
 const validateObjectWithConstraints = validators => {
-  const configuredConstraints = CONSTRAINTS(validators);
-  const configuredValidateObject = validateObject(validators);
+  const configuredConstraints = CONSTRAINTS(validators)
+  const configuredValidateObject = validateObject(validators)
   return curry(
     (constraints, o) =>
       constraintsAreOwnConstraints(constraints)
@@ -29,7 +29,7 @@ const validateObjectWithConstraints = validators => {
             ),
             Failure: identity,
           })
-  );
-};
+  )
+}
 
-export default validateObjectWithConstraints;
+export default validateObjectWithConstraints

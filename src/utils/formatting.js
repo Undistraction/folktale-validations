@@ -14,7 +14,7 @@ import {
   when,
   always,
   gt,
-} from 'ramda';
+} from 'ramda'
 import {
   isEmptyString,
   isEmptyArray,
@@ -22,25 +22,25 @@ import {
   isNull,
   isNaN,
   isFunction,
-} from 'ramda-adjunct';
+} from 'ramda-adjunct'
 
 // -----------------------------------------------------------------------------
 // Internal
 // -----------------------------------------------------------------------------
 
-const NEWLINE = `\n`;
-const TAB = `\t`;
+const NEWLINE = `\n`
+const TAB = `\t`
 
 const stringRepresentationIfNil = compose(
   when(isNull, always(`null`)),
   when(isUndefined, always(`undefined`)),
   when(isNaN, always(`NaN`))
-);
+)
 
 const stringRepresentationIfFunction = when(
   isFunction,
   always(`function () {}`)
-);
+)
 
 // -----------------------------------------------------------------------------
 // Exports
@@ -50,15 +50,15 @@ export const joinDefined = withString =>
   compose(
     join(withString),
     reject(anyPass([isEmptyString, isEmptyArray, isUndefined]))
-  );
+  )
 
-export const joinWithComma = joinDefined(`, `);
-export const joinWithAnd = joinDefined(` and `);
-export const joinWithOr = joinDefined(` or `);
-export const joinWithEmDash = joinDefined(` – `);
-export const joinWithColon = joinDefined(`: `);
-export const joinWithSpace = joinDefined(` `);
-export const joinWithNoSpace = joinDefined(``);
+export const joinWithComma = joinDefined(`, `)
+export const joinWithAnd = joinDefined(` and `)
+export const joinWithOr = joinDefined(` or `)
+export const joinWithEmDash = joinDefined(` – `)
+export const joinWithColon = joinDefined(`: `)
+export const joinWithSpace = joinDefined(` `)
+export const joinWithNoSpace = joinDefined(``)
 
 export const wrapWith = (a, b = a) =>
   compose(
@@ -68,20 +68,20 @@ export const wrapWith = (a, b = a) =>
     of,
     stringRepresentationIfNil,
     stringRepresentationIfFunction
-  );
-export const wrapWithSingleQuotes = wrapWith(`'`);
-export const wrapWithSquareBrackets = wrapWith(`[`, `]`);
+  )
+export const wrapWithSingleQuotes = wrapWith(`'`)
+export const wrapWithSquareBrackets = wrapWith(`[`, `]`)
 
 export const quoteAndJoinWithComma = compose(
   joinWithComma,
   map(wrapWithSingleQuotes)
-);
-export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB));
+)
+export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB))
 
 export const newlineAndTabsForLevel = level =>
-  joinWithNoSpace([NEWLINE, tabsForLevel(level)]);
+  joinWithNoSpace([NEWLINE, tabsForLevel(level)])
 
-export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper));
+export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper))
 
 export const pluralise = (value, count) =>
-  gt(count, 1) ? joinWithNoSpace(value, `s`) : value;
+  gt(count, 1) ? joinWithNoSpace(value, `s`) : value

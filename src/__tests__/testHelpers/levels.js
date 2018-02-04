@@ -1,14 +1,14 @@
-import { CONSTRAINT_FIELD_NAMES } from '../../const';
-import { name1 } from './fixtures/constraintValues';
-import { constraintsObjName } from '../../messages';
-import { func } from './fixtures';
-import { REPLACE_TOKEN } from './const';
+import { CONSTRAINT_FIELD_NAMES } from '../../const'
+import { name1 } from './fixtures/constraintValues'
+import { constraintsObjName } from '../../messages'
+import { func } from './fixtures'
+import { REPLACE_TOKEN } from './const'
 
-const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES;
+const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES
 
-const level1Expected = null;
+const level1Expected = null
 
-const level1Value = null;
+const level1Value = null
 
 const level2Value = {
   [FIELDS]: [
@@ -18,7 +18,7 @@ const level2Value = {
       [CHILDREN]: REPLACE_TOKEN,
     },
   ],
-};
+}
 
 const level2Expected = {
   [NAME]: constraintsObjName(),
@@ -33,7 +33,7 @@ const level2Expected = {
       ],
     },
   },
-};
+}
 
 const level3Value = {
   [FIELDS]: [
@@ -51,7 +51,7 @@ const level3Value = {
       },
     },
   ],
-};
+}
 
 const level3Expected = {
   [NAME]: constraintsObjName(),
@@ -78,10 +78,10 @@ const level3Expected = {
       ],
     },
   },
-};
+}
 
 export default [
   [level1Value, level1Expected],
   [level2Value, level2Expected],
   [level3Value, level3Expected],
-];
+]

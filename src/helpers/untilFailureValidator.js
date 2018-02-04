@@ -1,7 +1,7 @@
-import { validation as Validation } from 'folktale';
-import { reduce } from 'ramda';
-import { chain } from '../utils/validations';
+import { validation as Validation } from 'folktale'
+import { reduce } from 'ramda'
+import { chain } from '../utils/validations'
 
-const { Success } = Validation;
+const { Success } = Validation
 
-export default validators => o => reduce(chain, Success(o), validators);
+export default validators => o => reduce(chain, Success(o), validators)

@@ -1,7 +1,7 @@
-import { compose, map, curry, when, always } from 'ramda';
-import { isVanillaObjectOrArray } from './predicates';
+import { compose, map, curry, when, always } from 'ramda'
+import { isVanillaObjectOrArray } from './predicates'
 
-export const { freeze } = Object;
+export const { freeze } = Object
 
 export const deepReplace = curry((pred, replacement, o) =>
   when(
@@ -11,4 +11,4 @@ export const deepReplace = curry((pred, replacement, o) =>
       map(when(pred, always(replacement)))
     )
   )(o)
-);
+)

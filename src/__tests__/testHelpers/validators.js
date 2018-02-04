@@ -1,4 +1,4 @@
-import typeData from './fixtures/typeData';
+import typeData from './fixtures/typeData'
 import {
   validateIsArray,
   validateIsNotArray,
@@ -29,8 +29,8 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
-} from '../../index';
-import { PREDICATES } from '../../const';
+} from '../../index'
+import { PREDICATES } from '../../const'
 
 export default {
   // Types
@@ -96,4 +96,4 @@ export default {
     validators: { validateIsValidDate, validateIsNotValidDate },
     values: [typeData.validDateValues, typeData.withoutValidDateValues],
   },
-};
+}

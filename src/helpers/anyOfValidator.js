@@ -1,5 +1,5 @@
-import { reduce } from 'ramda';
-import { joinMessagesWithAnd } from '../messages';
+import { reduce } from 'ramda'
+import { joinMessagesWithAnd } from '../messages'
 
 export default validators => o =>
   reduce(
@@ -12,4 +12,4 @@ export default validators => o =>
             ])
           ),
     null
-  )(validators);
+  )(validators)

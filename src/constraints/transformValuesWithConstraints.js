@@ -7,12 +7,12 @@ import {
   ifElse,
   always,
   __,
-} from 'ramda';
-import { isNotEmpty, isUndefined } from 'ramda-adjunct';
-import { validation as Validation } from 'folktale';
-import { buildTransformersMap } from './utils';
+} from 'ramda'
+import { isNotEmpty, isUndefined } from 'ramda-adjunct'
+import { validation as Validation } from 'folktale'
+import { buildTransformersMap } from './utils'
 
-const { Success } = Validation;
+const { Success } = Validation
 
 const transformValues = transformersMap =>
   reduce(
@@ -24,12 +24,12 @@ const transformValues = transformersMap =>
       )(prop(name, acc)),
     __,
     toPairs(transformersMap)
-  );
+  )
 
 const transformObjectValues = transformersMap =>
-  compose(Success, transformValues(transformersMap));
+  compose(Success, transformValues(transformersMap))
 
 export default compose(
   ifElse(isNotEmpty, transformObjectValues, always(Success)),
   buildTransformersMap
-);
+)

@@ -1,21 +1,21 @@
-import { replace, map, equals } from 'ramda';
-import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils';
-import diff from 'jest-diff';
+import { replace, map, equals } from 'ramda'
+import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils'
+import diff from 'jest-diff'
 
-const replaceWhitespace = replace(/\s+/g, ` `);
-const compressWhitespace = map(replaceWhitespace);
+const replaceWhitespace = replace(/\s+/g, ` `)
+const compressWhitespace = map(replaceWhitespace)
 
-const name = `toEqualWithCompressedWhitespace`;
+const name = `toEqualWithCompressedWhitespace`
 
 export default (received, expected) => {
   const [
     receivedWithCompresssedWhitespace,
     expectedWithCompresssedWhitespace,
-  ] = compressWhitespace([received, expected]);
+  ] = compressWhitespace([received, expected])
   const pass = equals(
     receivedWithCompresssedWhitespace,
     expectedWithCompresssedWhitespace
-  );
+  )
 
   const message = pass
     ? () =>
@@ -32,7 +32,7 @@ export default (received, expected) => {
         const diffString = diff(
           expectedWithCompresssedWhitespace,
           receivedWithCompresssedWhitespace
-        );
+        )
         return (
           `${matcherHint(`.${name}`)}\n\n` +
           `Uncompressed expected value:\n` +
@@ -45,13 +45,13 @@ export default (received, expected) => {
           `  ${printReceived(receivedWithCompresssedWhitespace)}${
             diffString ? `\n\nDifference:\n\n${diffString}` : ``
           }`
-        );
-      };
+        )
+      }
   return {
     actual: received,
     expected,
     message,
     name,
     pass,
-  };
-};
+  }
+}

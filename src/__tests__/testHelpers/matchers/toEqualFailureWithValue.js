@@ -1,17 +1,17 @@
-import { validation as Validation } from 'folktale';
-import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils';
-import diff from 'jest-diff';
-import deepEql from 'deep-eql';
+import { validation as Validation } from 'folktale'
+import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils'
+import diff from 'jest-diff'
+import deepEql from 'deep-eql'
 
-const { Failure } = Validation;
+const { Failure } = Validation
 
-const name = `toEqualFailureWithValue`;
+const name = `toEqualFailureWithValue`
 
 export default (received, expected) => {
-  const expectedAsFailure = Failure(expected);
+  const expectedAsFailure = Failure(expected)
 
   const pass =
-    Failure.hasInstance(received) && deepEql(received.value, expected);
+    Failure.hasInstance(received) && deepEql(received.value, expected)
 
   const message = pass
     ? () =>
@@ -21,7 +21,7 @@ export default (received, expected) => {
         `Received:\n` +
         `  ${printReceived(received)}`
     : () => {
-        const diffString = diff(expectedAsFailure, received);
+        const diffString = diff(expectedAsFailure, received)
         return (
           `${matcherHint(`.${name}`)}\n\n` +
           `Expected value to equal:\n` +
@@ -30,8 +30,8 @@ export default (received, expected) => {
           `  ${printReceived(received)}${
             diffString ? `\n\nDifference:\n\n${diffString}` : ``
           }`
-        );
-      };
+        )
+      }
   // Passing the the actual and expected objects so that a custom reporter
   // could access them, for example in order to display a custom visual diff,
   // or create a different error message
@@ -41,5 +41,5 @@ export default (received, expected) => {
     message,
     name,
     pass,
-  };
-};
+  }
+}

@@ -1,4 +1,4 @@
-import { assoc } from 'ramda';
+import { assoc } from 'ramda'
 import {
   validateIsArray,
   validateIsNotArray,
@@ -31,21 +31,21 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
-} from '../validators/predicate/generatedPredicateValidators';
+} from '../validators/predicate/generatedPredicateValidators'
 
-import validateIsLengthGreaterThan from '../validators/association/validateIsLengthGreaterThan';
-import validateIsLengthLessThan from '../validators/association/validateIsLengthLessThan';
-import validateIsLengthBetween from '../validators/association/validateIsLengthBetween';
-import validateIsWhitelistedValue from '../validators/other/validateIsWhitelistedValue';
-import validateObjectValues from '../validators/object/validateObjectValues';
-import validateRequiredKeys from '../validators/object/validateRequiredKeys';
-import validateWhitelistedKeys from '../validators/object/validateWhitelistedKeys';
-import validateExclusiveKeys from '../validators/object/validateExclusiveKeys';
-import validateIsArrayOf from '../validators/array/validateIsArrayOf';
-import validateArrayElements from '../validators/array/validateArrayElements';
+import validateIsLengthGreaterThan from '../validators/association/validateIsLengthGreaterThan'
+import validateIsLengthLessThan from '../validators/association/validateIsLengthLessThan'
+import validateIsLengthBetween from '../validators/association/validateIsLengthBetween'
+import validateIsWhitelistedValue from '../validators/other/validateIsWhitelistedValue'
+import validateObjectValues from '../validators/object/validateObjectValues'
+import validateRequiredKeys from '../validators/object/validateRequiredKeys'
+import validateWhitelistedKeys from '../validators/object/validateWhitelistedKeys'
+import validateExclusiveKeys from '../validators/object/validateExclusiveKeys'
+import validateIsArrayOf from '../validators/array/validateIsArrayOf'
+import validateArrayElements from '../validators/array/validateArrayElements'
 
-import { PREDICATES } from '../const';
-import validateObjectWithConstraints from '../constraints/validators/validateConstraints';
+import { PREDICATES } from '../const'
+import validateObjectWithConstraints from '../constraints/validators/validateConstraints'
 
 export default messages => {
   const {
@@ -66,7 +66,7 @@ export default messages => {
     arrayElementErrorMessage,
     // Other
     isWhitelistedStringMessage,
-  } = messages;
+  } = messages
 
   const configuredValidators = {
     // -------------------------------------------------------------------------
@@ -175,11 +175,11 @@ export default messages => {
       arrayElementsErrorMessage,
       arrayElementErrorMessage
     ),
-  };
+  }
 
   return assoc(
     `validateObjectWithConstraints`,
     validateObjectWithConstraints(configuredValidators),
     configuredValidators
-  );
-};
+  )
+}
