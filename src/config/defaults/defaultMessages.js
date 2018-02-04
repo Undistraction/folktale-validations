@@ -5,7 +5,7 @@ import {
   wrapWithSingleQuotes,
   wrapWithSquareBrackets,
   joinWithSpace,
-} from '../utils/formatting'
+} from '../../utils/formatting'
 
 // -----------------------------------------------------------------------------
 // Predicate

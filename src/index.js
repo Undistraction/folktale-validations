@@ -59,4 +59,4 @@ export {
 // Configured Validators
 export {
   default as validatorsWithMessages,
-} from './defaults/validatorsWithMessages'
+} from './config/defaults/validatorsWithMessages'

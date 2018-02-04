@@ -1,4 +1,4 @@
 import defaultMessages from './defaultMessages'
-import configureValidatorsWithMessages from '../validators/configureValidatorsWithMessages'
+import configureValidatorsWithMessages from '../../config/configureValidatorsWithMessages'
 
 export default configureValidatorsWithMessages(defaultMessages)

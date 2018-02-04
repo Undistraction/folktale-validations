@@ -6,7 +6,7 @@ import {
   stubReturns,
 } from '../../testHelpers/sinon'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
-import validatorsWithMessages from '../../../defaults/validatorsWithMessages'
+import validatorsWithMessages from '../../../config/defaults/validatorsWithMessages'
 import {
   value1,
   value2,
