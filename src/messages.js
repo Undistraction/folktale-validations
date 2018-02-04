@@ -12,8 +12,7 @@ import {
   wrapWithSquareBrackets,
   newlineAndTabsForLevel,
 } from './utils/formatting'
-import { ROOT_FIELD } from './const'
-import { TYPES } from '../lib/const'
+import { PREDICATES, ROOT_FIELD } from './const'
 
 const { Failure } = Validation
 
@@ -66,8 +65,8 @@ export const arrayValueErrorMessage = (level, index, value) =>
 export const fieldsErrorMessage = (level, value) =>
   joinWithEmDash([newlineAndTabsForLevel(level), value])
 
-export const invalidObjectPrefix = always(TYPES.Object)
-export const invalidArrayPrefix = always(TYPES.Array)
+export const invalidObjectPrefix = always(PREDICATES.Object)
+export const invalidArrayPrefix = always(PREDICATES.Array)
 
 export const invalidObjectReasonInvalidValues = level =>
   joinWithEmDash([newlineAndTabsForLevel(level), `included invalid value(s)`])

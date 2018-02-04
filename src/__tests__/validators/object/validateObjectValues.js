@@ -1,5 +1,4 @@
 import { stub } from 'sinon'
-import { validation as Validation } from 'folktale'
 import validateObjectValues from '../../../validators/object/validateObjectValues'
 import {
   spy,
@@ -7,8 +6,6 @@ import {
   stubReturnsSuccess,
 } from '../../testHelpers/sinon'
 import { toObjectError } from '../../../failures/utils'
-
-const { Failure } = Validation
 
 describe(`validateObjectValues()`, () => {
   const key1 = 1
