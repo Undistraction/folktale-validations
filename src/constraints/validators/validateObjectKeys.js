@@ -1,7 +1,7 @@
 import { compose } from 'ramda';
 import { validation as Validation } from 'folktale';
 import untilFailureValidator from '../../helpers/untilFailureValidator';
-import { toObjectFieldsError } from '../../errors/utils';
+import { toObjectFieldsError } from '../../failures/utils';
 
 const { Failure } = Validation;
 

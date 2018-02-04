@@ -35,6 +35,7 @@ import {
 import { joinWithAnd, mapWithIndex, pluralise } from '../../../utils';
 import levels from '../../testHelpers/levels';
 import { replaceTokenWith } from '../../testHelpers/utils';
+import { constraintsObjName } from '../../../messages';
 
 const {
   FIELDS,
@@ -169,7 +170,7 @@ describe(`validateConstraints`, () => {
     const withExpectedRoot = ifElse(
       always(isNotNull(expectedRoot)),
       replaceTokenWith(__, expectedRoot),
-      assoc(NAME, `constraints`)
+      assoc(NAME, constraintsObjName())
     );
 
     describe(`with ${level} constraint ${pluralise(`level`, level)}`, () => {

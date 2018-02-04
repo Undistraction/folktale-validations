@@ -1,6 +1,6 @@
 import { always, compose } from 'ramda';
 import { validation as Validation } from 'folktale';
-import { toConstraintsError } from '../../errors/utils';
+import { toConstraintsError } from '../../failures/utils';
 import { propValue } from '../../utils';
 
 const { Failure, Success } = Validation;

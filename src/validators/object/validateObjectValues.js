@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale';
 import { compose, reduce, toPairs, always, curry, pair } from 'ramda';
 import { isNotUndefined } from 'ramda-adjunct';
-import { toObjectError } from '../../errors/utils';
+import { toObjectError } from '../../failures/utils';
 
 const { Success, Failure } = Validation;
 

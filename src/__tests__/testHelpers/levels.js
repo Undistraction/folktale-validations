@@ -1,12 +1,10 @@
 import { CONSTRAINT_FIELD_NAMES } from '../../const';
 import { name1 } from './fixtures/constraintValues';
-import { constraintsObjPrefix } from '../../messages';
+import { constraintsObjName } from '../../messages';
 import { func } from './fixtures';
 import { REPLACE_TOKEN } from './const';
 
 const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES;
-
-const CONSTRAINTS = constraintsObjPrefix();
 
 const level1Expected = null;
 
@@ -23,7 +21,7 @@ const level2Value = {
 };
 
 const level2Expected = {
-  [NAME]: `constraints`,
+  [NAME]: constraintsObjName(),
   [FIELDS]: {
     [FIELDS]: {
       [CHILDREN]: [
@@ -56,7 +54,7 @@ const level3Value = {
 };
 
 const level3Expected = {
-  [NAME]: `constraints`,
+  [NAME]: constraintsObjName(),
   [FIELDS]: {
     [FIELDS]: {
       [CHILDREN]: [

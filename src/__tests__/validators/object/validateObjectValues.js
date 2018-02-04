@@ -6,7 +6,7 @@ import {
   stubReturnsFailure,
   stubReturnsSuccess,
 } from '../../testHelpers/sinon';
-import { toObjectError } from '../../../errors/utils';
+import { toObjectError } from '../../../failures/utils';
 
 const { Failure } = Validation;
 

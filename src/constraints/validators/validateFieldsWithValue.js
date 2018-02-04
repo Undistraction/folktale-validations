@@ -5,7 +5,7 @@ import {
   filterFailures,
   extractFailureValues,
 } from '../utils';
-import { toObjectError } from '../../errors/utils';
+import { toObjectError } from '../../failures/utils';
 
 const { Failure, Success } = Validation;
 

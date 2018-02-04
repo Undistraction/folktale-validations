@@ -1,5 +1,5 @@
 import { assoc } from 'ramda';
-import objectRenderer from '../../../errors/renderers/objectRenderer';
+import objectRenderer from '../../../failures/renderers/objectRenderer';
 import {
   flatErrorMessage,
   nestedObjectErrorMessage,

@@ -1,6 +1,7 @@
 import { fromPairs, compose, mergeAll, objOf, assoc, of, map } from 'ramda';
 import { FAILURE_FIELD_NAMES } from '../const';
 import { propValue } from '../utils/failures';
+import { constraintsObjName } from '../messages';
 
 const { FIELDS_FAILURE_MESSAGE, FIELDS, CHILDREN, NAME } = FAILURE_FIELD_NAMES;
 
@@ -10,7 +11,7 @@ export const toObjectFieldsError = objOf(FIELDS_FAILURE_MESSAGE);
 
 export const addObjectName = assoc(NAME);
 
-export const toConstraintsError = compose(assoc(`name`, `constraints`));
+export const toConstraintsError = compose(assoc(NAME, constraintsObjName()));
 
 export const toArrayError = objOf(CHILDREN, of);
 

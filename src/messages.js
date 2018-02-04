@@ -80,7 +80,7 @@ export const invalidArrayReasonInvalidObjects = always(
 // Constraint Validator Messages
 // -----------------------------------------------------------------------------
 
-export const constraintsObjPrefix = always(`Constraints`);
+export const constraintsObjName = always(`Constraints`);
 
 export const objectValidatorErrorMessage = fieldName => messages =>
   fieldName === ROOT_FIELD
@@ -90,12 +90,5 @@ export const objectValidatorErrorMessage = fieldName => messages =>
 export const fieldErrorMessage = (field, errorMessage) =>
   `Field ${joinWithColon([wrapWithSingleQuotes(field), errorMessage])}`;
 
-export const constraintValidatorErrorMessage = messages =>
-  joinWithSpace(constraintsObjPrefix(), messages);
-
 export const objectErrorMessageWrapper = fieldName =>
   wrapFailureMessageWith(objectValidatorErrorMessage(fieldName));
-
-export const constraintErrorMessageWrapper = wrapFailureMessageWith(
-  constraintValidatorErrorMessage
-);
