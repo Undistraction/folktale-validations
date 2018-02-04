@@ -29,6 +29,8 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
+  validateIsPositive,
+  validateIsNegative,
 } from '../../index'
 import { PREDICATES } from '../../const'
 
@@ -95,5 +97,14 @@ export default {
   [PREDICATES.validDate]: {
     validators: { validateIsValidDate, validateIsNotValidDate },
     values: [typeData.validDateValues, typeData.withoutValidDateValues],
+  },
+  // Numeric
+  [PREDICATES.positive]: {
+    validators: { validateIsPositive },
+    values: [typeData.positiveNumbers, typeData.negativeNumbersIncludingZero],
+  },
+  [PREDICATES.negative]: {
+    validators: { validateIsNegative },
+    values: [typeData.negativeNumbers, typeData.positiveNumbersIncludingZero],
   },
 }

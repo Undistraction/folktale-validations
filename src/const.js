@@ -15,6 +15,8 @@ export const PREDICATES = Object.freeze({
   emptyArray: `Empty Array`,
   validNumber: `Valid Number`,
   validDate: `Valid Date`,
+  positive: `Positive`,
+  negative: `Negative`,
 })
 
 export const ROOT_FIELD = `root`

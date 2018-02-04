@@ -29,6 +29,8 @@ import {
   isNotValidDate,
   isNotValidNumber,
   isValidNumber,
+  isPositive,
+  isNegative,
 } from 'ramda-adjunct'
 import { assoc, isNil, isEmpty } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
@@ -68,6 +70,8 @@ const predicates = {
   isNotValidDate,
   isValidNumber,
   isNotValidNumber,
+  isPositive,
+  isNegative,
 }
 
 const buildValidator = (acc, [key, predicate]) =>
@@ -111,4 +115,6 @@ export const {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
+  validateIsPositive,
+  validateIsNegative,
 } = validators

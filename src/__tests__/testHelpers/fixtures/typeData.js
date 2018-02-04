@@ -14,6 +14,10 @@ const regexValues = [/a/]
 const stringValues = [...emptyStringValues, ...nonEmptyStringValues]
 const validNumericValues = [0, 1, -1]
 const numericConstValues = [-Infinity, Infinity, NaN]
+const positiveNumbers = [100, Infinity]
+const negativeNumbers = [-100, -Infinity]
+const positiveNumbersIncludingZero = [0, ...positiveNumbers]
+const negativeNumbersIncludingZero = [0, ...negativeNumbers]
 const numericValues = concat(validNumericValues, numericConstValues)
 const booleanValues = [true, false]
 const validDateValues = [new Date()]
@@ -78,6 +82,10 @@ export default {
   invalidDateValues,
   undefinedValues,
   nullValues,
+  positiveNumbers,
+  negativeNumbers,
+  positiveNumbersIncludingZero,
+  negativeNumbersIncludingZero,
   withoutBooleanValues,
   withoutNumericValues,
   withoutArrayValues,
