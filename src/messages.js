@@ -1,17 +1,17 @@
 import { isNotNull, isArray } from 'ramda-adjunct';
 import { always, curry, ifElse, when, compose, of } from 'ramda';
 import { validation as Validation } from 'folktale';
+import { propValue } from './utils';
 import {
   joinWithColon,
   joinWithOr,
   joinWithAnd,
   wrapWithSingleQuotes,
   joinWithSpace,
-  propValue,
   joinWithEmDash,
   wrapWithSquareBrackets,
   newlineAndTabsForLevel,
-} from './utils';
+} from './utils/formatting';
 import { ROOT_FIELD } from './const';
 import { TYPES } from '../lib/const';
 

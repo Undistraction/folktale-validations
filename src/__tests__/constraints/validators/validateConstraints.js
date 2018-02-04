@@ -32,7 +32,8 @@ import {
   invalidKeyValue,
   invalidKeyName,
 } from '../../testHelpers/fixtures/constraintValues';
-import { joinWithAnd, mapWithIndex, pluralise } from '../../../utils';
+import { mapWithIndex } from '../../../utils';
+import { pluralise, joinWithAnd } from '../../../utils/formatting';
 import levels from '../../testHelpers/levels';
 import { replaceTokenWith } from '../../testHelpers/utils';
 import { constraintsObjName } from '../../../messages';

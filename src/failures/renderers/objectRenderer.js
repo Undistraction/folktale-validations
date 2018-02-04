@@ -11,15 +11,7 @@ import {
   defaultTo,
 } from 'ramda';
 import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct';
-import {
-  joinWithColon,
-  reduceObjIndexed,
-  joinWithNoSpace,
-  joinWithSpace,
-  wrapWithSingleQuotes,
-  mapWithIndex,
-  isStringOrArray,
-} from '../../utils';
+import { reduceObjIndexed, mapWithIndex, isStringOrArray } from '../../utils';
 import {
   invalidObjectPrefix,
   invalidObjectReasonInvalidValues,
@@ -37,6 +29,12 @@ import {
   propFieldsFailiureMessage,
   hasPropChildren,
 } from '../../utils/failures';
+import {
+  joinWithColon,
+  joinWithNoSpace,
+  joinWithSpace,
+  wrapWithSingleQuotes,
+} from '../../utils/formatting';
 
 const buildArrayMessage = curry((level, fieldName, fieldValue) => {
   const prefix = compose(
@@ -57,8 +55,7 @@ const buildArrayMessage = curry((level, fieldName, fieldValue) => {
 });
 
 const buildObjMessage = curry((level, fieldName, o) => {
-  const hasChildren = hasPropChildren(o);
-  if (hasChildren) {
+  if (hasPropChildren(o)) {
     return buildArrayMessage(level, fieldName, propChildren(o));
   }
 

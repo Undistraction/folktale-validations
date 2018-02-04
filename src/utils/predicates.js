@@ -1,6 +1,7 @@
-import { prop } from 'ramda';
-import { PREDICATE_DATA_FIELD_NAMES } from '../const';
+import { either, allPass } from 'ramda';
+import { isArray, isObj, isNotDate } from 'ramda-adjunct';
 
-export const propValue = prop(PREDICATE_DATA_FIELD_NAMES.VALUE);
-export const propValues = prop(PREDICATE_DATA_FIELD_NAMES.VALUES);
-export const propValidators = prop(PREDICATE_DATA_FIELD_NAMES.VALIDATORS);
+export const isNotRegex = v => !(v instanceof RegExp);
+export const isVanillaObj = allPass([isObj, isNotRegex, isNotDate]);
+
+export const isVanillaObjectOrArray = either(isVanillaObj, isArray);
