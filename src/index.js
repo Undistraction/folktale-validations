@@ -1,7 +1,13 @@
+// -----------------------------------------------------------------------------
 // Utils
+// -----------------------------------------------------------------------------
+
 export { withField } from './utils/validations'
 
+// -----------------------------------------------------------------------------
 // Helpers
+// -----------------------------------------------------------------------------
+
 export { default as anyOfValidator } from './helpers/anyOfValidator'
 export { default as allOfValidator } from './helpers/allOfValidator'
 export { default as orValidator } from './helpers/orValidator'
@@ -13,6 +19,10 @@ export { default as predicateValidator } from './helpers/predicateValidator'
 export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator'
+
+// -----------------------------------------------------------------------------
+// Validators
+// -----------------------------------------------------------------------------
 
 export {
   default as validateIsArrayOf,
@@ -56,11 +66,18 @@ export {
   default as validateObjectWithConstraints,
 } from './constraints/validators/validateObjectWithConstraints'
 
+// -----------------------------------------------------------------------------
 // Renderers
+// -----------------------------------------------------------------------------
+
 export { default as objectRenderer } from './failures/renderers/objectRenderer'
 export {
   default as argumentsRenderer,
 } from './failures/renderers/argumentsRenderer'
+
+// -----------------------------------------------------------------------------
+// Configured Functions
+// -----------------------------------------------------------------------------
 
 // Configured Validators
 export {
