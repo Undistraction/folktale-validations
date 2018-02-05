@@ -71,6 +71,7 @@ export const wrapWith = (a, b = a) =>
   )
 export const wrapWithSingleQuotes = wrapWith(`'`)
 export const wrapWithSquareBrackets = wrapWith(`[`, `]`)
+export const wrapWithSoftBrackets = wrapWith(`(`, `)`)
 
 export const quoteAndJoinWithComma = compose(
   joinWithComma,

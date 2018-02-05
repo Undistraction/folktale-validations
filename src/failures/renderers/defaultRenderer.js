@@ -79,7 +79,7 @@ export default messages => failureObj => {
     )(defaultTo(messages.invalidObjectPrefix(), propName(o)))
   })
 
-  const parseFieldValue = (level, fieldName, fieldValue) =>
+  const parseFieldValue = (level, fieldValue, fieldName = null) =>
     ifElse(
       isStringOrArray,
       messages.objectValueErrorMessage(level, fieldName),
@@ -87,7 +87,7 @@ export default messages => failureObj => {
     )(fieldValue)
 
   const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
-    const result = parseFieldValue(level, fieldName, fieldValue)
+    const result = parseFieldValue(level, fieldValue, fieldName)
     return joinWithNoSpace([acc, result])
   }
 
@@ -98,9 +98,9 @@ export default messages => failureObj => {
       messages.arrayValueErrorMessage(
         level,
         index,
-        parseFieldValue(inc(level), null, o)
+        parseFieldValue(inc(level), o)
       )
     )
 
-  return parseFieldValue(0, null, failureObj)
+  return parseFieldValue(0, failureObj)
 }

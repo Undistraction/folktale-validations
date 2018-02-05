@@ -1,12 +1,7 @@
 import { always, compose, of } from 'ramda'
 import { validation as Validation } from 'folktale'
 import { propValue } from './utils/props'
-import {
-  joinWithColon,
-  joinWithOr,
-  joinWithAnd,
-  wrapWithSingleQuotes,
-} from './utils/formatting'
+import { joinWithColon, wrapWithSingleQuotes } from './utils/formatting'
 import { ROOT_FIELD } from './const'
 
 const { Failure } = Validation
@@ -14,9 +9,6 @@ const { Failure } = Validation
 // -----------------------------------------------------------------------------
 // Utilities
 // -----------------------------------------------------------------------------
-
-export const joinMessagesWithAnd = joinWithAnd
-export const joinMessagesWithOr = joinWithOr
 
 export const wrapFailureMessageWith = messageWrapper =>
   compose(Failure, of, messageWrapper, propValue)

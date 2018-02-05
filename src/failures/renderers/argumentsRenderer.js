@@ -3,8 +3,8 @@ import { FAILURE_FIELD_NAMES } from '../../const'
 
 const { NAME } = FAILURE_FIELD_NAMES
 
-export default (objectRenderer, messages) =>
+export default (defaultRenderer, messages) =>
   compose(
-    objectRenderer(messages),
+    defaultRenderer(messages),
     assoc(NAME, messages.invalidArgumentsPrefix())
   )

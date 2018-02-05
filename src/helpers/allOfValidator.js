@@ -1,16 +1,11 @@
 import { validation as Validation } from 'folktale'
 import { compose, when, reduce } from 'ramda'
 import { isArray } from 'ramda-adjunct'
-import { joinMessagesWithAnd } from '../messages'
-import { appendRight } from '../utils/array'
+import { andMessages } from '../utils/failures'
 
 const { Success, Failure } = Validation
 
-const toErr = compose(
-  Failure,
-  appendRight([]),
-  when(isArray, joinMessagesWithAnd)
-)
+const toErr = compose(Failure, when(isArray, andMessages))
 
 export default validators => o =>
   reduce(

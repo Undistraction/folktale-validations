@@ -1,10 +1,10 @@
 import { anyOfValidator } from '../../index'
-import { joinMessagesWithAnd } from '../../messages'
 import {
   spy,
   stubReturnsSuccess,
   stubReturnsFailure,
 } from '../testHelpers/sinon'
+import { orMessages } from '../../utils/failures'
 
 describe(`anyOfValidator()`, () => {
   describe(`with a valid value`, () => {
@@ -62,9 +62,9 @@ describe(`anyOfValidator()`, () => {
       const v2 = stubReturnsFailure(errorMessage2)
       const validator = anyOfValidator([v1, v2])
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([
-        joinMessagesWithAnd([errorMessage1, errorMessage2]),
-      ])
+      expect(validation).toEqualFailureWithValue(
+        orMessages([errorMessage1, errorMessage2])
+      )
       expect(v1.calledWith(value)).toBeTrue()
       expect(v2.calledWith(value)).toBeTrue()
     })

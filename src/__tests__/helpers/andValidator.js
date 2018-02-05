@@ -1,6 +1,6 @@
 import { andValidator } from '../../index'
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon'
-import { joinMessagesWithAnd } from '../../messages'
+import { andMessages } from '../../utils/failures'
 
 const value = 1
 const message1 = `message1`
@@ -50,9 +50,9 @@ describe(`andValidator()`, () => {
       const v2 = stubReturnsFailure(message2)
       const validator = andValidator(v1, v2)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([
-        joinMessagesWithAnd([message1, message2]),
-      ])
+      expect(validation).toEqualFailureWithValue(
+        andMessages([message1, message2])
+      )
       expect(v1.calledWith(value)).toBeTrue()
       expect(v2.calledWith(value)).toBeTrue()
     })

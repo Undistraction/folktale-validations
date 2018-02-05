@@ -4,7 +4,7 @@ import {
   spy,
   stubReturnsFailure,
 } from '../testHelpers/sinon'
-import { joinMessagesWithAnd } from '../../messages'
+import { orMessages } from '../../utils/failures'
 
 const value = 1
 const message1 = `message1`
@@ -41,9 +41,9 @@ describe(`orValidator()`, () => {
       const v2 = stubReturnsFailure(message2)
       const validator = orValidator(v1, v2)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([
-        joinMessagesWithAnd([message1, message2]),
-      ])
+      expect(validation).toEqualFailureWithValue(
+        orMessages([message1, message2])
+      )
       expect(v1.calledWith(value)).toBeTrue()
       expect(v2.calledWith(value)).toBeTrue()
     })

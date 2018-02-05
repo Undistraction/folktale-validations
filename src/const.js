@@ -48,4 +48,6 @@ export const FAILURE_FIELD_NAMES = Object.freeze({
   FIELDS: `fields`,
   CHILDREN: `children`,
   NAME: `name`,
+  AND: `and`,
+  OR: `or`,
 })

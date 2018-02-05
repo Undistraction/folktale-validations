@@ -1,5 +1,5 @@
 import { assoc } from 'ramda'
-import objectRenderer from '../../../failures/renderers/objectRenderer'
+import defaultRenderer from '../../../failures/renderers/defaultRenderer'
 import {
   flatFailureMessage,
   nestedFailureMessageWithObject,
@@ -7,8 +7,8 @@ import {
 } from '../../testHelpers/fixtures/rendererFailureMessages'
 import defaultRendererMessages from '../../../config/defaults/defaultRendererMessages'
 
-describe(`objectRenderer()`, () => {
-  const renderer = objectRenderer(defaultRendererMessages)
+describe(`defaultRenderer()`, () => {
+  const renderer = defaultRenderer(defaultRendererMessages)
 
   describe(`with a single error string`, () => {
     it(`renders the correct error message`, () => {

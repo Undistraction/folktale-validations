@@ -70,7 +70,9 @@ export {
 // Renderers
 // -----------------------------------------------------------------------------
 
-export { default as objectRenderer } from './failures/renderers/objectRenderer'
+export {
+  default as defaultRenderer,
+} from './failures/renderers/defaultRenderer'
 export {
   default as argumentsRenderer,
 } from './failures/renderers/argumentsRenderer'

@@ -1,6 +1,6 @@
 import { allOfValidator } from '../../index'
-import { joinMessagesWithAnd } from '../../messages'
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon'
+import { andMessages } from '../../utils/failures'
 
 const message1 = `message1`
 const message2 = `message2`
@@ -76,9 +76,9 @@ describe(`allOfValidator()`, () => {
         const v3 = stubReturnsFailure(message3)
         const validator = allOfValidator([v1, v2, v3])
         const validation = validator(value)
-        expect(validation).toEqualFailureWithValue([
-          joinMessagesWithAnd([message1, message2, message3]),
-        ])
+        expect(validation).toEqualFailureWithValue(
+          andMessages([message1, message2, message3])
+        )
         expect(v1.calledWith(value)).toBeTrue()
         expect(v2.calledWith(value)).toBeTrue()
         expect(v3.calledWith(value)).toBeTrue()
