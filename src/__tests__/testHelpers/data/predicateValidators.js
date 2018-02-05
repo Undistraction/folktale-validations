@@ -1,4 +1,4 @@
-import typeData from './fixtures/typeData'
+import typeData from '../fixtures/typeData'
 import {
   validateIsArray,
   validateIsNotArray,
@@ -31,8 +31,8 @@ import {
   validateIsNotValidDate,
   validateIsPositive,
   validateIsNegative,
-} from '../../index'
-import { PREDICATES } from '../../const'
+} from '../../../index'
+import { PREDICATES } from '../../../const'
 
 export default {
   // Types

@@ -1,7 +1,7 @@
 import { isNotNull, isArray } from 'ramda-adjunct'
 import { always, curry, ifElse, when, compose, of } from 'ramda'
 import { validation as Validation } from 'folktale'
-import { propValue } from './utils'
+import { propValue } from './utils/props'
 import {
   joinWithColon,
   joinWithOr,

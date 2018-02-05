@@ -1,7 +1,7 @@
 import { always, compose } from 'ramda'
 import { validation as Validation } from 'folktale'
 import { toConstraintsError } from '../../failures/utils'
-import { propValue } from '../../utils'
+import { propValue } from '../../utils/props'
 
 const { Failure, Success } = Validation
 

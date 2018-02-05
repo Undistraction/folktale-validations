@@ -1,6 +1,6 @@
 import { compose, identity } from 'ramda'
 import { validation as Validation } from 'folktale'
-import { propValue } from '../utils'
+import { propValue } from '../utils/props'
 import { fieldErrorMessage } from '../messages'
 
 const { Failure } = Validation

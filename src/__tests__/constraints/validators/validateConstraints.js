@@ -1,6 +1,6 @@
 import { keys, map, without, assoc, of, compose } from 'ramda'
 import validateConstraints from '../../../constraints/validators/validateConstraints'
-import { func } from '../../testHelpers/fixtures'
+import { func } from '../../testHelpers/fixtures/generic'
 import typeData from '../../testHelpers/fixtures/typeData'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
 import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints'
@@ -21,6 +21,7 @@ import {
 } from '../../testHelpers/fixtures/constraintValues'
 import { pluralise, joinWithAnd } from '../../../utils/formatting'
 import testLevels from '../../testHelpers/testLevels'
+import constraintsLevels from '../../testHelpers/data/constraintsLevels'
 
 const {
   FIELDS,
@@ -145,7 +146,7 @@ describe(`validateConstraints`, () => {
   // Perform tests for multiple levels of nesting
   // ---------------------------------------------------------------------------
 
-  testLevels((level, withValueRoot, withExpectedRoot) => {
+  testLevels(constraintsLevels, (level, withValueRoot, withExpectedRoot) => {
     describe(`with ${level} constraint ${pluralise(`level`, level)}`, () => {
       // -----------------------------------------------------------------------
       // 1. Value itself

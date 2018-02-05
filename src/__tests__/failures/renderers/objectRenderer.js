@@ -1,10 +1,10 @@
 import { assoc } from 'ramda'
 import objectRenderer from '../../../failures/renderers/objectRenderer'
 import {
-  flatErrorMessage,
-  nestedObjectErrorMessage,
-  nestedArrayErrorMessage,
-} from '../../testHelpers/fixtures'
+  flatFailureMessage,
+  nestedFailureMessageWithObject,
+  nestedFailureMessageWithArray,
+} from '../../testHelpers/fixtures/failureMessages'
 
 describe(`objectRenderer()`, () => {
   const rootName = `Root Name`
@@ -34,7 +34,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a flat error object`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(flatErrorMessage)
+      const result = objectRenderer(flatFailureMessage)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – fieldsMessageForRoot
@@ -48,7 +48,7 @@ describe(`objectRenderer()`, () => {
     describe(`with a name`, () => {
       it(`renders the correct error message`, () => {
         const name = `Object Name`
-        const result = objectRenderer(assoc(`name`, name, flatErrorMessage))
+        const result = objectRenderer(assoc(`name`, name, flatFailureMessage))
         expect(result).toEqualWithCompressedWhitespace(
           `Object Name 
             – fieldsMessageForRoot
@@ -63,7 +63,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a nested error object`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(nestedObjectErrorMessage)
+      const result = objectRenderer(nestedFailureMessageWithObject)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – included invalid value(s)
@@ -79,7 +79,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a nested array of error objects`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(nestedArrayErrorMessage)
+      const result = objectRenderer(nestedFailureMessageWithArray)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – included invalid value(s)
@@ -98,10 +98,3 @@ describe(`objectRenderer()`, () => {
     })
   })
 })
-
-// doSomething()
-//   – missingRequiredArgs: [a, b]
-//   – invalidArgs
-//     – 'a': errorMessageForA
-//     – 'b': errorMessageForB
-//     – 'c': errorMessageForC
