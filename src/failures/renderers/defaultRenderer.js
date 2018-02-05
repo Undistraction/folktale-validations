@@ -2,13 +2,14 @@ import {
   curry,
   inc,
   append,
-  ifElse,
   compose,
   when,
   always,
   of,
   prepend,
   defaultTo,
+  cond,
+  T,
 } from 'ramda'
 import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct'
 import { isStringOrArray } from '../../utils/predicates'
@@ -26,6 +27,8 @@ import {
   joinWithSpace,
   wrapWithSingleQuotes,
 } from '../../utils/formatting'
+import { isAndOrOrObj } from '../utils'
+import andOrRenderer from './andOrRenderer'
 
 export default messages => failureObj => {
   const buildArrayMessage = curry((level, fieldName, fieldValue) => {
@@ -80,11 +83,11 @@ export default messages => failureObj => {
   })
 
   const parseFieldValue = (level, fieldValue, fieldName = null) =>
-    ifElse(
-      isStringOrArray,
-      messages.objectValueErrorMessage(level, fieldName),
-      buildObjMessage(level, fieldName)
-    )(fieldValue)
+    cond([
+      [isAndOrOrObj, andOrRenderer(messages)],
+      [isStringOrArray, messages.objectValueErrorMessage(level, fieldName)],
+      [T, buildObjMessage(level, fieldName)],
+    ])(fieldValue)
 
   const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
     const result = parseFieldValue(level, fieldValue, fieldName)

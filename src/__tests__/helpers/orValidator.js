@@ -44,6 +44,7 @@ describe(`orValidator()`, () => {
       expect(validation).toEqualFailureWithValue(
         orMessages([message1, message2])
       )
+
       expect(v1.calledWith(value)).toBeTrue()
       expect(v2.calledWith(value)).toBeTrue()
     })

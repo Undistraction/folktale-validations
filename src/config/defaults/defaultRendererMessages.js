@@ -3,22 +3,28 @@ import { always, curry, ifElse, when } from 'ramda'
 import {
   joinWithColon,
   joinWithAnd,
+  joinWithOr,
   wrapWithSingleQuotes,
   joinWithSpace,
   joinWithEmDash,
   wrapWithSquareBrackets,
   newlineAndTabsForLevel,
+  wrapWithSoftBrackets,
 } from '../../utils/formatting'
 import { PREDICATES } from '../../const'
 
 const KEY = `Key`
 const ARGUMENTS = `Arguments`
+const OBJECT = `object`
+const VALUE = `value`
 
-export const prefixWithKey = curry((level, value) =>
+const includedInvalidMessage = type => `included invalid ${type}(s)`
+
+const prefixWithKey = curry((level, value) =>
   joinWithSpace([joinWithEmDash([newlineAndTabsForLevel(level), KEY]), value])
 )
 
-export const prefixWithIndex = (level, index, value) =>
+const prefixWithIndex = (level, index, value) =>
   joinWithSpace([
     joinWithEmDash([
       newlineAndTabsForLevel(level),
@@ -27,7 +33,7 @@ export const prefixWithIndex = (level, index, value) =>
     value,
   ])
 
-export const objectValueErrorMessage = (level, name) => value => {
+const objectValueErrorMessage = (level, name) => value => {
   const stringValue = when(isArray, joinWithAnd)(value)
   return ifElse(
     isNotNull,
@@ -41,22 +47,22 @@ export const objectValueErrorMessage = (level, name) => value => {
   )(name)
 }
 
-export const arrayValueErrorMessage = (level, index, value) =>
+const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value)
 
-export const fieldsErrorMessage = (level, value) =>
+const fieldsErrorMessage = (level, value) =>
   joinWithEmDash([newlineAndTabsForLevel(level), value])
 
-export const invalidObjectPrefix = always(PREDICATES.Object)
-export const invalidArrayPrefix = always(PREDICATES.Array)
-export const invalidArgumentsPrefix = always(ARGUMENTS)
+const invalidObjectPrefix = always(PREDICATES.Object)
+const invalidArrayPrefix = always(PREDICATES.Array)
+const invalidArgumentsPrefix = always(ARGUMENTS)
 
-export const invalidObjectReasonInvalidValues = level =>
-  joinWithEmDash([newlineAndTabsForLevel(level), `included invalid value(s)`])
+const invalidObjectReasonInvalidValues = level =>
+  joinWithEmDash([newlineAndTabsForLevel(level), includedInvalidMessage(VALUE)])
 
-export const invalidArrayReasonInvalidObjects = always(
-  `included invalid object(s)`
-)
+const invalidArrayReasonInvalidObjects = always(includedInvalidMessage(OBJECT))
+
+const group = wrapWithSoftBrackets
 
 export default {
   invalidObjectReasonInvalidValues,
@@ -68,4 +74,7 @@ export default {
   arrayValueErrorMessage,
   invalidArrayReasonInvalidObjects,
   fieldsErrorMessage,
+  joinWithAnd,
+  joinWithOr,
+  group,
 }

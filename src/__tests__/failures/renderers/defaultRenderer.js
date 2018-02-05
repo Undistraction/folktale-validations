@@ -24,9 +24,9 @@ describe(`defaultRenderer()`, () => {
     })
   })
 
-  describe(`with an array of error strings`, () => {
+  describe(`with ands and ors`, () => {
     it(`renders the correct error message`, () => {
-      const result = renderer([`errorMessage1`, `errorMessage2`])
+      const result = renderer({ and: [`errorMessage1`, `errorMessage2`] })
       expect(result).toEqualWithCompressedWhitespace(
         `errorMessage1 and errorMessage2`
       )
