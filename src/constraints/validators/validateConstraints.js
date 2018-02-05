@@ -8,8 +8,7 @@ const { Failure, Success } = Validation
 export default (
   ownConstraints,
   validateObjectWithConstraints
-) => constraintsToValidate =>
-  validateObjectWithConstraints(
+) => constraintsToValidate => validateObjectWithConstraints(
     ownConstraints,
     constraintsToValidate
   ).matchWith({

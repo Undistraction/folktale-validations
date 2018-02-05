@@ -6,7 +6,7 @@ import {
   stubReturns,
 } from '../../testHelpers/sinon'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
-import validatorsWithMessages from '../../../config/defaults/validatorsWithMessages'
+import defaultValidators from '../../../config/defaults/defaultValidators'
 import {
   value1,
   value2,
@@ -56,9 +56,8 @@ const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES
 // given a valid constraint object, the constraints are appled correctly.
 
 describe(`validateObjectWithConstraints`, () => {
-  const validators = validatorsWithMessages
   const validateObjectWithConstraintsConfigured = validateObjectWithConstraints(
-    validators
+    defaultValidators
   )
 
   // ---------------------------------------------------------------------------
@@ -286,9 +285,7 @@ describe(`validateObjectWithConstraints`, () => {
           }
 
           const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: [
-              `Object was missing required key(s): ['${key2}']`,
-            ],
+            [FIELDS_FAILURE_MESSAGE]: [`missing required key(s): ['${key2}']`],
           }
 
           const validator = validateObjectWithConstraintsConfigured(constraints)
@@ -324,7 +321,7 @@ describe(`validateObjectWithConstraints`, () => {
 
           const expectedValue = {
             [FIELDS_FAILURE_MESSAGE]: [
-              `Object included invalid key(s): '[${invalidKeyName}]'`,
+              `included invalid key(s): '[${invalidKeyName}]'`,
             ],
           }
 

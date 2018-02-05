@@ -21,9 +21,9 @@ const negatedPredicateMessage = name =>
 // -----------------------------------------------------------------------------
 
 const isLengthGreaterThanMessage = length =>
-  `Length must be greater than ${length}`
+  `Length wasn't greater than ${length}`
 
-const isLengthLessThanMessage = length => `Length must be less than ${length}`
+const isLengthLessThanMessage = length => `Length wasn't less than ${length}`
 
 // -----------------------------------------------------------------------------
 // Other
@@ -48,25 +48,25 @@ const numberWithUnitMessage = unit =>
 
 const objectValuesMessage = valueErrorMessages =>
   joinWithColon([
-    `Object included invalid values(s)`,
+    `included invalid values(s)`,
     joinWithComma(valueErrorMessages),
   ])
 
 const invalidKeysErrorMessage = invalidKeys =>
   joinWithColon([
-    `Object included invalid key(s)`,
+    `included invalid key(s)`,
     wrapWithSingleQuotes(wrapWithSquareBrackets(joinWithComma(invalidKeys))),
   ])
 
 const missingRequiredKeyErrorMessage = keys =>
   joinWithColon([
-    `Object was missing required key(s)`,
+    `missing required key(s)`,
     wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
   ])
 
 const exclusiveKeyErrorMessage = keys =>
   joinWithColon([
-    `Object had more than one exlusive key`,
+    `had more than one exlusive key`,
     wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
   ])
 

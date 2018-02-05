@@ -16,7 +16,7 @@ describe.skip(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints([])
         const validation = validator(value)
         expect(validation).toEqual(
-          Failure([`Object included invalid key(s): '[a, b]'`])
+          Failure([`included invalid key(s): '[a, b]'`])
         )
       })
     })
@@ -97,7 +97,7 @@ describe.skip(`validateObjectKeysWithConstraints()`, () => {
           const validator = validateObjectKeysWithConstraints([], constraints)
           const validation = validator(o)
           expect(validation).toEqual(
-            Failure([`Object included invalid key(s): '[c]'`])
+            Failure([`included invalid key(s): '[c]'`])
           )
           expect(v1.notCalled).toBeTrue()
         })
@@ -113,7 +113,7 @@ describe.skip(`validateObjectKeysWithConstraints()`, () => {
         const validator = validateObjectKeysWithConstraints([], constraints)
         const validation = validator(value)
         expect(validation).toEqual(
-          Failure([`Object included invalid key(s): '[a, b]'`])
+          Failure([`included invalid key(s): '[a, b]'`])
         )
       })
     })
@@ -194,7 +194,7 @@ describe.skip(`validateObjectKeysWithConstraints()`, () => {
           const validator = validateObjectKeysWithConstraints([], constraints)
           const validation = validator(o)
           expect(validation).toEqual(
-            Failure([`Object included invalid key(s): '[c]'`])
+            Failure([`included invalid key(s): '[c]'`])
           )
           expect(v1.notCalled).toBeTrue()
         })

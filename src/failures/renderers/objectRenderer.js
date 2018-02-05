@@ -14,16 +14,6 @@ import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct'
 import { isStringOrArray } from '../../utils/predicates'
 import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
-  invalidObjectPrefix,
-  invalidObjectReasonInvalidValues,
-  objectValueErrorMessage,
-  prefixWithKey,
-  invalidArrayPrefix,
-  arrayValueErrorMessage,
-  invalidArrayReasonInvalidObjects,
-  fieldsErrorMessage,
-} from '../../messages'
-import {
   propName,
   propFields,
   propChildren,
@@ -37,72 +27,80 @@ import {
   wrapWithSingleQuotes,
 } from '../../utils/formatting'
 
-const buildArrayMessage = curry((level, fieldName, fieldValue) => {
-  const prefix = compose(
-    joinWithColon,
-    append(invalidArrayPrefix()),
-    of,
-    wrapWithSingleQuotes,
-    defaultTo(``)
-  )(fieldName)
+export default messages => failureObj => {
+  const buildArrayMessage = curry((level, fieldName, fieldValue) => {
+    const prefix = compose(
+      joinWithColon,
+      append(messages.invalidArrayPrefix()),
+      of,
+      wrapWithSingleQuotes,
+      defaultTo(``)
+    )(fieldName)
 
-  const result = joinWithSpace([
-    prefix,
-    invalidArrayReasonInvalidObjects(),
-    // eslint-disable-next-line no-use-before-define
-    joinWithNoSpace(parseArray(inc(level))(fieldValue)),
-  ])
-  return isNotUndefined(fieldName) ? prefixWithKey(level, result) : result
-})
+    const result = joinWithSpace([
+      prefix,
+      messages.invalidArrayReasonInvalidObjects(),
+      // eslint-disable-next-line no-use-before-define
+      joinWithNoSpace(parseArray(inc(level))(fieldValue)),
+    ])
+    return isNotUndefined(fieldName)
+      ? messages.prefixWithKey(level, result)
+      : result
+  })
 
-const buildObjMessage = curry((level, fieldName, o) => {
-  if (hasPropChildren(o)) {
-    return buildArrayMessage(level, fieldName, propChildren(o))
+  const buildObjMessage = curry((level, fieldName, o) => {
+    if (hasPropChildren(o)) {
+      return buildArrayMessage(level, fieldName, propChildren(o))
+    }
+
+    const fields = propFields(o)
+    const fieldsError = propFieldsFailiureMessage(o)
+
+    return compose(
+      when(always(isNotNull(fieldName)), messages.prefixWithKey(level)),
+      joinWithSpace,
+      when(
+        always(isNotUndefined(fields)),
+        concatRight([
+          messages.invalidObjectReasonInvalidValues(level),
+          // eslint-disable-next-line no-use-before-define
+          parseFields(level)(fields),
+        ])
+      ),
+      when(
+        always(isNotUndefined(fieldsError)),
+        append(messages.fieldsErrorMessage(level, fieldsError))
+      ),
+      of,
+      when(
+        always(isNotNull(fieldName)),
+        compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
+      )
+    )(defaultTo(messages.invalidObjectPrefix(), propName(o)))
+  })
+
+  const parseFieldValue = (level, fieldName, fieldValue) =>
+    ifElse(
+      isStringOrArray,
+      messages.objectValueErrorMessage(level, fieldName),
+      buildObjMessage(level, fieldName)
+    )(fieldValue)
+
+  const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
+    const result = parseFieldValue(level, fieldName, fieldValue)
+    return joinWithNoSpace([acc, result])
   }
 
-  const fields = propFields(o)
-  const fieldsError = propFieldsFailiureMessage(o)
+  const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``)
 
-  return compose(
-    when(always(isNotNull(fieldName)), prefixWithKey(level)),
-    joinWithSpace,
-    when(
-      always(isNotUndefined(fields)),
-      concatRight([
-        invalidObjectReasonInvalidValues(level),
-        // eslint-disable-next-line no-use-before-define
-        parseFields(level)(fields),
-      ])
-    ),
-    when(
-      always(isNotUndefined(fieldsError)),
-      append(fieldsErrorMessage(level, fieldsError))
-    ),
-    of,
-    when(
-      always(isNotNull(fieldName)),
-      compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
+  const parseArray = level =>
+    mapWithIndex((o, index) =>
+      messages.arrayValueErrorMessage(
+        level,
+        index,
+        parseFieldValue(inc(level), null, o)
+      )
     )
-  )(defaultTo(invalidObjectPrefix(), propName(o)))
-})
 
-const parseFieldValue = (level, fieldName, fieldValue) =>
-  ifElse(
-    isStringOrArray,
-    objectValueErrorMessage(level, fieldName),
-    buildObjMessage(level, fieldName)
-  )(fieldValue)
-
-const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
-  const result = parseFieldValue(level, fieldName, fieldValue)
-  return joinWithNoSpace([acc, result])
+  return parseFieldValue(0, null, failureObj)
 }
-
-const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``)
-
-const parseArray = level =>
-  mapWithIndex((o, index) =>
-    arrayValueErrorMessage(level, index, parseFieldValue(inc(level), null, o))
-  )
-
-export default o => parseFieldValue(0, null, o)

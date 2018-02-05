@@ -45,7 +45,7 @@ import validateIsArrayOf from '../validators/array/validateIsArrayOf'
 import validateArrayElements from '../validators/array/validateArrayElements'
 
 import { PREDICATES } from '../const'
-import validateObjectWithConstraints from '../constraints/validators/validateConstraints'
+import validateObjectWithConstraints from '../constraints/validators/validateObjectWithConstraints'
 
 export default messages => {
   const {

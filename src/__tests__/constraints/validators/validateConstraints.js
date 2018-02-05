@@ -5,7 +5,7 @@ import typeData from '../../testHelpers/fixtures/typeData'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
 import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints'
 import constraints from '../../../constraints/constraints'
-import validatorsWithMessages from '../../../config/defaults/validatorsWithMessages'
+import defaultValidators from '../../../config/defaults/defaultValidators'
 import {
   value1,
   value2,
@@ -69,7 +69,7 @@ const requiredKeysWithout = fieldName =>
   compose(map(v => assoc(v, func, {})), without(of(fieldName)))(requiredKeys)
 
 describe(`validateConstraints`, () => {
-  const validators = validatorsWithMessages
+  const validators = defaultValidators
   const configuredContraints = constraints(validators)
   const validateConstraintsConfigured = validateConstraints(
     configuredContraints,
@@ -186,7 +186,7 @@ describe(`validateConstraints`, () => {
 
             const expectedValue = withExpectedRoot({
               [FIELDS_FAILURE_MESSAGE]: [
-                `Object included invalid key(s): '[${invalidKeyName}]'`,
+                `included invalid key(s): '[${invalidKeyName}]'`,
               ],
             })
 
@@ -210,7 +210,7 @@ describe(`validateConstraints`, () => {
                       [CHILDREN]: [
                         {
                           [FIELDS_FAILURE_MESSAGE]: [
-                            `Object was missing required key(s): ['${fieldName}']`,
+                            `missing required key(s): ['${fieldName}']`,
                           ],
                         },
                       ],
@@ -248,7 +248,7 @@ describe(`validateConstraints`, () => {
                       [CHILDREN]: [
                         {
                           [FIELDS_FAILURE_MESSAGE]: [
-                            `Object had more than one exlusive key: ['${
+                            `had more than one exlusive key: ['${
                               keyNames[1]
                             }', '${keyNames[0]}']`,
                           ],
@@ -280,7 +280,7 @@ describe(`validateConstraints`, () => {
                       [CHILDREN]: [
                         {
                           [FIELDS_FAILURE_MESSAGE]: [
-                            `Object was missing required key(s): ['${fieldName}']`,
+                            `missing required key(s): ['${fieldName}']`,
                           ],
                         },
                       ],

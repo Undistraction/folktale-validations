@@ -4,20 +4,21 @@ import {
   flatFailureMessage,
   nestedFailureMessageWithObject,
   nestedFailureMessageWithArray,
-} from '../../testHelpers/fixtures/failureMessages'
+} from '../../testHelpers/fixtures/rendererFailureMessages'
+import defaultRendererMessages from '../../../config/defaults/defaultRendererMessages'
 
 describe(`objectRenderer()`, () => {
-  const rootName = `Root Name`
+  const renderer = objectRenderer(defaultRendererMessages)
 
   describe(`with a single error string`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(`errorMessage`)
+      const result = renderer(`errorMessage`)
       expect(result).toEqualWithCompressedWhitespace(`errorMessage`)
     })
 
     describe(`with rootName`, () => {
       it(`renders the correct error message`, () => {
-        const result = objectRenderer(`errorMessage`, rootName)
+        const result = renderer(`errorMessage`)
         expect(result).toEqualWithCompressedWhitespace(`errorMessage`)
       })
     })
@@ -25,7 +26,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with an array of error strings`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer([`errorMessage1`, `errorMessage2`])
+      const result = renderer([`errorMessage1`, `errorMessage2`])
       expect(result).toEqualWithCompressedWhitespace(
         `errorMessage1 and errorMessage2`
       )
@@ -34,7 +35,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a flat error object`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(flatFailureMessage)
+      const result = renderer(flatFailureMessage)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – fieldsMessageForRoot
@@ -48,7 +49,7 @@ describe(`objectRenderer()`, () => {
     describe(`with a name`, () => {
       it(`renders the correct error message`, () => {
         const name = `Object Name`
-        const result = objectRenderer(assoc(`name`, name, flatFailureMessage))
+        const result = renderer(assoc(`name`, name, flatFailureMessage))
         expect(result).toEqualWithCompressedWhitespace(
           `Object Name 
             – fieldsMessageForRoot
@@ -63,7 +64,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a nested error object`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(nestedFailureMessageWithObject)
+      const result = renderer(nestedFailureMessageWithObject)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – included invalid value(s)
@@ -79,7 +80,7 @@ describe(`objectRenderer()`, () => {
 
   describe(`with a nested array of error objects`, () => {
     it(`renders the correct error message`, () => {
-      const result = objectRenderer(nestedFailureMessageWithArray)
+      const result = renderer(nestedFailureMessageWithArray)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
           – included invalid value(s)

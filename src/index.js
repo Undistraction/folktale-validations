@@ -56,7 +56,16 @@ export {
   default as validateObjectWithConstraints,
 } from './constraints/validators/validateObjectWithConstraints'
 
+// Renderers
+export { default as objectRenderer } from './failures/renderers/objectRenderer'
+export {
+  default as argumentsRenderer,
+} from './failures/renderers/argumentsRenderer'
+
 // Configured Validators
 export {
-  default as validatorsWithMessages,
-} from './config/defaults/validatorsWithMessages'
+  default as defaultValidators,
+} from './config/defaults/defaultValidators'
+
+// Configured Renderers
+export { default as defaultRenderers } from './config/defaults/defaultRenderers'
