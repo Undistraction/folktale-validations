@@ -2,6 +2,7 @@ import { stub } from 'sinon'
 import { validation as Validation } from 'folktale'
 import { map } from 'ramda'
 import { numberWithUnitValidator } from '../../index'
+import typeData from '../testHelpers/fixtures/typeData'
 
 const { Failure } = Validation
 
@@ -17,7 +18,6 @@ describe(`numberWithUnitValidator`, () => {
 
   describe(`when value is valid`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
-      const numbers = [0, 0.5, -0.5, 10, -10]
       map(number => {
         const unit = `xx`
         const value = `${number}${unit}`
@@ -25,14 +25,13 @@ describe(`numberWithUnitValidator`, () => {
         const result = validator(value)
         expect(result).toEqualSuccessWithValue(value)
         expect(messageFunction.calledWith(unit)).toBeTrue()
-      })(numbers)
+      })(typeData.validNumericValues)
     })
   })
 
   describe(`when value is invalid`, () => {
     describe(`with unitless numbers`, () => {
       it(`returns a Validation.Failure with message`, () => {
-        const numbers = [0, 0.5, -0.5, 10, -10]
         map(number => {
           const unit = `px`
           const value = `${number}`
@@ -40,7 +39,7 @@ describe(`numberWithUnitValidator`, () => {
           const result = validator(value)
           expect(result).toEqualFailureWithValue([message])
           expect(messageFunction.calledWith(unit)).toBeTrue()
-        })(numbers)
+        })(typeData.validNumericValues)
       })
     })
 
@@ -61,7 +60,6 @@ describe(`numberWithUnitValidator`, () => {
 
     describe(`with other invalid values`, () => {
       it(`returns a Validation.Failure with message`, () => {
-        const numbers = [[], {}, null, undefined, `s`, /x/, true, false]
         map(number => {
           const unit = `px`
           const value = `${number}`
@@ -69,7 +67,7 @@ describe(`numberWithUnitValidator`, () => {
           const result = validator(value)
           expect(result).toEqualFailureWithValue([message])
           expect(messageFunction.calledWith(unit)).toBeTrue()
-        })(numbers)
+        })(typeData.withoutValidNumericValues)
       })
     })
   })
