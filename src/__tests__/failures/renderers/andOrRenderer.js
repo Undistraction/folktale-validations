@@ -1,6 +1,6 @@
 import { joinWithAnd, wrapWithSoftBrackets } from '../../../utils/formatting'
 import andRenderer from '../../../failures/renderers/andOrRenderer'
-import { joinWithOr } from '../../../../lib/utils/formatting'
+import { joinWithOr } from '../../../utils/formatting'
 
 describe(`andRenderer`, () => {
   const validatorId1 = `valiatorId1`

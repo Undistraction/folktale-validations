@@ -30,16 +30,26 @@ import {
 
 const NEWLINE = `\n`
 const TAB = `\t`
+const SINGLE_QUOTE = `'`
+const SQUARE_BRACKET_OPENING = `[`
+const SQUARE_BRACKET_CLOSING = `]`
+const SOFT_BRACKET_OPENING = `(`
+const SOFT_BRACKET_CLOSING = `)`
+
+const NULL = 'null'
+const UNDEFINED = 'undefined'
+const NAN = 'NaN'
+const FUNCTION = `function () {}`
 
 const stringRepresentationIfNil = compose(
-  when(isNull, always(`null`)),
-  when(isUndefined, always(`undefined`)),
-  when(isNaN, always(`NaN`))
+  when(isNull, always(NULL)),
+  when(isUndefined, always(UNDEFINED)),
+  when(isNaN, always(NAN))
 )
 
 const stringRepresentationIfFunction = when(
   isFunction,
-  always(`function () {}`)
+  always(FUNCTION)
 )
 
 // -----------------------------------------------------------------------------
@@ -69,9 +79,9 @@ export const wrapWith = (a, b = a) =>
     stringRepresentationIfNil,
     stringRepresentationIfFunction
   )
-export const wrapWithSingleQuotes = wrapWith(`'`)
-export const wrapWithSquareBrackets = wrapWith(`[`, `]`)
-export const wrapWithSoftBrackets = wrapWith(`(`, `)`)
+export const wrapWithSingleQuotes = wrapWith(SINGLE_QUOTE)
+export const wrapWithSquareBrackets = wrapWith(SQUARE_BRACKET_OPENING, SQUARE_BRACKET_CLOSING)
+export const wrapWithSoftBrackets = wrapWith(SOFT_BRACKET_OPENING, SOFT_BRACKET_CLOSING)
 
 export const quoteAndJoinWithComma = compose(
   joinWithComma,

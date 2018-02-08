@@ -1,10 +1,6 @@
 import { prop, has, pluck, propEq } from 'ramda'
 import { CONSTRAINT_FIELD_NAMES } from '../const'
 
-// -----------------------------------------------------------------------------
-// Properties
-// -----------------------------------------------------------------------------
-
 export const propName = prop(CONSTRAINT_FIELD_NAMES.NAME)
 export const propFields = prop(CONSTRAINT_FIELD_NAMES.FIELDS)
 export const propChildren = prop(CONSTRAINT_FIELD_NAMES.CHILDREN)
