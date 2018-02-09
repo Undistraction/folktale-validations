@@ -69,6 +69,7 @@ export const joinWithEmDash = joinDefined(` – `)
 export const joinWithColon = joinDefined(`: `)
 export const joinWithSpace = joinDefined(` `)
 export const joinWithNoSpace = joinDefined(``)
+export const joinWithDot = joinDefined(`.`)
 
 export const wrapWith = (a, b = a) =>
   compose(
