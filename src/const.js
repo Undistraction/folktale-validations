@@ -51,3 +51,9 @@ export const FAILURE_FIELD_NAMES = Object.freeze({
   AND: `and`,
   OR: `or`,
 })
+
+export const PAYLOAD_FIELD_NAMES = Object.freeze({
+  UID: `uid`,
+  VALUE: `value`,
+  ARGS: `args`,
+})

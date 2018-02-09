@@ -12,11 +12,12 @@ import {
   __,
   gt,
   both,
+  all,
 } from 'ramda'
+import { isObj } from 'ramda-adjunct'
 import { FAILURE_FIELD_NAMES } from '../const'
 import { propValue } from '../utils/failures'
 import { constraintsObjName } from '../messages'
-import { isObj } from 'ramda-adjunct'
 
 const {
   FIELDS_FAILURE_MESSAGE,
@@ -48,5 +49,6 @@ export const propOr = prop(OR)
 export const isAndObj = has(AND)
 export const isOrObj = has(OR)
 export const isAndOrOrObj = both(isObj, either(isAndObj, isOrObj))
+export const isPayload = all(has())
 
 export const greaterThanZero = gt(__, 0)

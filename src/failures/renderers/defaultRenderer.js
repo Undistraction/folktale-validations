@@ -9,9 +9,13 @@ import {
   prepend,
   defaultTo,
   cond,
-  T,
 } from 'ramda'
-import { isNotNull, isNotUndefined, concatRight } from 'ramda-adjunct'
+import {
+  isNotNull,
+  isNotUndefined,
+  concatRight,
+  isPlainObj,
+} from 'ramda-adjunct'
 import { isStringOrArray } from '../../utils/predicates'
 import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
@@ -29,6 +33,7 @@ import {
 } from '../../utils/formatting'
 import { isAndOrOrObj } from '../utils'
 import andOrRenderer from './andOrRenderer'
+import { isPayload } from '../utils/payload'
 
 export default messages => failureObj => {
   const buildArrayMessage = curry((level, fieldName, fieldValue) => {
@@ -85,8 +90,9 @@ export default messages => failureObj => {
   const parseFieldValue = (level, fieldValue, fieldName = null) =>
     cond([
       [isAndOrOrObj, andOrRenderer(messages)],
+      [isPlainObj, buildObjMessage(level, fieldName)],
+      [isPayload, messages.objectValueErrorMessage(level, fieldName)],
       [isStringOrArray, messages.objectValueErrorMessage(level, fieldName)],
-      [T, buildObjMessage(level, fieldName)],
     ])(fieldValue)
 
   const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {

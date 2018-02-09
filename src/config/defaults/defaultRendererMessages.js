@@ -47,6 +47,20 @@ const objectValueErrorMessage = (level, name) => value => {
   )(name)
 }
 
+const objectValueErrrorMessageFromPayload = renderer => (
+  level,
+  name
+) => payload => {
+  const message = renderer(payload)
+  return ifElse(
+    isNotNull,
+    always(
+      prefixWithKey(level, joinWithColon([wrapWithSingleQuotes(name), message]))
+    ),
+    always(message)
+  )(name)
+}
+
 const arrayValueErrorMessage = (level, index, value) =>
   prefixWithIndex(level, index, value)
 
@@ -67,6 +81,7 @@ const group = wrapWithSoftBrackets
 export default {
   invalidObjectReasonInvalidValues,
   objectValueErrorMessage,
+  objectValueErrrorMessageFromPayload,
   prefixWithKey,
   invalidObjectPrefix,
   invalidArrayPrefix,
