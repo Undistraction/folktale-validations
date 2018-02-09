@@ -36,9 +36,9 @@ const SQUARE_BRACKET_CLOSING = `]`
 const SOFT_BRACKET_OPENING = `(`
 const SOFT_BRACKET_CLOSING = `)`
 
-const NULL = 'null'
-const UNDEFINED = 'undefined'
-const NAN = 'NaN'
+const NULL = `null`
+const UNDEFINED = `undefined`
+const NAN = `NaN`
 const FUNCTION = `function () {}`
 
 const stringRepresentationIfNil = compose(
@@ -47,10 +47,7 @@ const stringRepresentationIfNil = compose(
   when(isNaN, always(NAN))
 )
 
-const stringRepresentationIfFunction = when(
-  isFunction,
-  always(FUNCTION)
-)
+const stringRepresentationIfFunction = when(isFunction, always(FUNCTION))
 
 // -----------------------------------------------------------------------------
 // Exports
@@ -81,8 +78,14 @@ export const wrapWith = (a, b = a) =>
     stringRepresentationIfFunction
   )
 export const wrapWithSingleQuotes = wrapWith(SINGLE_QUOTE)
-export const wrapWithSquareBrackets = wrapWith(SQUARE_BRACKET_OPENING, SQUARE_BRACKET_CLOSING)
-export const wrapWithSoftBrackets = wrapWith(SOFT_BRACKET_OPENING, SOFT_BRACKET_CLOSING)
+export const wrapWithSquareBrackets = wrapWith(
+  SQUARE_BRACKET_OPENING,
+  SQUARE_BRACKET_CLOSING
+)
+export const wrapWithSoftBrackets = wrapWith(
+  SOFT_BRACKET_OPENING,
+  SOFT_BRACKET_CLOSING
+)
 
 export const quoteAndJoinWithComma = compose(
   joinWithComma,
