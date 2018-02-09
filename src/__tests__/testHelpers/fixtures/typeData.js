@@ -1,14 +1,15 @@
-import { reject, without, concat } from 'ramda'
+import { reject, without, concat, equals } from 'ramda'
 import { isFunction } from 'util'
+import { concatAll } from '../../../utils/array'
 
 const emptyArrayValues = [[]]
 const emptyStringValues = [``]
-const emptyObjValues = [{}]
+const emptyPlainObjValues = [{}]
 const nonEmptyArrayValues = [[1, 2, 3]]
-const nonEmptyObjValues = [{ a: 1, b: 2, c: 3 }]
+const nonEmptyPlainObjValues = [{ a: 1, b: 2, c: 3 }]
 const nonEmptyStringValues = [`a`]
 const arrayValues = [...emptyArrayValues, ...nonEmptyArrayValues]
-const objectValues = [...emptyObjValues, ...nonEmptyObjValues]
+const plainObjectValues = [...emptyPlainObjValues, ...nonEmptyPlainObjValues]
 const functionValues = [function() {}]
 const regexValues = [/a/]
 const stringValues = [...emptyStringValues, ...nonEmptyStringValues]
@@ -25,15 +26,22 @@ const invalidDateValues = [new Date(`x`)]
 const dateValues = [...validDateValues, ...invalidDateValues]
 const emptyValues = [
   ...emptyArrayValues,
-  ...emptyObjValues,
+  ...emptyPlainObjValues,
   ...emptyStringValues,
 ]
 const undefinedValues = [undefined]
 const nullValues = [null]
+const objectValues = concat(
+  plainObjectValues,
+  regexValues,
+  arrayValues,
+  dateValues,
+  functionValues
+)
 
 const allValues = [
   ...arrayValues,
-  ...objectValues,
+  ...plainObjectValues,
   ...functionValues,
   ...regexValues,
   ...stringValues,
@@ -47,7 +55,8 @@ const allValues = [
 
 const withoutBooleanValues = without(booleanValues, allValues)
 const withoutArrayValues = without(arrayValues, allValues)
-const withoutObjectValues = without(objectValues, allValues)
+
+const withoutPlainObjectValues = without(plainObjectValues, allValues)
 const withoutStringValues = without(stringValues, allValues)
 const withoutFunctionValues = reject(isFunction, allValues)
 const withoutDateValues = without(dateValues, allValues)
@@ -61,10 +70,22 @@ const withoutUndefinedValues = without([undefined], allValues)
 const withoutEmptyValues = without(emptyValues, allValues)
 const withoutEmptyStringValues = without(emptyStringValues, allValues)
 const withoutEmptyarrayValues = without(emptyArrayValues, allValues)
+const withoutRegexValues = without(regexValues, allValues)
+const withoutObjectValues = without(
+  concatAll([
+    arrayValues,
+    plainObjectValues,
+    regexValues,
+    dateValues,
+    functionValues,
+  ]),
+  withoutFunctionValues
+)
 
 export default {
   arrayValues,
   objectValues,
+  plainObjectValues,
   functionValues,
   regexValues,
   stringValues,
@@ -75,7 +96,7 @@ export default {
   emptyStringValues,
   emptyArrayValues,
   nonEmptyArrayValues,
-  nonEmptyObjValues,
+  nonEmptyPlainObjValues,
   nonEmptyStringValues,
   validNumericValues,
   validDateValues,
@@ -90,6 +111,7 @@ export default {
   withoutNumericValues,
   withoutArrayValues,
   withoutObjectValues,
+  withoutPlainObjectValues,
   withoutStringValues,
   withoutFunctionValues,
   withoutDateValues,
@@ -102,4 +124,5 @@ export default {
   withoutEmptyarrayValues,
   withoutValidNumericValues,
   withoutValidDateValues,
+  withoutRegexValues,
 }

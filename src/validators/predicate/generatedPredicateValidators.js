@@ -29,6 +29,8 @@ import {
   isValidNumber,
   isPositive,
   isNegative,
+  isObject,
+  isNotObject,
   isPlainObject,
   isNotPlainObject,
 } from 'ramda-adjunct'
@@ -40,6 +42,8 @@ import { toTitle } from '../../utils/formatting'
 const predicates = {
   isArray,
   isNotArray,
+  isObject,
+  isNotObject,
   isBoolean,
   isNotBoolean,
   isDate,
@@ -86,6 +90,8 @@ const validators = reduceObjIndexed(buildValidator, {}, predicates)
 export const {
   validateIsArray,
   validateIsNotArray,
+  validateIsObject,
+  validateIsNotObject,
   validateIsPlainObject,
   validateIsNotPlainObject,
   validateIsBoolean,

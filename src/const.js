@@ -3,6 +3,7 @@ export const PREDICATES = Object.freeze({
   Array: `Array`,
   Date: `Date`,
   Object: `Object`,
+  plainObject: `Plain Object`,
   String: `String`,
   Number: `Number`,
   Boolean: `Boolean`,
