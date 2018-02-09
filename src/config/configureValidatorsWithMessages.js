@@ -4,8 +4,8 @@ import {
   validateIsNotArray,
   validateIsBoolean,
   validateIsNotBoolean,
-  validateIsObject,
-  validateIsNotObject,
+  validateIsPlainObject,
+  validateIsNotPlainObject,
   validateIsString,
   validateIsNotString,
   validateIsFunction,
@@ -85,8 +85,10 @@ export default messages => {
     validateIsNotString: validateIsNotString(
       negatedPredicateMessage(PREDICATES.String)
     ),
-    validateIsObject: validateIsObject(predicateMessage(PREDICATES.Object)),
-    validateIsNotObject: validateIsNotObject(
+    validateIsPlainObject: validateIsPlainObject(
+      predicateMessage(PREDICATES.Object)
+    ),
+    validateIsNotPlainObject: validateIsNotPlainObject(
       negatedPredicateMessage(PREDICATES.Object)
     ),
     validateIsFunction: validateIsFunction(

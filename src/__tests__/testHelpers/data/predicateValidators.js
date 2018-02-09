@@ -2,8 +2,8 @@ import typeData from '../fixtures/typeData'
 import {
   validateIsArray,
   validateIsNotArray,
-  validateIsObject,
-  validateIsNotObject,
+  validateIsPlainObject,
+  validateIsNotPlainObject,
   validateIsBoolean,
   validateIsNotBoolean,
   validateIsNumber,
@@ -41,7 +41,7 @@ export default {
     values: [typeData.arrayValues, typeData.withoutArrayValues],
   },
   [PREDICATES.Object]: {
-    validators: { validateIsObject, validateIsNotObject },
+    validators: { validateIsPlainObject, validateIsNotPlainObject },
     values: [typeData.objectValues, typeData.withoutObjectValues],
   },
   [PREDICATES.Boolean]: {

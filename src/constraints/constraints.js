@@ -8,7 +8,7 @@ export default validators => {
     validateIsFunction,
     validateIsNotUndefined,
     validateIsBoolean,
-    validateIsObject,
+    validateIsPlainObject,
     validateIsArrayOf,
     validateExclusiveKeys,
   } = validators
@@ -56,12 +56,12 @@ export default validators => {
 
   const valueField = {
     [NAME]: VALUE,
-    [VALIDATOR]: validateIsObject,
+    [VALIDATOR]: validateIsPlainObject,
   }
 
   const childrenField = {
     [NAME]: CHILDREN,
-    [VALIDATOR]: validateIsObject,
+    [VALIDATOR]: validateIsPlainObject,
   }
 
   const fields = [
@@ -81,7 +81,7 @@ export default validators => {
 
   const fieldsField = {
     [NAME]: FIELDS,
-    [VALIDATOR]: validateIsArrayOf(validateIsObject),
+    [VALIDATOR]: validateIsArrayOf(validateIsPlainObject),
     [CHILDREN]: {
       [FIELDS_VALIDATOR]: allOfValidator([
         validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),

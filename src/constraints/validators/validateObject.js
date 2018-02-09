@@ -25,7 +25,7 @@ const validateObject = validators =>
     const { fields, fieldsValidator } = constraints
 
     return untilFailureValidator([
-      validators.validateIsObject,
+      validators.validateIsPlainObject,
       validateObjectKeys(fieldsValidators(validators, fields, fieldsValidator)),
       validators.validateObjectValues(buildValidatorsMap(fields)),
       applyDefaultsWithConstraints(fields),

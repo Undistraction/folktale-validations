@@ -81,10 +81,5 @@ export {
 // Configured Functions
 // -----------------------------------------------------------------------------
 
-// Configured Validators
-export {
-  default as defaultValidators,
-} from './config/defaults/defaultValidators'
-
 // Configured Renderers
 export { default as defaultRenderers } from './config/defaults/defaultRenderers'

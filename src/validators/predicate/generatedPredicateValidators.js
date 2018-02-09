@@ -21,8 +21,6 @@ import {
   isNotNull,
   isNotNumber,
   isNumber,
-  isPlainObj,
-  isNotPlainObj,
   isUndefined,
   isNotUndefined,
   isValidDate,
@@ -31,6 +29,8 @@ import {
   isValidNumber,
   isPositive,
   isNegative,
+  isPlainObject,
+  isNotPlainObject,
 } from 'ramda-adjunct'
 import { assoc, isNil, isEmpty } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
@@ -62,8 +62,8 @@ const predicates = {
   isNotNull,
   isUndefined,
   isNotUndefined,
-  isPlainObj,
-  isNotPlainObj,
+  isPlainObject,
+  isNotPlainObject,
   isNumber,
   isNotNumber,
   isValidDate,
@@ -86,8 +86,8 @@ const validators = reduceObjIndexed(buildValidator, {}, predicates)
 export const {
   validateIsArray,
   validateIsNotArray,
-  validateIsPlainObj: validateIsObject,
-  validateIsNotPlainObj: validateIsNotObject,
+  validateIsPlainObject,
+  validateIsNotPlainObject,
   validateIsBoolean,
   validateIsNotBoolean,
   validateIsString,
