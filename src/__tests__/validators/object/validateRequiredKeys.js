@@ -1,34 +1,33 @@
-import { stub } from 'sinon'
 import { validateRequiredKeys } from '../../../index'
+import { key1, key2, key3 } from '../../testHelpers/fixtures/constraintValues'
+import toPayload from '../../../failures/toPayload'
+import { REQUIRED_KEYS } from '../../../const/uids'
 
 describe(`validate required keys`, () => {
-  const message = `message`
-  let messageFunction
-  let validatorWithMessage
-  beforeEach(() => {
-    messageFunction = stub().returns(message)
-    validatorWithMessage = validateRequiredKeys(messageFunction)
-  })
-
+  const requiredKeys = [key1, key2, key3]
   describe(`with missing keys`, () => {
     it(`returns a Success.Failure with message`, () => {
-      const requiredKeys = [`a`, `b`, `c`]
       const value = {}
-      const validator = validatorWithMessage(requiredKeys)
+      const missingKeys = [key1, key2, key3]
+      const expectedPayload = toPayload(REQUIRED_KEYS, value, [
+        requiredKeys,
+        missingKeys,
+      ])
+
+      const validator = validateRequiredKeys(requiredKeys)
       const result = validator(value)
-      expect(result).toEqualFailureWithValue([message])
+      expect(result).toEqualFailureWithValue(expectedPayload)
     })
   })
 
   describe(`with no missing keys`, () => {
     it(`returns a Success.Failure with message`, () => {
-      const requiredKeys = [`a`, `b`, `c`]
       const value = {
-        a: 1,
-        b: 2,
-        c: 3,
+        [key1]: 1,
+        [key2]: 2,
+        [key3]: 3,
       }
-      const validator = validatorWithMessage(requiredKeys)
+      const validator = validateRequiredKeys(requiredKeys)
       const result = validator(value)
       expect(result).toEqualSuccessWithValue(value)
     })

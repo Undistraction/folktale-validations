@@ -1,30 +1,24 @@
-import { stub } from 'sinon'
 import validateExclusiveKeys from '../../../validators/object/validateExclusiveKeys'
+import {
+  key1,
+  key2,
+  key3,
+  key4,
+} from '../../testHelpers/fixtures/constraintValues'
+import toPayload from '../../../failures/toPayload'
+import { EXCLUSIVE_KEYS } from '../../../const/uids'
 
 describe(`validateExclusiveKeys`, () => {
-  const key1 = `a`
-  const key2 = `b`
-  const key3 = `c`
-
   const value = {
     [key1]: 1,
     [key2]: 2,
     [key3]: 3,
   }
 
-  const message = `message`
-  let messageFunction
-  let validatorWithMessage
-
-  beforeEach(() => {
-    messageFunction = stub().returns(message)
-    validatorWithMessage = validateExclusiveKeys(messageFunction)
-  })
-
   describe(`with no exclusive keys defined`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
-      const exlusiveKeys = []
-      const validator = validatorWithMessage(exlusiveKeys)
+      const exclusiveKeys = []
+      const validator = validateExclusiveKeys(exclusiveKeys)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
     })
@@ -32,39 +26,48 @@ describe(`validateExclusiveKeys`, () => {
 
   describe(`with no exclusive keys present`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
-      const exlusiveKeys = [`d`]
-      const validator = validatorWithMessage(exlusiveKeys)
+      const exclusiveKeys = [`d`]
+      const validator = validateExclusiveKeys(exclusiveKeys)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
     })
   })
 
   describe(`with one exclusive key defined and present`, () => {
-    it(`returns a Validation.Failure with message`, () => {
-      const exlusiveKeys = [key1]
-      const validator = validatorWithMessage(exlusiveKeys)
+    it(`returns a Validation.Failure with payload`, () => {
+      const exclusiveKeys = [key1]
+      const validator = validateExclusiveKeys(exclusiveKeys)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
     })
   })
 
   describe(`with two exclusive key defined and present`, () => {
-    it(`returns a Validation.Failure with message`, () => {
-      const exlusiveKeys = [key1, key2]
-      const validator = validatorWithMessage(exlusiveKeys)
+    it(`returns a Validation.Failure with payload`, () => {
+      const exclusiveKeys = [key1, key2]
+      const presentExclusiveKeys = [key1, key2]
+      const expectedPayload = toPayload(EXCLUSIVE_KEYS, value, [
+        exclusiveKeys,
+        presentExclusiveKeys,
+      ])
+      const validator = validateExclusiveKeys(exclusiveKeys)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([message])
-      expect(messageFunction.calledWith([key1, key2])).toBeTrue()
+      expect(validation).toEqualFailureWithValue(expectedPayload)
     })
   })
 
-  describe(`with two exclusive key defined and present`, () => {
-    it(`returns a Validation.Failure with message`, () => {
-      const exlusiveKeys = [key1, key2, key3]
-      const validator = validatorWithMessage(exlusiveKeys)
+  describe(`with multiple exclusive key defined and some present`, () => {
+    it(`returns a Validation.Failure with payload`, () => {
+      const exclusiveKeys = [key1, key2, key3, key4]
+      const presentExclusiveKeys = [key1, key2, key3]
+      const expectedPayload = toPayload(EXCLUSIVE_KEYS, value, [
+        exclusiveKeys,
+        presentExclusiveKeys,
+      ])
+
+      const validator = validateExclusiveKeys(exclusiveKeys)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([message])
-      expect(messageFunction.calledWith([key1, key2, key3])).toBeTrue()
+      expect(validation).toEqualFailureWithValue(expectedPayload)
     })
   })
 })

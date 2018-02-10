@@ -1,11 +1,10 @@
-import { keys, map, without, assoc, of, compose } from 'ramda'
+import { keys, map, assoc, dissoc } from 'ramda'
 import validateConstraints from '../../../constraints/validators/validateConstraints'
 import { func } from '../../testHelpers/fixtures/generic'
 import typeData from '../../testHelpers/fixtures/typeData'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
-import validateObjectWithConstraints from '../../../constraints/validators/validateObjectWithConstraints'
+
 import constraints from '../../../constraints/constraints'
-import defaultValidators from '../../../config/defaults/defaultValidators'
 import {
   value1,
   value2,
@@ -16,12 +15,23 @@ import {
   value7,
   value8,
   name1,
-  invalidKeyValue,
   invalidKeyName,
 } from '../../testHelpers/fixtures/constraintValues'
 import { pluralise, joinWithAnd } from '../../../utils/formatting'
 import testLevels from '../../testHelpers/testLevels'
 import constraintsLevels from '../../testHelpers/data/constraintsLevels'
+import toPayload from '../../../failures/toPayload'
+import {
+  IS_PLAIN_OBJECT,
+  WHITELISTED_KEYS,
+  REQUIRED_KEYS,
+  EXCLUSIVE_KEYS,
+  IS_ARRAY,
+  ARRAY_ELEMENTS,
+  IS_FUNCTION,
+  IS_BOOLEAN,
+  IS_NOT_UNDEFINED,
+} from '../../../const/uids'
 
 const {
   FIELDS,
@@ -39,49 +49,43 @@ const requiredKeys = [NAME, VALIDATOR]
 
 const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES
 
-const validRequiredFields = {
+const requiredFields = {
   [NAME]: name1,
   [VALIDATOR]: func,
 }
 
 const exclusiveKeys = [
   {
-    [DEFAULT_VALUE]: value1,
     [IS_REQUIRED]: true,
+    [DEFAULT_VALUE]: value1,
   },
   {
-    [CHILDREN]: {},
     [VALUE]: {},
+    [CHILDREN]: {},
   },
 ]
 
 const fieldErrors = [
   // [NAME, `Wasn't 'String'`, typeData.withoutStringValues],
-  [VALIDATOR, `Wasn't 'Function'`, typeData.withoutFunctionValues],
-  [TRANSFORMER, `Wasn't 'Function'`, typeData.withoutFunctionValues],
-  [IS_REQUIRED, `Wasn't 'Boolean'`, typeData.withoutBooleanValues],
-  [DEFAULT_VALUE, `Was 'Undefined'`, typeData.undefinedValues],
-  [VALUE, `Wasn't 'Object'`, typeData.withoutObjectValues],
-  [CHILDREN, `Wasn't 'Object'`, typeData.withoutObjectValues],
+  [VALIDATOR, IS_FUNCTION, typeData.withoutFunctionValues],
+  [TRANSFORMER, IS_FUNCTION, typeData.withoutFunctionValues],
+  [IS_REQUIRED, IS_BOOLEAN, typeData.withoutBooleanValues],
+  [DEFAULT_VALUE, IS_NOT_UNDEFINED, typeData.undefinedValues],
+  [VALUE, IS_PLAIN_OBJECT, typeData.withoutObjectValues],
+  [CHILDREN, IS_PLAIN_OBJECT, typeData.withoutObjectValues],
 ]
 
-const requiredKeysWithout = fieldName =>
-  compose(map(v => assoc(v, func, {})), without(of(fieldName)))(requiredKeys)
+const requiredKeysWithout = fieldName => dissoc(fieldName)(requiredFields)
 
 describe(`validateConstraints`, () => {
-  const validators = defaultValidators
-  const configuredContraints = constraints(validators)
-  const validateConstraintsConfigured = validateConstraints(
-    configuredContraints,
-    validateObjectWithConstraints(validators)
-  )
+  const validateConstraintsConfigured = validateConstraints(constraints)
 
   // ---------------------------------------------------------------------------
   // Full nested constraint object with all features
   // ---------------------------------------------------------------------------
 
   describe(`with valid constraints`, () => {
-    it(`returns a Validation.Success with supplied value`, () => {
+    it.only(`returns a Validation.Success with supplied value`, () => {
       const value = {
         [FIELDS]: [
           {
@@ -153,7 +157,7 @@ describe(`validateConstraints`, () => {
       // -----------------------------------------------------------------------
       describe(`value itself`, () => {
         describe(`with empty object`, () => {
-          it(`returns a Validation.Success with supplied value`, () => {
+          it.only(`returns a Validation.Success with supplied value`, () => {
             const value = withValueRoot({})
             const validation = validateConstraintsConfigured(value)
             expect(validation).toEqualSuccessWithValue(value)
@@ -161,13 +165,15 @@ describe(`validateConstraints`, () => {
         })
 
         describe(`with invalid value`, () => {
-          it(`returns a Validation.Failure with message`, () => {
+          it.only(`returns a Validation.Failure with payload`, () => {
             map(value => {
               const validation = validateConstraintsConfigured(
                 withValueRoot(value)
               )
 
-              const expectedValue = withExpectedRoot([`Wasn't 'Object'`])
+              const expectedValue = withExpectedRoot(
+                toPayload(IS_PLAIN_OBJECT, value)
+              )
 
               expect(validation).toEqualFailureWithValue(expectedValue)
             }, typeData.withoutObjectValues)
@@ -179,18 +185,22 @@ describe(`validateConstraints`, () => {
         // ---------------------------------------------------------------------
 
         describe(`with additional keys`, () => {
-          it(`returns a Validation.Failure with message`, () => {
-            const value = withValueRoot({
-              [invalidKeyName]: invalidKeyValue,
-            })
+          it.only(`returns a Validation.Failure with payload`, () => {
+            const o = {
+              [invalidKeyName]: value1,
+            }
+
+            const value = withValueRoot(o)
 
             const expectedValue = withExpectedRoot({
-              [FIELDS_FAILURE_MESSAGE]: [
-                `included invalid key(s): '[${invalidKeyName}]'`,
-              ],
+              [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, o, [
+                [FIELDS_VALIDATOR, FIELDS],
+                [invalidKeyName],
+              ]),
             })
 
             const validation = validateConstraintsConfigured(value)
+
             expect(validation).toEqualFailureWithValue(expectedValue)
           })
         })
@@ -198,20 +208,23 @@ describe(`validateConstraints`, () => {
         describe(`with missing required keys`, () => {
           map(fieldName => {
             describe(fieldName, () => {
-              it(`returns a Validation.Failure with message`, () => {
+              it.only(`returns a Validation.Failure with payload`, () => {
                 const fields = requiredKeysWithout(fieldName)
-                const value = withValueRoot({
-                  [FIELDS]: fields,
-                })
+                const o = {
+                  [FIELDS]: [fields],
+                }
+                const value = withValueRoot(o)
 
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
                     [FIELDS]: {
                       [CHILDREN]: [
                         {
-                          [FIELDS_FAILURE_MESSAGE]: [
-                            `missing required key(s): ['${fieldName}']`,
-                          ],
+                          [FIELDS_FAILURE_MESSAGE]: toPayload(
+                            REQUIRED_KEYS,
+                            fields,
+                            [requiredKeys, [fieldName]]
+                          ),
                         },
                       ],
                     },
@@ -219,7 +232,6 @@ describe(`validateConstraints`, () => {
                 })
 
                 const validation = validateConstraintsConfigured(value)
-
                 expect(validation).toEqualFailureWithValue(expectedValue)
               })
             })
@@ -230,28 +242,30 @@ describe(`validateConstraints`, () => {
           map(keyPair => {
             const keyNames = keys(keyPair)
             describe(`${joinWithAnd(keyNames)}`, () => {
-              it(`returns a Validation.Failure with message`, () => {
+              it.only(`returns a Validation.Failure with payload`, () => {
+                const o = {
+                  [NAME]: value1,
+                  [VALIDATOR]: func,
+                  ...keyPair,
+                }
+
                 const value = withValueRoot({
-                  [FIELDS]: [
-                    {
-                      [NAME]: value1,
-                      [VALIDATOR]: func,
-                      ...keyPair,
-                    },
-                  ],
+                  [FIELDS]: [o],
                 })
+
                 const validation = validateConstraintsConfigured(value)
 
+                const pair = keys(keyPair)
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
                     [FIELDS]: {
                       [CHILDREN]: [
                         {
-                          [FIELDS_FAILURE_MESSAGE]: [
-                            `had more than one exlusive key: ['${
-                              keyNames[1]
-                            }', '${keyNames[0]}']`,
-                          ],
+                          [FIELDS_FAILURE_MESSAGE]: toPayload(
+                            EXCLUSIVE_KEYS,
+                            o,
+                            [pair, pair]
+                          ),
                         },
                       ],
                     },
@@ -267,21 +281,24 @@ describe(`validateConstraints`, () => {
         describe(`with missing required keys`, () => {
           map(fieldName => {
             describe(fieldName, () => {
-              it(`returns a Validation.Failure with message`, () => {
+              it.only(`returns a Validation.Failure with payload`, () => {
                 const fields = requiredKeysWithout(fieldName)
+                const o = {
+                  [FIELDS]: [fields],
+                }
 
-                const value = withValueRoot({
-                  [FIELDS]: fields,
-                })
+                const value = withValueRoot(o)
 
                 const expectedValue = withExpectedRoot({
                   [FIELDS]: {
                     [FIELDS]: {
                       [CHILDREN]: [
                         {
-                          [FIELDS_FAILURE_MESSAGE]: [
-                            `missing required key(s): ['${fieldName}']`,
-                          ],
+                          [FIELDS_FAILURE_MESSAGE]: toPayload(
+                            REQUIRED_KEYS,
+                            fields,
+                            [[NAME, VALIDATOR], [fieldName]]
+                          ),
                         },
                       ],
                     },
@@ -302,7 +319,7 @@ describe(`validateConstraints`, () => {
 
         describe(`'fields'`, () => {
           describe(`non-array value`, () => {
-            it(`returns a Validation.Failure with message`, () => {
+            it.only(`returns a Validation.Failure with payload`, () => {
               map(fieldValue => {
                 const value = withValueRoot({
                   [FIELDS]: fieldValue,
@@ -310,7 +327,7 @@ describe(`validateConstraints`, () => {
 
                 const expected = withExpectedRoot({
                   [FIELDS]: {
-                    [FIELDS]: [`Wasn't 'Array'`],
+                    [FIELDS]: toPayload(IS_ARRAY, fieldValue),
                   },
                 })
                 const validation = validateConstraintsConfigured(value)
@@ -320,7 +337,7 @@ describe(`validateConstraints`, () => {
           })
 
           describe(`array containing non-object values`, () => {
-            it(`returns a Validation.Failure with message`, () => {
+            it(`returns a Validation.Failure with payload`, () => {
               map(fieldValue => {
                 const value = withValueRoot({
                   [FIELDS]: [fieldValue],
@@ -329,9 +346,7 @@ describe(`validateConstraints`, () => {
 
                 const expected = withExpectedRoot({
                   [FIELDS]: {
-                    [FIELDS]: [
-                      `Array contained invalid element(s): '${fieldValue}': Wasn't 'Object'`,
-                    ],
+                    [FIELDS]: toPayload(ARRAY_ELEMENTS, fieldValue),
                   },
                 })
 
@@ -341,19 +356,19 @@ describe(`validateConstraints`, () => {
           })
 
           describe(`key values`, () => {
-            map(([fieldName, expectedValidationMessage, typeDataValues]) => {
+            map(([fieldName, validatorUID, typeDataValues]) => {
               describe(`with invalid value for '${fieldName}'`, () => {
-                it(`returns a Validation.Failure with message`, () => {
+                it.only(`returns a Validation.Failure with payload`, () => {
                   map(fieldValue => {
-                    const requiredFields = assoc(
+                    const allFields = assoc(
                       fieldName,
                       fieldValue,
-                      validRequiredFields
+                      requiredFields
                     )
 
                     const value = withValueRoot({
                       [FIELDS_VALIDATOR]: func,
-                      [FIELDS]: [requiredFields],
+                      [FIELDS]: [allFields],
                     })
 
                     const expected = withExpectedRoot({
@@ -362,7 +377,10 @@ describe(`validateConstraints`, () => {
                           [CHILDREN]: [
                             {
                               [FIELDS]: {
-                                [fieldName]: [expectedValidationMessage],
+                                [fieldName]: toPayload(
+                                  validatorUID,
+                                  fieldValue
+                                ),
                               },
                             },
                           ],
@@ -384,7 +402,7 @@ describe(`validateConstraints`, () => {
 
           describe(`'fieldsValidator'`, () => {
             describe(`with non-function value`, () => {
-              it(`returns a Validation.Failure with message`, () => {
+              it.only(`returns a Validation.Failure with payload`, () => {
                 map(fieldValue => {
                   const value = withValueRoot({
                     [FIELDS_VALIDATOR]: fieldValue,
@@ -393,7 +411,7 @@ describe(`validateConstraints`, () => {
 
                   const expected = withExpectedRoot({
                     [FIELDS]: {
-                      [FIELDS_VALIDATOR]: [`Wasn't 'Function'`],
+                      [FIELDS_VALIDATOR]: toPayload(IS_FUNCTION, fieldValue),
                     },
                   })
 
@@ -411,11 +429,11 @@ describe(`validateConstraints`, () => {
           map(fieldName => {
             describe(fieldName, () => {
               describe(`empty object`, () => {
-                it(`returns a Validation.Success with supplied value`, () => {
+                it.only(`returns a Validation.Success with supplied value`, () => {
                   const value = withValueRoot({
                     [FIELDS]: [
                       {
-                        ...validRequiredFields,
+                        ...requiredFields,
                         [fieldName]: {},
                       },
                     ],

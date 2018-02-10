@@ -233,7 +233,7 @@ describe.skip(`validateObjectKeysWithConstraints()`, () => {
     })
 
     describe(`which fails`, () => {
-      it(`returns Validation.Failure with message`, () => {
+      it(`returns Validation.Failure with payload`, () => {
         const o = {
           a: 1,
           b: 2,

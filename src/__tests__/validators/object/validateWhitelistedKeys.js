@@ -1,57 +1,57 @@
-import { stub } from 'sinon'
-import { validation as Validation } from 'folktale'
 import { validateWhitelistedKeys } from '../../../index'
-
-const { Success } = Validation
+import {
+  key1,
+  key2,
+  key3,
+  key4,
+} from '../../testHelpers/fixtures/constraintValues'
+import toPayload from '../../../failures/toPayload'
+import { WHITELISTED_KEYS } from '../../../const/uids'
 
 describe(`validateWhitelistedKeys()`, () => {
-  const validObject = {
-    alpha: 1,
-    bravo: 2,
-    charlie: 3,
-  }
-
-  const invalidObject = {
-    alpha: 1,
-    bravo: 1,
-    delta: 4,
-    echo: 5,
-  }
-
-  const validKeys = [`alpha`, `bravo`, `charlie`]
-
-  const message = `message`
-  let messageFunction
-  let validatorWithMessage
+  const whitelistedKeys = [key1, key2, key3]
   let validateWhitelistedKeysWithKeys
 
   beforeEach(() => {
-    messageFunction = stub().returns(message)
-    validatorWithMessage = validateWhitelistedKeys(messageFunction)
-    validateWhitelistedKeysWithKeys = validatorWithMessage(validKeys)
+    validateWhitelistedKeysWithKeys = validateWhitelistedKeys(whitelistedKeys)
   })
 
   describe(`when object has only valid keys`, () => {
-    it(`returns a Validation.Success with a value of the object`, () => {
-      const validation = validateWhitelistedKeysWithKeys(validObject)
-      expect(validation).toEqual(Success(validObject))
-      expect(messageFunction.notCalled).toBeTrue()
+    it.only(`returns a Validation.Success with a value of the object`, () => {
+      const value = {
+        [key1]: 1,
+        [key2]: 2,
+        [key3]: 3,
+      }
+
+      const validation = validateWhitelistedKeysWithKeys(value)
+      expect(validation).toEqualSuccessWithValue(value)
     })
   })
 
   describe(`when object has only invalid keys`, () => {
-    it(`returns a Validation.Failure with a value of an array of the invalid keys`, () => {
-      const validation = validateWhitelistedKeysWithKeys(invalidObject)
-      expect(validation).toEqualFailureWithValue([message])
-      expect(messageFunction.calledWith([`delta`, `echo`])).toBeTrue()
+    it.only(`returns a Validation.Failure with a payload`, () => {
+      const value = {
+        [key1]: 1,
+        [key2]: 2,
+        [key3]: 3,
+        [key4]: 4,
+      }
+      const invalidKeys = [key4]
+      const expectedPayload = toPayload(WHITELISTED_KEYS, value, [
+        whitelistedKeys,
+        invalidKeys,
+      ])
+      const validation = validateWhitelistedKeysWithKeys(value)
+      expect(validation).toEqualFailureWithValue(expectedPayload)
     })
   })
 
   describe(`when object has no keys`, () => {
-    it(`returns a Validation.Success with a value of the object`, () => {
-      const o = {}
-      const validation = validateWhitelistedKeysWithKeys({})
-      expect(validation).toEqual(Success(o))
+    it.only(`returns a Validation.Success with a value of the object`, () => {
+      const value = {}
+      const validation = validateWhitelistedKeysWithKeys(value)
+      expect(validation).toEqualSuccessWithValue(value)
     })
   })
 })

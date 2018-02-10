@@ -11,7 +11,7 @@ import {
   newlineAndTabsForLevel,
   wrapWithSoftBrackets,
 } from '../../utils/formatting'
-import { PREDICATES } from '../../const'
+import PREDICATES from '../../const/predicates'
 
 const KEY = `Key`
 const ARGUMENTS = `Arguments`

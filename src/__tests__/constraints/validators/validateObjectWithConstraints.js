@@ -6,7 +6,6 @@ import {
   stubReturns,
 } from '../../testHelpers/sinon'
 import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
-import defaultValidators from '../../../config/defaults/defaultValidators'
 import {
   value1,
   value2,
@@ -36,10 +35,14 @@ import {
   transformedValue2,
   defaultValue1,
   defaultValue2,
+  payload1,
 } from '../../testHelpers/fixtures/constraintValues'
+import toPayload from '../../../failures/toPayload'
+import { REQUIRED_KEYS, WHITELISTED_KEYS } from '../../../const/uids'
 
 const {
   FIELDS,
+  FIELDS_VALIDATOR,
   NAME,
   VALIDATOR,
   TRANSFORMER,
@@ -53,20 +56,16 @@ const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES
 
 // Note: No need to test the validity of the constraints object itself as this
 // is well tested in `validateConstraints.js`. These tests should validate that
-// given a valid constraint object, the constraints are appled correctly.
+// given a valid constraint object, the constraints are applied correctly.
 
 describe(`validateObjectWithConstraints`, () => {
-  const validateObjectWithConstraintsConfigured = validateObjectWithConstraints(
-    defaultValidators
-  )
-
   // ---------------------------------------------------------------------------
   // Full nested constraint object with all features
   // ---------------------------------------------------------------------------
 
   describe(`with a flat constraint object`, () => {
     describe(`that satisfies constraints`, () => {
-      it(`returns a Validation.Success with supplied value`, () => {
+      it.only(`returns a Validation.Success with supplied value`, () => {
         const v1 = stubReturnsSuccess(value1)
         const spyNotCalled1 = spy()
         const spyNotCalled2 = spy()
@@ -190,7 +189,7 @@ describe(`validateObjectWithConstraints`, () => {
           [key11]: defaultValue1,
         }
 
-        const validator = validateObjectWithConstraintsConfigured(constraints)
+        const validator = validateObjectWithConstraints(constraints)
         const validation = validator(o)
 
         expect(validation).toEqualSuccessWithValue(expectedValue)
@@ -205,12 +204,34 @@ describe(`validateObjectWithConstraints`, () => {
       })
     })
 
+    describe(`with invalid constraints object`, () => {
+      it.only(`returns a Validation.Failure with payload`, () => {
+        const value = {}
+
+        const constraints = {
+          invalidField: 1,
+        }
+
+        const expectedValue = {
+          [NAME]: `Constraints`,
+          [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, constraints, [
+            [`fieldsValidator`, `fields`],
+            [`invalidField`],
+          ]),
+        }
+
+        const validator = validateObjectWithConstraints(constraints)
+        const validation = validator(value)
+        expect(validation).toEqualFailureWithValue(expectedValue)
+      })
+    })
+
     // -------------------------------------------------------------------------
     // One level of constraints
     // -------------------------------------------------------------------------
 
     describe(`empty object`, () => {
-      it(`returns a Validation.Success with message`, () => {
+      it.only(`returns a Validation.Success with message`, () => {
         const v1 = stubReturnsSuccess(value1)
         const value = {}
 
@@ -227,7 +248,7 @@ describe(`validateObjectWithConstraints`, () => {
           ],
         }
 
-        const validator = validateObjectWithConstraintsConfigured(constraints)
+        const validator = validateObjectWithConstraints(constraints)
         const validation = validator(value)
         expect(validation).toEqualSuccessWithValue(value)
         expect(v1.notCalled).toBeTrue()
@@ -236,8 +257,8 @@ describe(`validateObjectWithConstraints`, () => {
 
     describe(`that doesn't satisfy constraints`, () => {
       describe(`with invalid value`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const v1 = stubReturnsFailure(message1)
+        it.only(`returns a Validation.Failure with payload`, () => {
+          const v1 = stubReturnsFailure(payload1)
           const o = {
             [key1]: value1,
           }
@@ -252,53 +273,20 @@ describe(`validateObjectWithConstraints`, () => {
             ],
           }
 
-          const expectedValue = { [FIELDS]: { [key1]: [message1] } }
+          const expectedValue = { [FIELDS]: { [key1]: payload1 } }
 
-          const validator = validateObjectWithConstraintsConfigured(constraints)
+          const validator = validateObjectWithConstraints(constraints)
           const validation = validator(o)
           expect(validation).toEqualFailureWithValue(expectedValue)
           expect(v1.calledWith(value1)).toBeTrue()
         })
       })
 
-      describe(`with missing required key on item`, () => {
-        it(`returns a Validation.Failure with message`, () => {
-          const v1 = stubReturnsSuccess(value1)
-          const v2 = stubReturnsFailure(message1)
-          const o = {
-            [key1]: value1,
-          }
-
-          const constraints = {
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: true,
-              },
-              {
-                [NAME]: key2,
-                [VALIDATOR]: v2,
-                [IS_REQUIRED]: true,
-              },
-            ],
-          }
-
-          const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: [`missing required key(s): ['${key2}']`],
-          }
-
-          const validator = validateObjectWithConstraintsConfigured(constraints)
-          const validation = validator(o)
-          expect(validation).toEqualFailureWithValue(expectedValue)
-        })
-      })
-
-      describe(`with invalid key`, () => {
-        it(`returns a Validation.Failure with message`, () => {
+      describe(`with additional key`, () => {
+        it.only(`returns a Validation.Failure with payload`, () => {
           const v1 = spy()
           const v2 = spy()
-          const o = {
+          const value = {
             [key1]: value1,
             [key2]: value2,
             [invalidKeyName]: invalidKeyValue,
@@ -320,16 +308,111 @@ describe(`validateObjectWithConstraints`, () => {
           }
 
           const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: [
-              `included invalid key(s): '[${invalidKeyName}]'`,
-            ],
+            [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, value, [
+              [key1, key2],
+              [invalidKeyName],
+            ]),
           }
 
-          const validator = validateObjectWithConstraintsConfigured(constraints)
-          const validation = validator(o)
+          const validator = validateObjectWithConstraints(constraints)
+          const validation = validator(value)
           expect(validation).toEqualFailureWithValue(expectedValue)
           expect(v1.notCalled).toBeTrue()
           expect(v2.notCalled).toBeTrue()
+        })
+      })
+
+      describe(`with missing required key`, () => {
+        it.only(`returns a Validation.Failure with payload`, () => {
+          const v1 = spy()
+          const v2 = spy()
+          const value = {
+            [key1]: value1,
+          }
+
+          const constraints = {
+            [FIELDS]: [
+              {
+                [NAME]: key1,
+                [VALIDATOR]: v1,
+                [IS_REQUIRED]: true,
+              },
+              {
+                [NAME]: key2,
+                [VALIDATOR]: v2,
+                [IS_REQUIRED]: true,
+              },
+            ],
+          }
+
+          const expectedValue = {
+            [FIELDS_FAILURE_MESSAGE]: toPayload(REQUIRED_KEYS, value, [
+              [key1, key2],
+              [key2],
+            ]),
+          }
+
+          const validator = validateObjectWithConstraints(constraints)
+          const validation = validator(value)
+          expect(validation).toEqualFailureWithValue(expectedValue)
+          expect(v1.notCalled).toBeTrue()
+          expect(v2.notCalled).toBeTrue()
+        })
+      })
+    })
+
+    describe(`with custom fields validator`, () => {
+      describe(`which succeeds`, () => {
+        it.only(`returns a Validation.Success with value`, () => {
+          const value = {
+            [key1]: value1,
+          }
+          const v1 = stubReturnsSuccess(value)
+
+          const constraints = {
+            [FIELDS_VALIDATOR]: v1,
+            [FIELDS]: [
+              {
+                [NAME]: key1,
+                [VALIDATOR]: v1,
+                [IS_REQUIRED]: false,
+              },
+            ],
+          }
+
+          const validator = validateObjectWithConstraints(constraints)
+          const validation = validator(value)
+          expect(validation).toEqualSuccessWithValue(value)
+          expect(v1.calledWith(value)).toBeTrue()
+        })
+      })
+
+      describe(`which fails`, () => {
+        it.only(`returns a Validation.Failure with payload`, () => {
+          const value = {
+            [key1]: value1,
+          }
+          const v1 = stubReturnsFailure(payload1)
+
+          const constraints = {
+            [FIELDS_VALIDATOR]: v1,
+            [FIELDS]: [
+              {
+                [NAME]: key1,
+                [VALIDATOR]: v1,
+                [IS_REQUIRED]: false,
+              },
+            ],
+          }
+
+          const expectedValue = {
+            [FIELDS_FAILURE_MESSAGE]: payload1,
+          }
+
+          const validator = validateObjectWithConstraints(constraints)
+          const validation = validator(value)
+          expect(validation).toEqualFailureWithValue(expectedValue)
+          expect(v1.calledWith(value)).toBeTrue()
         })
       })
     })
@@ -341,7 +424,7 @@ describe(`validateObjectWithConstraints`, () => {
 
   describe(`that doesn't satisfy constraints`, () => {
     describe(`with invalid value`, () => {
-      it(`returns a Validation.Failure with message`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
         const v1 = stubReturnsSuccess()
         const v2 = stubReturnsFailure(message1)
         const o = {
@@ -377,7 +460,7 @@ describe(`validateObjectWithConstraints`, () => {
           },
         }
 
-        const validator = validateObjectWithConstraintsConfigured(constraints)
+        const validator = validateObjectWithConstraints(constraints)
         const validation = validator(o)
         expect(validation).toEqualFailureWithValue(expectedValue)
         expect(
@@ -389,7 +472,7 @@ describe(`validateObjectWithConstraints`, () => {
     })
 
     describe(`with invalid children`, () => {
-      it.only(`returns a Validation.Failure with message`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
         const v1 = stubReturnsSuccess()
         const v2 = stubReturnsFailure(message1)
         const o = {
@@ -431,7 +514,7 @@ describe(`validateObjectWithConstraints`, () => {
           },
         }
 
-        const validator = validateObjectWithConstraintsConfigured(constraints)
+        const validator = validateObjectWithConstraints(constraints)
         const validation = validator(o)
         expect(validation).toEqualFailureWithValue(expectedValue)
       })

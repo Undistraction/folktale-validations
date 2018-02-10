@@ -1,34 +1,23 @@
 import { validation as Validation } from 'folktale'
 import { validateIsArrayOf } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
+import toPayload from '../../../failures/toPayload'
+import { IS_ARRAY, ARRAY_ELEMENTS } from '../../../const/uids'
+import {
+  value1,
+  value2,
+  value3,
+} from '../../testHelpers/fixtures/constraintValues'
 
 const { Success, Failure } = Validation
 
 describe(`validateIsArrayOf()`, () => {
-  const isArrayMessage = `isArrayMessage`
-  const arrayElementsMessage = `elementsMessage`
-  const arrayElementMessage = `elementMessage`
-
-  let arrayElementsMessageFunction
-  let arrayElementMessageFunction
-  let validatorWithMessage
-
-  beforeEach(() => {
-    arrayElementsMessageFunction = stub().returns(arrayElementsMessage)
-    arrayElementMessageFunction = stub().returns(arrayElementMessage)
-    validatorWithMessage = validateIsArrayOf(
-      isArrayMessage,
-      arrayElementsMessageFunction,
-      arrayElementMessageFunction
-    )
-  })
-
   describe(`argument is an array`, () => {
     describe(`when array is empty`, () => {
       it(`returns a Validation.Success with the supplied value`, () => {
         const value = []
         const v1 = spy()
-        const validator = validatorWithMessage(v1)
+        const validator = validateIsArrayOf(v1)
         const validation = validator(value)
         expect(validation).toEqualSuccessWithValue(value)
         expect(v1.notCalled).toBeTrue()
@@ -39,43 +28,45 @@ describe(`validateIsArrayOf()`, () => {
   describe(`argument is not an array`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const v1 = spy()
-      const validator = validatorWithMessage(v1)
+      const expectedPayload = toPayload(IS_ARRAY, undefined)
+      const validator = validateIsArrayOf(v1)
       const validation = validator()
-      expect(validation).toEqualFailureWithValue([isArrayMessage])
+      expect(validation).toEqualFailureWithValue(expectedPayload)
       expect(v1.notCalled).toBeTrue()
     })
   })
 
   describe(`array contains valid items`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
-      const value = [1, 2, 3]
+      const value = [value1, value2, value3]
       const v1 = stubReturnsSuccess()
-      const validator = validatorWithMessage(v1)
+      const validator = validateIsArrayOf(v1)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
       expect(v1.calledThrice).toBeTrue()
-      expect(v1.calledWith(1)).toBeTrue()
-      expect(v1.calledWith(2)).toBeTrue()
-      expect(v1.calledWith(3)).toBeTrue()
+      expect(v1.calledWith(value1)).toBeTrue()
+      expect(v1.calledWith(value2)).toBeTrue()
+      expect(v1.calledWith(value3)).toBeTrue()
+      expect(v1.calledThrice).toBeTrue()
     })
   })
 
   describe(`array contains invalid item`, () => {
     it(`returns a Validation.Failiure with messsage`, () => {
-      const value = [1, 2, 3]
+      const value = [value1, value2, value3]
       const v1 = stub()
+      const uid = `uid`
+      const elementPayload = toPayload(uid, value)
+      const expectedPayload = toPayload(ARRAY_ELEMENTS, value, [elementPayload])
       v1.onFirstCall().returns(Success())
       v1.onSecondCall().returns(Success())
-      v1.onThirdCall().returns(Failure(isArrayMessage))
-      const validator = validatorWithMessage(v1)
+      v1.onThirdCall().returns(Failure(elementPayload))
+      const validator = validateIsArrayOf(v1)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([arrayElementsMessage])
-      expect(
-        arrayElementsMessageFunction.calledWith([arrayElementMessage])
-      ).toBeTrue()
-      expect(v1.calledWith(1)).toBeTrue()
-      expect(v1.calledWith(2)).toBeTrue()
-      expect(v1.calledWith(3)).toBeTrue()
+      expect(validation).toEqualFailureWithValue(expectedPayload)
+      expect(v1.calledWith(value1)).toBeTrue()
+      expect(v1.calledWith(value2)).toBeTrue()
+      expect(v1.calledWith(value3)).toBeTrue()
       expect(v1.calledThrice).toBeTrue()
     })
   })

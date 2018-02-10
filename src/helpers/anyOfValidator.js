@@ -1,7 +1,8 @@
 import { validation as Validation } from 'folktale'
-import { reduce, concat, when, compose } from 'ramda'
+import { reduce, when, compose, of } from 'ramda'
 import { isArray } from 'ramda-adjunct'
 import { orMessages } from '../utils/failures'
+import { appendRight } from '../utils/array'
 
 const { Failure } = Validation
 
@@ -9,13 +10,11 @@ const toErr = compose(Failure, when(isArray, orMessages))
 
 export default validators => o =>
   reduce(
-    (accumulatedValidation, validator) =>
-      !accumulatedValidation
-        ? validator(o)
-        : accumulatedValidation.orElse(errorMessage1 =>
-            validator(o).mapFailure(errorMessage2 =>
-              concat(errorMessage1, errorMessage2)
-            )
+    (acc, validator) =>
+      !acc
+        ? validator(o).orElse(compose(Failure, of))
+        : acc.orElse(accFailure =>
+            validator(o).orElse(compose(Failure, appendRight(accFailure)))
           ),
     null,
     validators

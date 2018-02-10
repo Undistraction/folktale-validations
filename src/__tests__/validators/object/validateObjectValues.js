@@ -1,133 +1,133 @@
-import { stub } from 'sinon'
 import validateObjectValues from '../../../validators/object/validateObjectValues'
 import {
   spy,
   stubReturnsFailure,
   stubReturnsSuccess,
 } from '../../testHelpers/sinon'
-import { toObjectError } from '../../../failures/utils'
+import {
+  key1,
+  key2,
+  key3,
+  value1,
+  value2,
+  value3,
+} from '../../testHelpers/fixtures/constraintValues'
+import { OBJECT_VALUES } from '../../../const/uids'
+import toPayload from '../../../failures/toPayload'
 
 describe(`validateObjectValues()`, () => {
-  const key1 = 1
-  const key2 = 2
-  const key3 = 2
-
-  const objectMessage = `objectMessage`
-  const valueMessage = `valueMessage`
-  let validatorWithMessage
-  let objectMessageFunction
-  let valueMessageFunction
-
-  beforeEach(() => {
-    objectMessageFunction = stub().returns(objectMessage)
-    valueMessageFunction = stub().returns(valueMessage)
-    validatorWithMessage = validateObjectValues(
-      objectMessageFunction,
-      valueMessageFunction
-    )
-  })
-
-  describe(`with valid values`, () => {
-    describe(`with first value invalid`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const message = `message`
-        const v1 = stubReturnsFailure(message)
-        const v2 = stubReturnsSuccess()
-        const value = {
-          a: key1,
-          b: key2,
-        }
-        const validators = {
-          a: v1,
-          b: v2,
-        }
-        const validator = validatorWithMessage(validators)
-        const validation = validator(value)
-
-        const expectedValue = toObjectError([[`a`, [message]]])
-
-        expect(validation).toEqualFailureWithValue(expectedValue)
-        expect(v1.calledWith(key1)).toBeTrue()
-        expect(v2.calledWith(key2)).toBeTrue()
-      })
-    })
-
-    describe(`with second value invalid`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const message = `message`
-        const v1 = stubReturnsSuccess()
-        const v2 = stubReturnsFailure(message)
-        const value = {
-          a: key1,
-          b: key2,
-        }
-        const validators = {
-          a: v1,
-          b: v2,
-        }
-        const validator = validatorWithMessage(validators)
-        const validation = validator(value)
-
-        const expectedValue = toObjectError([[`b`, [message]]])
-
-        expect(validation).toEqualFailureWithValue(expectedValue)
-        expect(v1.calledWith(key1)).toBeTrue()
-        expect(v2.calledWith(key2)).toBeTrue()
-      })
-    })
-
-    describe(`with all values invalid`, () => {
-      it(`returns a Validation.Failure with message`, () => {
-        const message1 = `message1`
-        const message2 = `message2`
-        const message3 = `message3`
-        const v1 = stubReturnsFailure(message1)
-        const v2 = stubReturnsFailure(message2)
-        const v3 = stubReturnsFailure(message3)
-        const value = {
-          a: key1,
-          b: key2,
-          c: key3,
-        }
-        const validators = {
-          a: v1,
-          b: v2,
-          c: v3,
-        }
-        const validator = validatorWithMessage(validators)
-        const validation = validator(value)
-
-        const expectedValue = toObjectError([
-          [`a`, [message1]],
-          [`b`, [message2]],
-          [`c`, [message3]],
-        ])
-
-        expect(validation).toEqualFailureWithValue(expectedValue)
-        expect(v1.calledWith(key1)).toBeTrue()
-        expect(v2.calledWith(key2)).toBeTrue()
-        expect(v2.calledWith(key3)).toBeTrue()
-      })
-    })
-  })
+  const key1Payload = toPayload(OBJECT_VALUES, value1)
+  const key2Payload = toPayload(OBJECT_VALUES, value2)
+  const key3Payload = toPayload(OBJECT_VALUES, value3)
 
   describe(`with valid values`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
       const v1 = stubReturnsSuccess()
       const v2 = stubReturnsSuccess()
       const value = {
-        a: key1,
-        b: key2,
+        [key1]: value1,
+        [key2]: value2,
       }
       const validators = {
-        a: v1,
-        b: v2,
+        [key1]: v1,
+        [key2]: v2,
       }
-      const validator = validatorWithMessage(validators)
+      const validator = validateObjectValues(validators)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
-      expect(v1.calledWith(key1)).toBeTrue()
-      expect(v2.calledWith(key2)).toBeTrue()
+      expect(v1.calledWith(value1)).toBeTrue()
+      expect(v2.calledWith(value2)).toBeTrue()
+    })
+  })
+
+  describe(`with invalid values`, () => {
+    describe(`with first value invalid`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
+        const v1 = stubReturnsFailure(key1Payload)
+        const v2 = stubReturnsSuccess()
+
+        const expectedPayload = {
+          fields: {
+            [key1]: key1Payload,
+          },
+        }
+
+        const value = {
+          [key1]: value1,
+          [key2]: value2,
+        }
+        const validators = {
+          [key1]: v1,
+          [key2]: v2,
+        }
+        const validator = validateObjectValues(validators)
+        const validation = validator(value)
+
+        expect(validation).toEqualFailureWithValue(expectedPayload)
+        expect(v1.calledWith(value1)).toBeTrue()
+        expect(v2.calledWith(value2)).toBeTrue()
+      })
+    })
+
+    describe(`with second value invalid`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
+        const v1 = stubReturnsSuccess()
+        const v2 = stubReturnsFailure(key2Payload)
+
+        const expectedPayload = {
+          fields: {
+            [key2]: key2Payload,
+          },
+        }
+
+        const value = {
+          [key1]: value1,
+          [key2]: value2,
+        }
+        const validators = {
+          [key1]: v1,
+          [key2]: v2,
+        }
+        const validator = validateObjectValues(validators)
+        const validation = validator(value)
+
+        expect(validation).toEqualFailureWithValue(expectedPayload)
+        expect(v1.calledWith(value1)).toBeTrue()
+        expect(v2.calledWith(value2)).toBeTrue()
+      })
+    })
+
+    describe(`with all values invalid`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
+        const v1 = stubReturnsFailure(key1Payload)
+        const v2 = stubReturnsFailure(key2Payload)
+        const v3 = stubReturnsFailure(key3Payload)
+
+        const expectedPayload = {
+          fields: {
+            [key1]: key1Payload,
+            [key2]: key2Payload,
+            [key3]: key3Payload,
+          },
+        }
+
+        const value = {
+          [key1]: value1,
+          [key2]: value2,
+          [key3]: value3,
+        }
+        const validators = {
+          [key1]: v1,
+          [key2]: v2,
+          [key3]: v3,
+        }
+        const validator = validateObjectValues(validators)
+        const validation = validator(value)
+        expect(validation).toEqualFailureWithValue(expectedPayload)
+        expect(v1.calledWith(value1)).toBeTrue()
+        expect(v2.calledWith(value2)).toBeTrue()
+        expect(v3.calledWith(value3)).toBeTrue()
+      })
     })
   })
 
@@ -135,10 +135,10 @@ describe(`validateObjectValues()`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
       const v1 = spy()
       const value = {
-        a: key1,
+        [key1]: value1,
       }
       const validators = {}
-      const validator = validatorWithMessage(validators)
+      const validator = validateObjectValues(validators)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
       expect(v1.notCalled).toBeTrue()
@@ -149,12 +149,12 @@ describe(`validateObjectValues()`, () => {
     it(`returns a Validation.Success with supplied value`, () => {
       const v1 = spy()
       const value = {
-        a: key1,
+        [key1]: value1,
       }
       const validators = {
-        b: v1,
+        [key2]: v1,
       }
-      const validator = validatorWithMessage(validators)
+      const validator = validateObjectValues(validators)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
       expect(v1.notCalled).toBeTrue()

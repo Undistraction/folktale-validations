@@ -13,23 +13,14 @@ const constraintsAreOwnConstraints = propEq(
   OWN_CONSTRAINTS
 )
 
-const validateObjectWithConstraints = validators => {
-  const configuredConstraints = CONSTRAINTS(validators)
-  const configuredValidateObject = validateObject(validators)
-  return curry(
-    (constraints, o) =>
-      constraintsAreOwnConstraints(constraints)
-        ? configuredValidateObject(ROOT_FIELD, constraints, o)
-        : validateConstraints(
-            configuredConstraints,
-            validateObjectWithConstraints(validators)
-          )(constraints).matchWith({
-            Success: always(
-              configuredValidateObject(ROOT_FIELD, constraints, o)
-            ),
-            Failure: identity,
-          })
-  )
-}
+const validateObjectWithConstraints = curry(
+  (constraints, o) =>
+    constraintsAreOwnConstraints(constraints)
+      ? validateObject(ROOT_FIELD, constraints, o)
+      : validateConstraints(CONSTRAINTS)(constraints).matchWith({
+          Success: always(validateObject(ROOT_FIELD, constraints, o)),
+          Failure: identity,
+        })
+)
 
 export default validateObjectWithConstraints

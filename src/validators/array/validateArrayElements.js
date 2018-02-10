@@ -1,27 +1,23 @@
 import { validation as Validation } from 'folktale'
-import { reduce, always, curry } from 'ramda'
+import { reduce, always, compose, of } from 'ramda'
 
-import { wrapFailureMessageWith } from '../../messages'
+import { ARRAY_ELEMENTS } from '../../const/uids'
+import toPayload from '../../failures/toPayload'
 
 const { Success, Failure } = Validation
 
-const validateAllWith = (elementMessage, validator) => o =>
+const validateAllWith = (validator, o) =>
   reduce(
     (acc, element) =>
-      acc.concat(
-        validator(element).orElse(message =>
-          Failure([elementMessage(element, message)])
-        )
-      ),
+      acc.concat(validator(element).orElse(compose(Failure, of))),
     Success(),
     o
   )
 
-export default curry((elementsMessage, elementMessage, validator) => o => {
-  const v = validateAllWith(elementMessage, validator)
-  const validation = v(o)
+export default validator => o => {
+  const validation = validateAllWith(validator, o)
   return validation.matchWith({
     Success: always(Success(o)),
-    Failure: wrapFailureMessageWith(elementsMessage),
+    Failure: ({ value }) => Failure(toPayload(ARRAY_ELEMENTS, o, value)),
   })
-})
+}

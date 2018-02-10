@@ -1,91 +1,13 @@
-import {
-  isNotArray,
-  isArray,
-  isBoolean,
-  isNotBoolean,
-  isNotDate,
-  isEmptyArray,
-  isNonEmptyArray,
-  isNonEmptyString,
-  isEmptyString,
-  isDate,
-  isFunction,
-  isString,
-  isNotString,
-  isNotFunction,
-  isNotNaN,
-  isNaN,
-  isNotNil,
-  isNotEmpty,
-  isNull,
-  isNotNull,
-  isNotNumber,
-  isNumber,
-  isUndefined,
-  isNotUndefined,
-  isValidDate,
-  isNotValidDate,
-  isNotValidNumber,
-  isValidNumber,
-  isPositive,
-  isNegative,
-  isObject,
-  isNotObject,
-  isPlainObject,
-  isNotPlainObject,
-} from 'ramda-adjunct'
-import { assoc, isNil, isEmpty } from 'ramda'
+import { assoc } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
 import { reduceObjIndexed } from '../../utils/iteration'
-import { toTitle } from '../../utils/formatting'
+import { toValidatorUID } from '../../failures/utils'
+import predicates from './predicates'
 
-const predicates = {
-  isArray,
-  isNotArray,
-  isObject,
-  isNotObject,
-  isBoolean,
-  isNotBoolean,
-  isDate,
-  isNotDate,
-  isString,
-  isNotString,
-  isEmpty,
-  isNotEmpty,
-  isEmptyArray,
-  isNonEmptyArray,
-  isEmptyString,
-  isNonEmptyString,
-  isFunction,
-  isNotFunction,
-  isNaN,
-  isNotNaN,
-  isNil,
-  isNotNil,
-  isNull,
-  isNotNull,
-  isUndefined,
-  isNotUndefined,
-  isPlainObject,
-  isNotPlainObject,
-  isNumber,
-  isNotNumber,
-  isValidDate,
-  isNotValidDate,
-  isValidNumber,
-  isNotValidNumber,
-  isPositive,
-  isNegative,
+const buildValidator = (acc, [name, [predicate]]) => {
+  const validatorUID = toValidatorUID(name)
+  return assoc(name, predicateValidator(predicate, validatorUID), acc)
 }
-
-const buildValidator = (acc, [key, predicate]) =>
-  assoc(
-    `validate${toTitle(key)}`,
-    message => predicateValidator(message, predicate),
-    acc
-  )
-
-const validators = reduceObjIndexed(buildValidator, {}, predicates)
 
 export const {
   validateIsArray,
@@ -123,4 +45,4 @@ export const {
   validateIsNotValidDate,
   validateIsPositive,
   validateIsNegative,
-} = validators
+} = reduceObjIndexed(buildValidator, {}, predicates)

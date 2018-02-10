@@ -1,19 +1,17 @@
-import {
-  curry,
-  without,
-  compose,
-  keys,
-  isEmpty,
-  always,
-  ifElse,
-  of,
-} from 'ramda'
+import { without, compose, keys, isEmpty, always, ifElse } from 'ramda'
 import { validation as Validation } from 'folktale'
+import toPayload from '../../failures/toPayload'
+import { WHITELISTED_KEYS } from '../../const/uids'
 
 const { Success, Failure } = Validation
 
-export default curry((message, validKeys) => o =>
-  ifElse(isEmpty, always(Success(o)), compose(Failure, of, message))(
-    compose(without(validKeys), keys)(o)
-  )
-)
+const validateWhitelistedKeys = validKeys => o => {
+  const invalidKeys = compose(without(validKeys), keys)(o)
+  return ifElse(
+    isEmpty,
+    always(Success(o)),
+    always(Failure(toPayload(WHITELISTED_KEYS, o, [validKeys, invalidKeys])))
+  )(invalidKeys)
+}
+
+export default validateWhitelistedKeys

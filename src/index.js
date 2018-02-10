@@ -1,10 +1,4 @@
 // -----------------------------------------------------------------------------
-// Utils
-// -----------------------------------------------------------------------------
-
-export { withField } from './utils/validations'
-
-// -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
 
@@ -13,28 +7,13 @@ export { default as allOfValidator } from './helpers/allOfValidator'
 export { default as orValidator } from './helpers/orValidator'
 export { default as andValidator } from './helpers/andValidator'
 export {
-  default as numberWithUnitValidator,
-} from './helpers/numberWithUnitValidator'
-export { default as predicateValidator } from './helpers/predicateValidator'
-export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator'
+export { default as predicateValidator } from './helpers/predicateValidator'
 
 // -----------------------------------------------------------------------------
 // Validators
 // -----------------------------------------------------------------------------
-
-export {
-  default as validateIsArrayOf,
-} from './validators/array/validateIsArrayOf'
-
-export {
-  default as validateArrayElements,
-} from './validators/array/validateArrayElements'
-
-export {
-  default as validateIsWhitelistedValue,
-} from './validators/other/validateIsWhitelistedValue'
 
 // Predicate Validators
 export * from './validators/predicate/generatedPredicateValidators'
@@ -60,6 +39,22 @@ export {
 export {
   default as validateRequiredKeys,
 } from './validators/object/validateRequiredKeys'
+
+// Array
+export {
+  default as validateIsArrayOf,
+} from './validators/array/validateIsArrayOf'
+export {
+  default as validateArrayElements,
+} from './validators/array/validateArrayElements'
+
+// Other
+export {
+  default as validateIsWhitelistedValue,
+} from './validators/other/validateIsWhitelistedValue'
+export {
+  default as validateIsNumberWithUnit,
+} from './validators/other/validateIsNumberWithUnit'
 
 // Constraint Validators
 export {

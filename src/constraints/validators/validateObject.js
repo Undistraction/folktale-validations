@@ -1,4 +1,4 @@
-import { curry, compose, juxt, of, concat } from 'ramda'
+import { curry, compose, juxt, of, concat, defaultTo } from 'ramda'
 import untilFailureValidator from '../../helpers/untilFailureValidator'
 import validateObjectKeys from './validateObjectKeys'
 import applyDefaultsWithConstraints from '../applyDefaultsWithConstraints'
@@ -8,30 +8,30 @@ import { compact } from '../../utils/array'
 import validateFieldsWithValue from './validateFieldsWithValue'
 import validateFieldsWithChildren from './validateFieldsWithChildren'
 import { pluckName } from '../../utils/constraints'
+import { validateIsPlainObject } from '../../validators/predicate/generatedPredicateValidators'
+import validateWhitelistedKeys from '../../validators/object/validateWhitelistedKeys'
+import validateRequiredKeys from '../../validators/object/validateRequiredKeys'
+import validateObjectValues from '../../validators/object/validateObjectValues'
 
-const defaultFieldValidators = validators =>
-  juxt([
-    compose(validators.validateWhitelistedKeys, pluckName),
-    compose(validators.validateRequiredKeys, listRequiredKeys),
-  ])
+const defaultFieldValidators = juxt([
+  compose(validateWhitelistedKeys, pluckName),
+  compose(validateRequiredKeys, listRequiredKeys),
+])
 
-const fieldsValidators = (validators, fields, fieldsValidator) =>
-  compose(concat(defaultFieldValidators(validators)(fields)), compact, of)(
-    fieldsValidator
-  )
+const fieldsValidators = (fields = {}, fieldsValidator) =>
+  compose(concat(defaultFieldValidators(fields)), compact, of)(fieldsValidator)
 
-const validateObject = validators =>
-  curry((fieldName, constraints, o) => {
-    const { fields, fieldsValidator } = constraints
+const validateObject = curry((fieldName, constraints, o) => {
+  const fields = defaultTo([], constraints.fields)
 
-    return untilFailureValidator([
-      validators.validateIsPlainObject,
-      validateObjectKeys(fieldsValidators(validators, fields, fieldsValidator)),
-      validators.validateObjectValues(buildValidatorsMap(fields)),
-      applyDefaultsWithConstraints(fields),
-      transformValuesWithConstraints(fields),
-      validateFieldsWithValue(validateObject(validators), fields),
-      validateFieldsWithChildren(validateObject(validators), fields),
-    ])(o)
-  })
+  return untilFailureValidator([
+    validateIsPlainObject,
+    validateObjectKeys(fieldsValidators(fields, constraints.fieldsValidator)),
+    validateObjectValues(buildValidatorsMap(fields)),
+    applyDefaultsWithConstraints(fields),
+    transformValuesWithConstraints(fields),
+    validateFieldsWithValue(fields),
+    validateFieldsWithChildren(fields),
+  ])(o)
+})
 export default validateObject

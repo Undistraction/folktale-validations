@@ -7,6 +7,7 @@ export const propChildren = prop(CONSTRAINT_FIELD_NAMES.CHILDREN)
 
 export const hasPropChildren = has(CONSTRAINT_FIELD_NAMES.CHILDREN)
 export const hasPropIsRequired = has(CONSTRAINT_FIELD_NAMES.IS_REQUIRED)
+export const hasPropFields = has(CONSTRAINT_FIELD_NAMES.FIELDS)
 
 export const propEqName = propEq(CONSTRAINT_FIELD_NAMES.NAME)
 

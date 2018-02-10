@@ -16,7 +16,7 @@ import { isObj } from 'ramda-adjunct'
 import { FAILURE_FIELD_NAMES } from '../const'
 import { propValue } from '../utils/failures'
 import { constraintsObjName } from '../messages'
-import { joinWithDot } from '../utils/formatting'
+import { joinWithDot, toTitle } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 
 const {
@@ -28,7 +28,7 @@ const {
   OR,
 } = FAILURE_FIELD_NAMES
 
-const UIDPrefix = `folktale-validations`
+const UIDPrefix = `folktale-validations.validate`
 
 export const toObjectError = compose(objOf(FIELDS), mergeAll, fromPairs)
 export const toConstraintsError = compose(assoc(NAME, constraintsObjName()))
@@ -45,4 +45,5 @@ export const isOrObj = has(OR)
 export const isAndOrOrObj = both(isObj, either(isAndObj, isOrObj))
 export const isPayload = all(has())
 
-export const toUID = compose(joinWithDot, appendRight([UIDPrefix]))
+export const toValidatorUID = compose(joinWithDot, appendRight([UIDPrefix]))
+export const toValidatorName = key => `validate${toTitle(key)}`

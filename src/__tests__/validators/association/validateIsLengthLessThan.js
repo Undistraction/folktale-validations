@@ -1,43 +1,35 @@
-import { stub } from 'sinon'
 import { validateIsLengthLessThan } from '../../../index'
+import toPayload from '../../../failures/toPayload'
+import { IS_LENGTH_LESS_THAN } from '../../../const/uids'
 
 describe(`validateIsLengthLessThan()`, () => {
-  const message = `message`
-  const value = `xxx`
-  let messageFunction
-  let validatorWithMessage
-
-  beforeEach(() => {
-    messageFunction = stub().returns(message)
-    validatorWithMessage = validateIsLengthLessThan(messageFunction)
-  })
-
+  const value = `abc`
   describe(`when value is less than maximum length`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
       const length = 4
-      const validator = validatorWithMessage(length)
+      const validator = validateIsLengthLessThan(length)
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
     })
   })
 
   describe(`when value is equal to maximum length`, () => {
-    it(`returns a Validation.Failure with message`, () => {
+    it(`returns a Validation.Failure with payload`, () => {
       const length = 3
-      const validator = validatorWithMessage(length)
+      const validator = validateIsLengthLessThan(length)
+      const payload = toPayload(IS_LENGTH_LESS_THAN, value, [length])
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([message])
-      expect(messageFunction.calledWith(length)).toBeTrue()
+      expect(validation).toEqualFailureWithValue(payload)
     })
   })
 
   describe(`when value is less than maximum length`, () => {
-    it(`returns a Validation.Failure with message`, () => {
+    it(`returns a Validation.Failure with payload`, () => {
       const length = 2
-      const validator = validatorWithMessage(length)
+      const payload = toPayload(IS_LENGTH_LESS_THAN, value, [length])
+      const validator = validateIsLengthLessThan(length)
       const validation = validator(value)
-      expect(validation).toEqualFailureWithValue([message])
-      expect(messageFunction.calledWith(length)).toBeTrue()
+      expect(validation).toEqualFailureWithValue(payload)
     })
   })
 })

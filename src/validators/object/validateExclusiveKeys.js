@@ -1,15 +1,25 @@
 import { validation as Validation } from 'folktale'
-import { curry, flip, has, filter, always, of, ifElse, compose } from 'ramda'
+import { flip, has, filter, always, ifElse } from 'ramda'
 import { hasNoMoreThanOneChild } from '../../utils/predicates'
+import toPayload from '../../failures/toPayload'
+import { EXCLUSIVE_KEYS } from '../../const/uids'
 
 const { Success, Failure } = Validation
 
-export default curry((message, exclusiveKeys) => o => {
+const validateExclusiveKeys = exclusiveKeys => o => {
   const collectExclusiveKeys = filter(flip(has)(o))
   const collectedExclusiveKeys = collectExclusiveKeys(exclusiveKeys)
-  return ifElse(
+  const xsx = ifElse(
     hasNoMoreThanOneChild,
     always(Success(o)),
-    compose(Failure, of, message)
+    always(
+      Failure(
+        toPayload(EXCLUSIVE_KEYS, o, [exclusiveKeys, collectedExclusiveKeys])
+      )
+    )
   )(collectedExclusiveKeys)
-})
+
+  return xsx
+}
+
+export default validateExclusiveKeys

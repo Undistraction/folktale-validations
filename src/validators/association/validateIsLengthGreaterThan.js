@@ -1,9 +1,10 @@
-import { flip, gt, compose, length, curry } from 'ramda'
+import { flip, gt, compose, length } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
+import { IS_LENGTH_GREATER_THAN } from '../../const/uids'
 
-export default curry((message, stringLength) =>
+export default stringLength =>
   predicateValidator(
-    message(stringLength),
-    compose(flip(gt)(stringLength), length)
+    compose(flip(gt)(stringLength), length),
+    IS_LENGTH_GREATER_THAN,
+    [stringLength]
   )
-)

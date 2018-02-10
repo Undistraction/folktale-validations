@@ -1,3 +1,5 @@
+import toPayload from '../../../failures/toPayload'
+
 export const value1 = `value1`
 export const value2 = `value2`
 export const value3 = `value3`
@@ -30,3 +32,11 @@ export const transformedValue1 = `transformed1`
 export const transformedValue2 = `transformed2`
 export const defaultValue1 = `default1`
 export const defaultValue2 = `default2`
+export const uid1 = `uid1`
+export const uid2 = `uid2`
+export const uid3 = `uid3`
+export const uid4 = `uid4`
+export const payload1 = toPayload(uid1, value1)
+export const payload2 = toPayload(uid2, value2)
+export const payload3 = toPayload(uid3, value3)
+export const payload4 = toPayload(uid3, value4)

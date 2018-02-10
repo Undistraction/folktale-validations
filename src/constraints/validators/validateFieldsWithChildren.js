@@ -17,6 +17,7 @@ import {
   reduceIf,
 } from '../../utils/iteration'
 import { toChildrenFieldsError } from '../../failures/utils'
+import validateObject from './validateObject'
 
 const { Failure, Success } = Validation
 
@@ -45,7 +46,6 @@ const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
 // -----------------------------------------------------------------------------
 
 const validateChildrenOfArrayField = (
-  validateObject,
   fieldName,
   fieldValue,
   childConstraints
@@ -58,10 +58,9 @@ const validateChildrenOfArrayField = (
     fieldValue
   )
 
-const validateChildrenOfArrayFields = validateObject =>
-  reduce((acc, [fieldName, fieldValue, childConstraints]) => {
+const validateChildrenOfArrayFields = reduce(
+  (acc, [fieldName, fieldValue, childConstraints]) => {
     const childValidations = validateChildrenOfArrayField(
-      validateObject,
       fieldName,
       fieldValue,
       childConstraints
@@ -69,15 +68,17 @@ const validateChildrenOfArrayFields = validateObject =>
     return isEmpty(childValidations)
       ? acc
       : assoc(fieldName, childValidations, acc)
-  }, {})
+  },
+  {}
+)
 
 // -----------------------------------------------------------------------------
 // Process Fields that have children (that have a value that is an array)
 // -----------------------------------------------------------------------------
 
-export default (validateObject, constraints) => o => {
+export default constraints => o => {
   const fieldToValidationsMap = compose(
-    validateChildrenOfArrayFields(validateObject),
+    validateChildrenOfArrayFields,
     constraintsForFieldsWithPropChildren(constraints)
   )(o)
 

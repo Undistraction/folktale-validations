@@ -6,28 +6,26 @@ import {
   extractFailureValues,
 } from '../utils'
 import { toObjectError } from '../../failures/utils'
+import validateObject from './validateObject'
 
 const { Failure, Success } = Validation
 
-const validateValues = validateObject =>
-  reduce(
-    (acc, [fieldName, fieldValue, childConstraints]) =>
-      assoc(
-        fieldName,
-        validateObject(fieldName, childConstraints, fieldValue),
-        acc
-      ),
-    {}
-  )
+const validateValues = reduce(
+  (acc, [fieldName, fieldValue, childConstraints]) =>
+    assoc(
+      fieldName,
+      validateObject(fieldName, childConstraints, fieldValue),
+      acc
+    ),
+  {}
+)
 
-export default (validateObject, constraints) => o => {
+export default constraints => o => {
   const fieldsWithPropConstraints = constraintsForFieldsWithPropValue(
     constraints
   )(o)
 
-  const childValidations = validateValues(validateObject)(
-    fieldsWithPropConstraints
-  )
+  const childValidations = validateValues(fieldsWithPropConstraints)
 
   const failures = filterFailures(childValidations)
 
