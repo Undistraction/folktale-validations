@@ -53,6 +53,9 @@ export {
   default as validateIsWhitelistedValue,
 } from './validators/other/validateIsWhitelistedValue'
 export {
+  default as validateIsNotBlacklistedValue,
+} from './validators/other/validateIsNotBlacklistedValue'
+export {
   default as validateIsNumberWithUnit,
 } from './validators/other/validateIsNumberWithUnit'
 
