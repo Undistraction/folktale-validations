@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale'
 import { reduce, always, compose, of } from 'ramda'
 
-import { ARRAY_ELEMENTS } from '../../const/uids'
+import { ARRAY_ELEMENTS } from '../../const/validatorUids'
 import toPayload from '../../failures/toPayload'
 
 const { Success, Failure } = Validation

@@ -3,7 +3,7 @@ import { map } from 'ramda'
 import { validateIsNumberWithUnit } from '../../../index'
 import typeData from '../../testHelpers/fixtures/typeData'
 import toPayload from '../../../failures/toPayload'
-import { IS_NUMBER_WITH_UNIT } from '../../../const/uids'
+import { IS_NUMBER_WITH_UNIT } from '../../../const/validatorUids'
 
 const { Failure } = Validation
 

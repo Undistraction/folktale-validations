@@ -1,6 +1,5 @@
-import { compose, tap } from 'ramda'
+import { curry, compose, tap } from 'ramda'
 import { validation as Validation } from 'folktale'
-import curry from '../validators/object/validateWhitelistedKeys'
 import { joinWithColon } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 

@@ -1,6 +1,6 @@
 import { validateIsLengthLessThan } from '../../../index'
 import toPayload from '../../../failures/toPayload'
-import { IS_LENGTH_LESS_THAN } from '../../../const/uids'
+import { IS_LENGTH_LESS_THAN } from '../../../const/validatorUids'
 
 describe(`validateIsLengthLessThan()`, () => {
   const value = `abc`

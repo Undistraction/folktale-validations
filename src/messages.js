@@ -1,17 +1,6 @@
-import { always, compose, of } from 'ramda'
-import { validation as Validation } from 'folktale'
-import { propValue } from './utils/props'
+import { always } from 'ramda'
 import { joinWithColon, wrapWithSingleQuotes } from './utils/formatting'
 import { ROOT_FIELD } from './const'
-
-const { Failure } = Validation
-
-// -----------------------------------------------------------------------------
-// Utilities
-// -----------------------------------------------------------------------------
-
-export const wrapFailureMessageWith = messageWrapper =>
-  compose(Failure, of, messageWrapper, propValue)
 
 // -----------------------------------------------------------------------------
 // Constraint Validator Messages

@@ -1,7 +1,7 @@
 import { validateRequiredKeys } from '../../../index'
-import { key1, key2, key3 } from '../../testHelpers/fixtures/constraintValues'
+import { key1, key2, key3 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
-import { REQUIRED_KEYS } from '../../../const/uids'
+import { REQUIRED_KEYS } from '../../../const/validatorUids'
 
 describe(`validate required keys`, () => {
   const requiredKeys = [key1, key2, key3]

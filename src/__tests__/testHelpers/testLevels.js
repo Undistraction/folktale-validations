@@ -1,6 +1,6 @@
 import { inc, when, ifElse, always, __, assoc } from 'ramda'
 import { isNotNull } from 'ramda-adjunct'
-import { CONSTRAINT_FIELD_NAMES } from '../../const'
+import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
 import { constraintsObjName } from '../../messages'
 import { mapWithIndex } from '../../utils/iteration'
 import { replaceTokenWith } from './utils'

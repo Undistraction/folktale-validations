@@ -4,7 +4,7 @@ import untilFailureValidator from '../../helpers/untilFailureValidator'
 import validateIsLengthGreaterThan from './validateIsLengthGreaterThan'
 import validateIsLengthLessThan from './validateIsLengthLessThan'
 import toPayload from '../../failures/toPayload'
-import { IS_LENGTH_BETWEEN } from '../../const/uids'
+import { IS_LENGTH_BETWEEN } from '../../const/validatorUids'
 
 const { Failure } = Validation
 

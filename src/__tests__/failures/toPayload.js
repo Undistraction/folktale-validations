@@ -1,4 +1,4 @@
-import { value1 } from '../testHelpers/fixtures/constraintValues'
+import { value1 } from '../testHelpers/fixtures/generic'
 import toPayload from '../../failures/toPayload'
 
 describe(`toPayload`, () => {

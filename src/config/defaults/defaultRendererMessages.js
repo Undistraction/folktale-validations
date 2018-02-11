@@ -1,5 +1,5 @@
-import { isNotNull, isArray } from 'ramda-adjunct'
-import { always, curry, ifElse, when } from 'ramda'
+import { isNotNull } from 'ramda-adjunct'
+import { always, curry, ifElse } from 'ramda'
 import {
   joinWithColon,
   joinWithAnd,
@@ -11,20 +11,20 @@ import {
   newlineAndTabsForLevel,
   wrapWithSoftBrackets,
 } from '../../utils/formatting'
-import PREDICATES from '../../const/predicates'
 
 const KEY = `Key`
 const ARGUMENTS = `Arguments`
-const OBJECT = `object`
+const OBJECT = `Object`
+const ARRAY = `Array`
 const VALUE = `value`
 
-const includedInvalidMessage = type => `included invalid ${type}(s)`
+const includedInvalidTypeMessage = type => `included invalid ${type}(s)`
 
-const prefixWithKey = curry((level, value) =>
+const prefixWithObjectKey = curry((level, value) =>
   joinWithSpace([joinWithEmDash([newlineAndTabsForLevel(level), KEY]), value])
 )
 
-const prefixWithIndex = (level, index, value) =>
+const prefixWithArrayIndex = (level, index, value) =>
   joinWithSpace([
     joinWithEmDash([
       newlineAndTabsForLevel(level),
@@ -33,56 +33,44 @@ const prefixWithIndex = (level, index, value) =>
     value,
   ])
 
-const objectValueErrorMessage = (level, name) => value => {
-  const stringValue = when(isArray, joinWithAnd)(value)
-  return ifElse(
+const errorMessageFromPayload = renderer => (level, name) => value =>
+  ifElse(
     isNotNull,
     always(
-      prefixWithKey(
+      prefixWithObjectKey(
         level,
-        joinWithColon([wrapWithSingleQuotes(name), stringValue])
+        joinWithColon([wrapWithSingleQuotes(name), renderer(value)])
       )
     ),
-    always(stringValue)
+    always(renderer(value))
   )(name)
-}
-
-const objectValueErrrorMessageFromPayload = renderer => (
-  level,
-  name
-) => payload => {
-  const message = renderer(payload)
-  return ifElse(
-    isNotNull,
-    always(
-      prefixWithKey(level, joinWithColon([wrapWithSingleQuotes(name), message]))
-    ),
-    always(message)
-  )(name)
-}
 
 const arrayValueErrorMessage = (level, index, value) =>
-  prefixWithIndex(level, index, value)
+  prefixWithArrayIndex(level, index, value)
 
-const fieldsErrorMessage = (level, value) =>
-  joinWithEmDash([newlineAndTabsForLevel(level), value])
+const fieldsErrorMessage = renderer => (level, value) =>
+  joinWithEmDash([newlineAndTabsForLevel(level), renderer(value)])
 
-const invalidObjectPrefix = always(PREDICATES.Object)
-const invalidArrayPrefix = always(PREDICATES.Array)
+const invalidObjectPrefix = always(OBJECT)
+const invalidArrayPrefix = always(ARRAY)
 const invalidArgumentsPrefix = always(ARGUMENTS)
 
 const invalidObjectReasonInvalidValues = level =>
-  joinWithEmDash([newlineAndTabsForLevel(level), includedInvalidMessage(VALUE)])
+  joinWithEmDash([
+    newlineAndTabsForLevel(level),
+    includedInvalidTypeMessage(VALUE),
+  ])
 
-const invalidArrayReasonInvalidObjects = always(includedInvalidMessage(OBJECT))
+const invalidArrayReasonInvalidObjects = always(
+  includedInvalidTypeMessage(OBJECT)
+)
 
 const group = wrapWithSoftBrackets
 
 export default {
   invalidObjectReasonInvalidValues,
-  objectValueErrorMessage,
-  objectValueErrrorMessageFromPayload,
-  prefixWithKey,
+  errorMessageFromPayload,
+  prefixWithObjectKey,
   invalidObjectPrefix,
   invalidArrayPrefix,
   invalidArgumentsPrefix,

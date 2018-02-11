@@ -1,5 +1,5 @@
 import { prop, has, objOf, when } from 'ramda'
-import { FAILURE_FIELD_NAMES } from '../const'
+import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
 import { hasMoreThanOneChild } from './predicates'
 
 const { AND, OR } = FAILURE_FIELD_NAMES

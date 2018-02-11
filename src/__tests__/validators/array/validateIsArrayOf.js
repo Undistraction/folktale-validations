@@ -2,12 +2,8 @@ import { validation as Validation } from 'folktale'
 import { validateIsArrayOf } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
 import toPayload from '../../../failures/toPayload'
-import { IS_ARRAY, ARRAY_ELEMENTS } from '../../../const/uids'
-import {
-  value1,
-  value2,
-  value3,
-} from '../../testHelpers/fixtures/constraintValues'
+import { IS_ARRAY, ARRAY_ELEMENTS } from '../../../const/validatorUids'
+import { value1, value2, value3 } from '../../testHelpers/fixtures/generic'
 
 const { Success, Failure } = Validation
 

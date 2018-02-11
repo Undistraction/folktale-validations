@@ -1,9 +1,6 @@
 import { identity, curry, always, propEq } from 'ramda'
-import {
-  ROOT_FIELD,
-  CONSTRAINT_FIELD_NAMES,
-  OWN_CONSTRAINTS,
-} from '../../const'
+import { ROOT_FIELD, OWN_CONSTRAINTS } from '../../const'
+import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
 import validateObject from './validateObject'
 import validateConstraints from './validateConstraints'
 import CONSTRAINTS from '../constraints'

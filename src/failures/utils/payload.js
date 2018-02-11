@@ -1,6 +1,6 @@
 import { prop, has, allPass } from 'ramda'
 import { isPlainObj } from 'ramda-adjunct'
-import { PAYLOAD_FIELD_NAMES } from '../../const'
+import PAYLOAD_FIELD_NAMES from '../../const/payloadFieldNames'
 
 const { UID, VALUE, ARGS } = PAYLOAD_FIELD_NAMES
 

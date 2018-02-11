@@ -5,11 +5,7 @@ import {
   stubReturnsFailure,
 } from '../testHelpers/sinon'
 import { orMessages } from '../../utils/failures'
-import {
-  value1,
-  payload1,
-  payload2,
-} from '../testHelpers/fixtures/constraintValues'
+import { value1, payload1, payload2 } from '../testHelpers/fixtures/generic'
 
 describe(`orValidator()`, () => {
   describe(`with a valid value1`, () => {

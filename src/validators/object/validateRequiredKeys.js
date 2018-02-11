@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale'
 import { flip, has, reject, isEmpty, ifElse, always } from 'ramda'
 import toPayload from '../../failures/toPayload'
-import { REQUIRED_KEYS } from '../../const/uids'
+import { REQUIRED_KEYS } from '../../const/validatorUids'
 
 const { Success, Failure } = Validation
 

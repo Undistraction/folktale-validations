@@ -1,12 +1,12 @@
 import { validateIsNotBlacklistedValue } from '../../../index'
 import toPayload from '../../../failures/toPayload'
-import { IS_NOT_BLACKLISTED_VALUE } from '../../../const/uids'
+import { IS_NOT_BLACKLISTED_VALUE } from '../../../const/validatorUids'
 import {
   value1,
   value2,
   value3,
   value4,
-} from '../../testHelpers/fixtures/constraintValues'
+} from '../../testHelpers/fixtures/generic'
 
 describe(`validateIsNotBlacklistedValue()`, () => {
   const blacklist = [value1, value2, value3]

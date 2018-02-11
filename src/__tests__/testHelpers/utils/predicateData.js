@@ -1,5 +1,5 @@
 import { prop } from 'ramda'
-import { PREDICATE_DATA_FIELD_NAMES } from '../../../const'
+import PREDICATE_DATA_FIELD_NAMES from '../../../const/predicateDataFieldNames'
 
 export const propValue = prop(PREDICATE_DATA_FIELD_NAMES.VALUE)
 export const propValues = prop(PREDICATE_DATA_FIELD_NAMES.VALUES)

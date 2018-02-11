@@ -1,12 +1,7 @@
 import { validateWhitelistedKeys } from '../../../index'
-import {
-  key1,
-  key2,
-  key3,
-  key4,
-} from '../../testHelpers/fixtures/constraintValues'
+import { key1, key2, key3, key4 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
-import { WHITELISTED_KEYS } from '../../../const/uids'
+import { WHITELISTED_KEYS } from '../../../const/validatorUids'
 
 describe(`validateWhitelistedKeys()`, () => {
   const whitelistedKeys = [key1, key2, key3]

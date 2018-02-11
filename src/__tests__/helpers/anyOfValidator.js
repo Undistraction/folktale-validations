@@ -10,7 +10,7 @@ import {
   payload1,
   payload2,
   payload3,
-} from '../testHelpers/fixtures/constraintValues'
+} from '../testHelpers/fixtures/generic'
 
 describe(`anyOfValidator()`, () => {
   describe(`with a valid value`, () => {

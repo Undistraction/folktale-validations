@@ -1,5 +1,5 @@
 import { validateIsLengthBetween } from '../../../index'
-import { IS_LENGTH_BETWEEN } from '../../../const/uids'
+import { IS_LENGTH_BETWEEN } from '../../../const/validatorUids'
 import toPayload from '../../../failures/toPayload'
 
 describe(`validateIsLengthBetween()`, () => {

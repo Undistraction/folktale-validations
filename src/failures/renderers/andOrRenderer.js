@@ -2,7 +2,10 @@ import { compose, map, when, always, inc, ifElse } from 'ramda'
 import { isPositive } from 'ramda-adjunct'
 import { propAnd, isAndObj, propOr, isAndOrOrObj } from '../utils'
 
-const andOrRenderer = ({ joinWithAnd, joinWithOr, group }) => o1 => {
+const andOrRenderer = (
+  renderPayload,
+  { joinWithAnd, joinWithOr, group }
+) => o1 => {
   const render = level => o2 => {
     const groupIfLevelGt0 = when(always(isPositive(level)), group)
     const processSubGroups = map(when(isAndOrOrObj, render(inc(level))))
@@ -10,6 +13,7 @@ const andOrRenderer = ({ joinWithAnd, joinWithOr, group }) => o1 => {
     const processAndObj = compose(
       groupIfLevelGt0,
       joinWithAnd,
+      map(renderPayload),
       processSubGroups,
       propAnd
     )

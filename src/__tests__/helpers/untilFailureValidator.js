@@ -4,7 +4,7 @@ import {
   stubReturnsFailure,
   spy,
 } from '../testHelpers/sinon'
-import { value1, payload1 } from '../testHelpers/fixtures/constraintValues'
+import { value1, payload1 } from '../testHelpers/fixtures/generic'
 
 describe(`untilFailureValidator()`, () => {
   describe(`with valid value`, () => {

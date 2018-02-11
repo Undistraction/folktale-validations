@@ -1,5 +1,5 @@
-import { CONSTRAINT_FIELD_NAMES } from '../../../const'
-import { name1 } from '../fixtures/constraintValues'
+import CONSTRAINT_FIELD_NAMES from '../../../const/constraintFieldNames'
+import { name1 } from '../fixtures/generic'
 import { constraintsObjName } from '../../../messages'
 import { func } from '../fixtures/generic'
 import { REPLACE_TOKEN } from '../const'

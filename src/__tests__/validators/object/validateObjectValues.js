@@ -11,8 +11,8 @@ import {
   value1,
   value2,
   value3,
-} from '../../testHelpers/fixtures/constraintValues'
-import { OBJECT_VALUES } from '../../../const/uids'
+} from '../../testHelpers/fixtures/generic'
+import { OBJECT_VALUES } from '../../../const/validatorUids'
 import toPayload from '../../../failures/toPayload'
 
 describe(`validateObjectValues()`, () => {

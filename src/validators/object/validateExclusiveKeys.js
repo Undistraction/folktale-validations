@@ -2,7 +2,7 @@ import { validation as Validation } from 'folktale'
 import { flip, has, filter, always, ifElse } from 'ramda'
 import { hasNoMoreThanOneChild } from '../../utils/predicates'
 import toPayload from '../../failures/toPayload'
-import { EXCLUSIVE_KEYS } from '../../const/uids'
+import { EXCLUSIVE_KEYS } from '../../const/validatorUids'
 
 const { Success, Failure } = Validation
 

@@ -1,7 +1,7 @@
 import { without, compose, keys, isEmpty, always, ifElse } from 'ramda'
 import { validation as Validation } from 'folktale'
 import toPayload from '../../failures/toPayload'
-import { WHITELISTED_KEYS } from '../../const/uids'
+import { WHITELISTED_KEYS } from '../../const/validatorUids'
 
 const { Success, Failure } = Validation
 

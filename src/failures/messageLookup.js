@@ -7,7 +7,7 @@ import {
 } from '../errors'
 
 export default messages => {
-  const invalid = filter(isNotFunction)(messages)
+  const invalid = filter(isNotFunction, messages)
 
   if (isNotEmpty(invalid)) {
     throwError(messageValueMustBeFunction(invalid))

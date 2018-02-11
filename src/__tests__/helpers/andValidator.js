@@ -1,11 +1,7 @@
 import { andValidator } from '../../index'
 import { stubReturnsSuccess, stubReturnsFailure } from '../testHelpers/sinon'
 import { andMessages } from '../../utils/failures'
-import {
-  value1,
-  payload1,
-  payload2,
-} from '../testHelpers/fixtures/constraintValues'
+import { value1, payload1, payload2 } from '../testHelpers/fixtures/generic'
 
 describe(`andValidator()`, () => {
   describe(`with a valid value`, () => {

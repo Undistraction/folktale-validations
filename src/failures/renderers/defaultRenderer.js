@@ -9,6 +9,7 @@ import {
   prepend,
   defaultTo,
   cond,
+  T,
 } from 'ramda'
 import {
   isNotNull,
@@ -16,7 +17,6 @@ import {
   concatRight,
   isPlainObj,
 } from 'ramda-adjunct'
-import { isStringOrArray } from '../../utils/predicates'
 import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
   propName,
@@ -34,12 +34,26 @@ import {
 import { isAndOrOrObj } from '../utils'
 import andOrRenderer from './andOrRenderer'
 import { isPayload } from '../utils/payload'
+import messageLookup from '../messageLookup'
+import payloadRenderer from './payloadRenderer'
+import { throwError, invalidFailureStructureErrorMessage } from '../../errors'
 
-export default messages => failureObj => {
+export default curry((rendererMessages, validatorMessages) => failureObj => {
+  const renderPayload = compose(payloadRenderer, messageLookup)(
+    validatorMessages
+  )
+  const renderAndOrMessage = andOrRenderer(renderPayload, rendererMessages)
+  const renderMessageFromPayload = rendererMessages.errorMessageFromPayload(
+    renderPayload
+  )
+  const renderFieldsErrorMessage = rendererMessages.fieldsErrorMessage(
+    renderPayload
+  )
+
   const buildArrayMessage = curry((level, fieldName, fieldValue) => {
     const prefix = compose(
       joinWithColon,
-      append(messages.invalidArrayPrefix()),
+      append(rendererMessages.invalidArrayPrefix()),
       of,
       wrapWithSingleQuotes,
       defaultTo(``)
@@ -47,12 +61,12 @@ export default messages => failureObj => {
 
     const result = joinWithSpace([
       prefix,
-      messages.invalidArrayReasonInvalidObjects(),
+      rendererMessages.invalidArrayReasonInvalidObjects(),
       // eslint-disable-next-line no-use-before-define
       joinWithNoSpace(parseArray(inc(level))(fieldValue)),
     ])
     return isNotUndefined(fieldName)
-      ? messages.prefixWithKey(level, result)
+      ? rendererMessages.prefixWithObjectKey(level, result)
       : result
   })
 
@@ -62,37 +76,38 @@ export default messages => failureObj => {
     }
 
     const fields = propFields(o)
-    const fieldsError = propFieldsFailiureMessage(o)
-
+    const fieldsPayload = propFieldsFailiureMessage(o)
     return compose(
-      when(always(isNotNull(fieldName)), messages.prefixWithKey(level)),
+      when(
+        always(isNotNull(fieldName)),
+        rendererMessages.prefixWithObjectKey(level)
+      ),
       joinWithSpace,
       when(
         always(isNotUndefined(fields)),
         concatRight([
-          messages.invalidObjectReasonInvalidValues(level),
+          rendererMessages.invalidObjectReasonInvalidValues(level),
           // eslint-disable-next-line no-use-before-define
           parseFields(level)(fields),
         ])
       ),
-      when(
-        always(isNotUndefined(fieldsError)),
-        append(messages.fieldsErrorMessage(level, fieldsError))
+      when(always(isNotUndefined(fieldsPayload)), v =>
+        append(renderFieldsErrorMessage(level, fieldsPayload))(v)
       ),
       of,
       when(
         always(isNotNull(fieldName)),
         compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
       )
-    )(defaultTo(messages.invalidObjectPrefix(), propName(o)))
+    )(defaultTo(rendererMessages.invalidObjectPrefix(), propName(o)))
   })
 
   const parseFieldValue = (level, fieldValue, fieldName = null) =>
     cond([
-      [isAndOrOrObj, andOrRenderer(messages)],
+      [isAndOrOrObj, renderAndOrMessage],
+      [isPayload, renderMessageFromPayload(level, fieldName)],
       [isPlainObj, buildObjMessage(level, fieldName)],
-      [isPayload, messages.objectValueErrorMessage(level, fieldName)],
-      [isStringOrArray, messages.objectValueErrorMessage(level, fieldName)],
+      [T, compose(throwError, invalidFailureStructureErrorMessage)],
     ])(fieldValue)
 
   const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
@@ -104,7 +119,7 @@ export default messages => failureObj => {
 
   const parseArray = level =>
     mapWithIndex((o, index) =>
-      messages.arrayValueErrorMessage(
+      rendererMessages.arrayValueErrorMessage(
         level,
         index,
         parseFieldValue(inc(level), o)
@@ -112,4 +127,4 @@ export default messages => failureObj => {
     )
 
   return parseFieldValue(0, failureObj)
-}
+})

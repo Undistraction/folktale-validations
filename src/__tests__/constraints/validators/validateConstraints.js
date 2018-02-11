@@ -2,8 +2,8 @@ import { keys, map, assoc, dissoc } from 'ramda'
 import validateConstraints from '../../../constraints/validators/validateConstraints'
 import { func } from '../../testHelpers/fixtures/generic'
 import typeData from '../../testHelpers/fixtures/typeData'
-import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
-
+import FAILURE_FIELD_NAMES from '../../../const/failureFieldNames'
+import CONSTRAINT_FIELD_NAMES from '../../../const/constraintFieldNames'
 import constraints from '../../../constraints/constraints'
 import {
   value1,
@@ -16,7 +16,7 @@ import {
   value8,
   name1,
   invalidKeyName,
-} from '../../testHelpers/fixtures/constraintValues'
+} from '../../testHelpers/fixtures/generic'
 import { pluralise, joinWithAnd } from '../../../utils/formatting'
 import testLevels from '../../testHelpers/testLevels'
 import constraintsLevels from '../../testHelpers/data/constraintsLevels'
@@ -31,7 +31,7 @@ import {
   IS_FUNCTION,
   IS_BOOLEAN,
   IS_NOT_UNDEFINED,
-} from '../../../const/uids'
+} from '../../../const/validatorUids'
 
 const {
   FIELDS,

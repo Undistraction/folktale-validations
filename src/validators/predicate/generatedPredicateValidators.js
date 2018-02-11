@@ -4,7 +4,7 @@ import { reduceObjIndexed } from '../../utils/iteration'
 import { toValidatorUID } from '../../failures/utils'
 import predicates from './predicates'
 
-const buildValidator = (acc, [name, [predicate]]) => {
+const buildValidator = (acc, [_, [name, predicate]]) => {
   const validatorUID = toValidatorUID(name)
   return assoc(name, predicateValidator(predicate, validatorUID), acc)
 }

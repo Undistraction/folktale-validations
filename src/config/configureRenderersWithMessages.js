@@ -1,11 +1,14 @@
 import defaultRenderer from '../failures/renderers/defaultRenderer'
 import argumentsRenderer from '../failures/renderers/argumentsRenderer'
 
-export default messages => {
-  const configuredObjectRenderer = defaultRenderer(messages)
+export default (rendererMessages, validatorMessages) => {
+  const configuredObjectRenderer = defaultRenderer(
+    rendererMessages,
+    validatorMessages
+  )
   const configuredArgumentsRenderer = argumentsRenderer(
     defaultRenderer,
-    messages
+    rendererMessages
   )
   return {
     defaultRenderer: configuredObjectRenderer,

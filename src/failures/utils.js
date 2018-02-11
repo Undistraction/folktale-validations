@@ -13,7 +13,7 @@ import {
   all,
 } from 'ramda'
 import { isObj } from 'ramda-adjunct'
-import { FAILURE_FIELD_NAMES } from '../const'
+import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
 import { propValue } from '../utils/failures'
 import { constraintsObjName } from '../messages'
 import { joinWithDot, toTitle } from '../utils/formatting'

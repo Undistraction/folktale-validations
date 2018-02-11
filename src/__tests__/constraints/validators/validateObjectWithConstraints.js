@@ -5,7 +5,8 @@ import {
   spy,
   stubReturns,
 } from '../../testHelpers/sinon'
-import { CONSTRAINT_FIELD_NAMES, FAILURE_FIELD_NAMES } from '../../../const'
+import FAILURE_FIELD_NAMES from '../../../const/failureFieldNames'
+import CONSTRAINT_FIELD_NAMES from '../../../const/constraintFieldNames'
 import {
   value1,
   value2,
@@ -36,9 +37,9 @@ import {
   defaultValue1,
   defaultValue2,
   payload1,
-} from '../../testHelpers/fixtures/constraintValues'
+} from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
-import { REQUIRED_KEYS, WHITELISTED_KEYS } from '../../../const/uids'
+import { REQUIRED_KEYS, WHITELISTED_KEYS } from '../../../const/validatorUids'
 
 const {
   FIELDS,
