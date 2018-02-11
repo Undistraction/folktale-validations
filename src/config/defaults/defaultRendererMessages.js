@@ -33,7 +33,7 @@ const prefixWithArrayIndex = (level, index, value) =>
     value,
   ])
 
-const errorMessageFromPayload = renderer => (level, name) => value =>
+const payloadErrorMessage = renderer => (level, name) => value =>
   ifElse(
     isNotNull,
     always(
@@ -69,7 +69,7 @@ const group = wrapWithSoftBrackets
 
 export default {
   invalidObjectReasonInvalidValues,
-  errorMessageFromPayload,
+  payloadErrorMessage,
   prefixWithObjectKey,
   invalidObjectPrefix,
   invalidArrayPrefix,

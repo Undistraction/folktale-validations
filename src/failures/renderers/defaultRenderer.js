@@ -38,19 +38,51 @@ import messageLookup from '../messageLookup'
 import payloadRenderer from './payloadRenderer'
 import { throwError, invalidFailureStructureErrorMessage } from '../../errors'
 
+const cannotParse = compose(throwError, invalidFailureStructureErrorMessage)
+
 export default curry((rendererMessages, validatorMessages) => failureObj => {
+  // ---------------------------------------------------------------------------
+  // Configure
+  // ---------------------------------------------------------------------------
+
   const renderPayload = compose(payloadRenderer, messageLookup)(
     validatorMessages
   )
   const renderAndOrMessage = andOrRenderer(renderPayload, rendererMessages)
-  const renderMessageFromPayload = rendererMessages.errorMessageFromPayload(
+  const renderPayloadMessage = rendererMessages.payloadErrorMessage(
     renderPayload
   )
-  const renderFieldsErrorMessage = rendererMessages.fieldsErrorMessage(
+  const renderObjectFieldsErrorMessage = rendererMessages.fieldsErrorMessage(
     renderPayload
   )
 
-  const buildArrayMessage = curry((level, fieldName, fieldValue) => {
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
+
+  const renderValue = (level, fieldValue, fieldName = null) =>
+    cond([
+      [isAndOrOrObj, renderAndOrMessage],
+      [isPayload, renderPayloadMessage(level, fieldName)],
+      // eslint-disable-next-line no-use-before-define
+      [isPlainObj, renderObject(level, fieldName)],
+      [T, cannotParse],
+    ])(fieldValue)
+
+  // ---------------------------------------------------------------------------
+  // Render Array
+  // ---------------------------------------------------------------------------
+
+  const renderArrayValues = level =>
+    mapWithIndex((o, index) =>
+      rendererMessages.arrayValueErrorMessage(
+        level,
+        index,
+        renderValue(inc(level), o)
+      )
+    )
+
+  const renderArray = curry((level, fieldName, fieldValue) => {
     const prefix = compose(
       joinWithColon,
       append(rendererMessages.invalidArrayPrefix()),
@@ -62,17 +94,26 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
     const result = joinWithSpace([
       prefix,
       rendererMessages.invalidArrayReasonInvalidObjects(),
-      // eslint-disable-next-line no-use-before-define
-      joinWithNoSpace(parseArray(inc(level))(fieldValue)),
+      joinWithNoSpace(renderArrayValues(inc(level))(fieldValue)),
     ])
     return isNotUndefined(fieldName)
       ? rendererMessages.prefixWithObjectKey(level, result)
       : result
   })
 
-  const buildObjMessage = curry((level, fieldName, o) => {
+  // ---------------------------------------------------------------------------
+  // Render Object
+  // ---------------------------------------------------------------------------
+
+  const renderObjectFields = level =>
+    reduceObjIndexed((acc, [fieldName, fieldValue]) => {
+      const result = renderValue(level, fieldValue, fieldName)
+      return joinWithNoSpace([acc, result])
+    }, ``)
+
+  const renderObject = curry((level, fieldName, o) => {
     if (hasPropChildren(o)) {
-      return buildArrayMessage(level, fieldName, propChildren(o))
+      return renderArray(level, fieldName, propChildren(o))
     }
 
     const fields = propFields(o)
@@ -87,12 +128,11 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
         always(isNotUndefined(fields)),
         concatRight([
           rendererMessages.invalidObjectReasonInvalidValues(level),
-          // eslint-disable-next-line no-use-before-define
-          parseFields(level)(fields),
+          renderObjectFields(level)(fields),
         ])
       ),
       when(always(isNotUndefined(fieldsPayload)), v =>
-        append(renderFieldsErrorMessage(level, fieldsPayload))(v)
+        append(renderObjectFieldsErrorMessage(level, fieldsPayload))(v)
       ),
       of,
       when(
@@ -102,29 +142,5 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
     )(defaultTo(rendererMessages.invalidObjectPrefix(), propName(o)))
   })
 
-  const parseFieldValue = (level, fieldValue, fieldName = null) =>
-    cond([
-      [isAndOrOrObj, renderAndOrMessage],
-      [isPayload, renderMessageFromPayload(level, fieldName)],
-      [isPlainObj, buildObjMessage(level, fieldName)],
-      [T, compose(throwError, invalidFailureStructureErrorMessage)],
-    ])(fieldValue)
-
-  const fieldsReducer = level => (acc, [fieldName, fieldValue]) => {
-    const result = parseFieldValue(level, fieldValue, fieldName)
-    return joinWithNoSpace([acc, result])
-  }
-
-  const parseFields = level => reduceObjIndexed(fieldsReducer(level), ``)
-
-  const parseArray = level =>
-    mapWithIndex((o, index) =>
-      rendererMessages.arrayValueErrorMessage(
-        level,
-        index,
-        parseFieldValue(inc(level), o)
-      )
-    )
-
-  return parseFieldValue(0, failureObj)
+  return renderValue(0, failureObj)
 })
