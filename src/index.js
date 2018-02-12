@@ -10,6 +10,7 @@ export {
   default as untilFailureValidator,
 } from './helpers/untilFailureValidator'
 export { default as predicateValidator } from './helpers/predicateValidator'
+export { default as regExpValidator } from './helpers/regExpValidator'
 
 // -----------------------------------------------------------------------------
 // Validators
