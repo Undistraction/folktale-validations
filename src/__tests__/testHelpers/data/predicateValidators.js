@@ -35,142 +35,134 @@ import {
   validateIsNegative,
 } from '../../../index'
 import PREDICATES from '../../../const/predicates'
-import { toValidatorUID } from '../../../failures/utils'
+import {
+  IS_ARRAY,
+  IS_NOT_ARRAY,
+  IS_PLAIN_OBJECT,
+  IS_NOT_PLAIN_OBJECT,
+  IS_OBJECT,
+  IS_BOOLEAN,
+  IS_NOT_BOOLEAN,
+  IS_NOT_OBJECT,
+  IS_NUMBER,
+  IS_NOT_NUMBER,
+  IS_FUNCTION,
+  IS_NOT_FUNCTION,
+  IS_DATE,
+  IS_NOT_DATE,
+  IS_NAN,
+  IS_NOT_NAN,
+  IS_NIL,
+  IS_NULL,
+  IS_NOT_NULL,
+  IS_UNDEFINED,
+  IS_NOT_UNDEFINED,
+  IS_EMPTY,
+  IS_NOT_EMPTY,
+  IS_EMPTY_STRING,
+  IS_NON_EMPTY_STRING,
+  IS_EMPTY_ARRAY,
+  IS_NON_EMPTY_ARRAY,
+  IS_VALID_NUMBER,
+  IS_NOT_VALID_NUMBER,
+  IS_VALID_DATE,
+  IS_NOT_VALID_DATE,
+  IS_POSITIVE,
+  IS_NEGATIVE,
+} from '../../../const/validatorUids'
 
 export default {
   // Types
   [PREDICATES.Array]: {
-    uids: [
-      toValidatorUID(`validateIsArray`),
-      toValidatorUID(`validateIsNotArray`),
-    ],
+    uids: [IS_ARRAY, IS_NOT_ARRAY],
     validators: { validateIsArray, validateIsNotArray },
     values: [typeData.arrayValues, typeData.withoutArrayValues],
   },
   [PREDICATES.plainObject]: {
-    uids: [
-      toValidatorUID(`validateIsPlainObject`),
-      toValidatorUID(`validateIsNotPlainObject`),
-    ],
+    uids: [IS_PLAIN_OBJECT, IS_NOT_PLAIN_OBJECT],
     validators: { validateIsPlainObject, validateIsNotPlainObject },
     values: [typeData.plainObjectValues, typeData.withoutPlainObjectValues],
   },
   [PREDICATES.Object]: {
-    uids: [
-      toValidatorUID(`validateIsObject`),
-      toValidatorUID(`validateIsNotObject`),
-    ],
+    uids: [IS_OBJECT, IS_NOT_OBJECT],
     validators: { validateIsObject, validateIsNotObject },
     values: [typeData.objectValues, typeData.withoutObjectValues],
   },
   [PREDICATES.Boolean]: {
-    uids: [
-      toValidatorUID(`validateIsBoolean`),
-      toValidatorUID(`validateIsNotBoolean`),
-    ],
+    uids: [IS_BOOLEAN, IS_NOT_BOOLEAN],
     validators: { validateIsBoolean, validateIsNotBoolean },
     values: [typeData.booleanValues, typeData.withoutBooleanValues],
   },
   [PREDICATES.Number]: {
-    uids: [
-      toValidatorUID(`validateIsNumber`),
-      toValidatorUID(`validateIsNotNumber`),
-    ],
+    uids: [IS_NUMBER, IS_NOT_NUMBER],
     validators: { validateIsNumber, validateIsNotNumber },
     values: [typeData.numericValues, typeData.withoutNumericValues],
   },
   [PREDICATES.Function]: {
-    uids: [
-      toValidatorUID(`validateIsFunction`),
-      toValidatorUID(`validateIsNotFunction`),
-    ],
+    uids: [IS_FUNCTION, IS_NOT_FUNCTION],
     validators: { validateIsFunction, validateIsNotFunction },
     values: [typeData.functionValues, typeData.withoutFunctionValues],
   },
   [PREDICATES.Date]: {
-    uids: [
-      toValidatorUID(`validateIsDate`),
-      toValidatorUID(`validateIsNotDate`),
-    ],
+    uids: [IS_DATE, IS_NOT_DATE],
     validators: { validateIsDate, validateIsNotDate },
     values: [typeData.dateValues, typeData.withoutDateValues],
   },
   [PREDICATES.NaN]: {
-    uids: [toValidatorUID(`validateIsNaN`), toValidatorUID(`validateIsNotNaN`)],
+    uids: [IS_NAN, IS_NOT_NAN],
     validators: { validateIsNaN, validateIsNotNaN },
-    values: [NaN, typeData.withoutNaNValues],
+    values: [[NaN], typeData.withoutNaNValues],
   },
   [PREDICATES.Nil]: {
-    uids: [toValidatorUID(`validateIsNil`)],
+    uids: [IS_NIL],
     validators: { validateIsNil },
     values: [[null, undefined], typeData.withoutNilValues],
   },
   [PREDICATES.Null]: {
-    uids: [
-      toValidatorUID(`validateIsNull`),
-      toValidatorUID(`validateIsNotNull`),
-    ],
+    uids: [IS_NULL, IS_NOT_NULL],
     validators: { validateIsNull, validateIsNotNull },
     values: [[null], typeData.withoutNullValues],
   },
   [PREDICATES.Undefined]: {
-    uids: [
-      toValidatorUID(`validateIsUndefined`),
-      toValidatorUID(`validateIsNotUndefined`),
-    ],
+    uids: [IS_UNDEFINED, IS_NOT_UNDEFINED],
     validators: { validateIsUndefined, validateIsNotUndefined },
     values: [[undefined], typeData.withoutUndefinedValues],
   },
   // Empty
   [PREDICATES.empty]: {
-    uids: [
-      toValidatorUID(`validateIsEmpty`),
-      toValidatorUID(`validateIsNotEmpty`),
-    ],
+    uids: [IS_EMPTY, IS_NOT_EMPTY],
     validators: { validateIsEmpty, validateIsNotEmpty },
     values: [typeData.emptyValues, typeData.withoutEmptyValues],
   },
   [PREDICATES.emptyString]: {
-    uids: [
-      toValidatorUID(`validateIsEmptyString`),
-      toValidatorUID(`validateIsNonEmptyString`),
-    ],
+    uids: [IS_EMPTY_STRING, IS_NON_EMPTY_STRING],
     validators: { validateIsEmptyString, validateIsNonEmptyString },
     values: [typeData.emptyStringValues, typeData.nonEmptyStringValues],
   },
   [PREDICATES.emptyArray]: {
-    uids: [
-      toValidatorUID(`validateIsEmptyArray`),
-      toValidatorUID(`validateIsNonEmptyArray`),
-    ],
+    uids: [IS_EMPTY_ARRAY, IS_NON_EMPTY_ARRAY],
     validators: { validateIsEmptyArray, validateIsNonEmptyArray },
     values: [typeData.emptyArrayValues, typeData.nonEmptyArrayValues],
   },
   // Valid
   [PREDICATES.validNumber]: {
-    uids: [
-      toValidatorUID(`validateIsValidNumber`),
-      toValidatorUID(`validateIsNotValidNumber`),
-    ],
+    uids: [IS_VALID_NUMBER, IS_NOT_VALID_NUMBER],
     validators: { validateIsValidNumber, validateIsNotValidNumber },
     values: [typeData.validNumericValues, typeData.withoutValidNumericValues],
   },
   [PREDICATES.validDate]: {
-    uids: [
-      toValidatorUID(`validateIsValidDate`),
-      toValidatorUID(`validateIsNotValidDate`),
-    ],
+    uids: [IS_VALID_DATE, IS_NOT_VALID_DATE],
     validators: { validateIsValidDate, validateIsNotValidDate },
     values: [typeData.validDateValues, typeData.withoutValidDateValues],
   },
   // Numeric
   [PREDICATES.positive]: {
-    uids: [toValidatorUID(`validateIsPositive`)],
+    uids: [IS_POSITIVE],
     validators: { validateIsPositive },
     values: [typeData.positiveNumbers, typeData.negativeNumbersIncludingZero],
   },
   [PREDICATES.negative]: {
-    uids: [toValidatorUID(`validateIsNegative`)],
+    uids: [IS_NEGATIVE],
     validators: { validateIsNegative },
     values: [typeData.negativeNumbers, typeData.positiveNumbersIncludingZero],
   },

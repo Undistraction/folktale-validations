@@ -21,6 +21,6 @@ describe(`payloadRenderer()`, () => {
     const result = configuredPayloadRenderer(payload)
     expect(result).toEqual(message1)
     expect(lookupMessage.calledWith(uid1)).toBeTrue()
-    expect(messageFunction.calledWith([value1, value2, value3])).toBeTrue()
+    expect(messageFunction.calledWith(value1, value2, value3)).toBeTrue()
   })
 })

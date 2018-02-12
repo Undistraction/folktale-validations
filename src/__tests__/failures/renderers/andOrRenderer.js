@@ -19,7 +19,7 @@ describe(`andOrRenderer`, () => {
   const messages = {
     joinWithAnd,
     joinWithOr,
-    group: wrapWithSoftBrackets,
+    groupItems: wrapWithSoftBrackets,
   }
 
   const renderer = andOrRenderer(identity, messages)

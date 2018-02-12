@@ -96,6 +96,8 @@ export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB))
 export const newlineAndTabsForLevel = level =>
   joinWithNoSpace([NEWLINE, tabsForLevel(level)])
 
+export const toList = compose(wrapWithSquareBrackets, quoteAndJoinWithComma)
+
 export const toTitle = compose(joinWithNoSpace, over(lensIndex(0), toUpper))
 
 export const pluralise = (value, count) =>

@@ -1,22 +1,8 @@
-import { map, mapObjIndexed, compose, reverse } from 'ramda'
+import { map, mapObjIndexed } from 'ramda'
+import predicateValidators from '../../testHelpers/data/predicateValidators'
 
-import { mapObjIndexedWithIndex } from '../../../utils/iteration'
-import validators from '../../testHelpers/data/predicateValidators'
-import {
-  propValues,
-  propValidators,
-  propUIDs,
-} from '../../testHelpers/utils/predicateData'
 import toPayload from '../../../failures/toPayload'
-
-const prepareTestData = validatorPair =>
-  mapObjIndexedWithIndex((validator, name, o, i) => {
-    const testValues =
-      i === 0
-        ? propValues(validatorPair)
-        : compose(reverse, propValues)(validatorPair)
-    return [propUIDs(validatorPair)[i], name, validator, ...testValues]
-  }, propValidators(validatorPair))
+import { prepareTestData } from '../../testHelpers/utils/predicateData'
 
 mapObjIndexed((validatorPair, name) => {
   describe(`validators for '${name}'`, () => {
@@ -53,4 +39,4 @@ mapObjIndexed((validatorPair, name) => {
       prepareTestData(validatorPair)
     )
   })
-}, validators)
+}, predicateValidators)

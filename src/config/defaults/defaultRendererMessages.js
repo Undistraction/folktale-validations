@@ -1,5 +1,5 @@
-import { isNotNull } from 'ramda-adjunct'
-import { always, curry, ifElse } from 'ramda'
+import { isNotUndefined } from 'ramda-adjunct'
+import { of, append, compose, always, curry, ifElse, defaultTo } from 'ramda'
 import {
   joinWithColon,
   joinWithAnd,
@@ -35,7 +35,7 @@ const prefixWithArrayIndex = (level, index, value) =>
 
 const payloadErrorMessage = renderer => (level, name) => value =>
   ifElse(
-    isNotNull,
+    isNotUndefined,
     always(
       prefixWithObjectKey(
         level,
@@ -52,7 +52,6 @@ const fieldsErrorMessage = renderer => (level, value) =>
   joinWithEmDash([newlineAndTabsForLevel(level), renderer(value)])
 
 const invalidObjectPrefix = always(OBJECT)
-const invalidArrayPrefix = always(ARRAY)
 const invalidArgumentsPrefix = always(ARGUMENTS)
 
 const invalidObjectReasonInvalidValues = level =>
@@ -65,7 +64,15 @@ const invalidArrayReasonInvalidObjects = always(
   includedInvalidTypeMessage(OBJECT)
 )
 
-const group = wrapWithSoftBrackets
+const groupItems = wrapWithSoftBrackets
+
+const invalidArrayPrefix = compose(
+  joinWithColon,
+  append(ARRAY),
+  of,
+  wrapWithSingleQuotes,
+  defaultTo(``)
+)
 
 export default {
   invalidObjectReasonInvalidValues,
@@ -79,5 +86,5 @@ export default {
   fieldsErrorMessage,
   joinWithAnd,
   joinWithOr,
-  group,
+  groupItems,
 }

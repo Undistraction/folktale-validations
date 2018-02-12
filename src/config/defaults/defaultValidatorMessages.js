@@ -6,6 +6,7 @@ import {
   wrapWithSingleQuotes,
   wrapWithSquareBrackets,
   joinWithSpace,
+  toList,
 } from '../../utils/formatting'
 import * as UIDS from '../../const/validatorUids'
 import PREDICATES from '../../const/predicates'
@@ -14,11 +15,9 @@ import PREDICATES from '../../const/predicates'
 // Predicate
 // -----------------------------------------------------------------------------
 
-const predicateMessage = name =>
-  always(joinWithSpace([`Wasn't`, wrapWithSingleQuotes(name)]))
+const predicateMessage = name => always(joinWithSpace([`Wasn't`, name]))
 
-const negatedPredicateMessage = name =>
-  always(joinWithSpace([`Was`, wrapWithSingleQuotes(name)]))
+const negatedPredicateMessage = name => always(joinWithSpace([`Was`, name]))
 
 // -----------------------------------------------------------------------------
 // Association
@@ -37,10 +36,7 @@ const isLengthBetweenMessage = (low, high) =>
 // -----------------------------------------------------------------------------
 
 const exclusiveKeysMessage = keys =>
-  joinWithColon([
-    `had more than one exlusive key`,
-    wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
-  ])
+  joinWithColon([`had more than one exlusive key`, toList(keys)])
 
 const objectValuesMessage = valueErrorMessages =>
   joinWithColon([
@@ -49,16 +45,10 @@ const objectValuesMessage = valueErrorMessages =>
   ])
 
 const requiredKeysMessage = keys =>
-  joinWithColon([
-    `missing required key(s)`,
-    wrapWithSquareBrackets(quoteAndJoinWithComma(keys)),
-  ])
+  joinWithColon([`missing required key(s)`, toList(keys)])
 
-const whitelistedKeysMessage = invalidKeys =>
-  joinWithColon([
-    `included invalid key(s)`,
-    wrapWithSingleQuotes(wrapWithSquareBrackets(joinWithComma(invalidKeys))),
-  ])
+const whitelistedKeysMessage = keys =>
+  joinWithColon([`included key(s) not on whitelist`, toList(keys)])
 
 // -----------------------------------------------------------------------------
 // Array
@@ -78,10 +68,10 @@ const isArrayOfMessage = (value, message) =>
 // -----------------------------------------------------------------------------
 
 const isWhitelistedValueMessage = whitelist =>
-  joinWithColon([`Value wasn't on the whitelist`, joinWithComma(whitelist)])
+  joinWithColon([`Value wasn't on the whitelist`, toList(whitelist)])
 
 const isNotBlacklistedValueMessage = blacklist =>
-  joinWithColon([`Value was on the blacklist`, joinWithComma(blacklist)])
+  joinWithColon([`Value was on the blacklist`, toList(blacklist)])
 
 const isNumberWithUnitMessage = unit =>
   joinWithColon([`Wasn't number with unit`, wrapWithSingleQuotes(unit)])
@@ -118,8 +108,8 @@ const messageMap = {
   [UIDS.IS_NOT_NULL]: negatedPredicateMessage(PREDICATES.Null),
   [UIDS.IS_UNDEFINED]: predicateMessage(PREDICATES.Undefined),
   [UIDS.IS_NOT_UNDEFINED]: negatedPredicateMessage(PREDICATES.Undefined),
-  [UIDS.IS_PLAIN_OBJECT]: predicateMessage(PREDICATES.isPlainObject),
-  [UIDS.IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(PREDICATES.isPlainObject),
+  [UIDS.IS_PLAIN_OBJECT]: predicateMessage(PREDICATES.plainObject),
+  [UIDS.IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(PREDICATES.plainObject),
   [UIDS.IS_VALID_DATE]: predicateMessage(PREDICATES.validDate),
   [UIDS.IS_NOT_VALID_DATE]: negatedPredicateMessage(PREDICATES.validDate),
   [UIDS.IS_VALID_NUMBER]: predicateMessage(PREDICATES.validNumber),

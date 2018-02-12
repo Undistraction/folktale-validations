@@ -1,6 +1,6 @@
-import { compose, applyTo } from 'ramda'
+import { compose, apply, __ } from 'ramda'
 
 export default lookupMessage => payload => {
   const { uid, args } = payload
-  return compose(applyTo(args), lookupMessage)(uid)
+  return compose(apply(__, args), lookupMessage)(uid)
 }

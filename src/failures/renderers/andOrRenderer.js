@@ -4,10 +4,10 @@ import { propAnd, isAndObj, propOr, isAndOrOrObj } from '../utils'
 
 const andOrRenderer = (
   renderPayload,
-  { joinWithAnd, joinWithOr, group }
+  { joinWithAnd, joinWithOr, groupItems }
 ) => o1 => {
   const render = level => o2 => {
-    const groupIfLevelGt0 = when(always(isPositive(level)), group)
+    const groupIfLevelGt0 = when(always(isPositive(level)), groupItems)
     const processSubGroups = map(when(isAndOrOrObj, render(inc(level))))
 
     const processAndObj = compose(
