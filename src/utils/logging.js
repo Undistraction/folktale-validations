@@ -1,9 +1,6 @@
 import { curry, compose, tap } from 'ramda'
-import { validation as Validation } from 'folktale'
 import { joinWithColon } from '../utils/formatting'
 import { appendRight } from '../utils/array'
-
-const { Success } = Validation
 
 const log = curry((loggingFunction, prefix) =>
   tap(
@@ -16,10 +13,5 @@ const log = curry((loggingFunction, prefix) =>
   )
 )
 
-// eslint-disable-next-line no-console
+// eslint-disable-next-line import/prefer-default-export, no-console
 export const logToConsole = log(console.log)
-
-export const loggingValidator = message => validation => {
-  logToConsole(message)(validation)
-  return Success(validation)
-}

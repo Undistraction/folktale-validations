@@ -25,10 +25,12 @@ import {
 import { defaultRenderer } from '../../../config/defaults/defaultRenderers'
 import predicateValidators from '../../testHelpers/data/predicateValidators'
 import { prepareTestData } from '../../testHelpers/utils/predicateData'
-import validateArrayElements from '../../../validators/array/validateArrayElements'
-import { validateIsNumber } from '../../../index'
 
 describe(`defaultRendererMessages`, () => {
+  // ---------------------------------------------------------------------------
+  // Predicates
+  // ---------------------------------------------------------------------------
+
   mapObjIndexed((validatorPair, name) => {
     let negate = true
     map(([, validatorName, validator, , invalidValues]) => {

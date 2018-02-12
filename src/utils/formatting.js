@@ -77,7 +77,9 @@ export const wrapWith = (a, b = a) =>
     stringRepresentationIfNil,
     stringRepresentationIfFunction
   )
+
 export const wrapWithSingleQuotes = wrapWith(SINGLE_QUOTE)
+
 export const wrapWithSquareBrackets = wrapWith(
   SQUARE_BRACKET_OPENING,
   SQUARE_BRACKET_CLOSING
@@ -91,6 +93,7 @@ export const quoteAndJoinWithComma = compose(
   joinWithComma,
   map(wrapWithSingleQuotes)
 )
+
 export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB))
 
 export const newlineAndTabsForLevel = level =>

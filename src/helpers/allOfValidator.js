@@ -1,12 +1,12 @@
 import { validation as Validation } from 'folktale'
 import { compose, of, ifElse, reduce, head } from 'ramda'
 import { andMessages } from '../utils/failures'
-import { arrayWithOneChild } from '../utils/predicates'
+import { isArrayWithOneChild } from '../utils/predicates'
 
 const { Success, Failure } = Validation
 
 const toErr = v => {
-  const r = compose(Failure, ifElse(arrayWithOneChild, head, andMessages))(v)
+  const r = compose(Failure, ifElse(isArrayWithOneChild, head, andMessages))(v)
   return r
 }
 
