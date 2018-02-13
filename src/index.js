@@ -74,10 +74,10 @@ export {
 
 export {
   default as defaultRenderer,
-} from './failures/renderers/defaultRenderer'
+} from './failures/renderers/failureRenderer'
 export {
   default as argumentsRenderer,
-} from './failures/renderers/argumentsRenderer'
+} from './failures/renderers/argumentsFailureRenderer'
 
 // -----------------------------------------------------------------------------
 // Configured Functions

@@ -8,14 +8,11 @@ import {
   hasPropChildren,
   propName,
 } from '../../utils/failures'
-import { isAndOrOrObj } from '../utils'
+import { isAndOrOrObj, throwInvalidFailureStructureMessage } from '../utils'
 import andOrRenderer from './andOrRenderer'
 import { isPayload } from '../utils/payload'
 import messageLookup from '../messageLookup'
 import payloadRenderer from './payloadRenderer'
-import { throwError, invalidFailureStructureErrorMessage } from '../../errors'
-
-const cannotParse = compose(throwError, invalidFailureStructureErrorMessage)
 
 export default curry((rendererMessages, validatorMessages) => failureObj => {
   const {
@@ -47,7 +44,7 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
       [isPayload, renderPayloadMessage(level, fieldName)],
       // eslint-disable-next-line no-use-before-define
       [isPlainObj, processObjectOrArray(level, fieldName)],
-      [T, cannotParse],
+      [T, throwInvalidFailureStructureMessage],
     ])(fieldValue)
 
   // ---------------------------------------------------------------------------

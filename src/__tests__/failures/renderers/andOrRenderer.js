@@ -17,9 +17,9 @@ describe(`andOrRenderer`, () => {
   const validatorId8 = `valiatorId8`
 
   const messages = {
-    joinWithAnd,
-    joinWithOr,
-    groupItems: wrapWithSoftBrackets,
+    renderAnds: joinWithAnd,
+    renderOrs: joinWithOr,
+    renderGroup: wrapWithSoftBrackets,
   }
 
   const renderer = andOrRenderer(identity, messages)

@@ -1,34 +1,46 @@
-import { compose, map, when, always, inc, ifElse } from 'ramda'
-import { isPositive } from 'ramda-adjunct'
-import { propAnd, isAndObj, propOr, isAndOrOrObj } from '../utils'
+import { cond, T, map, when, inc, always, compose } from 'ramda'
+import { isPositive, isNotString } from 'ramda-adjunct'
+import {
+  isAndObj,
+  isOrObj,
+  throwInvalidFailureStructureMessage,
+  isAndOrOrObj,
+  propAnd,
+  propOr,
+} from '../utils'
 
 const andOrRenderer = (
   renderPayload,
-  { joinWithAnd, joinWithOr, groupItems }
+  { renderAnds, renderOrs, renderGroup }
 ) => o1 => {
-  const render = level => o2 => {
-    const groupIfLevelGt0 = when(always(isPositive(level)), groupItems)
-    const processSubGroups = map(when(isAndOrOrObj, render(inc(level))))
+  const processAndOrObj = level => o2 =>
+    cond([
+      // eslint-disable-next-line no-use-before-define
+      [isAndObj, processAndObj(level)],
+      // eslint-disable-next-line no-use-before-define
+      [isOrObj, processOrObj(level)],
+      [T, throwInvalidFailureStructureMessage],
+    ])(o2)
 
-    const processAndObj = compose(
-      groupIfLevelGt0,
-      joinWithAnd,
-      map(renderPayload),
-      processSubGroups,
+  const processAndObj = level => o =>
+    compose(
+      when(always(isPositive(level)), renderGroup),
+      renderAnds,
+      map(when(isNotString, renderPayload)),
+      map(when(isAndOrOrObj, processAndOrObj(inc(level)))),
       propAnd
-    )
+    )(o)
 
-    const processOrObj = compose(
-      groupIfLevelGt0,
-      joinWithOr,
-      processSubGroups,
+  const processOrObj = level => o =>
+    compose(
+      when(always(isPositive(level)), renderGroup),
+      renderOrs,
+      map(when(isNotString, renderPayload)),
+      map(when(isAndOrOrObj, processAndOrObj(inc(level)))),
       propOr
-    )
+    )(o)
 
-    return compose(ifElse(isAndObj, processAndObj, processOrObj))(o2)
-  }
-
-  return render(0)(o1)
+  return processAndOrObj(0)(o1)
 }
 
 export default andOrRenderer

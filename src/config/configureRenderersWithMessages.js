@@ -1,5 +1,5 @@
-import defaultRenderer from '../failures/renderers/defaultRenderer'
-import argumentsRenderer from '../failures/renderers/argumentsRenderer'
+import defaultRenderer from '../failures/renderers/failureRenderer'
+import argumentsRenderer from '../failures/renderers/argumentsFailureRenderer'
 
 export default (rendererMessages, validatorMessages) => {
   const configuredObjectRenderer = defaultRenderer(

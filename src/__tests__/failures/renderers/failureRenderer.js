@@ -1,10 +1,11 @@
 import { compose, assoc, of, prepend } from 'ramda'
 import { list } from 'ramda-adjunct'
-import defaultRenderer from '../../../failures/renderers/defaultRenderer'
+import failureRenderer from '../../../failures/renderers/failureRenderer'
 import {
   flatFailureMessage,
   nestedFailureMessageWithObject,
   nestedFailureMessageWithArray,
+  nestedAndOrs,
 } from '../../testHelpers/fixtures/rendererFailureMessages'
 import defaultRendererMessages from '../../../config/defaults/defaultRendererMessages'
 import {
@@ -29,7 +30,7 @@ import { invalidFailureStructureErrorMessage } from '../../../errors'
 const renderPayload = uid =>
   compose(joinWithColon, prepend(uid), of, wrapWithSoftBrackets, list)
 
-describe(`defaultRenderer()`, () => {
+describe(`failureRenderer()`, () => {
   const validatorMessages = {
     [uid1]: renderPayload(value1),
     [uid2]: renderPayload(value2),
@@ -39,7 +40,7 @@ describe(`defaultRenderer()`, () => {
     [uid6]: renderPayload(value6),
   }
 
-  const renderer = defaultRenderer(defaultRendererMessages, validatorMessages)
+  const renderer = failureRenderer(defaultRendererMessages, validatorMessages)
 
   describe(`with an invalid payload`, () => {
     it(`throws`, () => {
@@ -129,6 +130,17 @@ describe(`defaultRenderer()`, () => {
                 – included invalid value(s)
                   – Key 'b2a': value5: (1,2)
             – Key 'c': value6: (1,2)`
+      )
+    })
+  })
+
+  describe(`with nested ands and ors`, () => {
+    it.only(`renders the correct error message`, () => {
+      const result = renderer(nestedAndOrs)
+      expect(result).toEqualWithCompressedWhitespace(
+        `Object
+          – value1: (1,2)
+          – included invalid value(s) value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`
       )
     })
   })

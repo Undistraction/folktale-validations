@@ -2,9 +2,7 @@ import { always } from 'ramda'
 import {
   joinWithComma,
   joinWithColon,
-  quoteAndJoinWithComma,
   wrapWithSingleQuotes,
-  wrapWithSquareBrackets,
   joinWithSpace,
   toList,
 } from '../../utils/formatting'

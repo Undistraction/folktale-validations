@@ -14,6 +14,7 @@ import {
   joinWithColon,
   joinWithAnd,
   joinWithOr,
+  joinWithNoSpace,
   wrapWithSingleQuotes,
   joinWithSpace,
   joinWithEmDash,
@@ -21,14 +22,16 @@ import {
   newlineAndTabsForLevel,
   wrapWithSoftBrackets,
 } from '../../utils/formatting'
-import { joinWithNoSpace } from '../../../lib/utils/formatting'
-import { propName } from '../../utils/failures'
 
 const KEY = `Key`
 const ARGUMENTS = `Arguments`
 const OBJECT = `Object`
 const ARRAY = `Array`
 const VALUE = `value`
+
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
 
 const includedInvalidTypeMessage = type => `included invalid ${type}(s)`
 
@@ -76,11 +79,13 @@ const invalidArrayReasonInvalidValues = always(
   joinWithSpace([ARRAY, includedInvalidTypeMessage(VALUE)])
 )
 
-const groupItems = wrapWithSoftBrackets
-
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Render
-// ---------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
+const renderAnds = joinWithAnd
+const renderOrs = joinWithOr
+const renderGroup = wrapWithSoftBrackets
 
 const renderObjectFieldsError = renderer => level => value =>
   joinWithEmDash([newlineAndTabsForLevel(level), renderer(value)])
@@ -130,17 +135,12 @@ const renderObject = (
   )([])
 
 export default {
-  invalidObjectReasonInvalidValues,
   payloadErrorMessage,
-  prefixWithObjectKey,
-  invalidObjectPrefix,
   invalidArgumentsPrefix,
-  invalidArrayReasonInvalidValues,
   renderObjectFieldsError,
-  joinWithAnd,
-  joinWithOr,
-  groupItems,
-  prefixWithKey,
+  renderAnds,
+  renderOrs,
+  renderGroup,
   renderArrayValue,
   renderArray,
   renderObject,

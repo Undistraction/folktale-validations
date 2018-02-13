@@ -17,6 +17,7 @@ import { propValue } from '../utils/failures'
 import { constraintsObjName } from '../messages'
 import { joinWithDot, toTitle } from '../utils/formatting'
 import { appendRight } from '../utils/array'
+import { throwError, invalidFailureStructureErrorMessage } from '../errors'
 
 const {
   FIELDS_FAILURE_MESSAGE,
@@ -46,3 +47,8 @@ export const isPayload = all(has())
 
 export const toValidatorUID = compose(joinWithDot, appendRight([UIDPrefix]))
 export const toValidatorName = key => `validate${toTitle(key)}`
+
+export const throwInvalidFailureStructureMessage = compose(
+  throwError,
+  invalidFailureStructureErrorMessage
+)
