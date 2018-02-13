@@ -10,6 +10,8 @@ import {
   find,
   append,
   toPairs,
+  when,
+  always,
 } from 'ramda'
 import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
@@ -19,13 +21,15 @@ import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
 
 const { Failure } = Validation
 
+const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
+
 // -----------------------------------------------------------------------------
 // Predicates
 // -----------------------------------------------------------------------------
 
 const hasIsRequiredKey = both(
   hasPropIsRequired,
-  compose(propSatisfies(isTruthy, CONSTRAINT_FIELD_NAMES.IS_REQUIRED))
+  compose(propSatisfies(isTruthy, IS_REQUIRED))
 )
 
 // -----------------------------------------------------------------------------
@@ -41,13 +45,13 @@ export const buildValidatorsMap = reduce(
 
 export const buildTransformersMap = reduce(
   (acc, { name, transformer }) =>
-    isNotUndefined(transformer) ? assoc(name, transformer, acc) : acc,
+    when(always(isNotUndefined(transformer)), assoc(name, transformer))(acc),
   {}
 )
 
 export const buildDefaultsMap = reduce(
   (acc, { name, defaultValue }) =>
-    isNotUndefined(defaultValue) ? assoc(name, defaultValue, acc) : acc,
+    when(always(isNotUndefined(defaultValue)), assoc(name, defaultValue))(acc),
   {}
 )
 

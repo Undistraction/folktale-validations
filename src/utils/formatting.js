@@ -24,7 +24,6 @@ import {
   isNaN,
   isFunction,
 } from 'ramda-adjunct'
-import { appendRight } from '../../lib/utils'
 
 // -----------------------------------------------------------------------------
 // Internal
@@ -47,6 +46,8 @@ const NULL = `null`
 const UNDEFINED = `undefined`
 const NAN = `NaN`
 const FUNCTION = `function () {}`
+const AND = `and`
+const OR = `or`
 
 const stringRepresentationIfNil = compose(
   when(isNull, always(NULL)),
@@ -95,8 +96,8 @@ export const joinWithSpaced = compose(joinDefined, wrapWithSpaces)
 export const joinWithRightPadded = compose(joinDefined, padRight)
 
 export const joinWithComma = joinWithRightPadded(COMMA)
-export const joinWithAnd = joinWithSpaced(`and`)
-export const joinWithOr = joinWithSpaced(`or`)
+export const joinWithAnd = joinWithSpaced(AND)
+export const joinWithOr = joinWithSpaced(OR)
 export const joinWithEmDash = joinWithSpaced(EM_DASH)
 export const joinWithColon = joinWithRightPadded(COLON)
 export const joinWithSpace = joinDefined(SPACE)
