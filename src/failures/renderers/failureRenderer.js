@@ -16,7 +16,7 @@ import payloadRenderer from './payloadRenderer'
 
 export default curry((rendererMessages, validatorMessages) => failureObj => {
   const {
-    payloadErrorMessage,
+    renderPayload,
     renderObjectFieldsError,
     // Render
     renderObject,
@@ -27,12 +27,17 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   // Configure
   // ---------------------------------------------------------------------------
 
-  const renderPayload = compose(payloadRenderer, messageLookup)(
+  const renderPayloadConfigured = compose(payloadRenderer, messageLookup)(
     validatorMessages
   )
-  const renderAndOrMessage = andOrRenderer(renderPayload, rendererMessages)
-  const renderPayloadMessage = payloadErrorMessage(renderPayload)
-  const renderObjectFieldsErrorMessage = renderObjectFieldsError(renderPayload)
+  const renderAndOrMessagesConfigured = andOrRenderer(
+    renderPayloadConfigured,
+    rendererMessages
+  )
+  const renderPayloadMessagesConfigured = renderPayload(renderPayloadConfigured)
+  const renderObjectFieldsErrorMessageConfigured = renderObjectFieldsError(
+    renderPayloadConfigured
+  )
 
   // ---------------------------------------------------------------------------
   // Value
@@ -40,8 +45,8 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
 
   const processValue = (level, fieldValue, fieldName) =>
     cond([
-      [isAndOrOrObj, renderAndOrMessage],
-      [isPayload, renderPayloadMessage(level, fieldName)],
+      [isAndOrOrObj, renderAndOrMessagesConfigured],
+      [isPayload, renderPayloadMessagesConfigured(level, fieldName)],
       // eslint-disable-next-line no-use-before-define
       [isPlainObj, processObjectOrArray(level, fieldName)],
       [T, throwInvalidFailureStructureMessage],
@@ -78,7 +83,7 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
 
   const processObjectFieldsErrorMessage = (level, o) =>
     compose(
-      when(isNotUndefined, renderObjectFieldsErrorMessage(level)),
+      when(isNotUndefined, renderObjectFieldsErrorMessageConfigured(level)),
       propFieldsFailiureMessage
     )(o)
 

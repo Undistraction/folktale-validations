@@ -1,13 +1,11 @@
 import { compose, assoc, of, prepend } from 'ramda'
 import { list } from 'ramda-adjunct'
-import failureRenderer from '../../../failures/renderers/failureRenderer'
 import {
   flatFailureMessage,
   nestedFailureMessageWithObject,
   nestedFailureMessageWithArray,
   nestedAndOrs,
 } from '../../testHelpers/fixtures/rendererFailureMessages'
-import defaultRendererMessages from '../../../config/defaults/defaultRendererMessages'
 import {
   uid1,
   value1,
@@ -26,6 +24,9 @@ import {
 } from '../../testHelpers/fixtures/generic'
 import { joinWithColon, wrapWithSoftBrackets } from '../../../utils/formatting'
 import { invalidFailureStructureErrorMessage } from '../../../errors'
+import defaultFailureRendererHelpers from '../../../config/defaults/customise/defaultFailureRendererHelpers'
+import failureRendererDefaults from '../../../config/defaults/customise/failureRendererDefaults'
+import failureRenderer from '../../../failures/renderers/failureRenderer'
 
 const renderPayload = uid =>
   compose(joinWithColon, prepend(uid), of, wrapWithSoftBrackets, list)
@@ -40,8 +41,10 @@ describe(`failureRenderer()`, () => {
     [uid6]: renderPayload(value6),
   }
 
-  const renderer = failureRenderer(defaultRendererMessages, validatorMessages)
-
+  const renderer = failureRenderer(
+    defaultFailureRendererHelpers(failureRendererDefaults),
+    validatorMessages
+  )
   describe(`with an invalid payload`, () => {
     it(`throws`, () => {
       const value = []

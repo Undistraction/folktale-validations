@@ -5,9 +5,9 @@ import {
   wrapWithSingleQuotes,
   joinWithSpace,
   toList,
-} from '../../utils/formatting'
-import * as UIDS from '../../const/validatorUids'
-import PREDICATES from '../../const/predicates'
+} from '../../../utils/formatting'
+import * as UIDS from '../../../const/validatorUids'
+import PREDICATES from '../../../const/predicates'
 
 // -----------------------------------------------------------------------------
 // Predicate

@@ -1,8 +1,9 @@
-import rendererMessages from './defaultRendererMessages'
-import validatorMessages from './defaultValidatorMessages'
-import configureRenderersWithMessages from '../../config/configureRenderersWithMessages'
+import rendererHelpers from './customise/defaultFailureRendererHelpers'
+import validatorMessages from './customise/validatorMessagesDefaults'
+import failureRendererDefaults from './customise/failureRendererDefaults'
+import configureRenderers from '../../config/configureRenderers'
 
-export default configureRenderersWithMessages(
-  rendererMessages,
-  validatorMessages
+export default configureRenderers(
+  validatorMessages,
+  rendererHelpers(failureRendererDefaults)
 )

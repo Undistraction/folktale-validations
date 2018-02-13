@@ -14,6 +14,7 @@ import {
   when,
   always,
   gt,
+  flip,
 } from 'ramda'
 import {
   isEmptyString,
@@ -23,6 +24,7 @@ import {
   isNaN,
   isFunction,
 } from 'ramda-adjunct'
+import { appendRight } from '../../lib/utils'
 
 // -----------------------------------------------------------------------------
 // Internal
@@ -35,6 +37,11 @@ const SQUARE_BRACKET_OPENING = `[`
 const SQUARE_BRACKET_CLOSING = `]`
 const SOFT_BRACKET_OPENING = `(`
 const SOFT_BRACKET_CLOSING = `)`
+const SPACE = ` `
+const COMMA = `,`
+const EM_DASH = `–`
+const COLON = `:`
+const FULL_STOP = `.`
 
 const NULL = `null`
 const UNDEFINED = `undefined`
@@ -59,14 +66,7 @@ export const joinDefined = withString =>
     reject(anyPass([isEmptyString, isEmptyArray, isUndefined]))
   )
 
-export const joinWithComma = joinDefined(`, `)
-export const joinWithAnd = joinDefined(` and `)
-export const joinWithOr = joinDefined(` or `)
-export const joinWithEmDash = joinDefined(` – `)
-export const joinWithColon = joinDefined(`: `)
-export const joinWithSpace = joinDefined(` `)
 export const joinWithNoSpace = joinDefined(``)
-export const joinWithDot = joinDefined(`.`)
 
 export const wrapWith = (a, b = a) =>
   compose(
@@ -78,8 +78,10 @@ export const wrapWith = (a, b = a) =>
     stringRepresentationIfFunction
   )
 
-export const wrapWithSingleQuotes = wrapWith(SINGLE_QUOTE)
+export const padRight = compose(joinWithNoSpace, flip(prepend)([SPACE]))
 
+export const wrapWithSingleQuotes = wrapWith(SINGLE_QUOTE)
+export const wrapWithSpaces = wrapWith(SPACE)
 export const wrapWithSquareBrackets = wrapWith(
   SQUARE_BRACKET_OPENING,
   SQUARE_BRACKET_CLOSING
@@ -88,6 +90,17 @@ export const wrapWithSoftBrackets = wrapWith(
   SOFT_BRACKET_OPENING,
   SOFT_BRACKET_CLOSING
 )
+
+export const joinWithSpaced = compose(joinDefined, wrapWithSpaces)
+export const joinWithRightPadded = compose(joinDefined, padRight)
+
+export const joinWithComma = joinWithRightPadded(COMMA)
+export const joinWithAnd = joinWithSpaced(`and`)
+export const joinWithOr = joinWithSpaced(`or`)
+export const joinWithEmDash = joinWithSpaced(EM_DASH)
+export const joinWithColon = joinWithRightPadded(COLON)
+export const joinWithSpace = joinDefined(SPACE)
+export const joinWithDot = joinDefined(FULL_STOP)
 
 export const quoteAndJoinWithComma = compose(
   joinWithComma,
