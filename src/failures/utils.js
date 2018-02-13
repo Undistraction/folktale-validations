@@ -5,7 +5,6 @@ import {
   mergeAll,
   objOf,
   assoc,
-  of,
   map,
   has,
   either,
@@ -33,7 +32,7 @@ const UIDPrefix = `folktale-validations.validate`
 export const toObjectError = compose(objOf(FIELDS), mergeAll, fromPairs)
 export const toConstraintsError = compose(assoc(NAME, constraintsObjName()))
 export const toObjectFieldsError = objOf(FIELDS_FAILURE_MESSAGE)
-export const toArrayError = objOf(CHILDREN, of)
+export const toArrayError = objOf(CHILDREN)
 const failuresToChildren = map(compose(objOf(CHILDREN), map(propValue)))
 export const toChildrenFieldsError = compose(objOf(FIELDS), failuresToChildren)
 

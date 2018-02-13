@@ -1,4 +1,4 @@
-import validateObjectValues from '../../../validators/object/validateObjectValues'
+import { validateObjectValues } from '../../../index'
 import {
   spy,
   stubReturnsFailure,

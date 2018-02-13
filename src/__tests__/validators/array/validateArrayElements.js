@@ -2,16 +2,22 @@ import { validation as Validation } from 'folktale'
 import { validateArrayElements } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
 import toPayload from '../../../failures/toPayload'
-import { value1, value2, value3 } from '../../testHelpers/fixtures/generic'
-import { ARRAY_ELEMENTS } from '../../../const/validatorUids'
+import {
+  value1,
+  value2,
+  value3,
+  uid1,
+  uid2,
+  uid3,
+} from '../../testHelpers/fixtures/generic'
+import { toArrayError } from '../../../failures/utils'
 
 const { Success, Failure } = Validation
 
 describe(`validateArrayElements()`, () => {
-  const uid1 = `uid1`
   const element1Payload = toPayload(uid1, value1)
-  const element2Payload = toPayload(uid1, value2)
-  const element3Payload = toPayload(uid1, value3)
+  const element2Payload = toPayload(uid2, value2)
+  const element3Payload = toPayload(uid3, value3)
 
   describe(`when array is empty`, () => {
     it(`returns a Validation.Success with the supplied value`, () => {
@@ -46,7 +52,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Failure(element1Payload))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Success(3))
-        const payload = toPayload(ARRAY_ELEMENTS, value, [element1Payload])
+        const payload = toArrayError([element1Payload])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -65,7 +71,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Success(1))
         v1.onSecondCall().returns(Failure(element2Payload))
         v1.onThirdCall().returns(Success(3))
-        const payload = toPayload(ARRAY_ELEMENTS, value, [element2Payload])
+        const payload = toArrayError([element2Payload])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -84,7 +90,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Success(1))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Failure(element3Payload))
-        const payload = toPayload(ARRAY_ELEMENTS, value, [element3Payload])
+        const payload = toArrayError([element3Payload])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -103,10 +109,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Failure(element1Payload))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Failure(element3Payload))
-        const payload = toPayload(ARRAY_ELEMENTS, value, [
-          element1Payload,
-          element3Payload,
-        ])
+        const payload = toArrayError([element1Payload, element3Payload])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)

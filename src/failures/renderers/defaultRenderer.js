@@ -1,32 +1,13 @@
-import {
-  curry,
-  inc,
-  append,
-  compose,
-  when,
-  always,
-  of,
-  prepend,
-  defaultTo,
-  cond,
-  T,
-  ifElse,
-} from 'ramda'
-import { isNotUndefined, concatRight, isPlainObj } from 'ramda-adjunct'
+import { curry, inc, append, compose, cond, T, ifElse, when } from 'ramda'
+import { isPlainObj, isNotUndefined } from 'ramda-adjunct'
 import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
-  propName,
   propFields,
   propChildren,
   propFieldsFailiureMessage,
   hasPropChildren,
+  propName,
 } from '../../utils/failures'
-import {
-  joinWithColon,
-  joinWithNoSpace,
-  joinWithSpace,
-  wrapWithSingleQuotes,
-} from '../../utils/formatting'
 import { isAndOrOrObj } from '../utils'
 import andOrRenderer from './andOrRenderer'
 import { isPayload } from '../utils/payload'
@@ -38,14 +19,12 @@ const cannotParse = compose(throwError, invalidFailureStructureErrorMessage)
 
 export default curry((rendererMessages, validatorMessages) => failureObj => {
   const {
-    invalidArrayPrefix,
     payloadErrorMessage,
-    fieldsErrorMessage,
-    arrayValueErrorMessage,
-    prefixWithObjectKey,
-    invalidObjectPrefix,
-    invalidObjectReasonInvalidValues,
-    invalidArrayReasonInvalidObjects,
+    renderObjectFieldsError,
+    // Render
+    renderObject,
+    renderArray,
+    renderArrayValue,
   } = rendererMessages
   // ---------------------------------------------------------------------------
   // Configure
@@ -56,18 +35,18 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   )
   const renderAndOrMessage = andOrRenderer(renderPayload, rendererMessages)
   const renderPayloadMessage = payloadErrorMessage(renderPayload)
-  const renderObjectFieldsErrorMessage = fieldsErrorMessage(renderPayload)
+  const renderObjectFieldsErrorMessage = renderObjectFieldsError(renderPayload)
 
   // ---------------------------------------------------------------------------
   // Value
   // ---------------------------------------------------------------------------
 
-  const renderValue = (level, fieldValue, fieldName) =>
+  const processValue = (level, fieldValue, fieldName) =>
     cond([
       [isAndOrOrObj, renderAndOrMessage],
       [isPayload, renderPayloadMessage(level, fieldName)],
       // eslint-disable-next-line no-use-before-define
-      [isPlainObj, renderObjectOrArray(level, fieldName)],
+      [isPlainObj, processObjectOrArray(level, fieldName)],
       [T, cannotParse],
     ])(fieldValue)
 
@@ -75,66 +54,56 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   // Array
   // ---------------------------------------------------------------------------
 
-  const renderArrayValues = level =>
+  const processArrayValues = level =>
     mapWithIndex((o, index) =>
-      arrayValueErrorMessage(level, index, renderValue(inc(level), o))
+      renderArrayValue(level, index, processValue(inc(level), o))
     )
 
-  const renderArray = (level, fieldName) => o => {
-    const result = joinWithSpace([
-      invalidArrayPrefix(fieldName),
-      invalidArrayReasonInvalidObjects(),
-      joinWithNoSpace(renderArrayValues(inc(level))(o)),
-    ])
-    return isNotUndefined(fieldName)
-      ? prefixWithObjectKey(level, result)
-      : result
-  }
+  const processArray = (level, fieldName) =>
+    compose(
+      renderArray(level, fieldName),
+      processArrayValues(inc(level)),
+      propChildren
+    )
 
   // ---------------------------------------------------------------------------
   // Object
   // ---------------------------------------------------------------------------
 
-  const renderObjectFields = level =>
-    reduceObjIndexed((acc, [fieldName, fieldValue]) => {
-      const result = renderValue(level, fieldValue, fieldName)
-      return joinWithNoSpace([acc, result])
-    }, ``)
+  const processObjectFields = (level, o) =>
+    compose(
+      reduceObjIndexed((acc, [fieldName, fieldValue]) => {
+        const result = processValue(level, fieldValue, fieldName)
+        return append(result, acc)
+      }, []),
+      propFields
+    )(o)
 
-  const renderObject = (level, fieldName) => o => {
-    const fields = propFields(o)
-    const fieldsPayload = propFieldsFailiureMessage(o)
-    return compose(
-      when(always(isNotUndefined(fieldName)), prefixWithObjectKey(level)),
-      joinWithSpace,
-      when(
-        always(isNotUndefined(fields)),
-        concatRight([
-          invalidObjectReasonInvalidValues(level),
-          renderObjectFields(level)(fields),
-        ])
-      ),
-      when(always(isNotUndefined(fieldsPayload)), v =>
-        append(renderObjectFieldsErrorMessage(level, fieldsPayload))(v)
-      ),
-      of,
-      when(
-        always(isNotUndefined(fieldName)),
-        compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
-      )
-    )(defaultTo(invalidObjectPrefix(), propName(o)))
-  }
+  const processObjectFieldsErrorMessage = (level, o) =>
+    compose(
+      when(isNotUndefined, renderObjectFieldsErrorMessage(level)),
+      propFieldsFailiureMessage
+    )(o)
+
+  const processObject = (level, fieldName) => o =>
+    renderObject(
+      level,
+      fieldName,
+      propName(o),
+      processObjectFields(level, o),
+      processObjectFieldsErrorMessage(level, o)
+    )
 
   // ---------------------------------------------------------------------------
   // Object or Array
   // ---------------------------------------------------------------------------
 
-  const renderObjectOrArray = (level, fieldName) =>
+  const processObjectOrArray = (level, fieldName) =>
     ifElse(
       hasPropChildren,
-      compose(renderArray(level, fieldName), propChildren),
-      renderObject(level, fieldName)
+      processArray(level, fieldName),
+      processObject(level, fieldName)
     )
 
-  return renderValue(0, failureObj)
+  return processValue(0, failureObj)
 })

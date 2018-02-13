@@ -1,4 +1,4 @@
-import validateExclusiveKeys from '../../../validators/object/validateExclusiveKeys'
+import { validateExclusiveKeys } from '../../../index'
 import { key1, key2, key3, key4 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
 import { EXCLUSIVE_KEYS } from '../../../const/validatorUids'

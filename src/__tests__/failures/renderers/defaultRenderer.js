@@ -119,7 +119,7 @@ describe(`defaultRenderer()`, () => {
         `Object 
           – included invalid value(s)
             – Key 'a': value1: (1,2)
-            – Key 'b': Array included invalid Object(s)
+            – Key 'b': Array included invalid value(s)
               – [0] Object 
                 – included invalid value(s)
                   – Key 'b1a': value2: (1,2)

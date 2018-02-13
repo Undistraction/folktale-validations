@@ -1,8 +1,22 @@
 import { mapObjIndexed, map } from 'ramda'
-import validateIsLengthBetween from '../../../validators/association/validateIsLengthBetween'
-import validateIsLengthGreaterThan from '../../../validators/association/validateIsLengthGreaterThan'
-import validateIsLengthLessThan from '../../../validators/association/validateIsLengthLessThan'
-import validateExclusiveKeys from '../../../validators/object/validateExclusiveKeys'
+import {
+  validateIsLengthBetween,
+  validateIsLengthGreaterThan,
+  validateIsLengthLessThan,
+  validateExclusiveKeys,
+  validateRequiredKeys,
+  validateWhitelistedKeys,
+  validateObjectValues,
+  validateIsWhitelistedValue,
+  validateIsNotBlacklistedValue,
+  validateIsNumberWithUnit,
+  validateIsBoolean,
+  validateIsArray,
+  defaultRenderers,
+  validateIsNumber,
+  validateArrayElements,
+} from '../../../index'
+
 import {
   key2,
   key1,
@@ -12,21 +26,12 @@ import {
   value1,
   value2,
 } from '../../testHelpers/fixtures/generic'
-import validateRequiredKeys from '../../../validators/object/validateRequiredKeys'
-import validateWhitelistedKeys from '../../../validators/object/validateWhitelistedKeys'
-import validateObjectValues from '../../../validators/object/validateObjectValues'
-import validateIsWhitelistedValue from '../../../validators/other/validateIsWhitelistedValue'
-import validateIsNotBlacklistedValue from '../../../validators/other/validateIsNotBlacklistedValue'
-import validateIsNumberWithUnit from '../../../validators/other/validateIsNumberWithUnit'
-import {
-  validateIsBoolean,
-  validateIsArray,
-} from '../../../validators/predicate/generatedPredicateValidators'
-import { defaultRenderer } from '../../../config/defaults/defaultRenderers'
+
 import predicateValidators from '../../testHelpers/data/predicateValidators'
 import { prepareTestData } from '../../testHelpers/utils/predicateData'
 
 describe(`defaultRendererMessages`, () => {
+  const { defaultRenderer } = defaultRenderers
   // ---------------------------------------------------------------------------
   // Predicates
   // ---------------------------------------------------------------------------
@@ -179,15 +184,15 @@ describe(`defaultRendererMessages`, () => {
   // Array
   // ---------------------------------------------------------------------------
 
-  // describe(`validateArrayElements`, () => {
-  //   it(`renders payload to message`, () => {
-  //     const a = [1, 2, null]
-  //     const failedValidation = validateArrayElements(validateIsNumber)(a)
-  //     expect(
-  //       defaultRenderer(failedValidation.value)
-  //     ).toEqualWithCompressedWhitespace(`___`)
-  //   })
-  // })
+  describe(`validateArrayElements`, () => {
+    it(`renders payload to message`, () => {
+      const a = [1, 2, null]
+      const failedValidation = validateArrayElements(validateIsNumber)(a)
+      expect(defaultRenderer(failedValidation.value))
+        .toEqualWithCompressedWhitespace(`Array included invalid value(s)
+        – [0] Wasn't Number`)
+    })
+  })
 
   // [UIDS.IS_ARRAY_OF]: isArrayOfMessage,
   // [UIDS.ARRAY_ELEMENTS]: arrayElementsMessage,

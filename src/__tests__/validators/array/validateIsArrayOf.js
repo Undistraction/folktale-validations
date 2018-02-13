@@ -3,7 +3,14 @@ import { validateIsArrayOf } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
 import toPayload from '../../../failures/toPayload'
 import { IS_ARRAY, ARRAY_ELEMENTS } from '../../../const/validatorUids'
-import { value1, value2, value3 } from '../../testHelpers/fixtures/generic'
+import {
+  value1,
+  value2,
+  value3,
+  uid1,
+  payload1,
+} from '../../testHelpers/fixtures/generic'
+import { toArrayError } from '../../../failures/utils'
 
 const { Success, Failure } = Validation
 
@@ -48,15 +55,13 @@ describe(`validateIsArrayOf()`, () => {
   })
 
   describe(`array contains invalid item`, () => {
-    it(`returns a Validation.Failiure with messsage`, () => {
+    it(`returns a Validation.Failure with messsage`, () => {
       const value = [value1, value2, value3]
       const v1 = stub()
-      const uid = `uid`
-      const elementPayload = toPayload(uid, value)
-      const expectedPayload = toPayload(ARRAY_ELEMENTS, value, [elementPayload])
+      const expectedPayload = toArrayError([payload1])
       v1.onFirstCall().returns(Success())
       v1.onSecondCall().returns(Success())
-      v1.onThirdCall().returns(Failure(elementPayload))
+      v1.onThirdCall().returns(Failure(payload1))
       const validator = validateIsArrayOf(v1)
       const validation = validator(value)
       expect(validation).toEqualFailureWithValue(expectedPayload)

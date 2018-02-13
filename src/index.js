@@ -40,6 +40,9 @@ export {
 export {
   default as validateRequiredKeys,
 } from './validators/object/validateRequiredKeys'
+export {
+  default as validateExclusiveKeys,
+} from './validators/object/validateExclusiveKeys'
 
 // Array
 export {
