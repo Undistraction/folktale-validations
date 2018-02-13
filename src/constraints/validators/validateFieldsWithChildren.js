@@ -7,10 +7,17 @@ import {
   compose,
   prop,
   filter,
+  ifElse,
+  when,
+  always,
 } from 'ramda'
 import { isNotEmpty } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
-import { constraintsForFieldsWithPropChildren, filterFailures } from '../utils'
+import {
+  constraintsForFieldsWithPropChildren,
+  filterFailures,
+  alwaysSuccess,
+} from '../utils'
 import {
   reduceObjIndexed,
   reduceObjIndexedWithIndex,
@@ -65,9 +72,10 @@ const validateChildrenOfArrayFields = reduce(
       fieldValue,
       childConstraints
     )
-    return isEmpty(childValidations)
-      ? acc
-      : assoc(fieldName, childValidations, acc)
+    return when(
+      always(isNotEmpty(childValidations)),
+      assoc(fieldName, childValidations)
+    )(acc)
   },
   {}
 )
@@ -91,11 +99,9 @@ export default constraints => o => {
     fieldToValidationsMap
   )
 
-  if (isEmpty(failures)) {
-    return Success(replaceChildrenOfArrayFields(fieldToValidationsMap, o))
-  }
-
-  const out = toChildrenFieldsError(failures)
-
-  return Failure(out)
+  return ifElse(
+    isEmpty,
+    alwaysSuccess(replaceChildrenOfArrayFields(fieldToValidationsMap, o)),
+    compose(Failure, toChildrenFieldsError)
+  )(failures)
 }

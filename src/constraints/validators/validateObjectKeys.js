@@ -5,7 +5,7 @@ import { toObjectFieldsError } from '../../failures/utils'
 
 const { Failure } = Validation
 
-export default validators => o => {
-  const r = untilFailureValidator(validators)(o)
-  return r.orElse(compose(Failure, toObjectFieldsError))
-}
+export default validators => o =>
+  untilFailureValidator(validators)(o).orElse(
+    compose(Failure, toObjectFieldsError)
+  )

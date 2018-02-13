@@ -1,8 +1,9 @@
 import { validation as Validation } from 'folktale'
-import { reduce, always, compose, of } from 'ramda'
+import { reduce, compose, of } from 'ramda'
 
 import { toArrayError } from '../../failures/utils'
 import { propValue } from '../../utils/props'
+import { alwaysSuccess } from '../../constraints/utils'
 
 const { Success, Failure } = Validation
 
@@ -17,7 +18,7 @@ const validateAllWith = (validator, o) =>
 export default validator => o => {
   const validation = validateAllWith(validator, o)
   return validation.matchWith({
-    Success: always(Success(o)),
+    Success: alwaysSuccess(o),
     Failure: compose(Failure, toArrayError, propValue),
   })
 }

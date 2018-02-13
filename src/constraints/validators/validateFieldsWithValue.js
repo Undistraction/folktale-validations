@@ -1,14 +1,15 @@
 import { validation as Validation } from 'folktale'
-import { compose, reduce, assoc, isEmpty, toPairs } from 'ramda'
+import { compose, reduce, assoc, isEmpty, toPairs, ifElse } from 'ramda'
 import {
   constraintsForFieldsWithPropValue,
   filterFailures,
   extractFailureValues,
+  alwaysSuccess,
 } from '../utils'
 import { toObjectError } from '../../failures/utils'
 import validateObject from './validateObject'
 
-const { Failure, Success } = Validation
+const { Failure } = Validation
 
 const validateValues = reduce(
   (acc, [fieldName, fieldValue, childConstraints]) =>
@@ -20,20 +21,14 @@ const validateValues = reduce(
   {}
 )
 
-export default constraints => o => {
-  const fieldsWithPropConstraints = constraintsForFieldsWithPropValue(
-    constraints
+export default constraints => o =>
+  compose(
+    ifElse(
+      isEmpty,
+      alwaysSuccess(o),
+      compose(Failure, toObjectError, extractFailureValues, toPairs)
+    ),
+    filterFailures,
+    validateValues,
+    constraintsForFieldsWithPropValue(constraints)
   )(o)
-
-  const childValidations = validateValues(fieldsWithPropConstraints)
-
-  const failures = filterFailures(childValidations)
-
-  if (isEmpty(failures)) {
-    return Success(o)
-  }
-
-  return compose(Failure, toObjectError, extractFailureValues, toPairs)(
-    failures
-  )
-}

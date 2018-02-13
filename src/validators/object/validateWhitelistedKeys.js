@@ -1,16 +1,14 @@
-import { without, compose, keys, isEmpty, always, ifElse } from 'ramda'
-import { validation as Validation } from 'folktale'
+import { without, compose, keys, isEmpty, ifElse } from 'ramda'
 import toPayload from '../../failures/toPayload'
 import { WHITELISTED_KEYS } from '../../const/validatorUids'
-
-const { Success, Failure } = Validation
+import { alwaysSuccess, alwaysFailure } from '../../constraints/utils'
 
 const validateWhitelistedKeys = validKeys => o => {
   const invalidKeys = compose(without(validKeys), keys)(o)
   return ifElse(
     isEmpty,
-    always(Success(o)),
-    always(Failure(toPayload(WHITELISTED_KEYS, o, [validKeys, invalidKeys])))
+    alwaysSuccess(o),
+    alwaysFailure(toPayload(WHITELISTED_KEYS, o, [validKeys, invalidKeys]))
   )(invalidKeys)
 }
 

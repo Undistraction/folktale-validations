@@ -19,7 +19,7 @@ import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { mapWithIndex } from '../utils/iteration'
 import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
 
-const { Failure } = Validation
+const { Success, Failure } = Validation
 
 const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
 
@@ -107,3 +107,6 @@ export const extractFailureValues = mapWithIndex(([key, failure]) => [
   key,
   failure.value,
 ])
+
+export const alwaysSuccess = compose(always, Success)
+export const alwaysFailure = compose(always, Failure)
