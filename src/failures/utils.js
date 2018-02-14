@@ -15,13 +15,12 @@ import {
 } from 'ramda'
 import { isObj } from 'ramda-adjunct'
 import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
-import { propValue } from '../utils/failures'
 import { constraintsObjName } from '../messages'
 import { joinWithDot } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 import { throwError, invalidFailureStructureErrorMessage } from '../errors'
 import { reduceWithIndex } from '../utils/iteration'
-import { isFailure } from '../utils/validations'
+import { propValue, isFailure } from '../utils/validations'
 
 const {
   FIELDS_FAILURE_MESSAGE,

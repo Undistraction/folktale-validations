@@ -1,5 +1,5 @@
 import { prop } from 'ramda'
-import { VALIDATION_VALUE_KEY } from '../const'
+import VALIDATION_FIELD_NAMES from '../const/validationFieldNames'
 
 // eslint-disable-next-line import/prefer-default-export
-export const propValue = prop(VALIDATION_VALUE_KEY)
+export const propValue = prop(VALIDATION_FIELD_NAMES.VALUE)

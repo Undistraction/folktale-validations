@@ -3,7 +3,7 @@ import { isNotNull } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
 import { constraintsObjName } from '../../messages'
 import { mapWithIndex } from '../../utils/iteration'
-import { replaceTokenWith } from './utils'
+import { replaceTokenWith } from './utils/objects'
 
 const { NAME } = CONSTRAINT_FIELD_NAMES
 

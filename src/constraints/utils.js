@@ -23,7 +23,7 @@ const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
 // Predicates
 // -----------------------------------------------------------------------------
 
-const hasIsRequiredKey = both(
+const isRequired = both(
   hasPropIsRequired,
   compose(propSatisfies(isTruthy, IS_REQUIRED))
 )
@@ -32,7 +32,7 @@ const hasIsRequiredKey = both(
 // Extract data from validated object
 // -----------------------------------------------------------------------------
 
-export const listRequiredKeys = compose(map(propName), filter(hasIsRequiredKey))
+export const listRequiredKeys = compose(map(propName), filter(isRequired))
 
 export const buildValidatorsMap = reduce(
   (acc, { name, validator }) => assoc(name, validator, acc),

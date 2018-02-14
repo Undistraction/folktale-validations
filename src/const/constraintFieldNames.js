@@ -1,4 +1,4 @@
-import { OWN_CONSTRAINTS } from '../const'
+import { OWN_CONSTRAINTS } from '../constraints/const'
 
 export default Object.freeze({
   ID: OWN_CONSTRAINTS,

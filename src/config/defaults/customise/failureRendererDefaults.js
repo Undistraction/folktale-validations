@@ -1,6 +1,6 @@
 import { always } from 'ramda'
 
-module.exports = {
+export default {
   KEY: always(`Key`),
   ARGUMENTS: always(`Arguments`),
   OBJECT: always(`Object`),

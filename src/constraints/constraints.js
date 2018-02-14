@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze'
 import allOfValidator from '../helpers/allOfValidator'
-import { OWN_CONSTRAINTS } from '../const'
+import { OWN_CONSTRAINTS } from '../constraints/const'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import {
   validateIsString,

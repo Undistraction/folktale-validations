@@ -1,16 +1,6 @@
-import {
-  curry,
-  inc,
-  append,
-  compose,
-  cond,
-  T,
-  ifElse,
-  when,
-  mapObjIndexed,
-} from 'ramda'
+import { curry, inc, append, compose, cond, T, ifElse, when } from 'ramda'
 import { isPlainObj, isNotUndefined } from 'ramda-adjunct'
-import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
+import { reduceObjIndexed } from '../../utils/iteration'
 import {
   propFields,
   propChildren,

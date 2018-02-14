@@ -1,4 +1,4 @@
-import { reject, without, concat, equals } from 'ramda'
+import { reject, without, concat } from 'ramda'
 import { isFunction } from 'util'
 import { concatAll } from '../../../utils/array'
 
