@@ -26,8 +26,7 @@ import {
 } from '../../utils/iteration'
 import { toChildrenFieldsError } from '../../utils/failures'
 import validateObject from './validateObject'
-import { propFields } from '../../../lib/utils/constraints'
-import { hasPropDefaultValue } from '../../utils/constraints'
+import { hasPropDefaultValue, propFields } from '../../utils/constraints'
 
 const { Success } = Validation
 
