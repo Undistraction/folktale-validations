@@ -1,10 +1,8 @@
-import { assoc, compose } from 'ramda'
-import FAILURE_FIELD_NAMES from '../../const/failureFieldNames'
-
-const { NAME } = FAILURE_FIELD_NAMES
+import { compose } from 'ramda'
+import { setPropName } from '../../utils/failures'
 
 export default (defaultRenderer, rendererHelpers) => v =>
   compose(
     defaultRenderer,
-    assoc(NAME, rendererHelpers.invalidArgumentsPrefix())
+    setPropName(rendererHelpers.invalidArgumentsPrefix())
   )(v)

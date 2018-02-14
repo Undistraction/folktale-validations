@@ -1,7 +1,8 @@
-import { toConstraintsError } from '../../utils/failures'
+import { setPropName } from '../../utils/failures'
 import { propValue } from '../../utils/props'
 import validateObjectWithConstraints from './validateObjectWithConstraints'
 import { alwaysSuccess, composeFailure } from '../../utils/validations'
+import { constraintsObjName } from '../../messages'
 
 export default ownConstraints => constraintsToValidate =>
   validateObjectWithConstraints(
@@ -9,5 +10,5 @@ export default ownConstraints => constraintsToValidate =>
     constraintsToValidate
   ).matchWith({
     Success: alwaysSuccess(constraintsToValidate),
-    Failure: composeFailure(toConstraintsError, propValue),
+    Failure: composeFailure(setPropName(constraintsObjName()), propValue),
   })

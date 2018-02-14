@@ -41,6 +41,8 @@ export const propFieldsFailureMessage = prop(FIELDS_FAILURE_MESSAGE)
 export const propAnd = prop(AND)
 export const propOr = prop(OR)
 
+export const setPropName = assoc(NAME)
+
 export const hasPropChildren = has(CHILDREN)
 export const isAndObj = has(AND)
 export const isOrObj = has(OR)
@@ -68,7 +70,6 @@ const filterFailuresToChildrenObj = map(
 export const andMessages = when(hasMoreThanOneChild, objOf(AND))
 export const orMessages = when(hasMoreThanOneChild, objOf(OR))
 export const toObjectError = compose(objOf(FIELDS), mergeAll, fromPairs)
-export const toConstraintsError = compose(assoc(NAME, constraintsObjName()))
 export const toObjectFieldsError = objOf(FIELDS_FAILURE_MESSAGE)
 export const toArrayError = compose(objOf(CHILDREN), fromPairs)
 export const toChildrenFieldsError = compose(
