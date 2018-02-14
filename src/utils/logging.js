@@ -1,4 +1,5 @@
 import { curry, compose, tap } from 'ramda'
+import safeJsonStringify from 'safe-json-stringify'
 import { joinWithColon } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 
@@ -8,7 +9,7 @@ const log = curry((loggingFunction, prefix) =>
       loggingFunction,
       joinWithColon,
       appendRight([prefix]),
-      JSON.stringify
+      safeJsonStringify
     )
   )
 )

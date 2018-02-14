@@ -6,7 +6,11 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": ["dist", "src", "lib"],
+  "files": [
+    "dist",
+    "src",
+    "lib"
+  ],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
@@ -60,6 +64,7 @@
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
+    "safe-json-stringify": "^1.0.4",
     "sinon": "^4.1.4"
   },
   "dependencies": {

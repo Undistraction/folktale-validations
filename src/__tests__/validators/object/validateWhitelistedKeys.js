@@ -12,7 +12,7 @@ describe(`validateWhitelistedKeys()`, () => {
   })
 
   describe(`when object has only valid keys`, () => {
-    it.only(`returns a Validation.Success with a value of the object`, () => {
+    it(`returns a Validation.Success with a value of the object`, () => {
       const value = {
         [key1]: 1,
         [key2]: 2,
@@ -25,7 +25,7 @@ describe(`validateWhitelistedKeys()`, () => {
   })
 
   describe(`when object has only invalid keys`, () => {
-    it.only(`returns a Validation.Failure with a payload`, () => {
+    it(`returns a Validation.Failure with a payload`, () => {
       const value = {
         [key1]: 1,
         [key2]: 2,
@@ -43,7 +43,7 @@ describe(`validateWhitelistedKeys()`, () => {
   })
 
   describe(`when object has no keys`, () => {
-    it.only(`returns a Validation.Success with a value of the object`, () => {
+    it(`returns a Validation.Success with a value of the object`, () => {
       const value = {}
       const validation = validateWhitelistedKeysWithKeys(value)
       expect(validation).toEqualSuccessWithValue(value)

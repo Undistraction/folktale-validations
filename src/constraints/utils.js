@@ -94,6 +94,7 @@ export const constraintsForFieldsWithProp = fieldName => constraints =>
 export const constraintsForFieldsWithPropChildren = constraintsForFieldsWithProp(
   CONSTRAINT_FIELD_NAMES.CHILDREN
 )
+
 export const constraintsForFieldsWithPropValue = constraintsForFieldsWithProp(
   CONSTRAINT_FIELD_NAMES.VALUE
 )

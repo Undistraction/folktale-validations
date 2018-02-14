@@ -13,6 +13,7 @@ import {
 } from 'ramda'
 import { isNotEmpty } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
+import safeJsonStringify from 'safe-json-stringify'
 import {
   constraintsForFieldsWithPropChildren,
   filterFailures,
@@ -25,6 +26,8 @@ import {
 } from '../../utils/iteration'
 import { toChildrenFieldsError } from '../../failures/utils'
 import validateObject from './validateObject'
+import { propFields } from '../../../lib/utils/constraints'
+import { hasPropDefaultValue } from '../../utils/constraints'
 
 const { Failure, Success } = Validation
 
@@ -52,21 +55,23 @@ const replaceChildrenOfArrayFields = (fieldToValidationsMap, o) =>
 // Validate each child and collect their validations.
 // -----------------------------------------------------------------------------
 
+const fieldsHaveDefaults = compose(filter(hasPropDefaultValue), propFields)
+
 const validateChildrenOfArrayField = (
   fieldName,
   fieldValue,
   childConstraints
 ) =>
   reduceIf(
-    isNotEmpty,
+    always(isNotEmpty(fieldValue) || fieldsHaveDefaults(childConstraints)),
     (acc, child) =>
       append(validateObject(fieldName, childConstraints, child), acc),
     [],
     fieldValue
   )
 
-const validateChildrenOfArrayFields = reduce(
-  (acc, [fieldName, fieldValue, childConstraints]) => {
+const validateChildrenOfArrayFields = o =>
+  reduce((acc, [fieldName, fieldValue, childConstraints]) => {
     const childValidations = validateChildrenOfArrayField(
       fieldName,
       fieldValue,
@@ -76,9 +81,7 @@ const validateChildrenOfArrayFields = reduce(
       always(isNotEmpty(childValidations)),
       assoc(fieldName, childValidations)
     )(acc)
-  },
-  {}
-)
+  }, {})(o)
 
 // -----------------------------------------------------------------------------
 // Process Fields that have children (that have a value that is an array)
@@ -94,7 +97,7 @@ export default constraints => o => {
     return Success(o)
   }
 
-  const failures = filter(
+  const fieldsWithFailures = filter(
     compose(isNotEmpty, filterFailures),
     fieldToValidationsMap
   )
@@ -103,5 +106,5 @@ export default constraints => o => {
     isEmpty,
     alwaysSuccess(replaceChildrenOfArrayFields(fieldToValidationsMap, o)),
     compose(Failure, toChildrenFieldsError)
-  )(failures)
+  )(fieldsWithFailures)
 }

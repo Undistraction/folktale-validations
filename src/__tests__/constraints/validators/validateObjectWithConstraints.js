@@ -1,3 +1,4 @@
+import { map } from 'ramda'
 import { validateObjectWithConstraints } from '../../../index'
 import {
   stubReturnsSuccess,
@@ -31,15 +32,24 @@ import {
   key10,
   key11,
   key12,
-  message1,
   transformedValue1,
   transformedValue2,
   defaultValue1,
   defaultValue2,
   payload1,
+  payload3,
 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
-import { REQUIRED_KEYS, WHITELISTED_KEYS } from '../../../const/validatorUids'
+import {
+  REQUIRED_KEYS,
+  WHITELISTED_KEYS,
+  IS_PLAIN_OBJECT,
+} from '../../../const/validatorUids'
+import testLevels from '../../testHelpers/testLevels'
+import validateObjectWithConstraintsLevels from '../../testHelpers/data/validateObjectWithConstraintsLevels'
+import { pluralise } from '../../../utils/formatting'
+import { constraintsObjName } from '../../../messages'
+import typeData from '../../testHelpers/fixtures/typeData'
 
 const {
   FIELDS,
@@ -64,461 +74,796 @@ describe(`validateObjectWithConstraints`, () => {
   // Full nested constraint object with all features
   // ---------------------------------------------------------------------------
 
-  describe(`with a flat constraint object`, () => {
-    describe(`that satisfies constraints`, () => {
-      it.only(`returns a Validation.Success with supplied value`, () => {
-        const v1 = stubReturnsSuccess(value1)
-        const spyNotCalled1 = spy()
-        const spyNotCalled2 = spy()
-        const spyNotCalled3 = spy()
-        const v3 = stubReturnsSuccess(value3)
-        const v5 = stubReturnsSuccess(value5)
-        const v6 = stubReturnsSuccess(value6)
-        const v7 = stubReturnsSuccess(value7)
-        const v8 = stubReturnsSuccess(value8)
-        const t1 = stubReturns(transformedValue1)
-        const t2 = stubReturns(transformedValue2)
-        const o = {
-          [key1]: value1,
-          [key2]: value3,
-          [key3]: [
-            {
-              [key4]: value4,
-              [key5]: value8,
-            },
-            {
-              [key4]: value4,
-              [key5]: value8,
-              [key6]: value9,
-            },
-          ],
-          [key7]: {
-            [key8]: value2,
+  describe(`with an object that satisfies constraints`, () => {
+    it(`returns a Validation.Success with supplied value`, () => {
+      const v1 = stubReturnsSuccess(value1)
+      const spyNotCalled1 = spy()
+      const spyNotCalled2 = spy()
+      const spyNotCalled3 = spy()
+      const v3 = stubReturnsSuccess(value3)
+      const v5 = stubReturnsSuccess(value5)
+      const v6 = stubReturnsSuccess(value6)
+      const v7 = stubReturnsSuccess(value7)
+      const v8 = stubReturnsSuccess(value8)
+      const t1 = stubReturns(transformedValue1)
+      const t2 = stubReturns(transformedValue2)
+      const o = {
+        [key1]: value1,
+        [key2]: value3,
+        [key3]: [
+          {
+            [key4]: value4,
+            [key5]: value8,
           },
-        }
-
-        const constraints = {
-          [FIELDS]: [
-            {
-              [NAME]: key1,
-              [VALIDATOR]: v1,
-              [IS_REQUIRED]: true,
-              [TRANSFORMER]: t1, // Value should be transformed
-            },
-            {
-              [NAME]: key9,
-              [VALIDATOR]: spyNotCalled1,
-            },
-            {
-              [NAME]: key2,
-              [VALIDATOR]: v3,
-              [DEFAULT_VALUE]: defaultValue1,
-            },
-            {
-              [NAME]: key10,
-              [VALIDATOR]: spyNotCalled1, // Not run because no value
-              [DEFAULT_VALUE]: value2, // Should be applied instead
-            },
-            {
-              [NAME]: key11,
-              [VALIDATOR]: spyNotCalled1, // Not run because no value
-              [DEFAULT_VALUE]: defaultValue1, // Should be applied instead
-            },
-            {
-              [NAME]: key7,
-              [VALIDATOR]: v7,
-              [VALUE]: {
-                [FIELDS]: [
-                  {
-                    [NAME]: key8,
-                    [VALIDATOR]: v6,
-                  },
-                ],
-              },
-            },
-            {
-              [NAME]: key3,
-              [VALIDATOR]: v5,
-              [CHILDREN]: {
-                [FIELDS]: [
-                  {
-                    [NAME]: key4,
-                    [VALIDATOR]: v5,
-                    [IS_REQUIRED]: true,
-                  },
-                  {
-                    [NAME]: key5,
-                    [VALIDATOR]: v8,
-                    [TRANSFORMER]: t2,
-                    [IS_REQUIRED]: true,
-                  },
-                  {
-                    [NAME]: key6,
-                    [VALIDATOR]: v8,
-                    [DEFAULT_VALUE]: defaultValue2,
-                  },
-                ],
-              },
-            },
-            {
-              [NAME]: key12,
-              [VALIDATOR]: spyNotCalled2,
-              [TRANSFORMER]: spyNotCalled3, // Transformer should not be called
-            },
-          ],
-        }
-
-        const expectedValue = {
-          [key1]: transformedValue1,
-          [key2]: value3,
-          [key3]: [
-            {
-              [key4]: value4,
-              [key5]: transformedValue2,
-              [key6]: defaultValue2,
-            },
-            {
-              [key4]: value4,
-              [key5]: transformedValue2,
-              [key6]: value9,
-            },
-          ],
-          [key7]: {
-            [key8]: value2,
+          {
+            [key4]: value4,
+            [key5]: value8,
+            [key6]: value9,
           },
-          [key10]: value2,
-          [key11]: defaultValue1,
-        }
+        ],
+        [key7]: {
+          [key8]: value2,
+        },
+      }
 
-        const validator = validateObjectWithConstraints(constraints)
-        const validation = validator(o)
-
-        expect(validation).toEqualSuccessWithValue(expectedValue)
-        expect(t1.calledWith(value1)).toBeTrue()
-        expect(t2.calledWith(value8)).toBeTrue()
-        expect(v1.calledWith(value1)).toBeTrue()
-        expect(v3.calledWith(value3)).toBeTrue()
-        expect(v5.calledWith(value4)).toBeTrue()
-        expect(spyNotCalled1.notCalled).toBeTrue()
-        expect(spyNotCalled2.notCalled).toBeTrue()
-        expect(spyNotCalled3.notCalled).toBeTrue()
-      })
-    })
-
-    describe(`with invalid constraints object`, () => {
-      it.only(`returns a Validation.Failure with payload`, () => {
-        const value = {}
-
-        const constraints = {
-          invalidField: 1,
-        }
-
-        const expectedValue = {
-          [NAME]: `Constraints`,
-          [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, constraints, [
-            [`fieldsValidator`, `fields`],
-            [`invalidField`],
-          ]),
-        }
-
-        const validator = validateObjectWithConstraints(constraints)
-        const validation = validator(value)
-        expect(validation).toEqualFailureWithValue(expectedValue)
-      })
-    })
-
-    // -------------------------------------------------------------------------
-    // One level of constraints
-    // -------------------------------------------------------------------------
-
-    describe(`empty object`, () => {
-      it.only(`returns a Validation.Success with message`, () => {
-        const v1 = stubReturnsSuccess(value1)
-        const value = {}
-
-        const constraints = {
-          [FIELDS]: [
-            {
-              [NAME]: value1,
-              [VALIDATOR]: v1,
-            },
-            {
-              [NAME]: value2,
-              [VALIDATOR]: v1,
-            },
-          ],
-        }
-
-        const validator = validateObjectWithConstraints(constraints)
-        const validation = validator(value)
-        expect(validation).toEqualSuccessWithValue(value)
-        expect(v1.notCalled).toBeTrue()
-      })
-    })
-
-    describe(`that doesn't satisfy constraints`, () => {
-      describe(`with invalid value`, () => {
-        it.only(`returns a Validation.Failure with payload`, () => {
-          const v1 = stubReturnsFailure(payload1)
-          const o = {
-            [key1]: value1,
-          }
-
-          const constraints = {
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: true,
-              },
-            ],
-          }
-
-          const expectedValue = { [FIELDS]: { [key1]: payload1 } }
-
-          const validator = validateObjectWithConstraints(constraints)
-          const validation = validator(o)
-          expect(validation).toEqualFailureWithValue(expectedValue)
-          expect(v1.calledWith(value1)).toBeTrue()
-        })
-      })
-
-      describe(`with additional key`, () => {
-        it.only(`returns a Validation.Failure with payload`, () => {
-          const v1 = spy()
-          const v2 = spy()
-          const value = {
-            [key1]: value1,
-            [key2]: value2,
-            [invalidKeyName]: invalidKeyValue,
-          }
-
-          const constraints = {
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: true,
-              },
-              {
-                [NAME]: key2,
-                [VALIDATOR]: v2,
-                [IS_REQUIRED]: true,
-              },
-            ],
-          }
-
-          const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, value, [
-              [key1, key2],
-              [invalidKeyName],
-            ]),
-          }
-
-          const validator = validateObjectWithConstraints(constraints)
-          const validation = validator(value)
-          expect(validation).toEqualFailureWithValue(expectedValue)
-          expect(v1.notCalled).toBeTrue()
-          expect(v2.notCalled).toBeTrue()
-        })
-      })
-
-      describe(`with missing required key`, () => {
-        it.only(`returns a Validation.Failure with payload`, () => {
-          const v1 = spy()
-          const v2 = spy()
-          const value = {
-            [key1]: value1,
-          }
-
-          const constraints = {
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: true,
-              },
-              {
-                [NAME]: key2,
-                [VALIDATOR]: v2,
-                [IS_REQUIRED]: true,
-              },
-            ],
-          }
-
-          const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: toPayload(REQUIRED_KEYS, value, [
-              [key1, key2],
-              [key2],
-            ]),
-          }
-
-          const validator = validateObjectWithConstraints(constraints)
-          const validation = validator(value)
-          expect(validation).toEqualFailureWithValue(expectedValue)
-          expect(v1.notCalled).toBeTrue()
-          expect(v2.notCalled).toBeTrue()
-        })
-      })
-    })
-
-    describe(`with custom fields validator`, () => {
-      describe(`which succeeds`, () => {
-        it.only(`returns a Validation.Success with value`, () => {
-          const value = {
-            [key1]: value1,
-          }
-          const v1 = stubReturnsSuccess(value)
-
-          const constraints = {
-            [FIELDS_VALIDATOR]: v1,
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: false,
-              },
-            ],
-          }
-
-          const validator = validateObjectWithConstraints(constraints)
-          const validation = validator(value)
-          expect(validation).toEqualSuccessWithValue(value)
-          expect(v1.calledWith(value)).toBeTrue()
-        })
-      })
-
-      describe(`which fails`, () => {
-        it.only(`returns a Validation.Failure with payload`, () => {
-          const value = {
-            [key1]: value1,
-          }
-          const v1 = stubReturnsFailure(payload1)
-
-          const constraints = {
-            [FIELDS_VALIDATOR]: v1,
-            [FIELDS]: [
-              {
-                [NAME]: key1,
-                [VALIDATOR]: v1,
-                [IS_REQUIRED]: false,
-              },
-            ],
-          }
-
-          const expectedValue = {
-            [FIELDS_FAILURE_MESSAGE]: payload1,
-          }
-
-          const validator = validateObjectWithConstraints(constraints)
-          const validation = validator(value)
-          expect(validation).toEqualFailureWithValue(expectedValue)
-          expect(v1.calledWith(value)).toBeTrue()
-        })
-      })
-    })
-  })
-
-  // ---------------------------------------------------------------------------
-  // Two levels of constraints
-  // ---------------------------------------------------------------------------
-
-  describe(`that doesn't satisfy constraints`, () => {
-    describe(`with invalid value`, () => {
-      it(`returns a Validation.Failure with payload`, () => {
-        const v1 = stubReturnsSuccess()
-        const v2 = stubReturnsFailure(message1)
-        const o = {
-          [key1]: {
-            [key2]: invalidKeyValue,
+      const constraints = {
+        [FIELDS]: [
+          {
+            [NAME]: key1,
+            [VALIDATOR]: v1,
+            [IS_REQUIRED]: true,
+            [TRANSFORMER]: t1, // Value should be transformed
           },
-        }
-
-        const constraints = {
-          [FIELDS]: [
-            {
-              [NAME]: key1,
-              [VALIDATOR]: v1,
-              [VALUE]: {
-                [FIELDS]: [
-                  {
-                    [NAME]: key2,
-                    [VALIDATOR]: v2,
-                  },
-                ],
-              },
-            },
-          ],
-        }
-
-        const expectedValue = {
-          [FIELDS]: {
-            [key1]: {
-              [FIELDS]: {
-                [key2]: [message1],
-              },
-            },
+          {
+            [NAME]: key9,
+            [VALIDATOR]: spyNotCalled1,
           },
-        }
-
-        const validator = validateObjectWithConstraints(constraints)
-        const validation = validator(o)
-        expect(validation).toEqualFailureWithValue(expectedValue)
-        expect(
-          v1.calledWith({
-            [key2]: invalidKeyValue,
-          })
-        ).toBeTrue()
-      })
-    })
-
-    describe(`with invalid children`, () => {
-      it(`returns a Validation.Failure with payload`, () => {
-        const v1 = stubReturnsSuccess()
-        const v2 = stubReturnsFailure(message1)
-        const o = {
-          [key1]: [
-            {
-              [key2]: invalidKeyValue,
-            },
-          ],
-        }
-
-        const constraints = {
-          [FIELDS]: [
-            {
-              [NAME]: key1,
-              [VALIDATOR]: v1,
-              [CHILDREN]: {
-                [FIELDS]: [
-                  {
-                    [NAME]: key2,
-                    [VALIDATOR]: v2,
-                  },
-                ],
-              },
-            },
-          ],
-        }
-
-        const expectedValue = {
-          [FIELDS]: {
-            [key1]: {
-              [CHILDREN]: [
+          {
+            [NAME]: key2,
+            [VALIDATOR]: v3,
+            [DEFAULT_VALUE]: defaultValue1,
+          },
+          {
+            [NAME]: key10,
+            [VALIDATOR]: spyNotCalled1, // Not run because no value
+            [DEFAULT_VALUE]: value2, // Should be applied instead
+          },
+          {
+            [NAME]: key11,
+            [VALIDATOR]: spyNotCalled1, // Not run because no value
+            [DEFAULT_VALUE]: defaultValue1, // Should be applied instead
+          },
+          {
+            [NAME]: key7,
+            [VALIDATOR]: v7,
+            [VALUE]: {
+              [FIELDS]: [
                 {
-                  [FIELDS]: {
-                    [key2]: [message1],
-                  },
+                  [NAME]: key8,
+                  [VALIDATOR]: v6,
                 },
               ],
             },
           },
-        }
+          {
+            [NAME]: key3,
+            [VALIDATOR]: v5,
+            [CHILDREN]: {
+              [FIELDS]: [
+                {
+                  [NAME]: key4,
+                  [VALIDATOR]: v5,
+                  [IS_REQUIRED]: true,
+                },
+                {
+                  [NAME]: key5,
+                  [VALIDATOR]: v8,
+                  [TRANSFORMER]: t2,
+                  [IS_REQUIRED]: true,
+                },
+                {
+                  [NAME]: key6,
+                  [VALIDATOR]: v8,
+                  [DEFAULT_VALUE]: defaultValue2,
+                },
+              ],
+            },
+          },
+          {
+            [NAME]: key12,
+            [VALIDATOR]: spyNotCalled2,
+            [TRANSFORMER]: spyNotCalled3, // Transformer should not be called
+          },
+        ],
+      }
 
-        const validator = validateObjectWithConstraints(constraints)
-        const validation = validator(o)
-        expect(validation).toEqualFailureWithValue(expectedValue)
-      })
+      const expectedFailureObj = {
+        [key1]: transformedValue1,
+        [key2]: value3,
+        [key3]: [
+          {
+            [key4]: value4,
+            [key5]: transformedValue2,
+            [key6]: defaultValue2,
+          },
+          {
+            [key4]: value4,
+            [key5]: transformedValue2,
+            [key6]: value9,
+          },
+        ],
+        [key7]: {
+          [key8]: value2,
+        },
+        [key10]: value2,
+        [key11]: defaultValue1,
+      }
+
+      const validator = validateObjectWithConstraints(constraints)
+      const validation = validator(o)
+
+      expect(validation).toEqualSuccessWithValue(expectedFailureObj)
+      expect(t1.calledWith(value1)).toBeTrue()
+      expect(t2.calledWith(value8)).toBeTrue()
+      expect(v1.calledWith(value1)).toBeTrue()
+      expect(v3.calledWith(value3)).toBeTrue()
+      expect(v5.calledWith(value4)).toBeTrue()
+      expect(spyNotCalled1.notCalled).toBeTrue()
+      expect(spyNotCalled2.notCalled).toBeTrue()
+      expect(spyNotCalled3.notCalled).toBeTrue()
     })
   })
+
+  // ---------------------------------------------------------------------------
+  // Invalid Constraint Obj
+  // ---------------------------------------------------------------------------
+  describe(`with invalid constraints object`, () => {
+    it(`returns a Validation.Failure with payload`, () => {
+      const value = {}
+
+      const constraints = {
+        [invalidKeyName]: value1,
+      }
+
+      const expectedFailureObj = {
+        [NAME]: constraintsObjName(),
+        [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, constraints, [
+          [FIELDS_VALIDATOR, FIELDS],
+          [invalidKeyName],
+        ]),
+      }
+
+      const validator = validateObjectWithConstraints(constraints)
+      const validation = validator(value)
+      expect(validation).toEqualFailureWithValue(expectedFailureObj)
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Perform tests for multiple levels of nesting
+  // ---------------------------------------------------------------------------
+
+  testLevels(
+    validateObjectWithConstraintsLevels,
+    (
+      level,
+      { withValueRoot, withConstraintsRoot, withExpectedFailureObjRoot }
+    ) => {
+      describe(`with ${level} object ${pluralise(`level`, level)}`, () => {
+        // -------------------------------------------------------------------
+        // 1. Value Itself
+        // -------------------------------------------------------------------
+        describe(`value itself`, () => {
+          const v1 = stubReturnsSuccess(value1)
+          const constraints = withConstraintsRoot({
+            [FIELDS]: [
+              {
+                [NAME]: value1,
+                [VALIDATOR]: v1,
+              },
+              {
+                [NAME]: value2,
+                [VALIDATOR]: v1,
+              },
+            ],
+          })
+          const validator = validateObjectWithConstraints(constraints)
+
+          describe(`empty object`, () => {
+            it(`returns a Validation.Success with message`, () => {
+              const value = withValueRoot({})
+
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`with invalid value`, () => {
+            it(`returns a Validation.Failure with payload`, () => {
+              map(invalidValue => {
+                const value = withValueRoot(invalidValue)
+                const validation = validator(value)
+
+                const expectedFailureObj = withExpectedFailureObjRoot(
+                  toPayload(IS_PLAIN_OBJECT, invalidValue)
+                )
+
+                expect(validation).toEqualFailureWithValue(expectedFailureObj)
+              }, typeData.withoutObjectValues)
+            })
+          })
+        })
+
+        // -------------------------------------------------------------------
+        // 2. Values
+        // -------------------------------------------------------------------
+
+        describe(`values`, () => {
+          describe(`that don't satisfy constraints`, () => {
+            describe(`with invalid values`, () => {
+              it(`returns a Validation.Failure with payload`, () => {
+                const v1 = stubReturnsFailure(payload1)
+                const v2 = stubReturnsSuccess()
+                const v3 = stubReturnsFailure(payload3)
+                const o = withValueRoot({
+                  [key1]: value1,
+                  [key2]: value2,
+                  [key3]: value3,
+                })
+
+                const constraints = withConstraintsRoot({
+                  [FIELDS]: [
+                    {
+                      [NAME]: key1,
+                      [VALIDATOR]: v1,
+                    },
+                    {
+                      [NAME]: key2,
+                      [VALIDATOR]: v2,
+                    },
+                    {
+                      [NAME]: key3,
+                      [VALIDATOR]: v3,
+                    },
+                  ],
+                })
+
+                const expectedFailureObj = withExpectedFailureObjRoot({
+                  [FIELDS]: {
+                    [key1]: payload1,
+                    [key3]: payload3,
+                  },
+                })
+
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(o)
+                expect(validation).toEqualFailureWithValue(expectedFailureObj)
+                expect(v1.calledWith(value1)).toBeTrue()
+              })
+            })
+          })
+        })
+
+        // -----------------------------------------------------------------
+        // 3. Keys
+        // -----------------------------------------------------------------
+        describe(`keys`, () => {
+          describe(`additional`, () => {
+            it(`returns a Validation.Failure with payload`, () => {
+              const v1 = spy()
+              const v2 = spy()
+              const o = {
+                [key1]: value1,
+                [key2]: value2,
+                [invalidKeyName]: invalidKeyValue,
+              }
+              const value = withValueRoot(o)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [IS_REQUIRED]: true,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [IS_REQUIRED]: true,
+                  },
+                ],
+              })
+
+              const expectedFailureObj = withExpectedFailureObjRoot({
+                [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, o, [
+                  [key1, key2],
+                  [invalidKeyName],
+                ]),
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualFailureWithValue(expectedFailureObj)
+              expect(v1.notCalled).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`missing required`, () => {
+            it(`returns a Validation.Failure with payload`, () => {
+              const v1 = spy()
+              const v2 = spy()
+              const o = {
+                [key1]: value1,
+              }
+              const value = withValueRoot(o)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [IS_REQUIRED]: true,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [IS_REQUIRED]: true,
+                  },
+                ],
+              })
+
+              const expectedFailureObj = withExpectedFailureObjRoot({
+                [FIELDS_FAILURE_MESSAGE]: toPayload(REQUIRED_KEYS, o, [
+                  [key1, key2],
+                  [key2],
+                ]),
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualFailureWithValue(expectedFailureObj)
+              expect(v1.notCalled).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+            })
+          })
+        })
+
+        describe(`with custom fields validator`, () => {
+          describe(`which succeeds`, () => {
+            it(`returns a Validation.Success with value`, () => {
+              const o = {
+                [key1]: value1,
+              }
+              const value = withValueRoot(o)
+              const v1 = stubReturnsSuccess(value)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS_VALIDATOR]: v1,
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [IS_REQUIRED]: false,
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.calledWith(o)).toBeTrue()
+            })
+          })
+
+          describe(`which fails`, () => {
+            it(`returns a Validation.Failure with payload`, () => {
+              const o = {
+                [key1]: value1,
+              }
+              const value = withValueRoot(o)
+              const v1 = stubReturnsFailure(payload1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS_VALIDATOR]: v1,
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [IS_REQUIRED]: false,
+                  },
+                ],
+              })
+
+              const expectedFailureObj = withExpectedFailureObjRoot({
+                [FIELDS_FAILURE_MESSAGE]: payload1,
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualFailureWithValue(expectedFailureObj)
+              expect(v1.calledWith(o)).toBeTrue()
+            })
+          })
+        })
+        // -----------------------------------------------------------------
+        // 4. Children
+        // -----------------------------------------------------------------
+
+        describe(`children`, () => {
+          describe(`empty array`, () => {
+            it(`returns a Validation.Success with supplied value`, () => {
+              const o = {
+                [key1]: [],
+              }
+              const value = withValueRoot(o)
+              const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess()
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [CHILDREN]: {
+                      [FIELDS]: [
+                        {
+                          [NAME]: key2,
+                          [VALIDATOR]: v2,
+                        },
+                      ],
+                    },
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.calledWith([])).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`valid value`, () => {
+            it(`returns a Validation.Success with supplied value`, () => {
+              const o = {
+                [key1]: [{ key2: value1 }, { key2: value2 }],
+              }
+              const value = withValueRoot(o)
+              const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess(value1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [CHILDREN]: {
+                      [FIELDS]: [
+                        {
+                          [NAME]: key2,
+                          [VALIDATOR]: v2,
+                        },
+                      ],
+                    },
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v2.calledWith(value1)).toBeTrue()
+              expect(v2.calledWith(value2)).toBeTrue()
+            })
+          })
+
+          describe(`invalid values`, () => {
+            describe(`invalid key`, () => {
+              it(`returns a Validation.Success with supplied value`, () => {
+                const o = {
+                  [key1]: [
+                    { key2: value1 },
+                    { key2: value2 },
+                    { key3: value3 },
+                  ],
+                }
+                const value = withValueRoot(o)
+                const v1 = stubReturnsSuccess(value)
+                const v2 = stubReturnsSuccess(value1)
+
+                const constraints = withConstraintsRoot({
+                  [FIELDS]: [
+                    {
+                      [NAME]: key1,
+                      [VALIDATOR]: v1,
+                      [CHILDREN]: {
+                        [FIELDS]: [
+                          {
+                            [NAME]: key2,
+                            [VALIDATOR]: v2,
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                })
+
+                const expectedFailureObj = withExpectedFailureObjRoot({
+                  [FIELDS]: {
+                    [key1]: {
+                      [CHILDREN]: {
+                        '2': {
+                          [FIELDS_FAILURE_MESSAGE]: toPayload(
+                            WHITELISTED_KEYS,
+                            {
+                              key3: value3,
+                            },
+                            [[key2], [key3]]
+                          ),
+                        },
+                      },
+                    },
+                  },
+                })
+
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualFailureWithValue(expectedFailureObj)
+                expect(v2.calledWith(value1)).toBeTrue()
+                expect(v2.calledTwice).toBeTrue()
+              })
+            })
+          })
+        })
+        // -----------------------------------------------------------------
+        // 5. Value
+        // -----------------------------------------------------------------
+
+        describe(`value`, () => {
+          describe(`empty object`, () => {
+            it(`returns a Validation.Success with supplied value`, () => {
+              const value = withValueRoot({
+                [key1]: [],
+              })
+              const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess()
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [VALUE]: {
+                      [FIELDS]: [
+                        {
+                          [NAME]: key2,
+                          [VALIDATOR]: v2,
+                        },
+                      ],
+                    },
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.calledWith([])).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`valid value`, () => {
+            it(`returns a Validation.Success with supplied value`, () => {
+              const value = withValueRoot({
+                [key1]: { key2: value1 },
+              })
+              const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess(value1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [VALUE]: {
+                      [FIELDS]: [
+                        {
+                          [NAME]: key2,
+                          [VALIDATOR]: v2,
+                        },
+                      ],
+                    },
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v2.calledWith(value1)).toBeTrue()
+            })
+          })
+        })
+
+        // -----------------------------------------------------------------
+        // 6. Default Values
+        // -----------------------------------------------------------------
+        describe(`default values`, () => {
+          describe(`when no value is supplied`, () => {
+            it(`returns a Validation.Success with default value applied`, () => {
+              const value = withValueRoot({
+                key1: value1,
+              })
+              const v1 = stubReturnsSuccess(value1)
+              const v2 = spy()
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [DEFAULT_VALUE]: defaultValue2,
+                  },
+                ],
+              })
+
+              const expectedValue = withValueRoot({
+                [key1]: value1,
+                [key2]: defaultValue2,
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(expectedValue)
+              expect(v1.calledWith(value1)).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`when a value is supplied`, () => {
+            it(`returns a Validation.Success without default value applied`, () => {
+              const value = withValueRoot({
+                key1: value1,
+                key2: value2,
+              })
+              const v1 = stubReturnsSuccess(value1)
+              const v2 = stubReturnsSuccess(value2)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [DEFAULT_VALUE]: defaultValue2,
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.calledWith(value1)).toBeTrue()
+              expect(v2.calledWith(value2)).toBeTrue()
+            })
+          })
+        })
+
+        // -----------------------------------------------------------------
+        // 7. Transformed Values
+        // -----------------------------------------------------------------
+
+        describe(`transformed values`, () => {
+          describe(`when no value is supplied`, () => {
+            it(`returns a Validation.Success without transform`, () => {
+              const value = withValueRoot({
+                key1: value1,
+              })
+              const v1 = stubReturnsSuccess(value1)
+              const v2 = spy()
+              const t1 = spy()
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [TRANSFORMER]: t1,
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(value)
+              expect(v1.calledWith(value1)).toBeTrue()
+              expect(v2.notCalled).toBeTrue()
+              expect(t1.notCalled).toBeTrue()
+            })
+          })
+
+          describe(`when a value is supplied`, () => {
+            it(`returns a Validation.Success with transform`, () => {
+              const value = withValueRoot({
+                key1: value1,
+                key2: value2,
+              })
+              const v1 = stubReturnsSuccess(value1)
+              const v2 = stubReturnsSuccess(value2)
+              const t1 = stubReturns(transformedValue1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                  },
+                  {
+                    [NAME]: key2,
+                    [VALIDATOR]: v2,
+                    [TRANSFORMER]: t1,
+                  },
+                ],
+              })
+
+              const expectedValue = withValueRoot({
+                key1: value1,
+                key2: transformedValue1,
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(expectedValue)
+              expect(v1.calledWith(value1)).toBeTrue()
+              expect(v2.calledWith(value2)).toBeTrue()
+              expect(t1.calledWith(value2)).toBeTrue()
+            })
+          })
+
+          describe(`when a default value and transform are supplied`, () => {
+            it(`returns a Validation.Success with the default value`, () => {
+              const value = withValueRoot({})
+              const v1 = stubReturnsSuccess(value1)
+              const t1 = stubReturns(transformedValue1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [TRANSFORMER]: t1,
+                    [DEFAULT_VALUE]: defaultValue1,
+                  },
+                ],
+              })
+
+              const expectedValue = withValueRoot({
+                key1: transformedValue1,
+              })
+              const validator = validateObjectWithConstraints(constraints)
+              const validation = validator(value)
+              expect(validation).toEqualSuccessWithValue(expectedValue)
+              expect(v1.notCalled).toBeTrue()
+              expect(t1.calledWith(defaultValue1)).toBeTrue()
+            })
+          })
+        })
+      })
+    }
+  )
 })

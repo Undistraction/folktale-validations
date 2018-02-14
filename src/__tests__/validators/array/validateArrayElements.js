@@ -52,7 +52,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Failure(element1Payload))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Success(3))
-        const payload = toArrayError([element1Payload])
+        const payload = toArrayError([[0, element1Payload]])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -71,7 +71,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Success(1))
         v1.onSecondCall().returns(Failure(element2Payload))
         v1.onThirdCall().returns(Success(3))
-        const payload = toArrayError([element2Payload])
+        const payload = toArrayError([[1, element2Payload]])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -90,7 +90,7 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Success(1))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Failure(element3Payload))
-        const payload = toArrayError([element3Payload])
+        const payload = toArrayError([[2, element3Payload]])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)
@@ -109,7 +109,10 @@ describe(`validateArrayElements()`, () => {
         v1.onFirstCall().returns(Failure(element1Payload))
         v1.onSecondCall().returns(Success(2))
         v1.onThirdCall().returns(Failure(element3Payload))
-        const payload = toArrayError([element1Payload, element3Payload])
+        const payload = toArrayError([
+          [0, element1Payload],
+          [2, element3Payload],
+        ])
 
         const validator = validateArrayElements(v1)
         const validation = validator(value)

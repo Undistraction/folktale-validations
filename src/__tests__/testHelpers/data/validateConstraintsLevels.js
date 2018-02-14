@@ -1,7 +1,6 @@
 import CONSTRAINT_FIELD_NAMES from '../../../const/constraintFieldNames'
-import { name1 } from '../fixtures/generic'
 import { constraintsObjName } from '../../../messages'
-import { func } from '../fixtures/generic'
+import { name1, func } from '../fixtures/generic'
 import { REPLACE_TOKEN } from '../const'
 
 const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES
@@ -10,15 +9,14 @@ const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES
 // Level 1
 // -----------------------------------------------------------------------------
 
-const level1Expected = null
-
-const level1Value = null
+const level1ValueRoot = null
+const level1ExpectedFailureObjRoot = null
 
 // -----------------------------------------------------------------------------
 // Level 2
 // -----------------------------------------------------------------------------
 
-const level2Value = {
+const level2ValueRoot = {
   [FIELDS]: [
     {
       [NAME]: name1,
@@ -28,17 +26,17 @@ const level2Value = {
   ],
 }
 
-const level2Expected = {
+const level2ExpectedFailureObjRoot = {
   [NAME]: constraintsObjName(),
   [FIELDS]: {
     [FIELDS]: {
-      [CHILDREN]: [
-        {
+      [CHILDREN]: {
+        '0': {
           [FIELDS]: {
             [CHILDREN]: REPLACE_TOKEN,
           },
         },
-      ],
+      },
     },
   },
 }
@@ -47,7 +45,7 @@ const level2Expected = {
 // Level 3
 // -----------------------------------------------------------------------------
 
-const level3Value = {
+const level3ValueRoot = {
   [FIELDS]: [
     {
       [NAME]: name1,
@@ -65,29 +63,29 @@ const level3Value = {
   ],
 }
 
-const level3Expected = {
+const level3ExpectedFailureObjRoot = {
   [NAME]: constraintsObjName(),
   [FIELDS]: {
     [FIELDS]: {
-      [CHILDREN]: [
-        {
+      [CHILDREN]: {
+        '0': {
           [FIELDS]: {
             [CHILDREN]: {
               [FIELDS]: {
                 [FIELDS]: {
-                  [CHILDREN]: [
-                    {
+                  [CHILDREN]: {
+                    '0': {
                       [FIELDS]: {
                         [CHILDREN]: REPLACE_TOKEN,
                       },
                     },
-                  ],
+                  },
                 },
               },
             },
           },
         },
-      ],
+      },
     },
   },
 }
@@ -97,7 +95,16 @@ const level3Expected = {
 // -----------------------------------------------------------------------------
 
 export default [
-  [level1Value, level1Expected],
-  [level2Value, level2Expected],
-  [level3Value, level3Expected],
+  {
+    valueRoot: level1ValueRoot,
+    expectedFailureObjRoot: level1ExpectedFailureObjRoot,
+  },
+  {
+    valueRoot: level2ValueRoot,
+    expectedFailureObjRoot: level2ExpectedFailureObjRoot,
+  },
+  {
+    valueRoot: level3ValueRoot,
+    expectedFailureObjRoot: level3ExpectedFailureObjRoot,
+  },
 ]

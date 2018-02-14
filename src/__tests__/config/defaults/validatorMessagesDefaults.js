@@ -15,6 +15,7 @@ import {
   defaultRenderers,
   validateIsNumber,
   validateArrayElements,
+  validateObjectWithConstraints,
 } from '../../../index'
 
 import {
@@ -25,13 +26,49 @@ import {
   value3,
   value1,
   value2,
+  invalidKeyName,
 } from '../../testHelpers/fixtures/generic'
 
 import predicateValidators from '../../testHelpers/data/predicateValidators'
 import { prepareTestData } from '../../testHelpers/utils/predicateData'
+import validateIsArrayOf from '../../../validators/array/validateIsArrayOf'
 
-describe(`defaultRendererMessages`, () => {
+describe(`validatorMessagesDefaults`, () => {
   const { defaultRenderer } = defaultRenderers
+
+  // ===========================================================================
+  //
+  // 1. Constraints
+  //
+  // ===========================================================================
+
+  describe(`with invalid constraints`, () => {
+    it(`renders the errorObj to message`, () => {
+      const invalidConstraintsObj = {
+        [invalidKeyName]: value1,
+      }
+
+      const configuredValidator = validateObjectWithConstraints(
+        invalidConstraintsObj
+      )
+
+      const failedValidation = configuredValidator({})
+
+      expect(
+        defaultRenderer(failedValidation.value)
+      ).toEqualWithCompressedWhitespace(
+        `Constraints
+          – included key(s) not on whitelist: ['fieldsValidator', 'fields']`
+      )
+    })
+  })
+
+  // ===========================================================================
+  //
+  // 1. Validations
+  //
+  // ===========================================================================
+
   // ---------------------------------------------------------------------------
   // Predicates
   // ---------------------------------------------------------------------------
@@ -186,15 +223,29 @@ describe(`defaultRendererMessages`, () => {
 
   describe(`validateArrayElements`, () => {
     it(`renders payload to message`, () => {
-      const a = [1, 2, null]
+      const a = [1, 2, null, 3, null]
       const failedValidation = validateArrayElements(validateIsNumber)(a)
-      expect(defaultRenderer(failedValidation.value))
-        .toEqualWithCompressedWhitespace(`Array included invalid value(s)
-        – [0] Wasn't Number`)
+      expect(
+        defaultRenderer(failedValidation.value)
+      ).toEqualWithCompressedWhitespace(
+        `Array included invalid value(s)
+          – [2] Wasn't Number
+          – [4] Wasn't Number`
+      )
     })
   })
 
-  // [UIDS.IS_ARRAY_OF]: isArrayOfMessage,
-  // [UIDS.ARRAY_ELEMENTS]: arrayElementsMessage,
-  // //
+  describe(`validateisArrayOf`, () => {
+    it(`renders payload to message`, () => {
+      const a = [1, 2, null, 3, null]
+      const failedValidation = validateIsArrayOf(validateIsNumber)(a)
+      expect(
+        defaultRenderer(failedValidation.value)
+      ).toEqualWithCompressedWhitespace(
+        `Array included invalid value(s)
+          – [2] Wasn't Number
+          – [4] Wasn't Number`
+      )
+    })
+  })
 })

@@ -10,7 +10,11 @@ import {
   either,
   both,
   all,
+  toString,
+  when,
+  always,
 } from 'ramda'
+import { validation as Validation } from 'folktale'
 import { isObj } from 'ramda-adjunct'
 import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
 import { propValue } from '../utils/failures'
@@ -18,6 +22,9 @@ import { constraintsObjName } from '../messages'
 import { joinWithDot } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 import { throwError, invalidFailureStructureErrorMessage } from '../errors'
+import { reduceWithIndex } from '../utils/iteration'
+
+const { Failure } = Validation
 
 const {
   FIELDS_FAILURE_MESSAGE,
@@ -29,13 +36,28 @@ const {
 } = FAILURE_FIELD_NAMES
 
 const UIDPrefix = `folktale-validations.validate`
-const failuresToChildren = map(compose(objOf(CHILDREN), map(propValue)))
+const filterFailuresToChildrenObj = map(
+  compose(
+    objOf(CHILDREN),
+    reduceWithIndex(
+      (acc, value, index) =>
+        when(
+          always(Failure.hasInstance(value)),
+          assoc(toString(index), propValue(value))
+        )(acc),
+      {}
+    )
+  )
+)
 
 export const toObjectError = compose(objOf(FIELDS), mergeAll, fromPairs)
 export const toConstraintsError = compose(assoc(NAME, constraintsObjName()))
 export const toObjectFieldsError = objOf(FIELDS_FAILURE_MESSAGE)
-export const toArrayError = objOf(CHILDREN)
-export const toChildrenFieldsError = compose(objOf(FIELDS), failuresToChildren)
+export const toArrayError = compose(objOf(CHILDREN), fromPairs)
+export const toChildrenFieldsError = compose(
+  objOf(FIELDS),
+  filterFailuresToChildrenObj
+)
 
 export const propAnd = prop(AND)
 export const propOr = prop(OR)

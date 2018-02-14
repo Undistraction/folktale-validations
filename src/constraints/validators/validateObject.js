@@ -22,16 +22,18 @@ const fieldsValidators = (fields = {}, fieldsValidator) =>
   compose(concat(defaultFieldValidators(fields)), compact, of)(fieldsValidator)
 
 const validateObject = curry((fieldName, constraints, o) => {
-  const fields = defaultTo([], constraints.fields)
+  const constraintsForFields = defaultTo([], constraints.fields)
 
   return untilFailureValidator([
     validateIsPlainObject,
-    validateObjectKeys(fieldsValidators(fields, constraints.fieldsValidator)),
-    validateObjectValues(buildValidatorsMap(fields)),
-    applyDefaultsWithConstraints(fields),
-    transformValuesWithConstraints(fields),
-    validateFieldsWithValue(fields),
-    validateFieldsWithChildren(fields),
+    validateObjectKeys(
+      fieldsValidators(constraintsForFields, constraints.fieldsValidator)
+    ),
+    validateObjectValues(buildValidatorsMap(constraintsForFields)),
+    applyDefaultsWithConstraints(constraintsForFields),
+    transformValuesWithConstraints(constraintsForFields),
+    validateFieldsWithValue(constraintsForFields),
+    validateFieldsWithChildren(constraintsForFields),
   ])(o)
 })
 export default validateObject

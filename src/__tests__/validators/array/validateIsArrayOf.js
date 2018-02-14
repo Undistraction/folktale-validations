@@ -2,12 +2,11 @@ import { validation as Validation } from 'folktale'
 import { validateIsArrayOf } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
 import toPayload from '../../../failures/toPayload'
-import { IS_ARRAY, ARRAY_ELEMENTS } from '../../../const/validatorUids'
+import { IS_ARRAY } from '../../../const/validatorUids'
 import {
   value1,
   value2,
   value3,
-  uid1,
   payload1,
 } from '../../testHelpers/fixtures/generic'
 import { toArrayError } from '../../../failures/utils'
@@ -58,7 +57,7 @@ describe(`validateIsArrayOf()`, () => {
     it(`returns a Validation.Failure with messsage`, () => {
       const value = [value1, value2, value3]
       const v1 = stub()
-      const expectedPayload = toArrayError([payload1])
+      const expectedPayload = toArrayError([[2, payload1]])
       v1.onFirstCall().returns(Success())
       v1.onSecondCall().returns(Success())
       v1.onThirdCall().returns(Failure(payload1))

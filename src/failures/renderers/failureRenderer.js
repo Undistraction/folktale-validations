@@ -1,4 +1,14 @@
-import { curry, inc, append, compose, cond, T, ifElse, when } from 'ramda'
+import {
+  curry,
+  inc,
+  append,
+  compose,
+  cond,
+  T,
+  ifElse,
+  when,
+  mapObjIndexed,
+} from 'ramda'
 import { isPlainObj, isNotUndefined } from 'ramda-adjunct'
 import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
@@ -57,9 +67,14 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   // ---------------------------------------------------------------------------
 
   const processArrayValues = level =>
-    mapWithIndex((o, index) =>
-      renderArrayValue(level, index, processValue(inc(level), o))
-    )
+    reduceObjIndexed((acc, [key, value]) => {
+      const result = renderArrayValue(
+        level,
+        key,
+        processValue(inc(level), value)
+      )
+      return append(result, acc)
+    }, [])
 
   const processArray = (level, fieldName) =>
     compose(

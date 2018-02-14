@@ -36,20 +36,20 @@ export const nestedFailureMessageWithArray = {
   [FIELDS]: {
     a: payload1,
     b: {
-      [CHILDREN]: [
-        {
+      [CHILDREN]: {
+        '1': {
           [FIELDS]: {
             b1a: payload2,
             b1b: payload3,
           },
         },
-        {
+        '3': {
           [FIELDS_FAILURE_MESSAGE]: payload4,
           [FIELDS]: {
             b2a: payload5,
           },
         },
-      ],
+      },
     },
     c: payload6,
   },

@@ -7,21 +7,35 @@ import { replaceTokenWith } from './utils'
 
 const { NAME } = CONSTRAINT_FIELD_NAMES
 
-export default (constraintsLevels, tests) => {
-  mapWithIndex(([valueRoot, expectedRoot], index) => {
-    const level = inc(index)
+export default (constraintsLevels, tests, rootFailureIsConstraints = false) => {
+  mapWithIndex(
+    ({ valueRoot, constraintsRoot, expectedFailureObjRoot }, index) => {
+      const level = inc(index)
 
-    const withValueRoot = when(
-      always(isNotNull(valueRoot)),
-      replaceTokenWith(__, valueRoot)
-    )
+      const withValueRoot = when(
+        always(isNotNull(valueRoot)),
+        replaceTokenWith(__, valueRoot)
+      )
 
-    const withExpectedRoot = ifElse(
-      always(isNotNull(expectedRoot)),
-      replaceTokenWith(__, expectedRoot),
-      assoc(NAME, constraintsObjName()) // Mark it as a constraint object
-    )
+      const withConstraintsRoot = when(
+        always(isNotNull(constraintsRoot)),
+        replaceTokenWith(__, constraintsRoot)
+      )
 
-    tests(level, withValueRoot, withExpectedRoot)
-  })(constraintsLevels)
+      const withExpectedFailureObjRoot = ifElse(
+        always(isNotNull(expectedFailureObjRoot)),
+        replaceTokenWith(__, expectedFailureObjRoot),
+        when(
+          always(rootFailureIsConstraints),
+          assoc(NAME, constraintsObjName())
+        ) // Mark it as a constraint object
+      )
+
+      tests(level, {
+        withValueRoot,
+        withConstraintsRoot,
+        withExpectedFailureObjRoot,
+      })
+    }
+  )(constraintsLevels)
 }

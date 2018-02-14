@@ -124,11 +124,11 @@ describe(`failureRenderer()`, () => {
           – included invalid value(s)
             – Key 'a': value1: (1,2)
             – Key 'b': Array included invalid value(s)
-              – [0] Object 
+              – [1] Object 
                 – included invalid value(s)
                   – Key 'b1a': value2: (1,2)
                   – Key 'b1b': value3: (1,2)
-              – [1] Object 
+              – [3] Object 
                 – value4: (1,2)
                 – included invalid value(s)
                   – Key 'b2a': value5: (1,2)
@@ -138,7 +138,7 @@ describe(`failureRenderer()`, () => {
   })
 
   describe(`with nested ands and ors`, () => {
-    it.only(`renders the correct error message`, () => {
+    it(`renders the correct error message`, () => {
       const result = renderer(nestedAndOrs)
       expect(result).toEqualWithCompressedWhitespace(
         `Object

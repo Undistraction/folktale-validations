@@ -10,7 +10,7 @@ const { Failure } = Validation
 describe(`validateIsNumberWithUnit`, () => {
   const unit = `xx`
   describe(`when value is valid`, () => {
-    it.only(`returns a Validation.Success with the supplied value`, () => {
+    it(`returns a Validation.Success with the supplied value`, () => {
       map(number => {
         const value = `${number}${unit}`
         const validator = validateIsNumberWithUnit(unit)
@@ -22,7 +22,7 @@ describe(`validateIsNumberWithUnit`, () => {
 
   describe(`when value is invalid`, () => {
     describe(`with unitless numbers`, () => {
-      it.only(`returns a Validation.Failure with payload`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
         map(value => {
           const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
           const validator = validateIsNumberWithUnit(unit)
@@ -33,7 +33,7 @@ describe(`validateIsNumberWithUnit`, () => {
     })
 
     describe(`with wrong unit`, () => {
-      it.only(`returns a Validation.Failure with payload`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
         const numbers = [`0yy`, `0.5y`, `-0.5xy`]
         map(value => {
           const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
@@ -46,7 +46,7 @@ describe(`validateIsNumberWithUnit`, () => {
     })
 
     describe(`with other invalid values`, () => {
-      it.only(`returns a Validation.Failure with payload`, () => {
+      it(`returns a Validation.Failure with payload`, () => {
         map(value => {
           const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
           const validator = validateIsNumberWithUnit(unit)
