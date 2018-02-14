@@ -1,7 +1,5 @@
-import { OWN_CONSTRAINTS } from '../constraints/const'
-
 export default Object.freeze({
-  ID: OWN_CONSTRAINTS,
+  ID: `id`,
   FIELDS: `fields`,
   FIELDS_VALIDATOR: `fieldsValidator`,
   NAME: `name`,

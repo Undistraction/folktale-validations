@@ -1,16 +1,16 @@
 import { validation as Validation } from 'folktale'
-import { flip, has, filter, always, ifElse } from 'ramda'
+import { always, ifElse } from 'ramda'
 import { hasNoMoreThanOneChild } from '../../utils/predicates'
 import toPayload from '../../failures/toPayload'
 import { EXCLUSIVE_KEYS } from '../../const/validatorUids'
 import { alwaysSuccess } from '../../utils/validations'
+import { filterKeys } from '../../utils/object'
 
 const { Failure } = Validation
 
 const validateExclusiveKeys = exclusiveKeys => o => {
-  const collectExclusiveKeys = filter(flip(has)(o))
-  const collectedExclusiveKeys = collectExclusiveKeys(exclusiveKeys)
-  const xsx = ifElse(
+  const collectedExclusiveKeys = filterKeys(exclusiveKeys, o)
+  return ifElse(
     hasNoMoreThanOneChild,
     alwaysSuccess(o),
     always(
@@ -19,8 +19,6 @@ const validateExclusiveKeys = exclusiveKeys => o => {
       )
     )
   )(collectedExclusiveKeys)
-
-  return xsx
 }
 
 export default validateExclusiveKeys

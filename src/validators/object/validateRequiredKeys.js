@@ -1,10 +1,11 @@
-import { flip, has, reject, isEmpty, ifElse } from 'ramda'
+import { reject, isEmpty, ifElse } from 'ramda'
 import toPayload from '../../failures/toPayload'
 import { REQUIRED_KEYS } from '../../const/validatorUids'
 import { alwaysSuccess, alwaysFailure } from '../../utils/validations'
+import { hasFlipped } from '../../utils/object'
 
 const validateRequiredKeys = requiredKeys => o => {
-  const collectInvalidKeys = reject(flip(has)(o))
+  const collectInvalidKeys = reject(hasFlipped(o))
   const invalidKeys = collectInvalidKeys(requiredKeys)
   return ifElse(
     isEmpty,
