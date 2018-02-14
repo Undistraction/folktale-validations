@@ -24,7 +24,7 @@ import {
   reduceObjIndexedWithIndex,
   reduceIf,
 } from '../../utils/iteration'
-import { toChildrenFieldsError } from '../../failures/utils'
+import { toChildrenFieldsError } from '../../utils/failures'
 import validateObject from './validateObject'
 import { propFields } from '../../../lib/utils/constraints'
 import { hasPropDefaultValue } from '../../utils/constraints'

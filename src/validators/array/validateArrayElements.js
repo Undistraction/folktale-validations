@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale'
 import { of, prepend, toString } from 'ramda'
 
-import { toArrayError } from '../../failures/utils'
+import { toArrayError } from '../../utils/failures'
 import { propValue } from '../../utils/props'
 import { alwaysSuccess, composeFailure } from '../../utils/validations'
 import { reduceWithIndex } from '../../utils/iteration'

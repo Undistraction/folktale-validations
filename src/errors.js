@@ -20,3 +20,8 @@ export const invalidFailureStructureErrorMessage = value =>
   `[default renderer] Couldn't render failure. Structure not recognised: ${JSON.stringify(
     value
   )}`
+
+export const throwInvalidFailureStructureMessage = compose(
+  throwError,
+  invalidFailureStructureErrorMessage
+)

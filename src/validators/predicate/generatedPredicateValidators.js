@@ -1,7 +1,7 @@
 import { assoc } from 'ramda'
 import predicateValidator from '../../helpers/predicateValidator'
 import { reduceObjIndexed } from '../../utils/iteration'
-import { toValidatorUID } from '../../failures/utils'
+import { toValidatorUID } from '../../utils/failures'
 import predicates from './predicates'
 
 const buildValidator = (acc, [_, [name, predicate]]) => {

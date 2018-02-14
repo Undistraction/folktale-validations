@@ -9,7 +9,7 @@ import {
   value3,
   payload1,
 } from '../../testHelpers/fixtures/generic'
-import { toArrayError } from '../../../failures/utils'
+import { toArrayError } from '../../../utils/failures'
 
 const { Success, Failure } = Validation
 

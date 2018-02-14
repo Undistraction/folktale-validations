@@ -7,22 +7,22 @@ import {
   propFieldsFailureMessage,
   hasPropChildren,
   propName,
+  isAndOrOrObj,
 } from '../../utils/failures'
-import { isAndOrOrObj, throwInvalidFailureStructureMessage } from '../utils'
+import { throwInvalidFailureStructureMessage } from '../../errors'
+import { isPayload } from '../../utils/payload'
 import andOrRenderer from './andOrRenderer'
-import { isPayload } from '../utils/payload'
 import messageLookup from '../messageLookup'
 import payloadRenderer from './payloadRenderer'
 
-export default curry((rendererMessages, validatorMessages) => failureObj => {
+export default curry((rendererHelpers, validatorMessages) => failureObj => {
   const {
     renderPayload,
     renderObjectFieldsError,
-    // Render
     renderObject,
     renderArray,
     renderArrayValue,
-  } = rendererMessages
+  } = rendererHelpers
   // ---------------------------------------------------------------------------
   // Configure
   // ---------------------------------------------------------------------------
@@ -32,7 +32,7 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   )
   const renderAndOrMessagesConfigured = andOrRenderer(
     renderPayloadConfigured,
-    rendererMessages
+    rendererHelpers
   )
   const renderPayloadMessagesConfigured = renderPayload(renderPayloadConfigured)
   const renderObjectFieldsErrorMessageConfigured = renderObjectFieldsError(

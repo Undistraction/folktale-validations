@@ -3,11 +3,11 @@ import { isPositive, isNotString } from 'ramda-adjunct'
 import {
   isAndObj,
   isOrObj,
-  throwInvalidFailureStructureMessage,
   isAndOrOrObj,
   propAnd,
   propOr,
-} from '../utils'
+} from '../../utils/failures'
+import { throwInvalidFailureStructureMessage } from '../../errors'
 
 const andOrRenderer = (
   renderPayload,

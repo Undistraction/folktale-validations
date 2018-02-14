@@ -6,7 +6,7 @@ import {
   alwaysSuccess,
   composeFailure,
 } from '../../utils/validations'
-import { toObjectError } from '../../failures/utils'
+import { toObjectError } from '../../utils/failures'
 import validateObject from './validateObject'
 
 const validateValues = reduce(

@@ -1,4 +1,4 @@
-import { toValidatorUID } from '../failures/utils'
+import { toValidatorUID } from '../utils/failures'
 // ---------------------------------------------------------------------------
 // Predicates
 // ---------------------------------------------------------------------------

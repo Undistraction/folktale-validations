@@ -1,7 +1,7 @@
 import { validation as Validation } from 'folktale'
 import { compose, reduce, toPairs, always, pair } from 'ramda'
 import { isNotUndefined } from 'ramda-adjunct'
-import { toObjectError } from '../../failures/utils'
+import { toObjectError } from '../../utils/failures'
 import { composeFailure } from '../../utils/validations'
 
 const { Success, Failure } = Validation
