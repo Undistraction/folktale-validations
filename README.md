@@ -22,7 +22,7 @@ yarn add folktale-validations
 or
 
 ```bash
-npm install folktale-validations
+yarn install folktale-validations
 ```
 
 ## Usage
@@ -55,20 +55,46 @@ The NPM module includes:
 
 ### Tests
 
+Tests are written with Jest.
+
+#### Run Jest in watch mode
+
 ```bash
-npm test
+yarn test
+```
+
+#### Run Jest once
+
+```bash
+yarn test:noWatch
+```
+
+#### View HTML Coverage report
+
+```bash
+yarn test:cov
 ```
 
 ### Build
 
 ```bash
-npm run build
+yarn run build
 ```
 
 ### Publish to NPM
 
 ```bash
-npm run publish:patch
-npm run publish:minor
-npm run publish:major
+yarn run publish:patch
+```
+
+Or
+
+```bash
+yarn run publish:minor
+```
+
+Or
+
+```bash
+yarn run publish:major
 ```
