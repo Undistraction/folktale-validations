@@ -1,19 +1,19 @@
 import { validation as Validation } from 'folktale'
-import { compose, of, prepend, toString } from 'ramda'
+import { of, prepend, toString } from 'ramda'
 
 import { toArrayError } from '../../failures/utils'
 import { propValue } from '../../utils/props'
-import { alwaysSuccess } from '../../constraints/utils'
+import { alwaysSuccess, composeFailure } from '../../utils/validations'
 import { reduceWithIndex } from '../../utils/iteration'
 
-const { Success, Failure } = Validation
+const { Success } = Validation
 
 const validateAllWith = (validator, o) =>
   reduceWithIndex(
     (acc, element, index) =>
       acc.concat(
         validator(element).orElse(
-          compose(Failure, of, prepend(toString(index)), of)
+          composeFailure(of, prepend(toString(index)), of)
         )
       ),
     Success(),
@@ -24,6 +24,6 @@ export default validator => o => {
   const validation = validateAllWith(validator, o)
   return validation.matchWith({
     Success: alwaysSuccess(o),
-    Failure: compose(Failure, toArrayError, propValue),
+    Failure: composeFailure(toArrayError, propValue),
   })
 }

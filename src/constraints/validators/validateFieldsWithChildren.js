@@ -13,12 +13,12 @@ import {
 } from 'ramda'
 import { isNotEmpty } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
-import safeJsonStringify from 'safe-json-stringify'
+import { constraintsForFieldsWithPropChildren } from '../utils'
 import {
-  constraintsForFieldsWithPropChildren,
   filterFailures,
   alwaysSuccess,
-} from '../utils'
+  composeFailure,
+} from '../../utils/validations'
 import {
   reduceObjIndexed,
   reduceObjIndexedWithIndex,
@@ -29,7 +29,7 @@ import validateObject from './validateObject'
 import { propFields } from '../../../lib/utils/constraints'
 import { hasPropDefaultValue } from '../../utils/constraints'
 
-const { Failure, Success } = Validation
+const { Success } = Validation
 
 // -----------------------------------------------------------------------------
 // Replace the children with the validated (possibly transformed) versions.
@@ -105,6 +105,6 @@ export default constraints => o => {
   return ifElse(
     isEmpty,
     alwaysSuccess(replaceChildrenOfArrayFields(fieldToValidationsMap, o)),
-    compose(Failure, toChildrenFieldsError)
+    composeFailure(toChildrenFieldsError)
   )(fieldsWithFailures)
 }

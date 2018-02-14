@@ -2,6 +2,7 @@ import { validation as Validation } from 'folktale'
 import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils'
 import diff from 'jest-diff'
 import deepEql from 'deep-eql'
+import { isSuccess } from '../../../utils/validations'
 
 const { Success } = Validation
 
@@ -10,8 +11,7 @@ const name = `toEqualSuccessWithValue`
 export default (received, expected) => {
   const expectedAsSuccess = Success(expected)
 
-  const pass =
-    Success.hasInstance(received) && deepEql(received.value, expected)
+  const pass = isSuccess(received) && deepEql(received.value, expected)
 
   const message = pass
     ? () =>

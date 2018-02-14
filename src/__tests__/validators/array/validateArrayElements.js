@@ -46,7 +46,7 @@ describe(`validateArrayElements()`, () => {
 
   describe(`when array contains invalid items`, () => {
     describe(`as first item`, () => {
-      it(`returns a Validation.Failiure with messsage`, () => {
+      it(`returns a Validation.Failure with messsage`, () => {
         const value = [value1, value2, value3]
         const v1 = stub()
         v1.onFirstCall().returns(Failure(element1Payload))
@@ -65,7 +65,7 @@ describe(`validateArrayElements()`, () => {
     })
 
     describe(`as middle item`, () => {
-      it(`returns a Validation.Failiure with messsage`, () => {
+      it(`returns a Validation.Failure with messsage`, () => {
         const value = [value1, value2, value3]
         const v1 = stub()
         v1.onFirstCall().returns(Success(1))
@@ -103,7 +103,7 @@ describe(`validateArrayElements()`, () => {
     })
 
     describe(`multiple items`, () => {
-      it(`returns a Validation.Failiure with messsage`, () => {
+      it(`returns a Validation.Failure with messsage`, () => {
         const value = [value1, value2, value3]
         const v1 = stub()
         v1.onFirstCall().returns(Failure(element1Payload))

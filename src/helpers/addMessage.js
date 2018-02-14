@@ -1,9 +1,8 @@
-import { compose, assoc, head, of } from 'ramda'
-import { validation as Validation } from 'folktale'
+import { assoc, head, of } from 'ramda'
 import PAYLOAD_FIELD_NAMES from '../const/payloadFieldNames'
+import { composeFailure } from '../utils/validations'
 
-const { Failure } = Validation
 const { UID } = PAYLOAD_FIELD_NAMES
 
 export default (uid, validator) => o =>
-  validator(o).orElse(compose(Failure, of, assoc(UID, uid), head))
+  validator(o).orElse(composeFailure(of, assoc(UID, uid), head))

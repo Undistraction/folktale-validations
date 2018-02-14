@@ -2,6 +2,7 @@ import { validation as Validation } from 'folktale'
 import { compose, reduce, toPairs, always, pair } from 'ramda'
 import { isNotUndefined } from 'ramda-adjunct'
 import { toObjectError } from '../../failures/utils'
+import { composeFailure } from '../../utils/validations'
 
 const { Success, Failure } = Validation
 
@@ -18,7 +19,7 @@ const validate = validatorsMap => (acc, [name, v]) => {
 
 const validateObjectValues = validatorsMap => o =>
   compose(reduce(validate(validatorsMap), Success(o)), toPairs)(o).orElse(
-    compose(Failure, toObjectError)
+    composeFailure(toObjectError)
   )
 
 export default validateObjectValues

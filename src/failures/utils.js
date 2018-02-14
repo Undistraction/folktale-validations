@@ -10,11 +10,9 @@ import {
   either,
   both,
   all,
-  toString,
   when,
   always,
 } from 'ramda'
-import { validation as Validation } from 'folktale'
 import { isObj } from 'ramda-adjunct'
 import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
 import { propValue } from '../utils/failures'
@@ -23,8 +21,7 @@ import { joinWithDot } from '../utils/formatting'
 import { appendRight } from '../utils/array'
 import { throwError, invalidFailureStructureErrorMessage } from '../errors'
 import { reduceWithIndex } from '../utils/iteration'
-
-const { Failure } = Validation
+import { isFailure } from '../utils/validations'
 
 const {
   FIELDS_FAILURE_MESSAGE,
@@ -41,10 +38,7 @@ const filterFailuresToChildrenObj = map(
     objOf(CHILDREN),
     reduceWithIndex(
       (acc, value, index) =>
-        when(
-          always(Failure.hasInstance(value)),
-          assoc(toString(index), propValue(value))
-        )(acc),
+        when(always(isFailure(value)), assoc(index, propValue(value)))(acc),
       {}
     )
   )

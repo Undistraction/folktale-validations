@@ -14,7 +14,7 @@ import { reduceObjIndexed, mapWithIndex } from '../../utils/iteration'
 import {
   propFields,
   propChildren,
-  propFieldsFailiureMessage,
+  propFieldsFailureMessage,
   hasPropChildren,
   propName,
 } from '../../utils/failures'
@@ -99,7 +99,7 @@ export default curry((rendererMessages, validatorMessages) => failureObj => {
   const processObjectFieldsErrorMessage = (level, o) =>
     compose(
       when(isNotUndefined, renderObjectFieldsErrorMessageConfigured(level)),
-      propFieldsFailiureMessage
+      propFieldsFailureMessage
     )(o)
 
   const processObject = (level, fieldName) => o =>

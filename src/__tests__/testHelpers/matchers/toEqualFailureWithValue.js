@@ -2,6 +2,7 @@ import { validation as Validation } from 'folktale'
 import { matcherHint, printReceived, printExpected } from 'jest-matcher-utils'
 import diff from 'jest-diff'
 import deepEql from 'deep-eql'
+import { isFailure } from '../../../utils/validations'
 
 const { Failure } = Validation
 
@@ -10,8 +11,7 @@ const name = `toEqualFailureWithValue`
 export default (received, expected) => {
   const expectedAsFailure = Failure(expected)
 
-  const pass =
-    Failure.hasInstance(received) && deepEql(received.value, expected)
+  const pass = isFailure(received) && deepEql(received.value, expected)
 
   const message = pass
     ? () =>

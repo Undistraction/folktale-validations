@@ -1,7 +1,7 @@
 import { without, compose, keys, isEmpty, ifElse } from 'ramda'
 import toPayload from '../../failures/toPayload'
 import { WHITELISTED_KEYS } from '../../const/validatorUids'
-import { alwaysSuccess, alwaysFailure } from '../../constraints/utils'
+import { alwaysSuccess, alwaysFailure } from '../../utils/validations'
 
 const validateWhitelistedKeys = validKeys => o => {
   const invalidKeys = compose(without(validKeys), keys)(o)

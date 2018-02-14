@@ -1,20 +1,18 @@
-import { validation as Validation } from 'folktale'
-import { reduce, when, compose, of } from 'ramda'
+import { reduce, when, of } from 'ramda'
 import { isArray } from 'ramda-adjunct'
 import { orMessages } from '../utils/failures'
 import { appendRight } from '../utils/array'
+import { composeFailure } from '../utils/validations'
 
-const { Failure } = Validation
-
-const toErr = compose(Failure, when(isArray, orMessages))
+const toErr = composeFailure(when(isArray, orMessages))
 
 export default validators => o =>
   reduce(
     (acc, validator) =>
       !acc
-        ? validator(o).orElse(compose(Failure, of))
+        ? validator(o).orElse(composeFailure(of))
         : acc.orElse(accFailure =>
-            validator(o).orElse(compose(Failure, appendRight(accFailure)))
+            validator(o).orElse(composeFailure(appendRight(accFailure)))
           ),
     null,
     validators

@@ -1,18 +1,19 @@
 import { validation as Validation } from 'folktale'
-import { compose, of, ifElse, reduce, head } from 'ramda'
+import { of, ifElse, reduce, head } from 'ramda'
 import { andMessages } from '../utils/failures'
 import { isArrayWithOneChild } from '../utils/predicates'
+import { composeFailure } from '../utils/validations'
 
-const { Success, Failure } = Validation
+const { Success } = Validation
 
 const toErr = v => {
-  const r = compose(Failure, ifElse(isArrayWithOneChild, head, andMessages))(v)
+  const r = composeFailure(ifElse(isArrayWithOneChild, head, andMessages))(v)
   return r
 }
 
 export default validators => o =>
   reduce(
-    (acc, validator) => acc.concat(validator(o).orElse(compose(Failure, of))),
+    (acc, validator) => acc.concat(validator(o).orElse(composeFailure(of))),
     Success(o),
     validators
   ).orElse(toErr)

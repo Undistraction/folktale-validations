@@ -3,7 +3,7 @@ import { flip, has, filter, always, ifElse } from 'ramda'
 import { hasNoMoreThanOneChild } from '../../utils/predicates'
 import toPayload from '../../failures/toPayload'
 import { EXCLUSIVE_KEYS } from '../../const/validatorUids'
-import { alwaysSuccess } from '../../constraints/utils'
+import { alwaysSuccess } from '../../utils/validations'
 
 const { Failure } = Validation
 

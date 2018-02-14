@@ -1,11 +1,8 @@
-import { validation as Validation } from 'folktale'
 import { map } from 'ramda'
 import { validateIsNumberWithUnit } from '../../../index'
 import typeData from '../../testHelpers/fixtures/typeData'
 import toPayload from '../../../failures/toPayload'
 import { IS_NUMBER_WITH_UNIT } from '../../../const/validatorUids'
-
-const { Failure } = Validation
 
 describe(`validateIsNumberWithUnit`, () => {
   const unit = `xx`
@@ -39,7 +36,6 @@ describe(`validateIsNumberWithUnit`, () => {
           const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
           const validator = validateIsNumberWithUnit(unit)
           const result = validator(value)
-          expect(Failure.hasInstance(result)).toBeTrue()
           expect(result).toEqualFailureWithValue(expectedPayload)
         })(numbers)
       })
