@@ -85,3 +85,9 @@ export {
 
 // Configured Renderers
 export { default as defaultRenderers } from './config/defaults/defaultRenderers'
+
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
+
+export { default as decorateValidator } from './helpers/decorateValidator'
