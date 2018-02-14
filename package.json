@@ -6,11 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": [
-    "dist",
-    "src",
-    "lib"
-  ],
+  "files": ["dist", "src", "lib"],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
@@ -27,6 +23,7 @@
     "build:dist": "NODE_ENV=development rollup --config",
     "test": "jest --watch",
     "test:noWatch": "jest",
+    "test:cov": "open coverage/index.html",
     "prepublishOnly": "sudo npm run build",
     "publish:patch": "npm version patch && sudo npm publish",
     "publish:minor": "npm version minor && sudo npm publish",
