@@ -2,8 +2,7 @@ import { always } from 'ramda'
 import { configureRenderers } from '../../index'
 import toPayload from '../../failures/toPayload'
 import { message1 } from '../testHelpers/fixtures/generic'
-import { IS_ARRAY } from '../../const/validatorUids'
-import { IS_OBJECT } from '../../../lib/const/validatorUids'
+import { IS_ARRAY, IS_OBJECT } from '../../const/validatorUids'
 
 describe(`configureRenderers()`, () => {
   const expectedIsArrayPayload = toPayload(IS_ARRAY)
