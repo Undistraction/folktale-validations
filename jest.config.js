@@ -2,6 +2,7 @@ module.exports = {
   bail: true,
   verbose: true,
   collectCoverage: true,
+  coverageDirectory: `coverage/`,
   collectCoverageFrom: [`src/**/*.js`],
   coveragePathIgnorePatterns: [`src/index.js`, `src/utils/logging.js`],
   coverageReporters: [`json`, `html`],
