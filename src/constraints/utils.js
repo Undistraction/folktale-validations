@@ -13,9 +13,10 @@ import {
   when,
   always,
 } from 'ramda'
-import { isNotUndefined, isTruthy, isNotEmpty } from 'ramda-adjunct'
+import { isNotUndefined, isNotEmpty } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
+import { isTrue } from '../utils/predicates'
 
 const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
 
@@ -23,10 +24,7 @@ const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
 // Predicates
 // -----------------------------------------------------------------------------
 
-const isRequired = both(
-  hasPropIsRequired,
-  compose(propSatisfies(isTruthy, IS_REQUIRED))
-)
+const isRequired = both(hasPropIsRequired, propSatisfies(isTrue, IS_REQUIRED))
 
 // -----------------------------------------------------------------------------
 // Extract data from validated object

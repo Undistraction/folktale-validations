@@ -1,6 +1,6 @@
 import { compose, filter, always, prop } from 'ramda'
+import { mapIndexed } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
-import { mapWithIndex } from '../utils/iteration'
 import VALIDATION_FIELD_NAMES from '../const/validationFieldNames'
 
 const { Success, Failure } = Validation
@@ -12,7 +12,7 @@ export const isFailure = Failure.hasInstance
 export const isSuccess = Success.hasInstance
 
 export const filterFailures = filter(isFailure)
-export const extractFailureValues = mapWithIndex(([key, failure]) => [
+export const extractFailureValues = mapIndexed(([key, failure]) => [
   key,
   failure.value,
 ])

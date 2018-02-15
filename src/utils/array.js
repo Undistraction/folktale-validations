@@ -1,6 +1,4 @@
-import { filter, append, flip, reduce, concat } from 'ramda'
-import { isNotUndefined } from 'ramda-adjunct'
+import { reduce, concat } from 'ramda'
 
-export const compact = filter(isNotUndefined)
-export const appendRight = flip(append)
+// eslint-disable-next-line import/prefer-default-export
 export const concatAll = reduce(concat, [])

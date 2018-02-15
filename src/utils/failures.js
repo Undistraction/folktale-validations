@@ -12,13 +12,10 @@ import {
   both,
   always,
 } from 'ramda'
-import { isObj } from 'ramda-adjunct'
+import { isObj, appendFlipped, reduceIndexed } from 'ramda-adjunct'
 import FAILURE_FIELD_NAMES from '../const/failureFieldNames'
 import { hasMoreThanOneChild } from './predicates'
-import { constraintsObjName } from '../messages'
 import { joinWithDot } from '../utils/formatting'
-import { appendRight } from '../utils/array'
-import { reduceWithIndex } from '../utils/iteration'
 import { propValue, isFailure } from '../utils/validations'
 
 const {
@@ -55,7 +52,7 @@ export const isAndOrOrObj = both(isObj, either(isAndObj, isOrObj))
 const filterFailuresToChildrenObj = map(
   compose(
     objOf(CHILDREN),
-    reduceWithIndex(
+    reduceIndexed(
       (acc, value, index) =>
         when(always(isFailure(value)), assoc(index, propValue(value)))(acc),
       {}
@@ -82,4 +79,4 @@ export const toChildrenFieldsError = compose(
 // -----------------------------------------------------------------------------
 
 const UIDPrefix = `folktale-validations.validate`
-export const toValidatorUID = compose(joinWithDot, appendRight([UIDPrefix]))
+export const toValidatorUID = compose(joinWithDot, appendFlipped([UIDPrefix]))

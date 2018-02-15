@@ -1,15 +1,15 @@
 import { validation as Validation } from 'folktale'
 import { of, prepend, toString } from 'ramda'
+import { reduceIndexed } from 'ramda-adjunct'
 
 import { toArrayError } from '../../utils/failures'
 import { propValue } from '../../utils/props'
 import { alwaysSuccess, composeFailure } from '../../utils/validations'
-import { reduceWithIndex } from '../../utils/iteration'
 
 const { Success } = Validation
 
 const validateAllWith = (validator, o) =>
-  reduceWithIndex(
+  reduceIndexed(
     (acc, element, index) =>
       acc.concat(
         validator(element).orElse(

@@ -1,14 +1,14 @@
 import { curry, compose, tap } from 'ramda'
+import { appendFlipped } from 'ramda-adjunct'
 import safeJsonStringify from 'safe-json-stringify'
 import { joinWithColon } from '../utils/formatting'
-import { appendRight } from '../utils/array'
 
 const log = curry((loggingFunction, prefix) =>
   tap(
     compose(
       loggingFunction,
       joinWithColon,
-      appendRight([prefix]),
+      appendFlipped([prefix]),
       safeJsonStringify
     )
   )

@@ -1,7 +1,6 @@
 import { reduce, when, of } from 'ramda'
-import { isArray } from 'ramda-adjunct'
+import { isArray, appendFlipped } from 'ramda-adjunct'
 import { orMessages } from '../utils/failures'
-import { appendRight } from '../utils/array'
 import { composeFailure } from '../utils/validations'
 
 const toErr = composeFailure(when(isArray, orMessages))
@@ -12,7 +11,7 @@ export default validators => o =>
       !acc
         ? validator(o).orElse(composeFailure(of))
         : acc.orElse(accFailure =>
-            validator(o).orElse(composeFailure(appendRight(accFailure)))
+            validator(o).orElse(composeFailure(appendFlipped(accFailure)))
           ),
     null,
     validators

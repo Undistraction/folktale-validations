@@ -1,14 +1,13 @@
 import { inc, when, ifElse, always, __, assoc } from 'ramda'
-import { isNotNull } from 'ramda-adjunct'
+import { isNotNull, mapIndexed } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
 import { constraintsObjName } from '../../messages'
-import { mapWithIndex } from '../../utils/iteration'
 import { replaceTokenWith } from './utils/objects'
 
 const { NAME } = CONSTRAINT_FIELD_NAMES
 
 export default (constraintsLevels, tests, rootFailureIsConstraints = false) => {
-  mapWithIndex(
+  mapIndexed(
     ({ valueRoot, constraintsRoot, expectedFailureObjRoot }, index) => {
       const level = inc(index)
 
