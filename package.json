@@ -6,7 +6,11 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": ["dist", "src", "lib"],
+  "files": [
+    "dist",
+    "src",
+    "lib"
+  ],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
@@ -69,6 +73,6 @@
     "deep-freeze": "^0.0.1",
     "folktale": "^2.0.1",
     "ramda": "^0.25.0",
-    "ramda-adjunct": "^2.4.1"
+    "ramda-adjunct": "^2.5.0"
   }
 }

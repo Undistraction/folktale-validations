@@ -3548,9 +3548,9 @@ ramda-adjunct@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.4.0.tgz#d53ed31350b9dfac59965095be0a3dd967ee8853"
 
-ramda-adjunct@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.4.1.tgz#c86d552da227f7740bea6422f12d9e862c267ef8"
+ramda-adjunct@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.5.0.tgz#50d7d74ca273731b05dcdda77d102bc57d7c1145"
 
 ramda@0.25.0, ramda@^0.25.0:
   version "0.25.0"
