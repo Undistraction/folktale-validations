@@ -14,6 +14,7 @@ export const {
   validateIsArray,
   validateIsNotArray,
   validateIsObject,
+  validateIsNotObject,
   validateIsBoolean,
   validateIsNotBoolean,
   validateIsString,
@@ -27,9 +28,9 @@ export const {
   validateIsNotDate,
   validateIsRegExp,
   validateIsNotRegExp,
-  validateIsNotObject,
   validateIsPlainObject,
   validateIsNotPlainObject,
+  // Nil Values
   validateIsNaN,
   validateIsNotNaN,
   validateIsNil,
@@ -37,16 +38,19 @@ export const {
   validateIsNotNull,
   validateIsUndefined,
   validateIsNotUndefined,
+  // Empty
   validateIsEmpty,
   validateIsNotEmpty,
   validateIsEmptyArray,
   validateIsNonEmptyArray,
   validateIsEmptyString,
   validateIsNonEmptyString,
+  // Valid
   validateIsValidNumber,
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
+  // Numeric
   validateIsPositive,
   validateIsNegative,
 } = reduceObjIndexed(buildValidator, {}, predicates)

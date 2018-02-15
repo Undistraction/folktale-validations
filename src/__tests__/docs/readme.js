@@ -2,10 +2,8 @@ import {
   // orValidator,
   // andValidator,
   defaultRenderers,
-  toPayload,
 } from '../../index'
 import { validateIsString } from '../../../lib/validators/predicate/generatedPredicateValidators'
-import { IS_STRING } from '../../../lib/const/validatorUids'
 
 describe(`code from README.md`, () => {
   describe(`Individual validators`, () => {

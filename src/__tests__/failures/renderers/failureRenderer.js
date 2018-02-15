@@ -24,8 +24,7 @@ import {
 } from '../../testHelpers/fixtures/generic'
 import { joinWithColon, wrapWithSoftBrackets } from '../../../utils/formatting'
 import { invalidFailureStructureErrorMessage } from '../../../errors'
-import defaultFailureRendererHelpers from '../../../config/defaults/customise/defaultFailureRendererHelpers'
-import failureRendererDefaults from '../../../config/defaults/customise/failureRendererDefaults'
+import failureRendererHelpersDefaults from '../../../config/defaults/customise/failureRendererHelpersDefaults'
 import failureRenderer from '../../../failures/renderers/failureRenderer'
 
 const renderPayload = uid =>
@@ -42,7 +41,7 @@ describe(`failureRenderer()`, () => {
   }
 
   const renderer = failureRenderer(
-    defaultFailureRendererHelpers(failureRendererDefaults),
+    failureRendererHelpersDefaults,
     validatorMessages
   )
   describe(`with an invalid payload`, () => {

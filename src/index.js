@@ -1,3 +1,4 @@
+import { isSuccess } from './utils/validations'
 // -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
@@ -97,3 +98,10 @@ export { default as decorateValidator } from './helpers/decorateValidator'
 // -----------------------------------------------------------------------------
 
 export { default as toPayload } from './failures/toPayload'
+export { isFailure, isSuccess } from './utils/failures'
+
+// -----------------------------------------------------------------------------
+// Configuration
+// -----------------------------------------------------------------------------
+
+export { default as configureRenderers } from './config/configureRenderers'
