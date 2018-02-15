@@ -97,7 +97,12 @@ export { default as decorateValidator } from './helpers/decorateValidator'
 // -----------------------------------------------------------------------------
 
 export { default as toPayload } from './failures/toPayload'
-export { isFailure, isSuccess } from './utils/failures'
+
+// -----------------------------------------------------------------------------
+// Validations
+// ----------------------------------------------------------------------------
+
+export { isFailure, isSuccess } from './utils/validations'
 
 // -----------------------------------------------------------------------------
 // Configuration
