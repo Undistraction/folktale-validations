@@ -9,8 +9,8 @@ import {
   validateIsNotEmpty,
   validateIsRegExp,
   validateArrayElements,
-  // allOfValidator,
-  // validateIsLengthLessThan,
+  allOfValidator,
+  validateIsLengthLessThan,
 } from '../../index'
 
 describe(`code from README.md`, () => {
@@ -149,44 +149,43 @@ describe(`code from README.md`, () => {
     })
   })
 
-  // describe(`Example 5 - allOf Validator`, () => {
-  //   it(`returns expected values`, () => {
-  //     const configuredValidator = allOfValidator([
-  //       validateIsString,
-  //       validateIsLengthLessThan(5),
-  //     ])
+  describe(`Example 5 - allOf Validator`, () => {
+    it(`returns expected values`, () => {
+      const configuredValidator = allOfValidator([
+        validateIsString,
+        validateIsLengthLessThan(5),
+      ])
 
-  //     const validValue = `abcd`
-  //     const successfulValidation = configuredValidator(validValue)
+      const validValue = `abcd`
+      const successfulValidation = configuredValidator(validValue)
 
-  //     expect(isSuccess(successfulValidation)).toBeTrue()
-  //     expect(successfulValidation.value).toEqual(validValue)
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
 
-  //     const invalidValue = 1
-  //     const failedValidation = configuredValidator(invalidValue)
-  //     const message = failureRenderer(failedValidation.value)
+      const invalidValue = 1
+      const failedValidation = configuredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
 
-  //     expect(isFailure(failedValidation)).toBeTrue()
-  //     expect(failedValidation.value).toEqual({
-  //       and: [
-  //         {
-  //           uid: `folktale-validations.validate.validateIsString`,
-  //           value: 1,
-  //           args: [],
-  //         },
-  //         {
-  //           uid: `folktale-validations.validate.validateIsLengthLessThan`,
-  //           value: 1,
-  //           args: [5],
-  //         },
-  //       ],
-  //     })
-  //     expect(message).toEqualWithCompressedWhitespace(
-  //       `Array included invalid value(s)
-  //         – [1] Wasn't RegExp`
-  //     )
-  //   })
-  // })
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        and: [
+          {
+            uid: `folktale-validations.validate.validateIsString`,
+            value: 1,
+            args: [],
+          },
+          {
+            uid: `folktale-validations.validate.validateIsLengthLessThan`,
+            value: 1,
+            args: [5],
+          },
+        ],
+      })
+      expect(message).toEqualWithCompressedWhitespace(
+        `Wasn't String and Length wasn't less than '5'`
+      )
+    })
+  })
 
   // describe(`Alternatives`, () => {
   //   describe(`Or`, () => {
