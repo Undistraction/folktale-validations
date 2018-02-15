@@ -140,7 +140,7 @@ This information can be rendered into a human-readable message using a Failure R
 
 Many of the validators are simple predicate validators - supply them with a value and they will either succeed or fail:
 
-Example 1 - Predicate Validator
+**Example 1 - Predicate Validator**
 
 ```javaScript
 const validValue = `a`
@@ -164,7 +164,7 @@ expect(message).toEqual(`Wasn't String`)
 
 Other validators require configuring before use.
 
-Example 2 - Association Validator
+**Example 2 - Association Validator**
 
 ```javaScript
 const configuredValidator = validateIsLengthGreaterThan(2)
@@ -188,18 +188,95 @@ expect(failedValidation.value).toEqual({
 expect(message).toEqual(`Length wasn't greater than '2'`)
 ```
 
-Validators can also validate Objects and Arrays.
+Validators can also validate Objects - either keys or values. In the following example, the values of an object are validated, using a different validator for each key.
 
-Example 3 - Object Validator
+**Example 3 - Object Validator**
 
 ```javaScript
+const configuredValidator = validateObjectValues({
+    a: validateIsNumber,
+    b: validateIsString,
+    c: validateIsNotEmpty,
+  })
 
+  const validValue = {
+    a: 1,
+    b: `example`,
+    c: [1, 2, 3],
+  }
+  const successfulValidation = configuredValidator(validValue)
+
+  expect(isSuccess(successfulValidation)).toBeTrue()
+  expect(successfulValidation.value).toEqual(validValue)
+
+  const invalidValue = {
+    a: `example`,
+    b: true,
+    c: [],
+  }
+  const failedValidation = configuredValidator(invalidValue)
+  const message = failureRenderer(failedValidation.value)
+
+  expect(isFailure(failedValidation)).toBeTrue()
+  expect(failedValidation.value).toEqual({
+    fields: {
+      a: {
+        uid: `folktale-validations.validate.validateIsNumber`,
+        value: `example`,
+        args: [],
+      },
+      b: {
+        uid: `folktale-validations.validate.validateIsString`,
+        value: true,
+        args: [],
+      },
+      c: {
+        uid: `folktale-validations.validate.validateIsNotEmpty`,
+        value: [],
+        args: [],
+      },
+    },
+  })
+  expect(message).toEqualWithCompressedWhitespace(
+    `Object
+      – included invalid value(s)
+        – Key 'a': Wasn't Number
+        – Key 'b': Wasn't String
+        – Key 'c': Was Empty`
+  )
 ```
+
+An Array of values can also be validated, using a single validator for all the values in the array.
 
 Example 4 - Array Validator
 
 ```javaScript
+const configuredValidator = validateArrayElements(validateIsRegExp)
 
+const validValue = [/a/, /b/, /c/]
+const successfulValidation = configuredValidator(validValue)
+
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(validValue)
+
+const invalidValue = [/a/, `/b/`, /c/]
+const failedValidation = configuredValidator(invalidValue)
+const message = failureRenderer(failedValidation.value)
+
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  children: {
+    '1': {
+      uid: `folktale-validations.validate.validateIsRegExp`,
+      value: `/b/`,
+      args: [],
+    },
+  },
+})
+expect(message).toEqualWithCompressedWhitespace(
+  `Array included invalid value(s)
+    – [1] Wasn't RegExp`
+      )
 ```
 
 ### Combining Validations
