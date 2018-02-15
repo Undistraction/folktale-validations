@@ -34,7 +34,7 @@ import { prepareTestData } from '../../testHelpers/utils/predicateData'
 import validateIsArrayOf from '../../../validators/array/validateIsArrayOf'
 
 describe(`validatorMessagesDefaults`, () => {
-  const { defaultRenderer } = defaultRenderers
+  const { failureRenderer } = defaultRenderers
 
   // ===========================================================================
   //
@@ -55,7 +55,7 @@ describe(`validatorMessagesDefaults`, () => {
       const failedValidation = configuredValidator({})
 
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Constraints
           – included key(s) not on whitelist: ['fieldsValidator', 'fields']`
@@ -80,7 +80,7 @@ describe(`validatorMessagesDefaults`, () => {
         it(`renders correctly`, () => {
           negate = !negate
           const failedValidation = validator(invalidValues[0])
-          expect(defaultRenderer(failedValidation.value)).toEqual(
+          expect(failureRenderer(failedValidation.value)).toEqual(
             `${negate ? `Was` : `Wasn't`} ${name}`
           )
         })
@@ -95,7 +95,7 @@ describe(`validatorMessagesDefaults`, () => {
   describe(`validateIsLengthBetween`, () => {
     it(`renders payload to message`, () => {
       const failedValidation = validateIsLengthBetween(1, 2)(4)
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `Length wasn't between '1' and '2'`
       )
     })
@@ -104,7 +104,7 @@ describe(`validatorMessagesDefaults`, () => {
   describe(`validateIsLengthGreaterThan`, () => {
     it(`renders payload to message`, () => {
       const failedValidation = validateIsLengthGreaterThan(1)(0)
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `Length wasn't greater than '1'`
       )
     })
@@ -113,7 +113,7 @@ describe(`validatorMessagesDefaults`, () => {
   describe(`validateIsLengthLessThan`, () => {
     it(`renders payload to message`, () => {
       const failedValidation = validateIsLengthLessThan(1)(2)
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `Length wasn't less than '1'`
       )
     })
@@ -129,7 +129,7 @@ describe(`validatorMessagesDefaults`, () => {
         [key1]: 1,
         [key2]: 2,
       })
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `had more than one exlusive key: ['${key1}', '${key2}']`
       )
     })
@@ -138,7 +138,7 @@ describe(`validatorMessagesDefaults`, () => {
   describe(`validateRequiredKeys`, () => {
     it(`renders payload to message`, () => {
       const failedValidation = validateRequiredKeys([key1, key2])({})
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `missing required key(s): ['${key1}', '${key2}']`
       )
     })
@@ -150,7 +150,7 @@ describe(`validatorMessagesDefaults`, () => {
         key3,
         key4,
       })
-      expect(defaultRenderer(failedValidation.value)).toEqual(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `included key(s) not on whitelist: ['${key1}', '${key2}']`
       )
     })
@@ -167,7 +167,7 @@ describe(`validatorMessagesDefaults`, () => {
       })
 
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Object
             – included invalid value(s)
@@ -187,7 +187,7 @@ describe(`validatorMessagesDefaults`, () => {
         value3
       )
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Value wasn't on the whitelist: ['${value1}', '${value2}']`
       )
@@ -200,7 +200,7 @@ describe(`validatorMessagesDefaults`, () => {
         value1
       )
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Value was on the blacklist: ['${value1}', '${value2}']`
       )
@@ -212,7 +212,7 @@ describe(`validatorMessagesDefaults`, () => {
       const unit = `xx`
       const failedValidation = validateIsNumberWithUnit(unit)(12)
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(`Wasn't number with unit: '${unit}'`)
     })
   })
@@ -226,7 +226,7 @@ describe(`validatorMessagesDefaults`, () => {
       const a = [1, 2, null, 3, null]
       const failedValidation = validateArrayElements(validateIsNumber)(a)
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Array included invalid value(s)
           – [2] Wasn't Number
@@ -240,7 +240,7 @@ describe(`validatorMessagesDefaults`, () => {
       const a = [1, 2, null, 3, null]
       const failedValidation = validateIsArrayOf(validateIsNumber)(a)
       expect(
-        defaultRenderer(failedValidation.value)
+        failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Array included invalid value(s)
           – [2] Wasn't Number

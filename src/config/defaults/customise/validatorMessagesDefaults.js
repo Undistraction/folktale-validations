@@ -7,7 +7,7 @@ import {
   toList,
 } from '../../../utils/formatting'
 import * as UIDS from '../../../const/validatorUids'
-import PREDICATES from '../../../const/predicates'
+import PREDICATE_NAMES from '../../../const/predicateNames'
 
 // -----------------------------------------------------------------------------
 // Predicate
@@ -78,53 +78,77 @@ const messageMap = {
   // ---------------------------------------------------------------------------
   // Predicate
   // ---------------------------------------------------------------------------
-  [UIDS.IS_ARRAY]: predicateMessage(PREDICATES.Array),
-  [UIDS.IS_NOT_ARRAY]: negatedPredicateMessage(PREDICATES.Array),
-  [UIDS.IS_OBJECT]: predicateMessage(PREDICATES.Object),
-  [UIDS.IS_NOT_OBJECT]: negatedPredicateMessage(PREDICATES.Object),
-  [UIDS.IS_BOOLEAN]: predicateMessage(PREDICATES.Boolean),
-  [UIDS.IS_NOT_BOOLEAN]: negatedPredicateMessage(PREDICATES.Boolean),
-  [UIDS.IS_DATE]: predicateMessage(PREDICATES.Date),
-  [UIDS.IS_NOT_DATE]: negatedPredicateMessage(PREDICATES.Date),
-  [UIDS.IS_STRING]: predicateMessage(PREDICATES.String),
-  [UIDS.IS_NOT_STRING]: negatedPredicateMessage(PREDICATES.String),
-  [UIDS.IS_FUNCTION]: predicateMessage(PREDICATES.Function),
-  [UIDS.IS_NOT_FUNCTION]: negatedPredicateMessage(PREDICATES.Function),
-  [UIDS.IS_NUMBER]: predicateMessage(PREDICATES.Number),
-  [UIDS.IS_NOT_NUMBER]: negatedPredicateMessage(PREDICATES.Number),
-  [UIDS.IS_EMPTY]: predicateMessage(PREDICATES.empty),
-  [UIDS.IS_NOT_EMPTY]: negatedPredicateMessage(PREDICATES.empty),
-  [UIDS.IS_EMPTY_ARRAY]: predicateMessage(PREDICATES.emptyArray),
-  [UIDS.IS_NON_EMPTY_ARRAY]: negatedPredicateMessage(PREDICATES.emptyArray),
-  [UIDS.IS_EMPTY_STRING]: predicateMessage(PREDICATES.emptyString),
-  [UIDS.IS_NON_EMPTY_STRING]: negatedPredicateMessage(PREDICATES.emptyString),
-  [UIDS.IS_NAN]: predicateMessage(PREDICATES.NaN),
-  [UIDS.IS_NOT_NAN]: negatedPredicateMessage(PREDICATES.NaN),
-  [UIDS.IS_NIL]: predicateMessage(PREDICATES.Nil),
-  [UIDS.IS_NOT_NIL]: negatedPredicateMessage(PREDICATES.Nil),
-  [UIDS.IS_NULL]: predicateMessage(PREDICATES.Null),
-  [UIDS.IS_NOT_NULL]: negatedPredicateMessage(PREDICATES.Null),
-  [UIDS.IS_UNDEFINED]: predicateMessage(PREDICATES.Undefined),
-  [UIDS.IS_NOT_UNDEFINED]: negatedPredicateMessage(PREDICATES.Undefined),
-  [UIDS.IS_PLAIN_OBJECT]: predicateMessage(PREDICATES.plainObject),
-  [UIDS.IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(PREDICATES.plainObject),
-  [UIDS.IS_VALID_DATE]: predicateMessage(PREDICATES.validDate),
-  [UIDS.IS_NOT_VALID_DATE]: negatedPredicateMessage(PREDICATES.validDate),
-  [UIDS.IS_VALID_NUMBER]: predicateMessage(PREDICATES.validNumber),
-  [UIDS.IS_NOT_VALID_NUMBER]: negatedPredicateMessage(PREDICATES.validNumber),
-  [UIDS.IS_POSITIVE]: predicateMessage(PREDICATES.positive),
-  [UIDS.IS_NEGATIVE]: predicateMessage(PREDICATES.negative),
+  // Basic Types
+  [UIDS.IS_ARRAY]: predicateMessage(PREDICATE_NAMES.Array),
+  [UIDS.IS_NOT_ARRAY]: negatedPredicateMessage(PREDICATE_NAMES.Array),
+  [UIDS.IS_OBJECT]: predicateMessage(PREDICATE_NAMES.Object),
+  [UIDS.IS_NOT_OBJECT]: negatedPredicateMessage(PREDICATE_NAMES.Object),
+  [UIDS.IS_BOOLEAN]: predicateMessage(PREDICATE_NAMES.Boolean),
+  [UIDS.IS_NOT_BOOLEAN]: negatedPredicateMessage(PREDICATE_NAMES.Boolean),
+  [UIDS.IS_STRING]: predicateMessage(PREDICATE_NAMES.String),
+  [UIDS.IS_NOT_STRING]: negatedPredicateMessage(PREDICATE_NAMES.String),
+  [UIDS.IS_FUNCTION]: predicateMessage(PREDICATE_NAMES.Function),
+  [UIDS.IS_NOT_FUNCTION]: negatedPredicateMessage(PREDICATE_NAMES.Function),
+  [UIDS.IS_NUMBER]: predicateMessage(PREDICATE_NAMES.Number),
+  [UIDS.IS_NOT_NUMBER]: negatedPredicateMessage(PREDICATE_NAMES.Number),
+
+  // Complex Objs
+  [UIDS.IS_DATE]: predicateMessage(PREDICATE_NAMES.Date),
+  [UIDS.IS_NOT_DATE]: negatedPredicateMessage(PREDICATE_NAMES.Date),
+  [UIDS.IS_REGEXP]: predicateMessage(PREDICATE_NAMES.RegExp),
+  [UIDS.IS_NOT_REGEXP]: negatedPredicateMessage(PREDICATE_NAMES.RegExp),
+  [UIDS.IS_PLAIN_OBJECT]: predicateMessage(PREDICATE_NAMES.plainObject),
+  [UIDS.IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(
+    PREDICATE_NAMES.plainObject
+  ),
+
+  // Nil Values
+  [UIDS.IS_NAN]: predicateMessage(PREDICATE_NAMES.NaN),
+  [UIDS.IS_NOT_NAN]: negatedPredicateMessage(PREDICATE_NAMES.NaN),
+  [UIDS.IS_NIL]: predicateMessage(PREDICATE_NAMES.Nil),
+  [UIDS.IS_NOT_NIL]: negatedPredicateMessage(PREDICATE_NAMES.Nil),
+  [UIDS.IS_NULL]: predicateMessage(PREDICATE_NAMES.Null),
+  [UIDS.IS_NOT_NULL]: negatedPredicateMessage(PREDICATE_NAMES.Null),
+  [UIDS.IS_UNDEFINED]: predicateMessage(PREDICATE_NAMES.Undefined),
+  [UIDS.IS_NOT_UNDEFINED]: negatedPredicateMessage(PREDICATE_NAMES.Undefined),
+
+  // Empty
+  [UIDS.IS_EMPTY]: predicateMessage(PREDICATE_NAMES.empty),
+  [UIDS.IS_NOT_EMPTY]: negatedPredicateMessage(PREDICATE_NAMES.empty),
+  [UIDS.IS_EMPTY_ARRAY]: predicateMessage(PREDICATE_NAMES.emptyArray),
+  [UIDS.IS_NON_EMPTY_ARRAY]: negatedPredicateMessage(
+    PREDICATE_NAMES.emptyArray
+  ),
+  [UIDS.IS_EMPTY_STRING]: predicateMessage(PREDICATE_NAMES.emptyString),
+  [UIDS.IS_NON_EMPTY_STRING]: negatedPredicateMessage(
+    PREDICATE_NAMES.emptyString
+  ),
+
+  // Valid
+  [UIDS.IS_VALID_DATE]: predicateMessage(PREDICATE_NAMES.validDate),
+  [UIDS.IS_NOT_VALID_DATE]: negatedPredicateMessage(PREDICATE_NAMES.validDate),
+  [UIDS.IS_VALID_NUMBER]: predicateMessage(PREDICATE_NAMES.validNumber),
+  [UIDS.IS_NOT_VALID_NUMBER]: negatedPredicateMessage(
+    PREDICATE_NAMES.validNumber
+  ),
+
+  // Numeric
+  [UIDS.IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
+  [UIDS.IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
+
   // ---------------------------------------------------------------------------
   // Array
   // ---------------------------------------------------------------------------
   [UIDS.IS_ARRAY_OF]: isArrayOfMessage,
   [UIDS.ARRAY_ELEMENTS]: arrayElementsMessage,
+
   // ---------------------------------------------------------------------------
   // Association
   // ---------------------------------------------------------------------------
   [UIDS.IS_LENGTH_BETWEEN]: isLengthBetweenMessage,
   [UIDS.IS_LENGTH_GREATER_THAN]: isLengthGreaterThanMessage,
   [UIDS.IS_LENGTH_LESS_THAN]: isLengthLessThanMessage,
+
   // ---------------------------------------------------------------------------
   // Object
   // ---------------------------------------------------------------------------
@@ -132,6 +156,7 @@ const messageMap = {
   [UIDS.OBJECT_VALUES]: objectValuesMessage,
   [UIDS.REQUIRED_KEYS]: requiredKeysMessage,
   [UIDS.WHITELISTED_KEYS]: whitelistedKeysMessage,
+
   // ---------------------------------------------------------------------------
   // Other
   // ---------------------------------------------------------------------------

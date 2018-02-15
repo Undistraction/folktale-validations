@@ -1,5 +1,5 @@
-import defaultRenderer from '../failures/renderers/failureRenderer'
-import argumentsRenderer from '../failures/renderers/argumentsFailureRenderer'
+import failureRenderer from '../failures/renderers/failureRenderer'
+import argumentsFailureRenderer from '../failures/renderers/argumentsFailureRenderer'
 import validatorMessagesDefaults from './defaults/customise/validatorMessagesDefaults'
 import defaultFailureRendererHelpers from './defaults/customise/defaultFailureRendererHelpers'
 
@@ -7,16 +7,16 @@ export default (
   validatorMessages = validatorMessagesDefaults,
   rendererHelpers = defaultFailureRendererHelpers
 ) => {
-  const configuredFailureRenderer = defaultRenderer(
+  const configuredFailureRenderer = failureRenderer(
     rendererHelpers,
     validatorMessages
   )
-  const configuredArgumentsRenderer = argumentsRenderer(
-    defaultRenderer,
+  const configuredArgumentsFailureRenderer = argumentsFailureRenderer(
+    failureRenderer,
     rendererHelpers
   )
   return {
-    defaultRenderer: configuredFailureRenderer,
-    argumentsRenderer: configuredArgumentsRenderer,
+    failureRenderer: configuredFailureRenderer,
+    argumentsFailureRenderer: configuredArgumentsFailureRenderer,
   }
 }

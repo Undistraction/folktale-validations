@@ -11,7 +11,7 @@ const nonEmptyStringValues = [`a`]
 const arrayValues = [...emptyArrayValues, ...nonEmptyArrayValues]
 const plainObjectValues = [...emptyPlainObjValues, ...nonEmptyPlainObjValues]
 const functionValues = [function() {}]
-const regexValues = [/a/]
+const regExpValues = [/a/]
 const stringValues = [...emptyStringValues, ...nonEmptyStringValues]
 const validNumericValues = [0, 1, -1]
 const numericConstValues = [-Infinity, Infinity, NaN]
@@ -33,7 +33,7 @@ const undefinedValues = [undefined]
 const nullValues = [null]
 const objectValues = concat(
   plainObjectValues,
-  regexValues,
+  regExpValues,
   arrayValues,
   dateValues,
   functionValues
@@ -43,7 +43,7 @@ const allValues = [
   ...arrayValues,
   ...plainObjectValues,
   ...functionValues,
-  ...regexValues,
+  ...regExpValues,
   ...stringValues,
   ...validNumericValues,
   ...numericValues,
@@ -70,12 +70,12 @@ const withoutUndefinedValues = without([undefined], allValues)
 const withoutEmptyValues = without(emptyValues, allValues)
 const withoutEmptyStringValues = without(emptyStringValues, allValues)
 const withoutEmptyarrayValues = without(emptyArrayValues, allValues)
-const withoutRegexValues = without(regexValues, allValues)
+const withoutRegExpValues = without(regExpValues, allValues)
 const withoutObjectValues = without(
   concatAll([
     arrayValues,
     plainObjectValues,
-    regexValues,
+    regExpValues,
     dateValues,
     functionValues,
   ]),
@@ -87,7 +87,7 @@ export default {
   objectValues,
   plainObjectValues,
   functionValues,
-  regexValues,
+  regExpValues,
   stringValues,
   numericValues,
   booleanValues,
@@ -124,5 +124,5 @@ export default {
   withoutEmptyarrayValues,
   withoutValidNumericValues,
   withoutValidDateValues,
-  withoutRegexValues,
+  withoutRegExpValues,
 }

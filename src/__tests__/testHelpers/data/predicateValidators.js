@@ -4,14 +4,16 @@ import {
   validateIsNotArray,
   validateIsObject,
   validateIsNotObject,
-  validateIsPlainObject,
-  validateIsNotPlainObject,
   validateIsBoolean,
   validateIsNotBoolean,
   validateIsNumber,
   validateIsNotNumber,
+  validateIsFunction,
+  validateIsNotFunction,
   validateIsDate,
   validateIsNotDate,
+  validateIsPlainObject,
+  validateIsNotPlainObject,
   validateIsNaN,
   validateIsNotNaN,
   validateIsNil,
@@ -19,8 +21,6 @@ import {
   validateIsNotNull,
   validateIsUndefined,
   validateIsNotUndefined,
-  validateIsFunction,
-  validateIsNotFunction,
   validateIsEmpty,
   validateIsNotEmpty,
   validateIsEmptyString,
@@ -31,10 +31,12 @@ import {
   validateIsNotValidNumber,
   validateIsValidDate,
   validateIsNotValidDate,
+  validateIsRegExp,
+  validateIsNotRegExp,
   validateIsPositive,
   validateIsNegative,
 } from '../../../index'
-import PREDICATES from '../../../const/predicates'
+import PREDICATES from '../../../const/predicateNames'
 import {
   IS_ARRAY,
   IS_NOT_ARRAY,
@@ -69,19 +71,18 @@ import {
   IS_NOT_VALID_DATE,
   IS_POSITIVE,
   IS_NEGATIVE,
+  IS_REGEXP,
+  IS_NOT_REGEXP,
 } from '../../../const/validatorUids'
 
 export default {
-  // Types
+  // ---------------------------------------------------------------------------
+  // Basic Types
+  // ---------------------------------------------------------------------------
   [PREDICATES.Array]: {
     uids: [IS_ARRAY, IS_NOT_ARRAY],
     validators: { validateIsArray, validateIsNotArray },
     values: [typeData.arrayValues, typeData.withoutArrayValues],
-  },
-  [PREDICATES.plainObject]: {
-    uids: [IS_PLAIN_OBJECT, IS_NOT_PLAIN_OBJECT],
-    validators: { validateIsPlainObject, validateIsNotPlainObject },
-    values: [typeData.plainObjectValues, typeData.withoutPlainObjectValues],
   },
   [PREDICATES.Object]: {
     uids: [IS_OBJECT, IS_NOT_OBJECT],
@@ -103,11 +104,29 @@ export default {
     validators: { validateIsFunction, validateIsNotFunction },
     values: [typeData.functionValues, typeData.withoutFunctionValues],
   },
+
+  // ---------------------------------------------------------------------------
+  // Complex Objs
+  // ---------------------------------------------------------------------------
   [PREDICATES.Date]: {
     uids: [IS_DATE, IS_NOT_DATE],
     validators: { validateIsDate, validateIsNotDate },
     values: [typeData.dateValues, typeData.withoutDateValues],
   },
+  [PREDICATES.RegExp]: {
+    uids: [IS_REGEXP, IS_NOT_REGEXP],
+    validators: { validateIsRegExp, validateIsNotRegExp },
+    values: [typeData.regExpValues, typeData.withoutRegExpValues],
+  },
+  [PREDICATES.plainObject]: {
+    uids: [IS_PLAIN_OBJECT, IS_NOT_PLAIN_OBJECT],
+    validators: { validateIsPlainObject, validateIsNotPlainObject },
+    values: [typeData.plainObjectValues, typeData.withoutPlainObjectValues],
+  },
+
+  // ---------------------------------------------------------------------------
+  // Nil Values
+  // ---------------------------------------------------------------------------
   [PREDICATES.NaN]: {
     uids: [IS_NAN, IS_NOT_NAN],
     validators: { validateIsNaN, validateIsNotNaN },
@@ -128,7 +147,10 @@ export default {
     validators: { validateIsUndefined, validateIsNotUndefined },
     values: [[undefined], typeData.withoutUndefinedValues],
   },
+
+  // ---------------------------------------------------------------------------
   // Empty
+  // ---------------------------------------------------------------------------
   [PREDICATES.empty]: {
     uids: [IS_EMPTY, IS_NOT_EMPTY],
     validators: { validateIsEmpty, validateIsNotEmpty },
@@ -144,7 +166,10 @@ export default {
     validators: { validateIsEmptyArray, validateIsNonEmptyArray },
     values: [typeData.emptyArrayValues, typeData.nonEmptyArrayValues],
   },
+
+  // ---------------------------------------------------------------------------
   // Valid
+  // ---------------------------------------------------------------------------
   [PREDICATES.validNumber]: {
     uids: [IS_VALID_NUMBER, IS_NOT_VALID_NUMBER],
     validators: { validateIsValidNumber, validateIsNotValidNumber },
@@ -155,7 +180,10 @@ export default {
     validators: { validateIsValidDate, validateIsNotValidDate },
     values: [typeData.validDateValues, typeData.withoutValidDateValues],
   },
+
+  // ---------------------------------------------------------------------------
   // Numeric
+  // ---------------------------------------------------------------------------
   [PREDICATES.positive]: {
     uids: [IS_POSITIVE],
     validators: { validateIsPositive },

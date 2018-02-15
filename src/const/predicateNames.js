@@ -7,6 +7,7 @@ export default Object.freeze({
   String: `String`,
   Number: `Number`,
   Boolean: `Boolean`,
+  RegExp: `RegExp`,
   Undefined: `Undefined`,
   Null: `null`,
   Nil: `nil`,

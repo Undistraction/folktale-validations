@@ -91,3 +91,9 @@ export { default as defaultRenderers } from './config/defaults/defaultRenderers'
 // -----------------------------------------------------------------------------
 
 export { default as decorateValidator } from './helpers/decorateValidator'
+
+// -----------------------------------------------------------------------------
+// Failures
+// -----------------------------------------------------------------------------
+
+export { default as toPayload } from './failures/toPayload'

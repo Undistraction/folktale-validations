@@ -10,12 +10,10 @@ const buildValidator = (acc, [_, [name, predicate]]) => {
 }
 
 export const {
+  // Basic Types
   validateIsArray,
   validateIsNotArray,
   validateIsObject,
-  validateIsNotObject,
-  validateIsPlainObject,
-  validateIsNotPlainObject,
   validateIsBoolean,
   validateIsNotBoolean,
   validateIsString,
@@ -24,8 +22,14 @@ export const {
   validateIsNotFunction,
   validateIsNumber,
   validateIsNotNumber,
+  // Complex Objs
   validateIsDate,
   validateIsNotDate,
+  validateIsRegExp,
+  validateIsNotRegExp,
+  validateIsNotObject,
+  validateIsPlainObject,
+  validateIsNotPlainObject,
   validateIsNaN,
   validateIsNotNaN,
   validateIsNil,
