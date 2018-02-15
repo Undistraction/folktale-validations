@@ -49,19 +49,6 @@ const whitelistedKeysMessage = keys =>
   joinWithColon([`included key(s) not on whitelist`, toList(keys)])
 
 // -----------------------------------------------------------------------------
-// Array
-// -----------------------------------------------------------------------------
-
-const arrayElementsMessage = elementErrorMessages =>
-  joinWithColon([
-    `Array contained invalid element(s)`,
-    joinWithComma(elementErrorMessages),
-  ])
-
-const isArrayOfMessage = (value, message) =>
-  joinWithColon([wrapWithSingleQuotes(value), message])
-
-// -----------------------------------------------------------------------------
 // Other
 // -----------------------------------------------------------------------------
 
@@ -135,12 +122,6 @@ const messageMap = {
   // Numeric
   [UIDS.IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
   [UIDS.IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
-
-  // ---------------------------------------------------------------------------
-  // Array
-  // ---------------------------------------------------------------------------
-  [UIDS.IS_ARRAY_OF]: isArrayOfMessage,
-  [UIDS.ARRAY_ELEMENTS]: arrayElementsMessage,
 
   // ---------------------------------------------------------------------------
   // Association

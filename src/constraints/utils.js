@@ -50,17 +50,6 @@ export const buildDefaultsMap = reduce(
 )
 
 // -----------------------------------------------------------------------------
-// Update data on validated object
-// -----------------------------------------------------------------------------
-
-export const replaceFieldsWithValidationValues = (fieldsToValidationsMap, o) =>
-  reduce(
-    (acc, [fieldName, validation]) => assoc(fieldName, validation.value, o),
-    o,
-    toPairs(fieldsToValidationsMap)
-  )
-
-// -----------------------------------------------------------------------------
 // Extract data from constraints object
 // -----------------------------------------------------------------------------
 
