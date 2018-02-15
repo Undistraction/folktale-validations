@@ -1,5 +1,10 @@
 # folktale-validations
 
+[![NPM Version](https://img.shields.io/npm/v/folktale-validations.svg)](https://www.npmjs.com/package/folktale-validations)
+[![codecov](https://img.shields.io/codecov/c/github/Undistraction/folktale-validations.svg)](https://codecov.io/gh/Undistraction/folktale-validations)
+[![Build Status](https://img.shields.io/travis/Undistraction/folktale-validations.svg)](https://travis-ci.org/Undistraction/folktale-validations)
+[![DUB](https://img.shields.io/dub/l/vibe-d.svg)](./LICENSE.md)
+
 A library of validators using [folktale](http://folktale.origamitower.com/)'s `Validation` including utility functions for creating validators with less boilerplate and specialised validators.
 
 Note: For validators relying on predicates from well tested external libraries, tests will only ensure validator succeeds and fails.
@@ -98,3 +103,16 @@ Or
 ```bash
 yarn run publish:major
 ```
+
+### Developing
+
+#### Adding Predicates
+
+Simple predicates and their tests are generated from a series of consts and data files.
+
+1. Add the predicate name to `src/const/predicateNames.js`
+2. Add predicate and negation to `src/const/validatorUids.js`
+3. Add predicate and negation to `src/validators/predicate/predicates.js`
+4. Add predicate and negation export to `src/validators/predicate/generatedPredicateValidators.js`
+5. Add predicate and negation data to `src/__tests__/testHelpers/data/predicateValidators.js`
+6. Add default message to `src/config/defaults/validatorMessagesDefaults.js`
