@@ -18,7 +18,21 @@ The project is broken into:
 * constraints: A system for validating whole objects or object graphs, with validation and transformation of values.
 * failures: Rendering of failed validations to human-readable error messages.
 
+## Install
+
+```bash
+yarn add folktale-validations
+```
+
+or
+
+```bash
+yarn install folktale-validations
+```
+
 ## Validators
+
+Many validators are included, but it is very easy to create your own. The following are all ready to use out of the box.
 
 ### Predicates
 
@@ -105,18 +119,6 @@ The project is broken into:
 * predicateValidator - Create a validator using a simple predicate
 * regExpValidator - Create a validator that uses a RegExp for validation
 
-## Install
-
-```bash
-yarn add folktale-validations
-```
-
-or
-
-```bash
-yarn install folktale-validations
-```
-
 ## Usage
 
 ### Introduction
@@ -146,18 +148,38 @@ Example 1 - Predicate Validator
 
 Other validators require configuring before use.
 
+Example 2 - Association Validator
+
+```javaScript
+
+```
+
+Validators can also validate Objects and Arrays.
+
+Example 3 - Object Validator
+
+```javaScript
+
+```
+
+Example 4 - Array Validator
+
+```javaScript
+
+```
+
 ### Combining Validations
 
 The library offers a number of helper functions for combining or composing validations. In the following example, `allOfValidator` is used to compose three validations into a single validation:
 
-Example 2 - Composed Validations
+Example 5 - Composed Validations
 
 ```javascript
 ```
 
 These validations can themselves be composed, for example:
 
-Example 3 - Nested Composed Validations
+Example 6 - Nested Composed Validations
 
 ```javascript
 ```
@@ -169,12 +191,12 @@ Using constraints allows you to describe what constitutes a valid object or nest
 1. Create a constraint object
 2. Perform a validation using this constraint object.
 
-Example 4 - Flat Object
+Example 7 - Flat Object
 
 ```javascript
 ```
 
-Example 5 - Object Graph
+Example 8 - Object Graph
 
 ```javascript
 ```
@@ -185,19 +207,19 @@ The messages ouput during rendering can be configured by passing a map of functi
 
 Each key should map to a function that returns a formatted message for that validator. The `uid` of the payload returned from a validator will be used to locate the appropriate function, which will then have the values in the payload's `args` applied to it. It is recommended you use some kind of namespaced uid. This library uses uids like this: `folktale-validations.validateIsArray`.
 
-Example 6 - Customising Validation Failure Messages
+Example 9 - Customising Validation Failure Messages
 
 ```javascript
 ```
 
 You can also customise the rendering of constraint-based validation failures. In this instance things are more complicated as there is significant formatting as well as text rendering. Again, you can pass in an object via the configuration object of `configureValdidators()`. The default helpers can be found here: `src/config/customise/failureRendererHelpersDefaults.js`.
 
-Example 7 - Customising Constraint-based Validation Failure Messages
+Example 10 - Customising Constraint-based Validation Failure Messages
 
 ```javascript
 ```
 
-Example 8 - Customising Constraint-based Validation Formatting
+Example 11 - Customising Constraint-based Validation Formatting
 
 ```javascript
 ```
