@@ -6,11 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": [
-    "dist",
-    "src",
-    "lib"
-  ],
+  "files": ["dist", "src", "lib"],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
@@ -28,11 +24,12 @@
     "test": "jest --watch",
     "test:noWatch": "jest",
     "test:cov": "open coverage/index.html",
-    "prepublishOnly": "sudo npm run build",
+    "validateAll": "npm run lint && npm run test:noWatch && npm run build",
+    "prepublishOnly": "npm run validateAll",
     "publish:patch": "npm version patch && sudo npm publish",
     "publish:minor": "npm version minor && sudo npm publish",
     "publish:major": "npm version major && sudo npm publish",
-    "lint": "eslint src",
+    "lint": "eslint src/",
     "audit:packages": "yarn outdated || true"
   },
   "devDependencies": {
@@ -55,6 +52,7 @@
     "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-ramda": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
+    "husky": "^0.15.0-rc.8",
     "jasmine-expect": "^3.8.3",
     "jest": "^22.1.4",
     "madge": "^3.0.0",
@@ -74,5 +72,11 @@
     "folktale": "^2.0.1",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validateAll",
+      "pre-push": "npm run validateAll"
+    }
   }
 }
