@@ -1,34 +1,57 @@
 import {
-  // orValidator,
-  // andValidator,
-  defaultRenderers,
+  isSuccess,
+  isFailure,
   validateIsString,
+  validateIsLengthGreaterThan,
+  defaultRenderers,
 } from '../../index'
 
 describe(`code from README.md`, () => {
-  describe(`Individual validators`, () => {
-    describe(`Successful validator`, () => {
-      it.only(`returns Success with supplied value`, () => {
-        const value = `a`
-        const successfulValidation = validateIsString(value)
-        expect(successfulValidation).toEqualSuccessWithValue(value)
+  const { failureRenderer } = defaultRenderers
+
+  describe(`Example 1 - Individual Validator`, () => {
+    it(`returns expected values`, () => {
+      const validValue = `a`
+      const successfulValidation = validateIsString(validValue)
+
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
+
+      const invalidValue = 1
+      const failedValidation = validateIsString(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        uid: `folktale-validations.validate.validateIsString`,
+        value: invalidValue,
+        args: [],
       })
+      expect(message).toEqual(`Wasn't String`)
     })
+  })
 
-    describe(`Unsuccessful validator`, () => {
-      it.only(`returns Failure with payload`, () => {
-        const { failureRenderer } = defaultRenderers
-        const value = 1
+  describe(`Example 1 - Association Validator`, () => {
+    it(`returns expected values`, () => {
+      const configuredValidator = validateIsLengthGreaterThan(2)
 
-        const expectedRenderedMessage = `Wasn't String`
+      const validValue = `abc`
+      const successfulValidation = configuredValidator(validValue)
 
-        const failedValidation = validateIsString(value)
-        const renderedFailure = failureRenderer(failedValidation.value)
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
 
-        expect(renderedFailure).toEqualWithCompressedWhitespace(
-          expectedRenderedMessage
-        )
+      const invalidValue = `a`
+      const failedValidation = configuredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        uid: `folktale-validations.validate.validateIsLengthGreaterThan`,
+        value: invalidValue,
+        args: [2],
       })
+      expect(message).toEqual(`Length wasn't greater than '2'`)
     })
   })
 

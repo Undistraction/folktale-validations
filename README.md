@@ -143,7 +143,23 @@ Many of the validators are simple predicate validators - supply them with a valu
 Example 1 - Predicate Validator
 
 ```javaScript
+const validValue = `a`
+const successfulValidation = validateIsString(validValue)
 
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(validValue)
+
+const invalidValue = 1
+const failedValidation = validateIsString(invalidValue)
+const message = failureRenderer(failedValidation.value)
+
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  uid: `folktale-validations.validate.validateIsString`,
+  value: invalidValue,
+  args: [],
+})
+expect(message).toEqual(`Wasn't String`)
 ```
 
 Other validators require configuring before use.
@@ -151,7 +167,25 @@ Other validators require configuring before use.
 Example 2 - Association Validator
 
 ```javaScript
+const configuredValidator = validateIsLengthGreaterThan(2)
 
+const validValue = `abc`
+const successfulValidation = configuredValidator(validValue)
+
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(validValue)
+
+const invalidValue = `a`
+const failedValidation = configuredValidator(invalidValue)
+const message = failureRenderer(failedValidation.value)
+
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  uid: `folktale-validations.validate.validateIsLengthGreaterThan`,
+  value: invalidValue,
+  args: [2],
+})
+expect(message).toEqual(`Length wasn't greater than '2'`)
 ```
 
 Validators can also validate Objects and Arrays.
