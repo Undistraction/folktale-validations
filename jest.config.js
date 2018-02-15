@@ -1,9 +1,9 @@
 module.exports = {
   bail: true,
-  verbose: false,
+  verbose: true,
   collectCoverage: true,
-  collectCoverageFrom: [`src/**/*.js`, `!src/utils/logging.js`],
-  coveragePathIgnorePatterns: [`src/index.js`],
+  collectCoverageFrom: [`src/**/*.js`],
+  coveragePathIgnorePatterns: [`src/index.js`, `src/utils/logging.js`],
   coverageReporters: [`json`, `html`],
   setupFiles: [],
   setupTestFrameworkScriptFile: `<rootDir>/src/__tests__/testHelpers/matchers/customMatchers.js`,
