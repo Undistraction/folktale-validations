@@ -1,5 +1,6 @@
 import {
   join,
+  inc,
   compose,
   map,
   append,
@@ -111,7 +112,7 @@ export const quoteAndJoinWithComma = compose(
 export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB))
 
 export const newlineAndTabsForLevel = level =>
-  joinWithNoSpace([NEWLINE, tabsForLevel(level)])
+  joinWithNoSpace([NEWLINE, tabsForLevel(inc(level))])
 
 export const toList = compose(wrapWithSquareBrackets, quoteAndJoinWithComma)
 
