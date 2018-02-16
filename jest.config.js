@@ -1,18 +1,12 @@
 module.exports = {
   bail: true,
-  verbose: true,
+  verbose: false,
   collectCoverage: true,
   coverageDirectory: `coverage/`,
   collectCoverageFrom: [`src/**/*.js`],
   coveragePathIgnorePatterns: [`src/index.js`, `src/utils/logging.js`],
-  coverageReporters: [`json`, `html`],
-  setupFiles: [],
+  coverageReporters: [`json`],
   setupTestFrameworkScriptFile: `<rootDir>/src/__tests__/testHelpers/matchers/customMatchers.js`,
-  modulePathIgnorePatterns: [
-    `sharedTests/`,
-    `data.js`,
-    `featureValues.js`,
-    `testHelpers/`,
-  ],
+  modulePathIgnorePatterns: [`testHelpers/`],
   unmockedModulePathPatterns: [`jasmine-expect`],
 }
