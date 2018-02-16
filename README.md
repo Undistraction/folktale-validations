@@ -29,7 +29,7 @@ yarn add folktale-validations
 or
 
 ```bash
-yarn install folktale-validations
+npm install folktale-validations
 ```
 
 ## Validators
