@@ -17,6 +17,7 @@ import { isNotUndefined, isNotEmpty } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
 import { isTrue } from '../utils/predicates'
+import { filterFailures } from '../utils/validations'
 
 const { IS_REQUIRED, CHILDREN, VALUE } = CONSTRAINT_FIELD_NAMES
 
@@ -25,6 +26,7 @@ const { IS_REQUIRED, CHILDREN, VALUE } = CONSTRAINT_FIELD_NAMES
 // -----------------------------------------------------------------------------
 
 const isRequired = both(hasPropIsRequired, propSatisfies(isTrue, IS_REQUIRED))
+const hasChildFailures = compose(isNotEmpty, filterFailures)
 
 // -----------------------------------------------------------------------------
 // Extract data from validated object
@@ -53,31 +55,28 @@ export const buildDefaultsMap = reduce(
 // Extract data from constraints object
 // -----------------------------------------------------------------------------
 
-export const constraintsForFieldsWithPropReducer = (name, constraints) => (
+const nestedDataReducer = (name, constraints) => (
   acc,
   [fieldName, fieldValue]
 ) => {
-  const childConstraints = prop(name, find(propEqName(fieldName), constraints))
+  const constraintsForNestedObj = prop(
+    name,
+    find(propEqName(fieldName), constraints)
+  )
   if (
-    isNotUndefined(childConstraints) &&
-    isNotEmpty(childConstraints) &&
+    isNotUndefined(constraintsForNestedObj) &&
+    isNotEmpty(constraintsForNestedObj) &&
     isNotEmpty(fieldValue)
   ) {
-    return append([fieldName, fieldValue, childConstraints], acc)
+    return append([fieldName, fieldValue, constraintsForNestedObj], acc)
   }
   return acc
 }
 
-export const constraintsForFieldsWithProp = fieldName => constraints =>
-  compose(
-    reduce(constraintsForFieldsWithPropReducer(fieldName, constraints), []),
-    toPairs
-  )
+const nestedData = fieldName => constraints =>
+  compose(reduce(nestedDataReducer(fieldName, constraints), []), toPairs)
 
-export const constraintsForFieldsWithPropChildren = constraintsForFieldsWithProp(
-  CHILDREN
-)
+export const nestedValueData = nestedData(CHILDREN)
+export const nestedChildrenData = nestedData(VALUE)
 
-export const constraintsForFieldsWithPropValue = constraintsForFieldsWithProp(
-  VALUE
-)
+export const filterFieldsWithChildFailures = filter(hasChildFailures)

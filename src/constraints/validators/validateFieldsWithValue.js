@@ -1,5 +1,5 @@
 import { compose, reduce, assoc, isEmpty, toPairs, ifElse } from 'ramda'
-import { constraintsForFieldsWithPropValue } from '../utils'
+import { nestedChildrenData } from '../utils'
 import {
   filterFailures,
   extractFailureValues,
@@ -28,5 +28,5 @@ export default constraints => o =>
     ),
     filterFailures,
     validateValues,
-    constraintsForFieldsWithPropValue(constraints)
+    nestedChildrenData(constraints)
   )(o)
