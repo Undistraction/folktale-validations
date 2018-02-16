@@ -5,28 +5,27 @@ import {
   map,
   reduce,
   assoc,
-  both,
-  propSatisfies,
   find,
   append,
   toPairs,
   when,
   always,
 } from 'ramda'
-import { isNotUndefined, isNotEmpty } from 'ramda-adjunct'
+import { isNotUndefined } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
-import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
-import { isTrue } from '../utils/predicates'
-import { filterFailures } from '../utils/validations'
+import { propEqName, propName } from '../utils/constraints'
+import {
+  isNotUndefinedOrEmpty,
+  hasValueOrDefaults,
+  isRequired,
+  hasChildFailures,
+} from '../utils/predicates'
 
-const { IS_REQUIRED, CHILDREN, VALUE } = CONSTRAINT_FIELD_NAMES
+const { CHILDREN, VALUE } = CONSTRAINT_FIELD_NAMES
 
 // -----------------------------------------------------------------------------
 // Predicates
 // -----------------------------------------------------------------------------
-
-const isRequired = both(hasPropIsRequired, propSatisfies(isTrue, IS_REQUIRED))
-const hasChildFailures = compose(isNotEmpty, filterFailures)
 
 // -----------------------------------------------------------------------------
 // Extract data from validated object
@@ -63,10 +62,10 @@ const nestedDataReducer = (name, constraints) => (
     name,
     find(propEqName(fieldName), constraints)
   )
+
   if (
-    isNotUndefined(constraintsForNestedObj) &&
-    isNotEmpty(constraintsForNestedObj) &&
-    isNotEmpty(fieldValue)
+    isNotUndefinedOrEmpty(constraintsForNestedObj) &&
+    hasValueOrDefaults(fieldValue, constraintsForNestedObj)
   ) {
     return append([fieldName, fieldValue, constraintsForNestedObj], acc)
   }
