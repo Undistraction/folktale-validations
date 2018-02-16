@@ -9,6 +9,8 @@ A library of validators using [folktale](http://folktale.origamitower.com/)'s `V
 
 Much of the basic validation relies on well tested predicates provided by [ramda-adjunct](https://github.com/char0n/ramda-adjunct).
 
+The library is well tested (on Node 7, 8 and 9) and the validators themselves are easy to test.
+
 ## Structure
 
 The project is broken into:
@@ -136,7 +138,7 @@ A payload is a simple object describing the failure and has three fields:
 * `value` - the value that failed validation
 * `args` - an array of values relating to the failure, for example `validateIsWhiteListedValue` will include two arrays - one of all whitelisted values, and one of values discovered that weren't included in the whitelist.
 
-This information can be rendered into a human-readable message using a Failure Renderer. The library ships with a preconfigured renderer which knows how to render failures from all included validators, including complex nested failures. You can supply your own messages for some or all of these validators, as outlined below.
+This information can be rendered into a human-readable message using a Failure Renderer. The library ships with a preconfigured renderer which knows how to render failures from all included validators, including complex nested failures. You can supply your own messages for some or all of these validators, as outlined below. Outputting payload objects from the validators makes them easy to test.
 
 Many of the validators are simple predicate validators - supply them with a value and they will either succeed or fail:
 
