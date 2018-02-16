@@ -1,12 +1,16 @@
 {
   "name": "folktale-validations",
-  "version": "0.0.45",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": ["dist", "src", "lib"],
+  "files": [
+    "dist",
+    "src",
+    "lib"
+  ],
   "keywords": [],
   "author": "Pedr Browne",
   "license": "MIT",
