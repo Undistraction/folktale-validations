@@ -1,3 +1,5 @@
+import * as validatorUidImported from './const/validatorUids'
+
 // -----------------------------------------------------------------------------
 // Helpers
 // -----------------------------------------------------------------------------
@@ -109,3 +111,9 @@ export { isFailure, isSuccess } from './utils/validations'
 // -----------------------------------------------------------------------------
 
 export { default as configureRenderers } from './config/configureRenderers'
+
+// -----------------------------------------------------------------------------
+// Const
+// -----------------------------------------------------------------------------
+
+export const validatorUids = validatorUidImported
