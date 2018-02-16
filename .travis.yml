@@ -11,7 +11,7 @@ script:
   - node --version
   - yarn --version
   - yarn run lint
-  - yarn run jest:noWatch && codecov
+  - yarn run test:noWatch && codecov
   - yarn run build
 cache:
   yarn: true
