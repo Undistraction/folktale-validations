@@ -18,7 +18,7 @@ import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { propEqName, propName, hasPropIsRequired } from '../utils/constraints'
 import { isTrue } from '../utils/predicates'
 
-const { IS_REQUIRED } = CONSTRAINT_FIELD_NAMES
+const { IS_REQUIRED, CHILDREN, VALUE } = CONSTRAINT_FIELD_NAMES
 
 // -----------------------------------------------------------------------------
 // Predicates
@@ -75,9 +75,9 @@ export const constraintsForFieldsWithProp = fieldName => constraints =>
   )
 
 export const constraintsForFieldsWithPropChildren = constraintsForFieldsWithProp(
-  CONSTRAINT_FIELD_NAMES.CHILDREN
+  CHILDREN
 )
 
 export const constraintsForFieldsWithPropValue = constraintsForFieldsWithProp(
-  CONSTRAINT_FIELD_NAMES.VALUE
+  VALUE
 )
