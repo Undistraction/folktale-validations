@@ -11,6 +11,7 @@ import {
   validateArrayElements,
   allOfValidator,
   validateIsLengthLessThan,
+  orValidator,
 } from '../../index'
 
 describe(`code from README.md`, () => {
@@ -183,6 +184,53 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualWithCompressedWhitespace(
         `Wasn't String and Length wasn't less than '5'`
+      )
+    })
+  })
+
+  describe(`Example 6 - composition`, () => {
+    it(`returns expected values`, () => {
+      const configuredValidator = allOfValidator([
+        orValidator(validateIsString, validateIsNumber),
+        validateIsLengthLessThan(5),
+      ])
+
+      const validValue = `abcd`
+      const successfulValidation = configuredValidator(validValue)
+
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
+
+      const invalidValue = null
+      const failedValidation = configuredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        and: [
+          {
+            or: [
+              {
+                uid: `folktale-validations.validate.validateIsString`,
+                value: null,
+                args: [],
+              },
+              {
+                uid: `folktale-validations.validate.validateIsNumber`,
+                value: null,
+                args: [],
+              },
+            ],
+          },
+          {
+            uid: `folktale-validations.validate.validateIsLengthLessThan`,
+            value: null,
+            args: [5],
+          },
+        ],
+      })
+      expect(message).toEqualWithCompressedWhitespace(
+        `(Wasn't String or Wasn't Number) and Length wasn't less than '5'`
       )
     })
   })
