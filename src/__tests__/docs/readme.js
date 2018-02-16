@@ -1,4 +1,15 @@
 import {
+  always,
+  compose,
+  curry,
+  isEmpty,
+  reject,
+  flip,
+  contains,
+  toUpper,
+} from 'ramda'
+import { validation as Validation } from 'folktale'
+import {
   isSuccess,
   isFailure,
   validateIsString,
@@ -12,6 +23,18 @@ import {
   allOfValidator,
   validateIsLengthLessThan,
   orValidator,
+  validateIsDate,
+  validateObjectWithConstraints,
+  validateIsArrayOf,
+  validateIsBoolean,
+  validateIsNonEmptyArray,
+  validateIsObject,
+  configureRenderers,
+  validatorUids,
+  decorateValidator,
+  validateIsWhitelistedValue,
+  regExpValidator,
+  toPayload,
 } from '../../index'
 
 describe(`code from README.md`, () => {
@@ -235,132 +258,350 @@ describe(`code from README.md`, () => {
     })
   })
 
-  // describe(`Alternatives`, () => {
-  //   describe(`Or`, () => {
-  //     it(`returns expected values`, () => {
-  //       const configuredValidator = orValidator(
-  //         defaultValidators.validateIsString,
-  //         defaultValidators.validateIsNumber
-  //       )
+  describe(`Example 7 - Constraints With Flat Object`, () => {
+    it(`returns expected values`, () => {
+      const constraints = {
+        fields: [
+          {
+            name: `a`,
+            validator: validateIsString,
+          },
+          {
+            name: `b`,
+            validator: validateIsArrayOf(validateIsNumber),
+          },
+          {
+            name: `c`,
+            validator: validateIsDate,
+          },
+        ],
+      }
 
-  //       const successfulValidation1 = configuredValidator(`a`)
-  //       const successfulValidation2 = configuredValidator(1)
-  //       const failedValidation = configuredValidator([])
+      const confguredValidator = validateObjectWithConstraints(constraints)
 
-  //       expect(successfulValidation1).toEqualSuccessWithValue(`a`)
-  //       expect(successfulValidation2).toEqualSuccessWithValue(1)
-  //       expect(failedValidation).toEqualFailureWithValue([
-  //         `Wasn't 'String' and Wasn't 'Number'`,
-  //       ])
-  //     })
-  //   })
+      const validValue = {
+        a: `abc`,
+        b: [1, 2, 3],
+        c: new Date(`01-01-2001`),
+      }
 
-  //   describe(`And`, () => {
-  //     it(`returns expected values`, () => {
-  //       const configuredValidator = andValidator(
-  //         defaultValidators.validateIsString,
-  //         defaultValidators.validateIsLengthGreaterThan(2)
-  //       )
-  //       const successfulValidation = configuredValidator(`abc`)
-  //       const failedValidation1 = configuredValidator(1)
-  //       const failedValidation2 = configuredValidator(`a`)
+      const successfulValidation = confguredValidator(validValue)
 
-  //       expect(successfulValidation).toEqualSuccessWithValue(`abc`)
-  //       expect(failedValidation1).toEqualFailureWithValue([
-  //         `Wasn't 'String' and Length wasn't greater than 2`,
-  //       ])
-  //       expect(failedValidation2).toEqualFailureWithValue([
-  //         `Length wasn't greater than 2`,
-  //       ])
-  //     })
-  //   })
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
+
+      const invalidValue = {
+        a: 123,
+        b: null,
+        c: `01-01-2001`,
+      }
+
+      const failedValidation = confguredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        fields: {
+          a: {
+            uid: `folktale-validations.validate.validateIsString`,
+            value: 123,
+            args: [],
+          },
+          b: {
+            uid: `folktale-validations.validate.validateIsArray`,
+            value: null,
+            args: [],
+          },
+          c: {
+            uid: `folktale-validations.validate.validateIsDate`,
+            value: `01-01-2001`,
+            args: [],
+          },
+        },
+      })
+      expect(message).toEqualWithCompressedWhitespace(
+        `Object
+          – included invalid value(s)
+          – Key 'a': Wasn't String
+          – Key 'b': Wasn't Array
+          – Key 'c': Wasn't Date`
+      )
+    })
+  })
+
+  describe(`Example 8 - Using isRequired, defaultValue and transformer`, () => {
+    it(`returns expected values`, () => {
+      const constraints = {
+        fields: [
+          {
+            name: `a`,
+            isRequired: true,
+            validator: validateIsString,
+            transformer: toUpper,
+          },
+          {
+            name: `b`,
+            validator: validateIsBoolean,
+            defaultValue: true,
+          },
+        ],
+      }
+
+      const confguredValidator = validateObjectWithConstraints(constraints)
+
+      const validValue = {
+        a: `abc`,
+      }
+
+      const expectedValue = {
+        a: `ABC`,
+        b: true,
+      }
+
+      const successfulValidation = confguredValidator(validValue)
+
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(expectedValue)
+
+      const invalidValue = {
+        b: false,
+      }
+
+      const failedValidation = confguredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        fieldsFailureMessage: {
+          uid: `folktale-validations.validate.validateRequiredKeys`,
+          value: { b: false },
+          args: [[`a`], [`a`]],
+        },
+      })
+      expect(message).toEqualWithCompressedWhitespace(
+        `Object – missing required key(s): ['a']`
+      )
+    })
+  })
+
+  describe(`Example 9 - Constraints With Object Graph`, () => {
+    it(`returns expected values`, () => {
+      const constraints = {
+        fields: [
+          {
+            name: `a`,
+            isRequired: true,
+            validator: validateIsObject,
+            value: {
+              fields: [
+                {
+                  name: `a-a`,
+                  isRequired: true,
+                  validator: validateIsBoolean,
+                },
+                {
+                  name: `a-b`,
+                  isRequired: true,
+                  validator: validateIsNonEmptyArray,
+                  children: {
+                    fields: [
+                      {
+                        name: `a-b-a`,
+                        isRequired: true,
+                        validator: validateIsString,
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      }
+
+      const confguredValidator = validateObjectWithConstraints(constraints)
+
+      const validValue = {
+        a: {
+          [`a-a`]: true,
+          [`a-b`]: [
+            {
+              [`a-b-a`]: `abc`,
+            },
+            {
+              [`a-b-a`]: `def`,
+            },
+          ],
+        },
+      }
+
+      const successfulValidation = confguredValidator(validValue)
+
+      expect(isSuccess(successfulValidation)).toBeTrue()
+      expect(successfulValidation.value).toEqual(validValue)
+
+      const invalidValue = {
+        a: {
+          [`a-a`]: true,
+          [`a-b`]: [
+            {
+              [`a-b-a`]: `abc`,
+            },
+            {
+              [`a-b-a`]: 123,
+            },
+          ],
+        },
+      }
+
+      const failedValidation = confguredValidator(invalidValue)
+      const message = failureRenderer(failedValidation.value)
+
+      expect(isFailure(failedValidation)).toBeTrue()
+      expect(failedValidation.value).toEqual({
+        fields: {
+          a: {
+            fields: {
+              'a-b': {
+                children: {
+                  '1': {
+                    fields: {
+                      'a-b-a': {
+                        uid: `folktale-validations.validate.validateIsString`,
+                        value: 123,
+                        args: [],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+      expect(message).toEqualWithCompressedWhitespace(
+        `Object
+        – included invalid value(s)
+          – Key 'a': Object
+            – included invalid value(s)
+              – Key 'a-b': Array included invalid value(s)
+                – [1] Object
+                  – included invalid value(s)
+                    – Key 'a-b-a': Wasn't String`
+      )
+    })
+  })
+
+  describe(`Example 10 - Customising Validation Failure Messages`, () => {
+    it(`returns expected values`, () => {
+      const newMessage = `Boolean it isn't`
+      const { failureRenderer: configuredFailureRenderer } = configureRenderers(
+        {
+          validatorMessages: {
+            [validatorUids.IS_BOOLEAN]: always(newMessage),
+          },
+        }
+      )
+
+      const failedValidation = validateIsBoolean(`yoda`)
+      const message = configuredFailureRenderer(failedValidation.value)
+      expect(message).toEqualWithCompressedWhitespace(newMessage)
+    })
+  })
+
+  describe(`Example 11 - Creating Validator Based On Existing Validator`, () => {
+    it(`returns expected values`, () => {
+      const newUID = `example.validateIsValidTitle`
+      const newMessageFunction = whitelist => `Wasn't a title: ${whitelist}`
+      const titles = [`mr`, `mrs`, `miss`, `ms`, `dr`, `mx`]
+
+      const { failureRenderer: configuredFailureRenderer } = configureRenderers(
+        {
+          validatorMessages: {
+            [newUID]: newMessageFunction,
+          },
+        }
+      )
+
+      const titleValidator = compose(
+        decorateValidator(newUID),
+        validateIsWhitelistedValue
+      )(titles)
+
+      const failedValidation = titleValidator(`emperor`)
+      const message = configuredFailureRenderer(failedValidation.value)
+      expect(message).toEqualWithCompressedWhitespace(
+        `Wasn't a title: mr,mrs,miss,ms,dr,mx`
+      )
+    })
+  })
+
+  // describe(`Example 12 - Creating Validator Based On Existing Validator`, () => {
+
   // })
 
-  // describe(`Constraints`, () => {
-  //   describe(`Flat Object`, () => {
-  //     const constraints = {
-  //       fields: [
-  //         {
-  //           name: `a`,
-  //           validator: defaultValidators.validateIsString,
-  //           isRequired: true,
-  //         },
-  //         {
-  //           name: `b`,
-  //           validator: defaultValidators.validateIsNumber,
-  //         },
-  //         {
-  //           name: `c`,
-  //           validator: defaultValidators.validateIsBoolean,
-  //           defaultValue: true,
-  //         },
-  //       ],
-  //     }
-  //     // -----------------------------------------------------------------------
-  //     // Flat Valid Object
-  //     // -----------------------------------------------------------------------
-  //     describe(`valid`, () => {
-  //       it(`returns expected values`, () => {
-  //         const configuredValidator = defaultValidators.validateObjectWithConstraints(
-  //           constraints
-  //         )
+  describe(`Example 13 - Creating a Validator Using Helpers`, () => {
+    it(`returns expected values`, () => {
+      const UID = `example.hasNotWhitespaceValidator`
+      const newMessageFunction = always(`Should not contain whitespace`)
+      const regExp = /^\S+$/
 
-  //         const validObject = {
-  //           a: `a`,
-  //         }
+      const { failureRenderer: configuredFailureRenderer } = configureRenderers(
+        {
+          validatorMessages: {
+            [UID]: newMessageFunction,
+          },
+        }
+      )
 
-  //         const successfulValidation = configuredValidator(validObject)
+      const validateHasNoWhitespace = regExpValidator(UID, regExp)
 
-  //         expect(successfulValidation).toEqualSuccessWithValue({
-  //           a: `a`,
-  //           c: true,
-  //         })
-  //       })
-  //     })
-  //     // -----------------------------------------------------------------------
-  //     // Flat Invalid Object
-  //     // -----------------------------------------------------------------------
-  //     describe(`invalid`, () => {
-  //       // ---------------------------------------------------------------------
-  //       // 1. Missing Required Key
-  //       // ---------------------------------------------------------------------
-  //       describe(`Missing required key`, () => {
-  //         it(`returns expected values`, () => {
-  //           const configuredValidator = defaultValidators.validateObjectWithConstraints(
-  //             constraints
-  //           )
+      const successfulValidation = validateHasNoWhitespace(`ab`)
+      expect(isSuccess(successfulValidation)).toBeTrue()
 
-  //           const invalidObject = {}
+      const failedValidation = validateHasNoWhitespace(`a b`)
+      const message = configuredFailureRenderer(failedValidation.value)
+      expect(message).toEqualWithCompressedWhitespace(
+        `Should not contain whitespace`
+      )
+    })
+  })
 
-  //           const failedValidation = configuredValidator(invalidObject)
+  describe(`Example 14 - Creating a Validator From Scratch`, () => {
+    it(`returns expected values`, () => {
+      const UID = `example.validateContainsChars`
+      const newMessageFunction = chars => `Didn't contain chars: [${chars}]`
 
-  //           expect(failedValidation).toEqualFailureWithValue({
-  //             fieldsFailureMessage: [`missing required key(s): ['a']`],
-  //           })
-  //         })
-  //       })
-  //       // ---------------------------------------------------------------------
-  //       // 2. With Additional Keys
-  //       // ---------------------------------------------------------------------
-  //       describe(`Additional keys`, () => {
-  //         it(`returns expected values`, () => {
-  //           const configuredValidator = defaultValidators.validateObjectWithConstraints(
-  //             constraints
-  //           )
+      const { failureRenderer: configuredFailureRenderer } = configureRenderers(
+        {
+          validatorMessages: {
+            [UID]: newMessageFunction,
+          },
+        }
+      )
 
-  //           const invalidObject = {
-  //             a: `a`,
-  //             d: `d`,
-  //           }
+      const containsChars = (chars, s) =>
+        compose(isEmpty, reject(flip(contains)(s)))(chars)
 
-  //           const failedValidation = configuredValidator(invalidObject)
+      const { Success, Failure } = Validation
 
-  //           expect(failedValidation).toEqualFailureWithValue({
-  //             fieldsFailureMessage: [`included invalid key(s): '[d]'`],
-  //           })
-  //         })
-  //       })
-  //     })
-  //   })
-  // })
+      const validateContainsChars = curry(
+        (chars, value) =>
+          containsChars(chars, value)
+            ? Success(value)
+            : compose(Failure, toPayload)(UID, value, [chars])
+      )
+
+      const configuredValidator = validateContainsChars([`a`, `b`, `c`])
+
+      const successfulValidation = configuredValidator(`cab`)
+      expect(isSuccess(successfulValidation)).toBeTrue()
+
+      const failedValidation = configuredValidator(`cat`)
+      const message = configuredFailureRenderer(failedValidation.value)
+      expect(message).toEqualWithCompressedWhitespace(
+        `Didn't contain chars: [a,b,c]`
+      )
+    })
+  })
 })

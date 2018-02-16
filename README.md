@@ -248,7 +248,7 @@ const configuredValidator = validateObjectValues({
 
 An Array of values can also be validated, using a single validator for all the values in the array.
 
-Example 4 - Array Validator
+**Example 4 - Array Validator**
 
 ```javaScript
 const configuredValidator = validateArrayElements(validateIsRegExp)
@@ -283,7 +283,7 @@ expect(message).toEqualWithCompressedWhitespace(
 
 The library offers a number of helper functions for combining or composing validations. In the following example, `allOfValidator` is used to compose two validations into a single validation:
 
-Example 5 - Composed Validations
+**Example 5 - Composed Validations**
 
 ```javascript
 const configuredValidator = allOfValidator([
@@ -323,7 +323,7 @@ expect(message).toEqualWithCompressedWhitespace(
 
 These validations can themselves be composed, for example:
 
-Example 6 - Nested Composed Validations
+**Example 6 - Nested Composed Validations**
 
 ```javascript
 const configuredValidator = allOfValidator([
@@ -372,42 +372,418 @@ expect(message).toEqualWithCompressedWhitespace(
 
 ### Constraint-based validations
 
-Using constraints allows you to describe what constitutes a valid object or nested object graph. It also allows you to tansform the received values and apply default values for missing props. This involves two steps:
+Using constraints allows you to describe what constitutes a valid object or nested object graph. It also allows you to tansform the received values and apply default values for missing props. This involves three steps:
 
 1. Create a constraint object
-2. Perform a validation using this constraint object.
+2. Configure `validateObjectWithConstraints` a constraint object
+3. Validate
 
-Example 7 - Flat Object
+Note: As part of the validation process, the constraints object itself is validated, and you will recieve a Failed Validation explaining where the problem is if it is invalid.
+
+Note: Take a look at `src/constraints/constraints.js` to see the constraints object that is used to validate constraints objects supplied to `validateObjectWithConstraints()`.
+
+**Example 7 - Constraints With Flat Object**
 
 ```javascript
+it(`returns expected values`, () => {
+  const constraints = {
+    fields: [
+      {
+        name: `a`,
+        validator: validateIsString,
+      },
+      {
+        name: `b`,
+        validator: validateIsArrayOf(validateIsNumber),
+      },
+      {
+        name: `c`,
+        validator: validateIsDate,
+      },
+    ],
+  }
+
+  const confguredValidator = validateObjectWithConstraints(constraints)
+
+  const validValue = {
+    a: `abc`,
+    b: [1, 2, 3],
+    c: new Date(`01-01-2001`),
+  }
+
+  const successfulValidation = confguredValidator(validValue)
+
+  expect(isSuccess(successfulValidation)).toBeTrue()
+  expect(successfulValidation.value).toEqual(validValue)
+
+  const invalidValue = {
+    a: 123,
+    b: null,
+    c: `01-01-2001`,
+  }
+
+  const failedValidation = confguredValidator(invalidValue)
+  const message = failureRenderer(failedValidation.value)
+
+  expect(isFailure(failedValidation)).toBeTrue()
+  expect(failedValidation.value).toEqual({
+    fields: {
+      a: {
+        uid: `folktale-validations.validate.validateIsString`,
+        value: 123,
+        args: [],
+      },
+      b: {
+        uid: `folktale-validations.validate.validateIsArray`,
+        value: null,
+        args: [],
+      },
+      c: {
+        uid: `folktale-validations.validate.validateIsDate`,
+        value: `01-01-2001`,
+        args: [],
+      },
+    },
+  })
+  expect(message).toEqualWithCompressedWhitespace(
+    `Object
+      – included invalid value(s)
+      – Key 'a': Wasn't String
+      – Key 'b': Wasn't Array
+      – Key 'c': Wasn't Date`
+  )
+})
 ```
 
-Example 8 - Object Graph
+There are a number of other valid attributes for the constraints object.
+
+#### Validating the keys of the object
+
+All object's are validated by two field validators - one that checks there are no keys present that aren't described by the constraitns, and one that checks that any required keys (see below) are present. You can use the `fieldsValidator` attribute to supply an additional validator for the object's keys themselves. For example you might want to check that only one of a set of keys should appear per object.
+
+#### Object values
+
+##### isRequired
+
+If a key must be present, you can add an `isRequired` attribute to the constraints object for that field. This will cause validation to fail if the key does not appear on the object. Note: your constraints will be invalid if you use `isRequired` and `defaultValue` on the same field.
+
+##### defaultValue
+
+If you want to supply a defualt value for a key if it isn't present you can add a `defaultValue` attribute. This add a key with the default value to the object when it is validated. Note: Nothing is mutated - the value returned will be a copy of the object with the key/value pair added.
+
+##### transformer
+
+If you want to transform a supplied value that has passed validation, you can supply a transformer function as a field's `transformer` attribute. Note: the transformer will be applied after any `defaultValue`. The transformer function should be unary and return the transformed value.
+
+**Example 8 - Using isRequired, defaultValue and transformer**
 
 ```javascript
+const constraints = {
+  fields: [
+    {
+      name: `a`,
+      isRequired: true,
+      validator: validateIsString,
+      transformer: toUpper,
+    },
+    {
+      name: `b`,
+      validator: validateIsBoolean,
+      defaultValue: true,
+    },
+  ],
+}
+
+const confguredValidator = validateObjectWithConstraints(constraints)
+
+const validValue = {
+  a: `abc`,
+}
+
+const expectedValue = {
+  a: `ABC`,
+  b: true,
+}
+
+const successfulValidation = confguredValidator(validValue)
+
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(expectedValue)
+
+const invalidValue = {
+  b: false,
+}
+
+const failedValidation = confguredValidator(invalidValue)
+const message = failureRenderer(failedValidation.value)
+
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  fieldsFailureMessage: {
+    uid: `folktale-validations.validate.validateRequiredKeys`,
+    value: { b: false },
+    args: [[`a`], [`a`]],
+  },
+})
+expect(message).toEqualWithCompressedWhitespace(
+  `Object – missing required key(s): ['a']`
+)
 ```
 
-### Customising Failure Messages
+#### Validating Object Graphs
+
+You aren't limitted to flat objects. You can use full object graphs comprising of objects and arrays. To describe these graphs you use two additional attributes of the constraints object: `children` and `value`. In the following example a complex object graph is validated. Note: your constraints will be invalid if you use `children` and `value` on the same field.
+
+**Example 9 - Constraints With Object Graph**
+
+```javascript
+const constraints = {
+  fields: [
+    {
+      name: `a`,
+      isRequired: true,
+      validator: validateIsObject,
+      value: {
+        fields: [
+          {
+            name: `a-a`,
+            isRequired: true,
+            validator: validateIsBoolean,
+          },
+          {
+            name: `a-b`,
+            isRequired: true,
+            validator: validateIsNonEmptyArray,
+            children: {
+              fields: [
+                {
+                  name: `a-b-a`,
+                  isRequired: true,
+                  validator: validateIsString,
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+}
+
+const confguredValidator = validateObjectWithConstraints(constraints)
+
+const validValue = {
+  a: {
+    [`a-a`]: true,
+    [`a-b`]: [
+      {
+        [`a-b-a`]: `abc`,
+      },
+      {
+        [`a-b-a`]: `def`,
+      },
+    ],
+  },
+}
+
+const successfulValidation = confguredValidator(validValue)
+
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(validValue)
+
+const invalidValue = {
+  a: {
+    [`a-a`]: true,
+    [`a-b`]: [
+      {
+        [`a-b-a`]: `abc`,
+      },
+      {
+        [`a-b-a`]: 123,
+      },
+    ],
+  },
+}
+
+const failedValidation = confguredValidator(invalidValue)
+const message = failureRenderer(failedValidation.value)
+
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  fields: {
+    a: {
+      fields: {
+        'a-b': {
+          children: {
+            '1': {
+              fields: {
+                'a-b-a': {
+                  uid: `folktale-validations.validate.validateIsString`,
+                  value: 123,
+                  args: [],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+})
+expect(message).toEqualWithCompressedWhitespace(
+  `Object
+  – included invalid value(s)
+    – Key 'a': Object
+      – included invalid value(s)
+        – Key 'a-b': Array included invalid value(s)
+          – [1] Object
+            – included invalid value(s)
+              – Key 'a-b-a': Wasn't String`
+)
+})
+```
+
+### Customising Existing Validators
+
+#### Replacing Existing Messages
 
 The messages ouput during rendering can be configured by passing a map of functions via a configuration object to `configureValidators()`. Here you can override the validator messages by using one of the existing keys and you can add your own key/function pairs rendering failures from your own validators. The default validator messages can be found here: `src/config/customise/validatorMessagesDefaults.js`.
 
 Each key should map to a function that returns a formatted message for that validator. The `uid` of the payload returned from a validator will be used to locate the appropriate function, which will then have the values in the payload's `args` applied to it. It is recommended you use some kind of namespaced uid. This library uses uids like this: `folktale-validations.validateIsArray`.
 
-Example 9 - Customising Validation Failure Messages
+**Example 10 - Customising Validation Failure Messages**
 
 ```javascript
+it(`returns expected values`, () => {
+  const newMessage = `Boolean it isn't`
+  const { failureRenderer: configuredFailureRenderer } = configureRenderers({
+    validatorMessages: {
+      [validatorUids.IS_BOOLEAN]: always(newMessage),
+    },
+  })
+
+  const failedValidation = validateIsBoolean(`yoda`)
+  const message = configuredFailureRenderer(failedValidation.value)
+  expect(message).toEqualWithCompressedWhitespace(newMessage)
+})
 ```
+
+#### Creating Validator Based On Existing Validator
+
+The simplest way to customise an existing valiadator is simply to configure it as we have done in previous examples. You can then export the configured validator for use throughout your application. However if you want to add your own message that is specific to the configured validator you can decorate the validator, supplying it with a new uid.
+
+**Example 11 - Creating Validator Based On Existing Validator**
+
+```javascript
+const newUID = `example.validateIsValidTitle`
+const newMessageFunction = whitelist => `Wasn't a title: ${whitelist}`
+const titles = [`mr`, `mrs`, `miss`, `ms`, `dr`, `mx`]
+
+const { failureRenderer: configuredFailureRenderer } = configureRenderers({
+  validatorMessages: {
+    [newUID]: newMessageFunction,
+  },
+})
+
+const validateIsValidTitle = compose(
+  decorateValidator(newUID),
+  validateIsWhitelistedValue
+)(titles)
+
+const failedValidation = validateIsValidTitle(`emperor`)
+const message = configuredFailureRenderer(failedValidation.value)
+expect(message).toEqualWithCompressedWhitespace(
+  `Wasn't a title: mr,mrs,miss,ms,dr,mx`
+)
+```
+
+#### Customising Constraint Validation
 
 You can also customise the rendering of constraint-based validation failures. In this instance things are more complicated as there is significant formatting as well as text rendering. Again, you can pass in an object via the configuration object of `configureValdidators()`. The default helpers can be found here: `src/config/customise/failureRendererHelpersDefaults.js`.
 
-Example 10 - Customising Constraint-based Validation Failure Messages
+Example 12 - Customising Constraint-based Validation Formatting
+
+_Coming Soon_
+
+### Adding Your Own Validators
+
+#### Using existing helpers
+
+There are a couple of helpers offered to use as a basis for your own validators - `predicateValidator` and `regExpValidator`. In the following example we'll create a validator that checks that a string doesn't have any whitespace.
+
+**Example 13 - Creating a Validator Using Helpers**
 
 ```javascript
+const UID = `example.validateHasNoWhitespace`
+const newMessageFunction = always(`Should not contain whitespace`)
+const regExp = /^\S+$/
+
+const { failureRenderer: configuredFailureRenderer } = configureRenderers({
+  validatorMessages: {
+    [UID]: newMessageFunction,
+  },
+})
+
+const validateHasNoWhitespace = regExpValidator(UID, regExp)
+
+const successfulValidation = validateHasNoWhitespace(`ab`)
+expect(isSuccess(successfulValidation)).toBeTrue()
+
+const failedValidation = validateHasNoWhitespace(`a b`)
+const message = configuredFailureRenderer(failedValidation.value)
+expect(message).toEqualWithCompressedWhitespace(`Should not contain whitespace`)
 ```
 
-Example 11 - Customising Constraint-based Validation Formatting
+#### From scratch
+
+The validator interface is very simple. They should:
+
+* Accept any configuration values first
+* Accept the data to validate last
+* Should be curried
+* If the validation is succeeds they should return a `Success` with its `value` set to the validated data.
+* If the validation fails they shoudl return a `Failure` with its `value` set to a payload.
+
+##### Payloads
+
+A payload is created using `toPayload()` which takes three arguments:
+
+1. A UID for that validator
+2. The value that was validated
+3. (optional) an array of values to be supplied to the function that will render the message for this validator.
+
+**Example 14 - Creating a Validator From Scratch**
 
 ```javascript
+const UID = `example.validateContainsChars`
+const newMessageFunction = chars => `Didn't contain chars: [${chars}]`
+
+const { failureRenderer: configuredFailureRenderer } = configureRenderers({
+  validatorMessages: {
+    [UID]: newMessageFunction,
+  },
+})
+
+const containsChars = (chars, s) =>
+  compose(isEmpty, reject(flip(contains)(s)))(chars)
+
+const { Success, Failure } = Validation
+
+const validateContainsChars = curry(
+  (chars, value) =>
+    containsChars(chars, value)
+      ? Success(value)
+      : compose(Failure, toPayload)(UID, value, [chars])
+)
+
+const configuredValidator = validateContainsChars([`a`, `b`, `c`])
+
+const successfulValidation = configuredValidator(`cab`)
+expect(isSuccess(successfulValidation)).toBeTrue()
+
+const failedValidation = configuredValidator(`cat`)
+const message = configuredFailureRenderer(failedValidation.value)
+expect(message).toEqualWithCompressedWhitespace(`Didn't contain chars: [a,b,c]`)
 ```
 
 ### Arguments Failure Renderer
