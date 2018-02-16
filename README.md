@@ -799,6 +799,10 @@ The NPM module includes:
 * `lib` directory with imports transpiled for use by bundlers.
 * `dist` directory with a UMD build.
 
+## Contributing
+
+I welcome contributions, but ask you open an issue to discuss the bugfix or feature before you open a PR. Please keep any PRs as focussed as possible.
+
 ## Maintainance
 
 ### Tests
