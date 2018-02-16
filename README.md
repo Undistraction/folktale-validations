@@ -792,11 +792,11 @@ expect(message).toEqualWithCompressedWhitespace(`Didn't contain chars: [a,b,c]`)
 
 If you want to output a message relating to arguments instead of an object, you can use the `argumentsFailureRenderer` which will render a more appropriate message. It is also available from the object returned by `defaultValidators()`.
 
-## NPM
+## NPM Module
 
 The NPM module includes:
 
-* `lib` directory with imports transpiled for use in bundlers.
+* `lib` directory with imports transpiled for use by bundlers.
 * `dist` directory with a UMD build.
 
 ## Maintainance
@@ -805,22 +805,22 @@ The NPM module includes:
 
 Tests are written with Jest.
 
-#### Run Jest in watch mode
+#### Run tests in watch mode
 
 ```bash
 yarn test
 ```
 
-#### Run Jest once
+#### Run tests once
 
 ```bash
-yarn test:noWatch
+yarn run test:noWatch
 ```
 
 #### View HTML Coverage report
 
 ```bash
-yarn test:cov
+yarn run test:cov
 ```
 
 ### Build
