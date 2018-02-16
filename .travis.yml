@@ -10,8 +10,8 @@ notifications:
 script:
   - node --version
   - yarn --version
-  - yarn run verify
-  - codecov
+  - yarn run lint
+  - yarn run test
 cache:
   yarn: true
   bundler: true
