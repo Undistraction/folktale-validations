@@ -686,6 +686,47 @@ describe(`validateObjectWithConstraints`, () => {
               expect(validation).toEqualSuccessWithValue(value)
               expect(v2.calledWith(value1)).toBeTrue()
             })
+
+            describe(`only default values`, () => {
+              it.only(`returns a Validation.Success with supplied value`, () => {
+                const value = withValueRoot({
+                  __X__: {},
+                })
+                const v1 = stubReturnsSuccess(value)
+                const v2 = stubReturnsSuccess(value1)
+
+                const constraints = withConstraintsRoot({
+                  [FIELDS]: [
+                    {
+                      [NAME]: `__X__`,
+                      [VALIDATOR]: v1,
+                      [VALUE]: {
+                        [FIELDS]: [
+                          {
+                            [NAME]: key2,
+                            [VALIDATOR]: v2,
+                            [DEFAULT_VALUE]: value2,
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                })
+
+                const expectedValue = withValueRoot({
+                  __X__: {
+                    [key2]: value2,
+                  },
+                })
+                console.log(
+                  `//////////////////////////////////////////////////`
+                )
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(expectedValue)
+                expect(v2.notCalled).toBeTrue()
+              })
+            })
           })
         })
 

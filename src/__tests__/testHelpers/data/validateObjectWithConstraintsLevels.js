@@ -95,14 +95,14 @@ export default [
     constraintsRoot: level1ConstraintsRoot,
     expectedFailureObjRoot: level1ExpectedFailureObjRoot,
   },
-  {
-    valueRoot: level2ValueRoot,
-    constraintsRoot: level2ConstraintsRoot,
-    expectedFailureObjRoot: level2ExpectedFailureObjRoot,
-  },
-  {
-    valueRoot: level3ValueRoot,
-    constraintsRoot: level3ConstraintsRoot,
-    expectedFailureObjRoot: level3ExpectedFailureObjRoot,
-  },
+  // {
+  //   valueRoot: level2ValueRoot,
+  //   constraintsRoot: level2ConstraintsRoot,
+  //   expectedFailureObjRoot: level2ExpectedFailureObjRoot,
+  // },
+  // {
+  //   valueRoot: level3ValueRoot,
+  //   constraintsRoot: level3ConstraintsRoot,
+  //   expectedFailureObjRoot: level3ExpectedFailureObjRoot,
+  // },
 ]

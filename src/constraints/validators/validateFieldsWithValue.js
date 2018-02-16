@@ -8,6 +8,7 @@ import {
 } from '../../utils/validations'
 import { toObjectError } from '../../utils/failures'
 import validateObject from './validateObject'
+import { logToConsole } from '../../utils/logging'
 
 const validateValues = reduce(
   (acc, [fieldName, fieldValue, childConstraints]) =>
@@ -27,6 +28,7 @@ export default constraints => o =>
       composeFailure(toObjectError, extractFailureValues, toPairs)
     ),
     filterFailures,
+    logToConsole(`VALIDATED`),
     validateValues,
     nestedChildrenData(constraints)
   )(o)
