@@ -10,10 +10,10 @@ notifications:
 script:
   - node --version
   - yarn --version
-  - yarn run verify
-  - codecov
+  - yarn run lint
+  - yarn run jest:noWatch && codecov
+  - yarn run build
 cache:
   yarn: true
-  bundler: true
   directories:
     - node_modules
