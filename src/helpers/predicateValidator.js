@@ -1,7 +1,9 @@
+import { ifElse } from 'ramda'
 import { validation as Validation } from 'folktale'
 import toPayload from '../failures/toPayload'
+import { composeFailure } from '../utils/validations'
 
-const { Success, Failure } = Validation
+const { Success } = Validation
 
-export default (predicate, uid, args) => o =>
-  predicate(o) ? Success(o) : Failure(toPayload(uid, o, args))
+export default (predicate, uid, args) =>
+  ifElse(predicate, Success, o => composeFailure(toPayload)(uid, o, args))

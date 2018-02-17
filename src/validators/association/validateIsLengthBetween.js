@@ -1,21 +1,16 @@
-import { always } from 'ramda'
-import { validation as Validation } from 'folktale'
 import untilFailureValidator from '../../helpers/untilFailureValidator'
 import validateIsLengthGreaterThan from './validateIsLengthGreaterThan'
 import validateIsLengthLessThan from './validateIsLengthLessThan'
-import toPayload from '../../failures/toPayload'
 import { VALIDATE_IS_LENGTH_BETWEEN } from '../../const/validatorUids'
-
-const { Failure } = Validation
+import { alwaysFailureWithPayload } from '../../utils/validations'
 
 export default (minimumLength, maximumLength) => o =>
   untilFailureValidator([
     validateIsLengthGreaterThan(minimumLength),
     validateIsLengthLessThan(maximumLength),
   ])(o).orElse(
-    always(
-      Failure(
-        toPayload(VALIDATE_IS_LENGTH_BETWEEN, o, [minimumLength, maximumLength])
-      )
-    )
+    alwaysFailureWithPayload(VALIDATE_IS_LENGTH_BETWEEN, o, [
+      minimumLength,
+      maximumLength,
+    ])
   )
