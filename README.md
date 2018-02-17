@@ -9,7 +9,7 @@ A library of validators using [folktale](http://folktale.origamitower.com/)'s `V
 
 Much of the basic validation relies on well tested predicates provided by [ramda-adjunct](https://github.com/char0n/ramda-adjunct).
 
-The library is well tested (on Node 7, 8 and 9) and the validators themselves are easy to test.
+The library is well tested (on Node 7, 8 and 9) and the validators you'll create yourself are easy to test.
 
 ## Structure
 
@@ -125,7 +125,17 @@ Many validators are included, but it is very easy to create your own. The follow
 
 ### Introduction
 
-Note: All examples in this introduction can be viewed as working tests in `src/**tests**/docs/readme.js
+Note: All examples in this introduction can be run as working tests in: `src/__tests__/docs/readme.js` and can be run using:
+
+```
+yarn run test:readme
+```
+
+or
+
+```
+npm run test:readme
+```
 
 Every validation you perform will return a [Validation](http://folktale.origamitower.com/api/v2.1.0/en/folktale.validation.html) object which will be either a `Failure` or a `Success`. There are `isFailure` and `isSuccess` functions exported from `index.js` to help you check, however you can also use `matchWith` and a variety of other methods to handle both cases which are outlined in the link above.
 
