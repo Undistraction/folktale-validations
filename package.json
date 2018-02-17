@@ -6,16 +6,8 @@
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": [
-    "dist",
-    "src",
-    "lib"
-  ],
-  "keywords": [
-    "folktale",
-    "validation",
-    "ramda"
-  ],
+  "files": ["dist", "src", "lib"],
+  "keywords": ["folktale", "validation", "ramda"],
   "author": "Pedr Browne",
   "license": "MIT",
   "bugs": {
@@ -30,6 +22,7 @@
     "prebuild:dist": "rimraf dist/*",
     "build:dist": "NODE_ENV=development rollup --config",
     "test": "jest --watch",
+    "test:readme": "jest src/__tests__/docs/readme --watch",
     "test:noWatch": "jest",
     "test:cov": "open coverage/index.html",
     "verify": "npm run lint && npm run test:noWatch && npm run build",
