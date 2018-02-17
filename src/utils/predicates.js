@@ -8,11 +8,12 @@ import {
   both,
   equals,
   useWith,
-  and,
   ifElse,
   any,
   F,
   propSatisfies,
+  or,
+  curry,
 } from 'ramda'
 import {
   isNotEmpty,
@@ -20,6 +21,8 @@ import {
   isPlainObj,
   isString,
   isNotUndefined,
+  isTruthy,
+  list,
 } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { propFields } from '../utils/failures'
@@ -40,13 +43,13 @@ export const isRequired = both(
 )
 export const hasChildFailures = compose(isNotEmpty, filterFailures)
 
-export const multiPredicate = predicates => useWith(and, predicates)
+const argsPass = curry((c, ps) => useWith(compose(c(isTruthy), list), ps))
 
 export const hasFieldsWithDefaultValues = v =>
   compose(ifElse(isNotUndefined, any(hasPropDefaultValue), F), propFields)(v)
 
 export const isNotUndefinedOrEmpty = both(isNotEmpty, isNotUndefined)
-export const hasValueOrDefaults = multiPredicate([
+export const hasValueOrDefaults = argsPass(or, [
   isNotEmpty,
   hasFieldsWithDefaultValues,
 ])

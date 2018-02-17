@@ -1,6 +1,5 @@
 import { always } from 'ramda'
 import {
-  joinWithComma,
   joinWithColon,
   wrapWithSingleQuotes,
   joinWithSpace,
@@ -35,12 +34,6 @@ const isLengthBetweenMessage = (low, high) =>
 
 const exclusiveKeysMessage = keys =>
   joinWithColon([`had more than one exlusive key`, toList(keys)])
-
-const objectValuesMessage = valueErrorMessages =>
-  joinWithColon([
-    `included invalid values(s)`,
-    joinWithComma(valueErrorMessages),
-  ])
 
 const requiredKeysMessage = keys =>
   joinWithColon([`missing required key(s)`, toList(keys)])
@@ -134,7 +127,6 @@ const messageMap = {
   // Object
   // ---------------------------------------------------------------------------
   [UIDS.EXCLUSIVE_KEYS]: exclusiveKeysMessage,
-  [UIDS.OBJECT_VALUES]: objectValuesMessage,
   [UIDS.REQUIRED_KEYS]: requiredKeysMessage,
   [UIDS.WHITELISTED_KEYS]: whitelistedKeysMessage,
 

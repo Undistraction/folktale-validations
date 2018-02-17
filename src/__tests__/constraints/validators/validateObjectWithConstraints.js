@@ -626,7 +626,7 @@ describe(`validateObjectWithConstraints`, () => {
           describe(`empty object`, () => {
             it(`returns a Validation.Success with supplied value`, () => {
               const value = withValueRoot({
-                [key1]: [],
+                [key1]: {},
               })
               const v1 = stubReturnsSuccess(value)
               const v2 = stubReturnsSuccess()
@@ -651,7 +651,7 @@ describe(`validateObjectWithConstraints`, () => {
               const validator = validateObjectWithConstraints(constraints)
               const validation = validator(value)
               expect(validation).toEqualSuccessWithValue(value)
-              expect(v1.calledWith([])).toBeTrue()
+              expect(v1.calledWith({})).toBeTrue()
               expect(v2.notCalled).toBeTrue()
             })
           })
@@ -687,10 +687,10 @@ describe(`validateObjectWithConstraints`, () => {
               expect(v2.calledWith(value1)).toBeTrue()
             })
 
-            describe(`only default values`, () => {
-              it.only(`returns a Validation.Success with supplied value`, () => {
+            describe(`object with only default values`, () => {
+              it(`returns a Validation.Success with supplied value`, () => {
                 const value = withValueRoot({
-                  __X__: {},
+                  [key1]: {},
                 })
                 const v1 = stubReturnsSuccess(value)
                 const v2 = stubReturnsSuccess(value1)
@@ -698,7 +698,7 @@ describe(`validateObjectWithConstraints`, () => {
                 const constraints = withConstraintsRoot({
                   [FIELDS]: [
                     {
-                      [NAME]: `__X__`,
+                      [NAME]: key1,
                       [VALIDATOR]: v1,
                       [VALUE]: {
                         [FIELDS]: [
@@ -714,13 +714,10 @@ describe(`validateObjectWithConstraints`, () => {
                 })
 
                 const expectedValue = withValueRoot({
-                  __X__: {
+                  [key1]: {
                     [key2]: value2,
                   },
                 })
-                console.log(
-                  `//////////////////////////////////////////////////`
-                )
                 const validator = validateObjectWithConstraints(constraints)
                 const validation = validator(value)
                 expect(validation).toEqualSuccessWithValue(expectedValue)
