@@ -1,13 +1,21 @@
 {
   "name": "folktale-validations",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Undistraction/folktale-validations.git"
   },
-  "files": ["dist", "src", "lib"],
-  "keywords": ["folktale", "validation", "ramda"],
+  "files": [
+    "dist",
+    "src",
+    "lib"
+  ],
+  "keywords": [
+    "folktale",
+    "validation",
+    "ramda"
+  ],
   "author": "Pedr Browne",
   "license": "MIT",
   "bugs": {
