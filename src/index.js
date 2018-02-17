@@ -99,6 +99,10 @@ export { default as decorateValidator } from './helpers/decorateValidator'
 // -----------------------------------------------------------------------------
 
 export { default as toPayload } from './failures/toPayload'
+export { default as alwaysSuccess } from './utils/failures'
+export { default as alwaysFailureWithPayload } from './utils/failures'
+export { default as composeFailure } from './utils/failures'
+export { default as composeSuccess } from './utils/failures'
 
 // -----------------------------------------------------------------------------
 // Validations
