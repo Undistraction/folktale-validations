@@ -1,6 +1,6 @@
 import { validateIsNotBlacklistedValue } from '../../../index'
 import toPayload from '../../../failures/toPayload'
-import { IS_NOT_BLACKLISTED_VALUE } from '../../../const/validatorUids'
+import { VALIDATE_IS_NOT_BLACKLISTED_VALUE } from '../../../const/validatorUids'
 import {
   value1,
   value2,
@@ -28,18 +28,22 @@ describe(`validateIsNotBlacklistedValue()`, () => {
 
   describe(`when value is on the blacklist`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
-      const expectedPayload = toPayload(IS_NOT_BLACKLISTED_VALUE, value2, [
-        blacklist,
-      ])
+      const expectedPayload = toPayload(
+        VALIDATE_IS_NOT_BLACKLISTED_VALUE,
+        value2,
+        [blacklist]
+      )
       const validation = validator(value2)
       expect(validation).toEqualFailureWithValue(expectedPayload)
     })
 
     describe(`when value is first item`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
-        const expectedPayload = toPayload(IS_NOT_BLACKLISTED_VALUE, value1, [
-          blacklist,
-        ])
+        const expectedPayload = toPayload(
+          VALIDATE_IS_NOT_BLACKLISTED_VALUE,
+          value1,
+          [blacklist]
+        )
         const validation = validator(value1)
         expect(validation).toEqualFailureWithValue(expectedPayload)
       })
@@ -47,9 +51,11 @@ describe(`validateIsNotBlacklistedValue()`, () => {
 
     describe(`when value is last item`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
-        const expectedPayload = toPayload(IS_NOT_BLACKLISTED_VALUE, value3, [
-          blacklist,
-        ])
+        const expectedPayload = toPayload(
+          VALIDATE_IS_NOT_BLACKLISTED_VALUE,
+          value3,
+          [blacklist]
+        )
         const validation = validator(value3)
         expect(validation).toEqualFailureWithValue(expectedPayload)
       })

@@ -2,7 +2,7 @@ import { map } from 'ramda'
 import { validateIsNumberWithUnit } from '../../../index'
 import typeData from '../../testHelpers/fixtures/typeData'
 import toPayload from '../../../failures/toPayload'
-import { IS_NUMBER_WITH_UNIT } from '../../../const/validatorUids'
+import { VALIDATE_IS_NUMBER_WITH_UNIT } from '../../../const/validatorUids'
 
 describe(`validateIsNumberWithUnit`, () => {
   const unit = `xx`
@@ -21,7 +21,11 @@ describe(`validateIsNumberWithUnit`, () => {
     describe(`with unitless numbers`, () => {
       it(`returns a Validation.Failure with payload`, () => {
         map(value => {
-          const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
+          const expectedPayload = toPayload(
+            VALIDATE_IS_NUMBER_WITH_UNIT,
+            value,
+            [unit]
+          )
           const validator = validateIsNumberWithUnit(unit)
           const result = validator(value)
           expect(result).toEqualFailureWithValue(expectedPayload)
@@ -33,7 +37,11 @@ describe(`validateIsNumberWithUnit`, () => {
       it(`returns a Validation.Failure with payload`, () => {
         const numbers = [`0yy`, `0.5y`, `-0.5xy`]
         map(value => {
-          const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
+          const expectedPayload = toPayload(
+            VALIDATE_IS_NUMBER_WITH_UNIT,
+            value,
+            [unit]
+          )
           const validator = validateIsNumberWithUnit(unit)
           const result = validator(value)
           expect(result).toEqualFailureWithValue(expectedPayload)
@@ -44,7 +52,11 @@ describe(`validateIsNumberWithUnit`, () => {
     describe(`with other invalid values`, () => {
       it(`returns a Validation.Failure with payload`, () => {
         map(value => {
-          const expectedPayload = toPayload(IS_NUMBER_WITH_UNIT, value, [unit])
+          const expectedPayload = toPayload(
+            VALIDATE_IS_NUMBER_WITH_UNIT,
+            value,
+            [unit]
+          )
           const validator = validateIsNumberWithUnit(unit)
           const result = validator(value)
           expect(result).toEqualFailureWithValue(expectedPayload)

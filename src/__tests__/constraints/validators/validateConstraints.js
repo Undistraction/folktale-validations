@@ -22,14 +22,14 @@ import testLevels from '../../testHelpers/testLevels'
 import validateConstraintsLevels from '../../testHelpers/data/validateConstraintsLevels'
 import toPayload from '../../../failures/toPayload'
 import {
-  IS_PLAIN_OBJECT,
-  WHITELISTED_KEYS,
-  REQUIRED_KEYS,
-  EXCLUSIVE_KEYS,
-  IS_ARRAY,
-  IS_FUNCTION,
-  IS_BOOLEAN,
-  IS_NOT_UNDEFINED,
+  VALIDATE_IS_PLAIN_OBJECT,
+  VALIDATE_WHITELISTED_KEYS,
+  VALIDATE_REQUIRED_KEYS,
+  VALIDATE_EXCLUSIVE_KEYS,
+  VALIDATE_IS_ARRAY,
+  VALIDATE_IS_FUNCTION,
+  VALIDATE_IS_BOOLEAN,
+  VALIDATE_IS_NOT_UNDEFINED,
 } from '../../../const/validatorUids'
 
 const {
@@ -66,12 +66,12 @@ const exclusiveKeys = [
 
 const fieldErrors = [
   // [NAME, `Wasn't 'String'`, typeData.withoutStringValues],
-  [VALIDATOR, IS_FUNCTION, typeData.withoutFunctionValues],
-  [TRANSFORMER, IS_FUNCTION, typeData.withoutFunctionValues],
-  [IS_REQUIRED, IS_BOOLEAN, typeData.withoutBooleanValues],
-  [DEFAULT_VALUE, IS_NOT_UNDEFINED, typeData.undefinedValues],
-  [VALUE, IS_PLAIN_OBJECT, typeData.withoutObjectValues],
-  [CHILDREN, IS_PLAIN_OBJECT, typeData.withoutObjectValues],
+  [VALIDATOR, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
+  [TRANSFORMER, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
+  [IS_REQUIRED, VALIDATE_IS_BOOLEAN, typeData.withoutBooleanValues],
+  [DEFAULT_VALUE, VALIDATE_IS_NOT_UNDEFINED, typeData.undefinedValues],
+  [VALUE, VALIDATE_IS_PLAIN_OBJECT, typeData.withoutObjectValues],
+  [CHILDREN, VALIDATE_IS_PLAIN_OBJECT, typeData.withoutObjectValues],
 ]
 
 const requiredKeysWithout = fieldName => dissoc(fieldName)(requiredFields)
@@ -173,7 +173,7 @@ describe(`validateConstraints`, () => {
                 )
 
                 const expectedFailureObj = withExpectedFailureObjRoot(
-                  toPayload(IS_PLAIN_OBJECT, value)
+                  toPayload(VALIDATE_IS_PLAIN_OBJECT, value)
                 )
 
                 expect(validation).toEqualFailureWithValue(expectedFailureObj)
@@ -195,10 +195,11 @@ describe(`validateConstraints`, () => {
               const value = withValueRoot(o)
 
               const expectedFailureObj = withExpectedFailureObjRoot({
-                [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, o, [
-                  [FIELDS_VALIDATOR, FIELDS],
-                  [invalidKeyName],
-                ]),
+                [FIELDS_FAILURE_MESSAGE]: toPayload(
+                  VALIDATE_WHITELISTED_KEYS,
+                  o,
+                  [[FIELDS_VALIDATOR, FIELDS], [invalidKeyName]]
+                ),
               })
 
               const validation = validateConstraintsConfigured(value)
@@ -223,7 +224,7 @@ describe(`validateConstraints`, () => {
                         [CHILDREN]: {
                           '0': {
                             [FIELDS_FAILURE_MESSAGE]: toPayload(
-                              REQUIRED_KEYS,
+                              VALIDATE_REQUIRED_KEYS,
                               fields,
                               [requiredKeys, [fieldName]]
                             ),
@@ -263,7 +264,7 @@ describe(`validateConstraints`, () => {
                           [CHILDREN]: {
                             '0': {
                               [FIELDS_FAILURE_MESSAGE]: toPayload(
-                                EXCLUSIVE_KEYS,
+                                VALIDATE_EXCLUSIVE_KEYS,
                                 o,
                                 [pair, pair]
                               ),
@@ -296,7 +297,7 @@ describe(`validateConstraints`, () => {
 
                   const expectedFailureObj = withExpectedFailureObjRoot({
                     [FIELDS]: {
-                      [FIELDS]: toPayload(IS_ARRAY, fieldValue),
+                      [FIELDS]: toPayload(VALIDATE_IS_ARRAY, fieldValue),
                     },
                   })
                   const validation = validateConstraintsConfigured(value)
@@ -317,7 +318,7 @@ describe(`validateConstraints`, () => {
                     [FIELDS]: {
                       [FIELDS]: {
                         [CHILDREN]: {
-                          '0': toPayload(IS_PLAIN_OBJECT, fieldValue),
+                          '0': toPayload(VALIDATE_IS_PLAIN_OBJECT, fieldValue),
                         },
                       },
                     },
@@ -386,7 +387,10 @@ describe(`validateConstraints`, () => {
 
                     const expectedFailureObj = withExpectedFailureObjRoot({
                       [FIELDS]: {
-                        [FIELDS_VALIDATOR]: toPayload(IS_FUNCTION, fieldValue),
+                        [FIELDS_VALIDATOR]: toPayload(
+                          VALIDATE_IS_FUNCTION,
+                          fieldValue
+                        ),
                       },
                     })
 

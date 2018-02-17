@@ -157,7 +157,7 @@ const message = failureRenderer(failedValidation.value)
 
 expect(isFailure(failedValidation)).toBeTrue()
 expect(failedValidation.value).toEqual({
-  uid: `folktale-validations.validate.validateIsString`,
+  uid: `folktale-validations.validateIsString`,
   value: invalidValue,
   args: [],
 })
@@ -183,7 +183,7 @@ const message = failureRenderer(failedValidation.value)
 
 expect(isFailure(failedValidation)).toBeTrue()
 expect(failedValidation.value).toEqual({
-  uid: `folktale-validations.validate.validateIsLengthGreaterThan`,
+  uid: `folktale-validations.validateIsLengthGreaterThan`,
   value: invalidValue,
   args: [2],
 })
@@ -223,17 +223,17 @@ const configuredValidator = validateObjectValues({
   expect(failedValidation.value).toEqual({
     fields: {
       a: {
-        uid: `folktale-validations.validate.validateIsNumber`,
+        uid: `folktale-validations.validateIsNumber`,
         value: `example`,
         args: [],
       },
       b: {
-        uid: `folktale-validations.validate.validateIsString`,
+        uid: `folktale-validations.validateIsString`,
         value: true,
         args: [],
       },
       c: {
-        uid: `folktale-validations.validate.validateIsNotEmpty`,
+        uid: `folktale-validations.validateIsNotEmpty`,
         value: [],
         args: [],
       },
@@ -269,7 +269,7 @@ expect(isFailure(failedValidation)).toBeTrue()
 expect(failedValidation.value).toEqual({
   children: {
     '1': {
-      uid: `folktale-validations.validate.validateIsRegExp`,
+      uid: `folktale-validations.validateIsRegExp`,
       value: `/b/`,
       args: [],
     },
@@ -307,12 +307,12 @@ expect(isFailure(failedValidation)).toBeTrue()
 expect(failedValidation.value).toEqual({
   and: [
     {
-      uid: `folktale-validations.validate.validateIsString`,
+      uid: `folktale-validations.validateIsString`,
       value: 1,
       args: [],
     },
     {
-      uid: `folktale-validations.validate.validateIsLengthLessThan`,
+      uid: `folktale-validations.validateIsLengthLessThan`,
       value: 1,
       args: [5],
     },
@@ -349,19 +349,19 @@ expect(failedValidation.value).toEqual({
     {
       or: [
         {
-          uid: `folktale-validations.validate.validateIsString`,
+          uid: `folktale-validations.validateIsString`,
           value: null,
           args: [],
         },
         {
-          uid: `folktale-validations.validate.validateIsNumber`,
+          uid: `folktale-validations.validateIsNumber`,
           value: null,
           args: [],
         },
       ],
     },
     {
-      uid: `folktale-validations.validate.validateIsLengthLessThan`,
+      uid: `folktale-validations.validateIsLengthLessThan`,
       value: null,
       args: [5],
     },
@@ -431,17 +431,17 @@ it(`returns expected values`, () => {
   expect(failedValidation.value).toEqual({
     fields: {
       a: {
-        uid: `folktale-validations.validate.validateIsString`,
+        uid: `folktale-validations.validateIsString`,
         value: 123,
         args: [],
       },
       b: {
-        uid: `folktale-validations.validate.validateIsArray`,
+        uid: `folktale-validations.validateIsArray`,
         value: null,
         args: [],
       },
       c: {
-        uid: `folktale-validations.validate.validateIsDate`,
+        uid: `folktale-validations.validateIsDate`,
         value: `01-01-2001`,
         args: [],
       },
@@ -522,7 +522,7 @@ const message = failureRenderer(failedValidation.value)
 expect(isFailure(failedValidation)).toBeTrue()
 expect(failedValidation.value).toEqual({
   fieldsFailureMessage: {
-    uid: `folktale-validations.validate.validateRequiredKeys`,
+    uid: `folktale-validations.validateRequiredKeys`,
     value: { b: false },
     args: [[`a`], [`a`]],
   },
@@ -620,7 +620,7 @@ expect(failedValidation.value).toEqual({
             '1': {
               fields: {
                 'a-b-a': {
-                  uid: `folktale-validations.validate.validateIsString`,
+                  uid: `folktale-validations.validateIsString`,
                   value: 123,
                   args: [],
                 },
@@ -660,7 +660,7 @@ it(`returns expected values`, () => {
   const newMessage = `Boolean it isn't`
   const { failureRenderer: configuredFailureRenderer } = configureRenderers({
     validatorMessages: {
-      [validatorUids.IS_BOOLEAN]: always(newMessage),
+      [validatorUids.VALIDATE_IS_BOOLEAN]: always(newMessage),
     },
   })
 

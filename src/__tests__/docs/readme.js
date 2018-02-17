@@ -54,7 +54,7 @@ describe(`code from README.md`, () => {
 
       expect(isFailure(failedValidation)).toBeTrue()
       expect(failedValidation.value).toEqual({
-        uid: `folktale-validations.validate.validateIsString`,
+        uid: `folktale-validations.validateIsString`,
         value: invalidValue,
         args: [],
       })
@@ -78,7 +78,7 @@ describe(`code from README.md`, () => {
 
       expect(isFailure(failedValidation)).toBeTrue()
       expect(failedValidation.value).toEqual({
-        uid: `folktale-validations.validate.validateIsLengthGreaterThan`,
+        uid: `folktale-validations.validateIsLengthGreaterThan`,
         value: invalidValue,
         args: [2],
       })
@@ -116,17 +116,17 @@ describe(`code from README.md`, () => {
       expect(failedValidation.value).toEqual({
         fields: {
           a: {
-            uid: `folktale-validations.validate.validateIsNumber`,
+            uid: `folktale-validations.validateIsNumber`,
             value: `example`,
             args: [],
           },
           b: {
-            uid: `folktale-validations.validate.validateIsString`,
+            uid: `folktale-validations.validateIsString`,
             value: true,
             args: [],
           },
           c: {
-            uid: `folktale-validations.validate.validateIsNotEmpty`,
+            uid: `folktale-validations.validateIsNotEmpty`,
             value: [],
             args: [],
           },
@@ -160,7 +160,7 @@ describe(`code from README.md`, () => {
       expect(failedValidation.value).toEqual({
         children: {
           '1': {
-            uid: `folktale-validations.validate.validateIsRegExp`,
+            uid: `folktale-validations.validateIsRegExp`,
             value: `/b/`,
             args: [],
           },
@@ -194,12 +194,12 @@ describe(`code from README.md`, () => {
       expect(failedValidation.value).toEqual({
         and: [
           {
-            uid: `folktale-validations.validate.validateIsString`,
+            uid: `folktale-validations.validateIsString`,
             value: 1,
             args: [],
           },
           {
-            uid: `folktale-validations.validate.validateIsLengthLessThan`,
+            uid: `folktale-validations.validateIsLengthLessThan`,
             value: 1,
             args: [5],
           },
@@ -234,19 +234,19 @@ describe(`code from README.md`, () => {
           {
             or: [
               {
-                uid: `folktale-validations.validate.validateIsString`,
+                uid: `folktale-validations.validateIsString`,
                 value: null,
                 args: [],
               },
               {
-                uid: `folktale-validations.validate.validateIsNumber`,
+                uid: `folktale-validations.validateIsNumber`,
                 value: null,
                 args: [],
               },
             ],
           },
           {
-            uid: `folktale-validations.validate.validateIsLengthLessThan`,
+            uid: `folktale-validations.validateIsLengthLessThan`,
             value: null,
             args: [5],
           },
@@ -303,17 +303,17 @@ describe(`code from README.md`, () => {
       expect(failedValidation.value).toEqual({
         fields: {
           a: {
-            uid: `folktale-validations.validate.validateIsString`,
+            uid: `folktale-validations.validateIsString`,
             value: 123,
             args: [],
           },
           b: {
-            uid: `folktale-validations.validate.validateIsArray`,
+            uid: `folktale-validations.validateIsArray`,
             value: null,
             args: [],
           },
           c: {
-            uid: `folktale-validations.validate.validateIsDate`,
+            uid: `folktale-validations.validateIsDate`,
             value: `01-01-2001`,
             args: [],
           },
@@ -373,7 +373,7 @@ describe(`code from README.md`, () => {
       expect(isFailure(failedValidation)).toBeTrue()
       expect(failedValidation.value).toEqual({
         fieldsFailureMessage: {
-          uid: `folktale-validations.validate.validateRequiredKeys`,
+          uid: `folktale-validations.validateRequiredKeys`,
           value: { b: false },
           args: [[`a`], [`a`]],
         },
@@ -467,7 +467,7 @@ describe(`code from README.md`, () => {
                   '1': {
                     fields: {
                       'a-b-a': {
-                        uid: `folktale-validations.validate.validateIsString`,
+                        uid: `folktale-validations.validateIsString`,
                         value: 123,
                         args: [],
                       },
@@ -498,7 +498,7 @@ describe(`code from README.md`, () => {
       const { failureRenderer: configuredFailureRenderer } = configureRenderers(
         {
           validatorMessages: {
-            [validatorUids.IS_BOOLEAN]: always(newMessage),
+            [validatorUids.VALIDATE_IS_BOOLEAN]: always(newMessage),
           },
         }
       )

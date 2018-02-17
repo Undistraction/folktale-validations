@@ -2,7 +2,7 @@ import { validation as Validation } from 'folktale'
 import { always, ifElse } from 'ramda'
 import { hasNoMoreThanOneChild } from '../../utils/predicates'
 import toPayload from '../../failures/toPayload'
-import { EXCLUSIVE_KEYS } from '../../const/validatorUids'
+import { VALIDATE_EXCLUSIVE_KEYS } from '../../const/validatorUids'
 import { alwaysSuccess } from '../../utils/validations'
 import { filterKeys } from '../../utils/object'
 
@@ -15,7 +15,10 @@ const validateExclusiveKeys = exclusiveKeys => o => {
     alwaysSuccess(o),
     always(
       Failure(
-        toPayload(EXCLUSIVE_KEYS, o, [exclusiveKeys, collectedExclusiveKeys])
+        toPayload(VALIDATE_EXCLUSIVE_KEYS, o, [
+          exclusiveKeys,
+          collectedExclusiveKeys,
+        ])
       )
     )
   )(collectedExclusiveKeys)

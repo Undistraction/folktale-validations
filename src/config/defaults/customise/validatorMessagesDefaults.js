@@ -59,83 +59,105 @@ const messageMap = {
   // Predicate
   // ---------------------------------------------------------------------------
   // Basic Types
-  [UIDS.IS_ARRAY]: predicateMessage(PREDICATE_NAMES.Array),
-  [UIDS.IS_NOT_ARRAY]: negatedPredicateMessage(PREDICATE_NAMES.Array),
-  [UIDS.IS_OBJECT]: predicateMessage(PREDICATE_NAMES.Object),
-  [UIDS.IS_NOT_OBJECT]: negatedPredicateMessage(PREDICATE_NAMES.Object),
-  [UIDS.IS_BOOLEAN]: predicateMessage(PREDICATE_NAMES.Boolean),
-  [UIDS.IS_NOT_BOOLEAN]: negatedPredicateMessage(PREDICATE_NAMES.Boolean),
-  [UIDS.IS_STRING]: predicateMessage(PREDICATE_NAMES.String),
-  [UIDS.IS_NOT_STRING]: negatedPredicateMessage(PREDICATE_NAMES.String),
-  [UIDS.IS_FUNCTION]: predicateMessage(PREDICATE_NAMES.Function),
-  [UIDS.IS_NOT_FUNCTION]: negatedPredicateMessage(PREDICATE_NAMES.Function),
-  [UIDS.IS_NUMBER]: predicateMessage(PREDICATE_NAMES.Number),
-  [UIDS.IS_NOT_NUMBER]: negatedPredicateMessage(PREDICATE_NAMES.Number),
+  [UIDS.VALIDATE_IS_ARRAY]: predicateMessage(PREDICATE_NAMES.Array),
+  [UIDS.VALIDATE_IS_NOT_ARRAY]: negatedPredicateMessage(PREDICATE_NAMES.Array),
+  [UIDS.VALIDATE_IS_OBJECT]: predicateMessage(PREDICATE_NAMES.Object),
+  [UIDS.VALIDATE_IS_NOT_OBJECT]: negatedPredicateMessage(
+    PREDICATE_NAMES.Object
+  ),
+  [UIDS.VALIDATE_IS_BOOLEAN]: predicateMessage(PREDICATE_NAMES.Boolean),
+  [UIDS.VALIDATE_IS_NOT_BOOLEAN]: negatedPredicateMessage(
+    PREDICATE_NAMES.Boolean
+  ),
+  [UIDS.VALIDATE_IS_STRING]: predicateMessage(PREDICATE_NAMES.String),
+  [UIDS.VALIDATE_IS_NOT_STRING]: negatedPredicateMessage(
+    PREDICATE_NAMES.String
+  ),
+  [UIDS.VALIDATE_IS_FUNCTION]: predicateMessage(PREDICATE_NAMES.Function),
+  [UIDS.VALIDATE_IS_NOT_FUNCTION]: negatedPredicateMessage(
+    PREDICATE_NAMES.Function
+  ),
+  [UIDS.VALIDATE_IS_NUMBER]: predicateMessage(PREDICATE_NAMES.Number),
+  [UIDS.VALIDATE_IS_NOT_NUMBER]: negatedPredicateMessage(
+    PREDICATE_NAMES.Number
+  ),
 
   // Complex Objs
-  [UIDS.IS_DATE]: predicateMessage(PREDICATE_NAMES.Date),
-  [UIDS.IS_NOT_DATE]: negatedPredicateMessage(PREDICATE_NAMES.Date),
-  [UIDS.IS_REGEXP]: predicateMessage(PREDICATE_NAMES.RegExp),
-  [UIDS.IS_NOT_REGEXP]: negatedPredicateMessage(PREDICATE_NAMES.RegExp),
-  [UIDS.IS_PLAIN_OBJECT]: predicateMessage(PREDICATE_NAMES.plainObject),
-  [UIDS.IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(
+  [UIDS.VALIDATE_IS_DATE]: predicateMessage(PREDICATE_NAMES.Date),
+  [UIDS.VALIDATE_IS_NOT_DATE]: negatedPredicateMessage(PREDICATE_NAMES.Date),
+  [UIDS.VALIDATE_IS_REGEXP]: predicateMessage(PREDICATE_NAMES.RegExp),
+  [UIDS.VALIDATE_IS_NOT_REGEXP]: negatedPredicateMessage(
+    PREDICATE_NAMES.RegExp
+  ),
+  [UIDS.VALIDATE_IS_PLAIN_OBJECT]: predicateMessage(
+    PREDICATE_NAMES.plainObject
+  ),
+  [UIDS.VALIDATE_IS_NOT_PLAIN_OBJECT]: negatedPredicateMessage(
     PREDICATE_NAMES.plainObject
   ),
 
   // Nil Values
-  [UIDS.IS_NAN]: predicateMessage(PREDICATE_NAMES.NaN),
-  [UIDS.IS_NOT_NAN]: negatedPredicateMessage(PREDICATE_NAMES.NaN),
-  [UIDS.IS_NIL]: predicateMessage(PREDICATE_NAMES.Nil),
-  [UIDS.IS_NOT_NIL]: negatedPredicateMessage(PREDICATE_NAMES.Nil),
-  [UIDS.IS_NULL]: predicateMessage(PREDICATE_NAMES.Null),
-  [UIDS.IS_NOT_NULL]: negatedPredicateMessage(PREDICATE_NAMES.Null),
-  [UIDS.IS_UNDEFINED]: predicateMessage(PREDICATE_NAMES.Undefined),
-  [UIDS.IS_NOT_UNDEFINED]: negatedPredicateMessage(PREDICATE_NAMES.Undefined),
+  [UIDS.VALIDATE_IS_NAN]: predicateMessage(PREDICATE_NAMES.NaN),
+  [UIDS.VALIDATE_IS_NOT_NAN]: negatedPredicateMessage(PREDICATE_NAMES.NaN),
+  [UIDS.VALIDATE_IS_NIL]: predicateMessage(PREDICATE_NAMES.Nil),
+  [UIDS.VALIDATE_IS_NOT_NIL]: negatedPredicateMessage(PREDICATE_NAMES.Nil),
+  [UIDS.VALIDATE_IS_NULL]: predicateMessage(PREDICATE_NAMES.Null),
+  [UIDS.VALIDATE_IS_NOT_NULL]: negatedPredicateMessage(PREDICATE_NAMES.Null),
+  [UIDS.VALIDATE_IS_UNDEFINED]: predicateMessage(PREDICATE_NAMES.Undefined),
+  [UIDS.VALIDATE_IS_NOT_UNDEFINED]: negatedPredicateMessage(
+    PREDICATE_NAMES.Undefined
+  ),
 
   // Empty
-  [UIDS.IS_EMPTY]: predicateMessage(PREDICATE_NAMES.empty),
-  [UIDS.IS_NOT_EMPTY]: negatedPredicateMessage(PREDICATE_NAMES.empty),
-  [UIDS.IS_EMPTY_ARRAY]: predicateMessage(PREDICATE_NAMES.emptyArray),
+  [UIDS.VALIDATE_IS_EMPTY]: predicateMessage(PREDICATE_NAMES.empty),
+  [UIDS.VALIDATE_IS_NOT_EMPTY]: negatedPredicateMessage(PREDICATE_NAMES.empty),
+  [UIDS.VALIDATE_IS_EMPTY_ARRAY]: predicateMessage(PREDICATE_NAMES.emptyArray),
   [UIDS.IS_NON_EMPTY_ARRAY]: negatedPredicateMessage(
     PREDICATE_NAMES.emptyArray
   ),
-  [UIDS.IS_EMPTY_STRING]: predicateMessage(PREDICATE_NAMES.emptyString),
-  [UIDS.IS_NON_EMPTY_STRING]: negatedPredicateMessage(
+  [UIDS.VALIDATE_IS_EMPTY_STRING]: predicateMessage(
+    PREDICATE_NAMES.emptyString
+  ),
+  [UIDS.VALIDATE_IS_NON_EMPTY_STRING]: negatedPredicateMessage(
     PREDICATE_NAMES.emptyString
   ),
 
   // Valid
-  [UIDS.IS_VALID_DATE]: predicateMessage(PREDICATE_NAMES.validDate),
-  [UIDS.IS_NOT_VALID_DATE]: negatedPredicateMessage(PREDICATE_NAMES.validDate),
-  [UIDS.IS_VALID_NUMBER]: predicateMessage(PREDICATE_NAMES.validNumber),
-  [UIDS.IS_NOT_VALID_NUMBER]: negatedPredicateMessage(
+  [UIDS.VALIDATE_IS_VALID_DATE]: predicateMessage(PREDICATE_NAMES.validDate),
+  [UIDS.VALIDATE_IS_NOT_VALID_DATE]: negatedPredicateMessage(
+    PREDICATE_NAMES.validDate
+  ),
+  [UIDS.VALIDATE_IS_VALID_NUMBER]: predicateMessage(
+    PREDICATE_NAMES.validNumber
+  ),
+  [UIDS.VALIDATE_IS_NOT_VALID_NUMBER]: negatedPredicateMessage(
     PREDICATE_NAMES.validNumber
   ),
 
   // Numeric
-  [UIDS.IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
-  [UIDS.IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
+  [UIDS.VALIDATE_IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
+  [UIDS.VALIDATE_IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
 
   // ---------------------------------------------------------------------------
   // Association
   // ---------------------------------------------------------------------------
-  [UIDS.IS_LENGTH_BETWEEN]: isLengthBetweenMessage,
-  [UIDS.IS_LENGTH_GREATER_THAN]: isLengthGreaterThanMessage,
-  [UIDS.IS_LENGTH_LESS_THAN]: isLengthLessThanMessage,
+  [UIDS.VALIDATE_IS_LENGTH_BETWEEN]: isLengthBetweenMessage,
+  [UIDS.VALIDATE_IS_LENGTH_GREATER_THAN]: isLengthGreaterThanMessage,
+  [UIDS.VALIDATE_IS_LENGTH_LESS_THAN]: isLengthLessThanMessage,
 
   // ---------------------------------------------------------------------------
   // Object
   // ---------------------------------------------------------------------------
-  [UIDS.EXCLUSIVE_KEYS]: exclusiveKeysMessage,
-  [UIDS.REQUIRED_KEYS]: requiredKeysMessage,
-  [UIDS.WHITELISTED_KEYS]: whitelistedKeysMessage,
+  [UIDS.VALIDATE_EXCLUSIVE_KEYS]: exclusiveKeysMessage,
+  [UIDS.VALIDATE_REQUIRED_KEYS]: requiredKeysMessage,
+  [UIDS.VALIDATE_WHITELISTED_KEYS]: whitelistedKeysMessage,
 
   // ---------------------------------------------------------------------------
   // Other
   // ---------------------------------------------------------------------------
-  [UIDS.IS_WHITELISTED_VALUE]: isWhitelistedValueMessage,
-  [UIDS.IS_NOT_BLACKLISTED_VALUE]: isNotBlacklistedValueMessage,
-  [UIDS.IS_NUMBER_WITH_UNIT]: isNumberWithUnitMessage,
+  [UIDS.VALIDATE_IS_WHITELISTED_VALUE]: isWhitelistedValueMessage,
+  [UIDS.VALIDATE_IS_NOT_BLACKLISTED_VALUE]: isNotBlacklistedValueMessage,
+  [UIDS.VALIDATE_IS_NUMBER_WITH_UNIT]: isNumberWithUnitMessage,
 }
 
 export default messageMap

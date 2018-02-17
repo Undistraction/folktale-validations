@@ -78,5 +78,5 @@ export const toChildrenFieldsError = compose(
 // Validator UID
 // -----------------------------------------------------------------------------
 
-const UIDPrefix = `folktale-validations.validate`
+const UIDPrefix = `folktale-validations`
 export const toValidatorUID = compose(joinWithDot, appendFlipped([UIDPrefix]))

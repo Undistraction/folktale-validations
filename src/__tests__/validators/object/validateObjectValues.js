@@ -12,13 +12,13 @@ import {
   value2,
   value3,
 } from '../../testHelpers/fixtures/generic'
-import { OBJECT_VALUES } from '../../../const/validatorUids'
+import { VALIDATE_OBJECT_VALUES } from '../../../const/validatorUids'
 import toPayload from '../../../failures/toPayload'
 
 describe(`validateObjectValues()`, () => {
-  const key1Payload = toPayload(OBJECT_VALUES, value1)
-  const key2Payload = toPayload(OBJECT_VALUES, value2)
-  const key3Payload = toPayload(OBJECT_VALUES, value3)
+  const key1Payload = toPayload(VALIDATE_OBJECT_VALUES, value1)
+  const key2Payload = toPayload(VALIDATE_OBJECT_VALUES, value2)
+  const key3Payload = toPayload(VALIDATE_OBJECT_VALUES, value3)
 
   describe(`with valid values`, () => {
     it(`returns a Validation.Success with supplied value`, () => {

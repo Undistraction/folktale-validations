@@ -1,6 +1,6 @@
 import { validateIsWhitelistedValue } from '../../../index'
 import toPayload from '../../../failures/toPayload'
-import { IS_WHITELISTED_VALUE } from '../../../const/validatorUids'
+import { VALIDATE_IS_WHITELISTED_VALUE } from '../../../const/validatorUids'
 import {
   value2,
   value1,
@@ -36,9 +36,11 @@ describe(`validateIsWhitelistedValue()`, () => {
   describe(`when value is not on the whitelist`, () => {
     describe(`when no value is passed`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
-        const expectedPayload = toPayload(IS_WHITELISTED_VALUE, undefined, [
-          whitelist,
-        ])
+        const expectedPayload = toPayload(
+          VALIDATE_IS_WHITELISTED_VALUE,
+          undefined,
+          [whitelist]
+        )
         const validation = validator()
         expect(validation).toEqualFailureWithValue(expectedPayload)
       })
@@ -46,9 +48,11 @@ describe(`validateIsWhitelistedValue()`, () => {
 
     describe(`when value isn't on the whitelist`, () => {
       it(`returns a Validation.Failure with an error message`, () => {
-        const expectedPayload = toPayload(IS_WHITELISTED_VALUE, value4, [
-          whitelist,
-        ])
+        const expectedPayload = toPayload(
+          VALIDATE_IS_WHITELISTED_VALUE,
+          value4,
+          [whitelist]
+        )
         const validation = validator(value4)
         expect(validation).toEqualFailureWithValue(expectedPayload)
       })

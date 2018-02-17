@@ -41,9 +41,9 @@ import {
 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
 import {
-  REQUIRED_KEYS,
-  WHITELISTED_KEYS,
-  IS_PLAIN_OBJECT,
+  VALIDATE_REQUIRED_KEYS,
+  VALIDATE_WHITELISTED_KEYS,
+  VALIDATE_IS_PLAIN_OBJECT,
 } from '../../../const/validatorUids'
 import testLevels from '../../testHelpers/testLevels'
 import validateObjectWithConstraintsLevels from '../../testHelpers/data/validateObjectWithConstraintsLevels'
@@ -227,10 +227,11 @@ describe(`validateObjectWithConstraints`, () => {
 
       const expectedFailureObj = {
         [NAME]: constraintsObjName(),
-        [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, constraints, [
-          [FIELDS_VALIDATOR, FIELDS],
-          [invalidKeyName],
-        ]),
+        [FIELDS_FAILURE_MESSAGE]: toPayload(
+          VALIDATE_WHITELISTED_KEYS,
+          constraints,
+          [[FIELDS_VALIDATOR, FIELDS], [invalidKeyName]]
+        ),
       }
 
       const validator = validateObjectWithConstraints(constraints)
@@ -286,7 +287,7 @@ describe(`validateObjectWithConstraints`, () => {
                 const validation = validator(value)
 
                 const expectedFailureObj = withExpectedFailureObjRoot(
-                  toPayload(IS_PLAIN_OBJECT, invalidValue)
+                  toPayload(VALIDATE_IS_PLAIN_OBJECT, invalidValue)
                 )
 
                 expect(validation).toEqualFailureWithValue(expectedFailureObj)
@@ -376,10 +377,11 @@ describe(`validateObjectWithConstraints`, () => {
               })
 
               const expectedFailureObj = withExpectedFailureObjRoot({
-                [FIELDS_FAILURE_MESSAGE]: toPayload(WHITELISTED_KEYS, o, [
-                  [key1, key2],
-                  [invalidKeyName],
-                ]),
+                [FIELDS_FAILURE_MESSAGE]: toPayload(
+                  VALIDATE_WHITELISTED_KEYS,
+                  o,
+                  [[key1, key2], [invalidKeyName]]
+                ),
               })
 
               const validator = validateObjectWithConstraints(constraints)
@@ -415,7 +417,7 @@ describe(`validateObjectWithConstraints`, () => {
               })
 
               const expectedFailureObj = withExpectedFailureObjRoot({
-                [FIELDS_FAILURE_MESSAGE]: toPayload(REQUIRED_KEYS, o, [
+                [FIELDS_FAILURE_MESSAGE]: toPayload(VALIDATE_REQUIRED_KEYS, o, [
                   [key1, key2],
                   [key2],
                 ]),
@@ -597,7 +599,7 @@ describe(`validateObjectWithConstraints`, () => {
                       [CHILDREN]: {
                         '2': {
                           [FIELDS_FAILURE_MESSAGE]: toPayload(
-                            WHITELISTED_KEYS,
+                            VALIDATE_WHITELISTED_KEYS,
                             {
                               key3: value3,
                             },

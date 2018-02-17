@@ -1,5 +1,5 @@
 import { validateIsLengthBetween } from '../../../index'
-import { IS_LENGTH_BETWEEN } from '../../../const/validatorUids'
+import { VALIDATE_IS_LENGTH_BETWEEN } from '../../../const/validatorUids'
 import toPayload from '../../../failures/toPayload'
 
 describe(`validateIsLengthBetween()`, () => {
@@ -20,7 +20,7 @@ describe(`validateIsLengthBetween()`, () => {
     it(`returns a Validation.Failure with the supplied value`, () => {
       const minimumLength = 4
       const maximumLength = 6
-      const payload = toPayload(IS_LENGTH_BETWEEN, value, [
+      const payload = toPayload(VALIDATE_IS_LENGTH_BETWEEN, value, [
         minimumLength,
         maximumLength,
       ])
@@ -36,7 +36,7 @@ describe(`validateIsLengthBetween()`, () => {
     it(`returns a Validation.Failure with the supplied value`, () => {
       const minimumLength = 0
       const maximumLength = 3
-      const payload = toPayload(IS_LENGTH_BETWEEN, value, [
+      const payload = toPayload(VALIDATE_IS_LENGTH_BETWEEN, value, [
         minimumLength,
         maximumLength,
       ])

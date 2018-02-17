@@ -2,10 +2,13 @@ import { always } from 'ramda'
 import { configureRenderers } from '../../index'
 import toPayload from '../../failures/toPayload'
 import { message1 } from '../testHelpers/fixtures/generic'
-import { IS_ARRAY, IS_OBJECT } from '../../const/validatorUids'
+import {
+  VALIDATE_IS_ARRAY,
+  VALIDATE_IS_OBJECT,
+} from '../../const/validatorUids'
 
 describe(`configureRenderers()`, () => {
-  const expectedIsArrayPayload = toPayload(IS_ARRAY)
+  const expectedIsArrayPayload = toPayload(VALIDATE_IS_ARRAY)
 
   describe(`with no arguments`, () => {
     it(`applies default helpers and validator messages`, () => {
@@ -21,14 +24,14 @@ describe(`configureRenderers()`, () => {
   describe(`with supplied 'validatorsMessages'`, () => {
     it(`overrides supplied messages whilst leaving others untouched`, () => {
       const validatorMessages = {
-        [IS_OBJECT]: always(message1),
+        [VALIDATE_IS_OBJECT]: always(message1),
       }
 
       const { failureRenderer, argumentsFailureRenderer } = configureRenderers({
         validatorMessages,
       })
 
-      const expectedIsObjectPayload = toPayload(IS_OBJECT)
+      const expectedIsObjectPayload = toPayload(VALIDATE_IS_OBJECT)
 
       // Not overridden
       expect(failureRenderer(expectedIsArrayPayload)).toEqual(`Wasn't Array`)
@@ -53,7 +56,7 @@ describe(`configureRenderers()`, () => {
       const { failureRenderer, argumentsFailureRenderer } = configureRenderers({
         helpers,
       })
-      const expectedIsObjectPayload = toPayload(IS_OBJECT)
+      const expectedIsObjectPayload = toPayload(VALIDATE_IS_OBJECT)
 
       // Overridden
       expect(failureRenderer(expectedIsObjectPayload)).toEqual(message1)

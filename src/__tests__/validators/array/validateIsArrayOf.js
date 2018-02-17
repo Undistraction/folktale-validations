@@ -2,7 +2,7 @@ import { validation as Validation } from 'folktale'
 import { validateIsArrayOf } from '../../../index'
 import { spy, stubReturnsSuccess, stub } from '../../testHelpers/sinon'
 import toPayload from '../../../failures/toPayload'
-import { IS_ARRAY } from '../../../const/validatorUids'
+import { VALIDATE_IS_ARRAY } from '../../../const/validatorUids'
 import {
   value1,
   value2,
@@ -30,7 +30,7 @@ describe(`validateIsArrayOf()`, () => {
   describe(`argument is not an array`, () => {
     it(`returns a Validation.Failure with an error message`, () => {
       const v1 = spy()
-      const expectedPayload = toPayload(IS_ARRAY, undefined)
+      const expectedPayload = toPayload(VALIDATE_IS_ARRAY, undefined)
       const validator = validateIsArrayOf(v1)
       const validation = validator()
       expect(validation).toEqualFailureWithValue(expectedPayload)

@@ -1,6 +1,6 @@
 import { validateIsLengthGreaterThan } from '../../../index'
 import toPayload from '../../../failures/toPayload'
-import { IS_LENGTH_GREATER_THAN } from '../../../const/validatorUids'
+import { VALIDATE_IS_LENGTH_GREATER_THAN } from '../../../const/validatorUids'
 
 describe(`validateIsLengthGreaterThan()`, () => {
   const value = `abc`
@@ -17,7 +17,9 @@ describe(`validateIsLengthGreaterThan()`, () => {
   describe(`when value is equal to minimum length`, () => {
     it(`returns a Validation.Failure with the supplied message`, () => {
       const length = 3
-      const payload = toPayload(IS_LENGTH_GREATER_THAN, value, [length])
+      const payload = toPayload(VALIDATE_IS_LENGTH_GREATER_THAN, value, [
+        length,
+      ])
       const validator = validateIsLengthGreaterThan(length)
       const validation = validator(value)
       expect(validation).toEqualFailureWithValue(payload)
@@ -27,7 +29,9 @@ describe(`validateIsLengthGreaterThan()`, () => {
   describe(`when value is less than minimum length`, () => {
     it(`returns a Validation.Failure with the supplied message`, () => {
       const length = 4
-      const payload = toPayload(IS_LENGTH_GREATER_THAN, value, [length])
+      const payload = toPayload(VALIDATE_IS_LENGTH_GREATER_THAN, value, [
+        length,
+      ])
       const validator = validateIsLengthGreaterThan(length)
       const validation = validator(value)
       expect(validation).toEqualFailureWithValue(payload)
