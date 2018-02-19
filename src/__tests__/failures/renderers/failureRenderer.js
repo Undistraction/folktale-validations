@@ -43,8 +43,7 @@ describe(`failureRenderer()`, () => {
   }
 
   const renderer = failureRenderer(
-    failureRendererHelpersDefaults,
-    validatorMessages
+    failureRendererHelpersDefaults(validatorMessages)
   )
   describe(`with an invalid payload`, () => {
     it(`throws`, () => {

@@ -46,23 +46,4 @@ describe(`configureRenderers()`, () => {
       )
     })
   })
-
-  describe(`with supplied 'helpers'`, () => {
-    it(`overrides defaults`, () => {
-      const renderPayload = () => () => always(message1)
-      const helpers = {
-        renderPayload,
-      }
-      const { failureRenderer, argumentsFailureRenderer } = configureRenderers({
-        helpers,
-      })
-      const expectedIsObjectPayload = toPayload(VALIDATE_IS_OBJECT)
-
-      // Overridden
-      expect(failureRenderer(expectedIsObjectPayload)).toEqual(message1)
-      expect(argumentsFailureRenderer(expectedIsObjectPayload)).toEqual(
-        message1
-      )
-    })
-  })
 })

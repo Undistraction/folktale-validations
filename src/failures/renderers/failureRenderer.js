@@ -1,15 +1,5 @@
-import {
-  always,
-  curry,
-  inc,
-  append,
-  compose,
-  cond,
-  T,
-  ifElse,
-  when,
-} from 'ramda'
-import { isPlainObj, isNotUndefined } from 'ramda-adjunct'
+import { inc, append, compose, cond, T, ifElse, when } from 'ramda'
+import { isPlainObj, isNotUndefined, appendFlipped } from 'ramda-adjunct'
 import { reduceObjIndexed } from '../../utils/iteration'
 import {
   propFields,
@@ -21,34 +11,16 @@ import {
 } from '../../utils/failures'
 import { throwInvalidFailureStructureMessage } from '../../errors'
 import { isPayload } from '../../utils/payload'
-import andOrRenderer from './andOrRenderer'
-import messageLookup from '../messageLookup'
-import payloadRenderer from './payloadRenderer'
 
-export default curry((rendererHelpers, validatorMessages) => failureObj => {
+export default rendererHelpers => failureObj => {
   const {
-    renderPayload,
-    renderObjectFieldsError,
     renderObject,
     renderArray,
     renderArrayValue,
-    prefixWithKey,
+    renderAndOrMessages,
+    renderPayload,
+    renderObjectFieldsError,
   } = rendererHelpers
-  // ---------------------------------------------------------------------------
-  // Configure
-  // ---------------------------------------------------------------------------
-
-  const renderPayloadConfigured = compose(payloadRenderer, messageLookup)(
-    validatorMessages
-  )
-  const renderAndOrMessagesConfigured = andOrRenderer(
-    renderPayloadConfigured,
-    rendererHelpers
-  )
-  const renderPayloadMessagesConfigured = renderPayload(renderPayloadConfigured)
-  const renderObjectFieldsErrorMessageConfigured = renderObjectFieldsError(
-    renderPayloadConfigured
-  )
 
   // ---------------------------------------------------------------------------
   // Value
@@ -56,17 +28,8 @@ export default curry((rendererHelpers, validatorMessages) => failureObj => {
 
   const processValue = (level, fieldValue, fieldName) =>
     cond([
-      [
-        isAndOrOrObj,
-        compose(
-          when(
-            always(isNotUndefined(fieldName)),
-            prefixWithKey(level, fieldName)
-          ),
-          renderAndOrMessagesConfigured
-        ),
-      ],
-      [isPayload, renderPayloadMessagesConfigured(level, fieldName)],
+      [isAndOrOrObj, renderAndOrMessages(level, fieldName)],
+      [isPayload, renderPayload(level, fieldName)],
       // eslint-disable-next-line no-use-before-define
       [isPlainObj, processObjectOrArray(level, fieldName)],
       [T, throwInvalidFailureStructureMessage],
@@ -101,14 +64,14 @@ export default curry((rendererHelpers, validatorMessages) => failureObj => {
     compose(
       reduceObjIndexed((acc, [fieldName, fieldValue]) => {
         const result = processValue(level, fieldValue, fieldName)
-        return append(result, acc)
+        return appendFlipped(acc, result)
       }, []),
       propFields
     )(o)
 
   const processObjectFieldsErrorMessage = (level, o) =>
     compose(
-      when(isNotUndefined, renderObjectFieldsErrorMessageConfigured(level)),
+      when(isNotUndefined, renderObjectFieldsError(level)),
       propFieldsFailureMessage
     )(o)
 
@@ -133,4 +96,4 @@ export default curry((rendererHelpers, validatorMessages) => failureObj => {
     )
 
   return processValue(0, failureObj)
-})
+}
