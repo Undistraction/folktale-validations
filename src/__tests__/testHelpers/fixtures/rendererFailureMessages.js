@@ -55,8 +55,7 @@ export const nestedFailureMessageWithArray = {
   },
 }
 
-export const nestedAndOrs = {
-  [FIELDS_FAILURE_MESSAGE]: payload1,
+export const nestedAndsContainingOrs = {
   [FIELDS]: {
     a: {
       and: [
@@ -72,6 +71,35 @@ export const nestedAndOrs = {
           ],
         },
       ],
+    },
+  },
+}
+
+export const nestedOrsContainingAnds = {
+  [FIELDS]: {
+    a: {
+      or: [
+        payload1,
+        payload2,
+        {
+          and: [
+            payload3,
+            payload4,
+            {
+              or: [payload5, payload6],
+            },
+          ],
+        },
+      ],
+    },
+  },
+}
+
+export const nestedFailureMessageWithObjectAndNestedAnds = {
+  [FIELDS]: {
+    a: payload1,
+    b: {
+      and: [payload2, payload3],
     },
   },
 }

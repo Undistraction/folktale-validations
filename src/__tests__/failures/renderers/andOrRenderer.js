@@ -52,10 +52,36 @@ describe(`andOrRenderer`, () => {
         validatorId1,
         validatorId2,
         {
-          and: [
+          or: [
             validatorId3,
             {
               and: [validatorId4, validatorId5],
+            },
+          ],
+        },
+        validatorId6,
+        {
+          or: [validatorId7, validatorId8],
+        },
+      ],
+    }
+
+    const expected = `${validatorId1} and ${validatorId2} and (${validatorId3} or (${validatorId4} and ${validatorId5})) and ${validatorId6} and (${validatorId7} or ${validatorId8})`
+
+    const rendered = renderer(value)
+    expect(rendered).toEqual(expected)
+  })
+
+  it(`renders a nested 'ors' correctly`, () => {
+    const value = {
+      or: [
+        validatorId1,
+        validatorId2,
+        {
+          and: [
+            validatorId3,
+            {
+              or: [validatorId4, validatorId5],
             },
           ],
         },
@@ -66,7 +92,7 @@ describe(`andOrRenderer`, () => {
       ],
     }
 
-    const expected = `${validatorId1} and ${validatorId2} and (${validatorId3} and (${validatorId4} and ${validatorId5})) and ${validatorId6} and (${validatorId7} and ${validatorId8})`
+    const expected = `${validatorId1} or ${validatorId2} or (${validatorId3} and (${validatorId4} or ${validatorId5})) or ${validatorId6} or (${validatorId7} and ${validatorId8})`
 
     const rendered = renderer(value)
     expect(rendered).toEqual(expected)
