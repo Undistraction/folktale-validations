@@ -115,6 +115,7 @@ export {
   alwaysFailureWithPayload,
   composeFailure,
   composeSuccess,
+  matchWithSuccessOrFailure,
 } from './utils/validations'
 
 // -----------------------------------------------------------------------------

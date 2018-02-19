@@ -50,7 +50,6 @@ const defaultValueField = {
 const isRequiredField = {
   [NAME]: IS_REQUIRED,
   [VALIDATOR]: validateIsBoolean,
-  [DEFAULT_VALUE]: false,
 }
 
 const valueField = {
@@ -81,7 +80,6 @@ const fieldsValidatorField = {
 const fieldsField = {
   [NAME]: FIELDS,
   [VALIDATOR]: validateIsArrayOf(validateIsPlainObject),
-  [DEFAULT_VALUE]: [],
   [CHILDREN]: {
     [FIELDS_VALIDATOR]: allOfValidator([
       validateExclusiveKeys([IS_REQUIRED, DEFAULT_VALUE]),

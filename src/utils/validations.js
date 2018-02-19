@@ -1,4 +1,4 @@
-import { compose, filter, always, prop } from 'ramda'
+import { compose, filter, always, prop, curry } from 'ramda'
 import { mapIndexed } from 'ramda-adjunct'
 import { validation as Validation } from 'folktale'
 import VALIDATION_FIELD_NAMES from '../const/validationFieldNames'
@@ -20,3 +20,10 @@ export const extractFailureValues = mapIndexed(([key, failure]) => [
 ])
 
 export const propValue = prop(VALIDATION_FIELD_NAMES.VALUE)
+
+export const matchWithSuccessOrFailure = curry((success, failure, validation) =>
+  validation.matchWith({
+    Success: success,
+    Failure: failure,
+  })
+)
