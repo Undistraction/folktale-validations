@@ -142,4 +142,6 @@ export default {
   renderArrayValue,
   renderArray,
   renderObject,
+  renderObjectPrefix,
+  prefixWithKey,
 }

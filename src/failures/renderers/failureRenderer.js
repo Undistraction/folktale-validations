@@ -1,4 +1,14 @@
-import { curry, inc, append, compose, cond, T, ifElse, when } from 'ramda'
+import {
+  always,
+  curry,
+  inc,
+  append,
+  compose,
+  cond,
+  T,
+  ifElse,
+  when,
+} from 'ramda'
 import { isPlainObj, isNotUndefined } from 'ramda-adjunct'
 import { reduceObjIndexed } from '../../utils/iteration'
 import {
@@ -22,6 +32,7 @@ export default curry((rendererHelpers, validatorMessages) => failureObj => {
     renderObject,
     renderArray,
     renderArrayValue,
+    prefixWithKey,
   } = rendererHelpers
   // ---------------------------------------------------------------------------
   // Configure
@@ -45,7 +56,16 @@ export default curry((rendererHelpers, validatorMessages) => failureObj => {
 
   const processValue = (level, fieldValue, fieldName) =>
     cond([
-      [isAndOrOrObj, renderAndOrMessagesConfigured],
+      [
+        isAndOrOrObj,
+        compose(
+          when(
+            always(isNotUndefined(fieldName)),
+            prefixWithKey(level, fieldName)
+          ),
+          renderAndOrMessagesConfigured
+        ),
+      ],
       [isPayload, renderPayloadMessagesConfigured(level, fieldName)],
       // eslint-disable-next-line no-use-before-define
       [isPlainObj, processObjectOrArray(level, fieldName)],

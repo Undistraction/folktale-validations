@@ -6,7 +6,7 @@ import {
   nestedFailureMessageWithArray,
   nestedAndsContainingOrs,
   nestedOrsContainingAnds,
-  // nestedFailureMessageWithObjectAndNestedAnds,
+  nestedFailureMessageWithObjectAndNestedAnds,
 } from '../../testHelpers/fixtures/rendererFailureMessages'
 import {
   uid1,
@@ -143,7 +143,8 @@ describe(`failureRenderer()`, () => {
       const result = renderer(nestedAndsContainingOrs)
       expect(result).toEqualWithCompressedWhitespace(
         `Object
-          – included invalid value(s) value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`
+          – included invalid value(s) 
+            – Key 'a': value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`
       )
     })
   })
@@ -153,21 +154,21 @@ describe(`failureRenderer()`, () => {
       const result = renderer(nestedOrsContainingAnds)
       expect(result).toEqualWithCompressedWhitespace(
         `Object
-          – included invalid value(s) value1: (1,2) or value2: (1,2) or (value3: (1,2) and value4: (1,2) and (value5: (1,2) or value6: (1,2)))`
+          – included invalid value(s)
+            – Key 'a': value1: (1,2) or value2: (1,2) or (value3: (1,2) and value4: (1,2) and (value5: (1,2) or value6: (1,2)))`
       )
     })
   })
 
-  // describe(`with a flat error object and nested ands`, () => {
-  //   it(`renders the correct error message`, () => {
-  //     const result = renderer(nestedFailureMessageWithObjectAndNestedAnds)
-  //     expect(result).toEqualWithCompressedWhitespace(
-  //       `Object
-  //         – value1: (1,2)
-  //         – included invalid value(s)
-  //           – Key 'a': value1 (1,2)
-  //           – Key 'b': value2 (1,2) and value3 (1,2)`
-  //     )
-  //   })
-  // })
+  describe(`with a flat error object and nested ands`, () => {
+    it(`renders the correct error message`, () => {
+      const result = renderer(nestedFailureMessageWithObjectAndNestedAnds)
+      expect(result).toEqualWithCompressedWhitespace(
+        `Object
+          – included invalid value(s)
+            – Key 'a': value1: (1,2)
+            – Key 'b': value2: (1,2) and value3: (1,2)`
+      )
+    })
+  })
 })
