@@ -30,13 +30,13 @@ import messageLookup from '../../../failures/messageLookup'
 // Constants
 // ---------------------------------------------------------------------------
 
-const KEY = always(`Key`)
-const ARGUMENTS = always(`Arguments`)
-const OBJECT = always(`Object`)
-const ARRAY = always(`Array`)
-const AND = always(`and`)
-const OR = always(`or`)
-const INVALID_VALUES_MESSAGE = always(`included invalid value(s)`)
+const KEY = `Key`
+const ARGUMENTS = `Arguments`
+const OBJECT = `Object`
+const ARRAY = `Array`
+const AND = `and`
+const OR = `or`
+const INVALID_VALUES_MESSAGE = `included invalid value(s)`
 
 export default validatorMessages => {
   // ---------------------------------------------------------------------------
@@ -44,16 +44,15 @@ export default validatorMessages => {
   // ---------------------------------------------------------------------------
 
   const prefixWithObjectKey = curry((level, value) =>
-    joinWithSpace([
-      joinWithEmDash([newlineAndTabsForLevel(level), KEY()]),
-      value,
-    ])
+    joinWithSpace([joinWithEmDash([newlineAndTabsForLevel(level), KEY]), value])
   )
 
   const prefixWithKey = (level, fieldName) =>
     compose(
       prefixWithObjectKey(level),
-      compose(joinWithColon, prepend(wrapWithSingleQuotes(fieldName)), of)
+      joinWithColon,
+      prepend(wrapWithSingleQuotes(fieldName)),
+      of
     )
 
   const prefixWithArrayIndex = (level, index, value) =>
@@ -65,13 +64,13 @@ export default validatorMessages => {
       value,
     ])
 
-  const invalidArgumentsPrefix = ARGUMENTS
+  const invalidArgumentsPrefix = always(ARGUMENTS)
 
   const invalidObjectReasonInvalidValues = level =>
-    joinWithEmDash([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE()])
+    joinWithEmDash([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
 
   const invalidArrayReasonInvalidValues = always(
-    joinWithSpace([ARRAY(), INVALID_VALUES_MESSAGE()])
+    joinWithSpace([ARRAY, INVALID_VALUES_MESSAGE])
   )
 
   // ---------------------------------------------------------------------------
@@ -82,33 +81,20 @@ export default validatorMessages => {
     validatorMessages
   )
 
-  const renderAnds = compose(join, wrapWithSpaces)(AND())
-  const renderOrs = compose(join, wrapWithSpaces)(OR())
+  const renderAndOrs = compose(join, wrapWithSpaces)
+  const renderAnds = renderAndOrs(AND)
+  const renderOrs = renderAndOrs(OR)
   const renderGroup = wrapWithSoftBrackets
 
-  const renderObjectFieldsError = level => value =>
-    joinWithEmDash([
-      newlineAndTabsForLevel(level),
-      renderPayloadConfigured(value),
-    ])
-
-  const renderArrayValue = (level, index, value) =>
-    prefixWithArrayIndex(level, index, value)
-
-  const renderArray = (level, fieldName) => values =>
-    compose(
-      when(always(isNotUndefined(fieldName)), prefixWithKey(level, fieldName)),
-      joinWithSpace,
-      prepend(invalidArrayReasonInvalidValues()),
-      of,
-      joinWithNoSpace
-    )(values)
+  const renderFieldNamePrefix = (level, fieldName) =>
+    when(always(isNotUndefined(fieldName)), prefixWithKey(level, fieldName))
 
   const renderObjectPrefix = (fieldName, level, objName) =>
-    compose(
-      when(always(isNotUndefined(fieldName)), prefixWithKey(level, fieldName)),
-      defaultTo(OBJECT())
-    )(objName)
+    compose(renderFieldNamePrefix(level, fieldName), defaultTo(OBJECT))(objName)
+
+  // ---------------------------------------------------------------------------
+  // Exports
+  // ---------------------------------------------------------------------------
 
   const renderObject = (
     level,
@@ -133,22 +119,28 @@ export default validatorMessages => {
       append(renderObjectPrefix(fieldName, level, objName))
     )([])
 
-  const renderPayload = (level, name) =>
+  const renderArray = (level, fieldName) => values =>
+    compose(
+      renderFieldNamePrefix(level, fieldName),
+      joinWithSpace,
+      prepend(invalidArrayReasonInvalidValues()),
+      of,
+      joinWithNoSpace
+    )(values)
+
+  const renderArrayValue = (level, index, value) =>
+    prefixWithArrayIndex(level, index, value)
+
+  const renderPayload = (level, fieldName) =>
     ifElse(
-      always(isNotUndefined(name)),
-      compose(
-        prefixWithObjectKey(level),
-        joinWithColon,
-        prepend(wrapWithSingleQuotes(name)),
-        of,
-        renderPayloadConfigured
-      ),
+      always(isNotUndefined(fieldName)),
+      compose(prefixWithKey(level, fieldName), renderPayloadConfigured),
       renderPayloadConfigured
     )
 
   const renderAndOrMessages = (level, fieldName) =>
     compose(
-      when(always(isNotUndefined(fieldName)), prefixWithKey(level, fieldName)),
+      renderFieldNamePrefix(level, fieldName),
       andOrRenderer(renderPayloadConfigured, {
         renderAnds,
         renderOrs,
@@ -156,16 +148,19 @@ export default validatorMessages => {
       })
     )
 
+  const renderObjectFieldsError = level => value =>
+    joinWithEmDash([
+      newlineAndTabsForLevel(level),
+      renderPayloadConfigured(value),
+    ])
+
   return {
-    renderPayload,
-    invalidArgumentsPrefix,
-    renderObjectFieldsError,
-    renderAnds,
-    renderOrs,
-    renderGroup,
-    renderArrayValue,
-    renderArray,
     renderObject,
+    renderArray,
+    renderArrayValue,
+    renderPayload,
     renderAndOrMessages,
+    renderObjectFieldsError,
+    invalidArgumentsPrefix,
   }
 }
