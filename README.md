@@ -1,5 +1,7 @@
 # folktale-validations
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Undistraction/folktale-validations.svg)](https://greenkeeper.io/)
+
 [![NPM Version](https://img.shields.io/npm/v/folktale-validations.svg)](https://www.npmjs.com/package/folktale-validations)
 [![codecov](https://img.shields.io/codecov/c/github/Undistraction/folktale-validations.svg)](https://codecov.io/gh/Undistraction/folktale-validations)
 [![Build Status](https://img.shields.io/travis/Undistraction/folktale-validations.svg)](https://travis-ci.org/Undistraction/folktale-validations)
