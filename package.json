@@ -40,7 +40,7 @@
     "publish:major": "npm version major && sudo npm publish",
     "lint": "eslint src/",
     "audit:packages": "yarn outdated || true",
-    "security": "nsp check",
+    "securityCheck": "nsp check",
     "changelog": "conventional-changelog -p angular -i ./CHANGELOG.md -s"
   },
   "devDependencies": {
