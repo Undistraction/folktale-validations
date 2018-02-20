@@ -1,9 +1,9 @@
 language: node_js
 dist: trusty
 node_js:
-  - 7
-  - 8
   - 9
+  - 8
+  - 7
 notifications:
   email:
     on_failure: change
@@ -11,7 +11,9 @@ script:
   - node --version
   - yarn --version
   - yarn run lint
-  - yarn run test:noWatch && codecov
+  - yarn run test:noWatch
+  - ls ./coverage
+  - codecov
   - yarn run build
 cache:
   yarn: true
