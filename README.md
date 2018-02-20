@@ -1,11 +1,10 @@
 # folktale-validations
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/Undistraction/folktale-validations.svg)](https://greenkeeper.io/)
-
 [![NPM Version](https://img.shields.io/npm/v/folktale-validations.svg)](https://www.npmjs.com/package/folktale-validations)
 [![codecov](https://img.shields.io/codecov/c/github/Undistraction/folktale-validations.svg)](https://codecov.io/gh/Undistraction/folktale-validations)
 [![Build Status](https://img.shields.io/travis/Undistraction/folktale-validations.svg)](https://travis-ci.org/Undistraction/folktale-validations)
 [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](./LICENSE.md)
+[![Greenkeeper badge](https://badges.greenkeeper.io/Undistraction/folktale-validations.svg)](https://greenkeeper.io/)
 [![Node Security](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20/badge)](https://nodesecurity.io/orgs/dwyl/projects/1047e39b-0d4a-45ff-af65-c04afc41fc20)
 
 A library of validators using [folktale](http://folktale.origamitower.com/)'s `Validation` including utility functions for combining and composing validations, and constraint-based validation, allowing you to validate objects or object graphs. Includes easily customisable error message rendering, and is easily extended with your own validations.
