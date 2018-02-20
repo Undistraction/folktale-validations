@@ -10,6 +10,7 @@ notifications:
 script:
   - node --version
   - yarn --version
+  - yarn run securityCheck
   - yarn run lint
   - yarn run test:noWatch
   - codecov
