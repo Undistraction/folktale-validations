@@ -12,7 +12,10 @@ script:
   - yarn --version
   - yarn run lint
   - yarn run test:noWatch
-  - ls ./coverage
+  - echo 'List ----------------------------------------------------------------'
+  - ls -a ./
+  - echo 'Git ls --------------------------------------------------------------'
+  - git ls-files
   - codecov
   - yarn run build
 cache:
