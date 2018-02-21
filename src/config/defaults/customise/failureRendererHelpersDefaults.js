@@ -74,7 +74,7 @@ export default (validatorMessages, text = {}) => {
   const invalidArgumentsPrefix = always(ARGUMENTS)
 
   const invalidObjectReasonInvalidValues = level =>
-    joinWithEmDash([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
+    joinWithNoSpace([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
 
   const invalidArrayReasonInvalidValues = always(
     joinWithSpace([ARRAY, INVALID_VALUES_MESSAGE])

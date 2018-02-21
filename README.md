@@ -253,7 +253,7 @@ const configuredValidator = validateObjectValues({
   })
   expect(message).toEqualWithCompressedWhitespace(
     `Object
-      – included invalid value(s)
+      included invalid value(s)
         – Key 'a': Wasn't Number
         – Key 'b': Wasn't String
         – Key 'c': Was Empty`
@@ -461,7 +461,7 @@ it(`returns expected values`, () => {
   })
   expect(message).toEqualWithCompressedWhitespace(
     `Object
-      – included invalid value(s)
+      included invalid value(s)
       – Key 'a': Wasn't String
       – Key 'b': Wasn't Array
       – Key 'c': Wasn't Date`
@@ -646,12 +646,12 @@ expect(failedValidation.value).toEqual({
 })
 expect(message).toEqualWithCompressedWhitespace(
   `Object
-  – included invalid value(s)
+  included invalid value(s)
     – Key 'a': Object
-      – included invalid value(s)
+      included invalid value(s)
         – Key 'a-b': Array included invalid value(s)
           – [1] Object
-            – included invalid value(s)
+            included invalid value(s)
               – Key 'a-b-a': Wasn't String`
 )
 })

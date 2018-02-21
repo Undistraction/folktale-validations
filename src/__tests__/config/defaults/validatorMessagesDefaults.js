@@ -170,7 +170,7 @@ describe(`validatorMessagesDefaults`, () => {
         failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Object
-            – included invalid value(s)
+            included invalid value(s)
             – Key '${key1}': Wasn't Array
             – Key '${key2}': Wasn't Boolean`
       )

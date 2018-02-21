@@ -134,7 +134,7 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualWithCompressedWhitespace(
         `Object
-          – included invalid value(s)
+          included invalid value(s)
             – Key 'a': Wasn't Number
             – Key 'b': Wasn't String
             – Key 'c': Was Empty`
@@ -321,7 +321,7 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualWithCompressedWhitespace(
         `Object
-          – included invalid value(s)
+          included invalid value(s)
           – Key 'a': Wasn't String
           – Key 'b': Wasn't Array
           – Key 'c': Wasn't Date`
@@ -481,12 +481,12 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualWithCompressedWhitespace(
         `Object
-        – included invalid value(s)
+        included invalid value(s)
           – Key 'a': Object
-            – included invalid value(s)
+            included invalid value(s)
               – Key 'a-b': Array included invalid value(s)
                 – [1] Object
-                  – included invalid value(s)
+                  included invalid value(s)
                     – Key 'a-b-a': Wasn't String`
       )
     })
