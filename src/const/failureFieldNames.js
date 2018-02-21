@@ -5,4 +5,5 @@ export default Object.freeze({
   NAME: `name`,
   AND: `and`,
   OR: `or`,
+  SCOPE: `scope`,
 })

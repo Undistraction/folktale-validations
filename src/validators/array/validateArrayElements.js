@@ -1,5 +1,5 @@
 import { validation as Validation } from 'folktale'
-import { of, prepend, toString } from 'ramda'
+import { of, pair, toString } from 'ramda'
 import { reduceIndexed } from 'ramda-adjunct'
 
 import { toArrayError } from '../../utils/failures'
@@ -12,9 +12,7 @@ const validateAllWith = (validator, o) =>
   reduceIndexed(
     (acc, element, index) =>
       acc.concat(
-        validator(element).orElse(
-          composeFailure(of, prepend(toString(index)), of)
-        )
+        validator(element).orElse(composeFailure(of, pair(toString(index))))
       ),
     Success(),
     o

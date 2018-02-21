@@ -8,6 +8,7 @@ import {
   hasPropChildren,
   propName,
   isAndOrOrObj,
+  propScope,
 } from '../../utils/failures'
 import { throwInvalidFailureStructureMessage } from '../../errors'
 import { isPayload } from '../../utils/payload'
@@ -20,20 +21,24 @@ export default rendererHelpers => failureObj => {
     renderAndOrMessages,
     renderPayload,
     renderObjectFieldsError,
+    renderFieldNamePrefix,
   } = rendererHelpers
 
   // ---------------------------------------------------------------------------
   // Value
   // ---------------------------------------------------------------------------
 
-  const processValue = (level, fieldValue, fieldName) =>
-    cond([
-      [isAndOrOrObj, renderAndOrMessages(level, fieldName)],
-      [isPayload, renderPayload(level, fieldName)],
-      // eslint-disable-next-line no-use-before-define
-      [isPlainObj, processObjectOrArray(level, fieldName)],
-      [T, throwInvalidFailureStructureMessage],
-    ])(fieldValue)
+  const processValue = (level, fieldValue, fieldName, scope) =>
+    compose(
+      renderFieldNamePrefix(level, fieldName, scope),
+      cond([
+        [isAndOrOrObj, renderAndOrMessages],
+        [isPayload, renderPayload],
+        // eslint-disable-next-line no-use-before-define
+        [isPlainObj, processObjectOrArray(level)],
+        [T, throwInvalidFailureStructureMessage],
+      ])
+    )(fieldValue)
 
   // ---------------------------------------------------------------------------
   // Array
@@ -49,12 +54,8 @@ export default rendererHelpers => failureObj => {
       return append(result, acc)
     }, [])
 
-  const processArray = (level, fieldName) =>
-    compose(
-      renderArray(level, fieldName),
-      processArrayValues(inc(level)),
-      propChildren
-    )
+  const processArray = level =>
+    compose(renderArray, processArrayValues(inc(level)), propChildren)
 
   // ---------------------------------------------------------------------------
   // Object
@@ -63,7 +64,7 @@ export default rendererHelpers => failureObj => {
   const processObjectFields = (level, o) =>
     compose(
       reduceObjIndexed((acc, [fieldName, fieldValue]) => {
-        const result = processValue(level, fieldValue, fieldName)
+        const result = processValue(level, fieldValue, fieldName, propName(o))
         return appendFlipped(acc, result)
       }, []),
       propFields
@@ -75,11 +76,10 @@ export default rendererHelpers => failureObj => {
       propFieldsFailureMessage
     )(o)
 
-  const processObject = (level, fieldName) => o =>
+  const processObject = level => o =>
     renderObject(
       level,
-      fieldName,
-      propName(o),
+      propScope(o),
       processObjectFields(level, o),
       processObjectFieldsErrorMessage(level, o)
     )
@@ -88,12 +88,8 @@ export default rendererHelpers => failureObj => {
   // Object or Array
   // ---------------------------------------------------------------------------
 
-  const processObjectOrArray = (level, fieldName) =>
-    ifElse(
-      hasPropChildren,
-      processArray(level, fieldName),
-      processObject(level, fieldName)
-    )
+  const processObjectOrArray = level =>
+    ifElse(hasPropChildren, processArray(level), processObject(level))
 
   return processValue(0, failureObj)
 }

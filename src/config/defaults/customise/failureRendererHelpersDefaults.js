@@ -1,13 +1,10 @@
 import { isNotUndefined, concatRight, isNotEmpty, list } from 'ramda-adjunct'
 import {
-  of,
   append,
   compose,
   always,
-  curry,
-  ifElse,
+  pair,
   defaultTo,
-  prepend,
   when,
   join,
   useWith,
@@ -28,6 +25,7 @@ import andOrRenderer from '../../../failures/renderers/andOrRenderer'
 import payloadRenderer from '../../../failures/renderers/payloadRenderer'
 import messageLookup from '../../../failures/messageLookup'
 import defaultText from './failureRendererHelperTextDefault'
+import { propName, propKey } from '../../../utils/failureScope'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -36,30 +34,20 @@ import defaultText from './failureRendererHelperTextDefault'
 export default (validatorMessages, text = {}) => {
   const mergedText = merge(defaultText, text)
 
-  const {
-    KEY,
-    ARGUMENTS,
-    OBJECT,
-    ARRAY,
-    AND,
-    OR,
-    INVALID_VALUES_MESSAGE,
-  } = mergedText
+  const { KEY, OBJECT, ARRAY, AND, OR, INVALID_VALUES_MESSAGE } = mergedText
 
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
 
-  const prefixWithObjectKey = curry((level, value) =>
-    joinWithSpace([joinWithEmDash([newlineAndTabsForLevel(level), KEY]), value])
-  )
+  const textForKeys = compose(defaultTo(KEY), propKey)
 
-  const prefixWithKey = (level, fieldName) =>
+  const prefixWithKey = (level, fieldName, scope) =>
     compose(
-      prefixWithObjectKey(level),
+      joinWithSpace,
+      pair(joinWithEmDash([newlineAndTabsForLevel(level), textForKeys(scope)])),
       joinWithColon,
-      prepend(wrapWithSingleQuotes(fieldName)),
-      of
+      pair(wrapWithSingleQuotes(fieldName))
     )
 
   const prefixWithArrayIndex = (level, index, value) =>
@@ -70,8 +58,6 @@ export default (validatorMessages, text = {}) => {
       ]),
       value,
     ])
-
-  const invalidArgumentsPrefix = always(ARGUMENTS)
 
   const invalidObjectReasonInvalidValues = level =>
     joinWithEmDash([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
@@ -84,7 +70,7 @@ export default (validatorMessages, text = {}) => {
   // Renderers
   // ---------------------------------------------------------------------------
 
-  const renderPayloadConfigured = compose(payloadRenderer, messageLookup)(
+  const renderPayload = compose(payloadRenderer, messageLookup)(
     validatorMessages
   )
 
@@ -93,23 +79,14 @@ export default (validatorMessages, text = {}) => {
   const renderOrs = renderAndOrs(OR)
   const renderGroup = wrapWithSoftBrackets
 
-  const renderFieldNamePrefix = (level, fieldName) =>
-    when(always(isNotUndefined(fieldName)), prefixWithKey(level, fieldName))
-
-  const renderObjectPrefix = (fieldName, level, objName) =>
-    compose(renderFieldNamePrefix(level, fieldName), defaultTo(OBJECT))(objName)
+  const renderObjectPrefix = (level, objName) =>
+    compose(defaultTo(OBJECT))(objName)
 
   // ---------------------------------------------------------------------------
   // Exports
   // ---------------------------------------------------------------------------
 
-  const renderObject = (
-    level,
-    fieldName,
-    objName,
-    objectFields,
-    fieldsErrorMessage
-  ) =>
+  const renderObject = (level, scope, objectFields, fieldsErrorMessage) =>
     compose(
       joinWithSpace,
       when(
@@ -123,43 +100,36 @@ export default (validatorMessages, text = {}) => {
         always(isNotUndefined(fieldsErrorMessage)),
         append(fieldsErrorMessage)
       ),
-      append(renderObjectPrefix(fieldName, level, objName))
+      append(renderObjectPrefix(level, propName(scope)))
     )([])
 
-  const renderArray = (level, fieldName) => values =>
+  const renderArray = values =>
     compose(
-      renderFieldNamePrefix(level, fieldName),
       joinWithSpace,
-      prepend(invalidArrayReasonInvalidValues()),
-      of,
+      pair(invalidArrayReasonInvalidValues()),
       joinWithNoSpace
     )(values)
 
   const renderArrayValue = (level, index, value) =>
     prefixWithArrayIndex(level, index, value)
 
-  const renderPayload = (level, fieldName) =>
-    ifElse(
-      always(isNotUndefined(fieldName)),
-      compose(prefixWithKey(level, fieldName), renderPayloadConfigured),
-      renderPayloadConfigured
-    )
-
-  const renderAndOrMessages = (level, fieldName) =>
-    compose(
-      renderFieldNamePrefix(level, fieldName),
-      andOrRenderer(renderPayloadConfigured, {
-        renderAnds,
-        renderOrs,
-        renderGroup,
-      })
-    )
+  const renderAndOrMessages = andOrRenderer(renderPayload, {
+    renderAnds,
+    renderOrs,
+    renderGroup,
+  })
 
   const renderObjectFieldsError = level => value =>
     useWith(compose(joinWithEmDash, list), [
       newlineAndTabsForLevel,
-      renderPayloadConfigured,
+      renderPayload,
     ])(level, value)
+
+  const renderFieldNamePrefix = (level, fieldName, scope) =>
+    when(
+      always(isNotUndefined(fieldName)),
+      prefixWithKey(level, fieldName, scope)
+    )
 
   return {
     renderObject,
@@ -168,6 +138,6 @@ export default (validatorMessages, text = {}) => {
     renderPayload,
     renderAndOrMessages,
     renderObjectFieldsError,
-    invalidArgumentsPrefix,
+    renderFieldNamePrefix,
   }
 }

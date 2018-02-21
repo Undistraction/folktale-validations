@@ -34,7 +34,7 @@ import { prepareTestData } from '../../testHelpers/utils/predicateData'
 import validateIsArrayOf from '../../../validators/array/validateIsArrayOf'
 
 describe(`validatorMessagesDefaults`, () => {
-  const { failureRenderer } = defaultRenderers
+  const { failureRenderer, argumentsFailureRenderer } = defaultRenderers
 
   // ===========================================================================
   //
@@ -156,7 +156,7 @@ describe(`validatorMessagesDefaults`, () => {
     })
   })
 
-  describe(`validateWhitelistedKeys`, () => {
+  describe(`validateObjectValues`, () => {
     it(`renders payload to message`, () => {
       const failedValidation = validateObjectValues({
         [key1]: validateIsArray,
@@ -245,6 +245,31 @@ describe(`validatorMessagesDefaults`, () => {
         `Array included invalid value(s)
           – [2] Wasn't Number
           – [4] Wasn't Number`
+      )
+    })
+  })
+
+  // ---------------------------------------------------------------------------
+  // Arguments Renderer
+  // ---------------------------------------------------------------------------
+
+  describe(`validateObjectValues`, () => {
+    it(`renders payload to message`, () => {
+      const failedValidation = validateObjectValues({
+        [key1]: validateIsArray,
+        [key2]: validateIsBoolean,
+      })({
+        [key1]: 1,
+        [key2]: 2,
+      })
+
+      expect(
+        argumentsFailureRenderer(failedValidation.value)
+      ).toEqualWithCompressedWhitespace(
+        `Arguments
+            – included invalid value(s)
+            – Key '${key1}': Wasn't Array
+            – Key '${key2}': Wasn't Boolean`
       )
     })
   })

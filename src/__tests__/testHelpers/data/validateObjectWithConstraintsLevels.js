@@ -1,9 +1,8 @@
 import CONSTRAINT_FIELD_NAMES from '../../../const/constraintFieldNames'
+import FAILURE_FIELD_NAMES from '../../../const/failureFieldNames'
 import { name1, name2 } from '../fixtures/generic'
 import { REPLACE_TOKEN } from '../const'
 import { validateIsPlainObject, validateIsArrayOf } from '../../../index'
-
-const { FIELDS, NAME, VALIDATOR, CHILDREN } = CONSTRAINT_FIELD_NAMES
 
 // -----------------------------------------------------------------------------
 // Level 1
@@ -22,19 +21,21 @@ const level2ValueRoot = {
 }
 
 const level2ConstraintsRoot = {
-  [FIELDS]: [
+  [CONSTRAINT_FIELD_NAMES.FIELDS]: [
     {
-      [NAME]: name1,
-      [VALIDATOR]: validateIsArrayOf(validateIsPlainObject),
-      [CHILDREN]: REPLACE_TOKEN,
+      [CONSTRAINT_FIELD_NAMES.NAME]: name1,
+      [CONSTRAINT_FIELD_NAMES.VALIDATOR]: validateIsArrayOf(
+        validateIsPlainObject
+      ),
+      [CONSTRAINT_FIELD_NAMES.CHILDREN]: REPLACE_TOKEN,
     },
   ],
 }
 
 const level2ExpectedFailureObjRoot = {
-  [FIELDS]: {
+  [FAILURE_FIELD_NAMES.FIELDS]: {
     [name1]: {
-      [CHILDREN]: {
+      [FAILURE_FIELD_NAMES.CHILDREN]: {
         '0': REPLACE_TOKEN,
       },
     },
@@ -54,16 +55,20 @@ const level3ValueRoot = {
 }
 
 const level3ConstraintsRoot = {
-  [FIELDS]: [
+  [CONSTRAINT_FIELD_NAMES.FIELDS]: [
     {
-      [NAME]: name1,
-      [VALIDATOR]: validateIsArrayOf(validateIsPlainObject),
-      [CHILDREN]: {
-        [FIELDS]: [
+      [CONSTRAINT_FIELD_NAMES.NAME]: name1,
+      [CONSTRAINT_FIELD_NAMES.VALIDATOR]: validateIsArrayOf(
+        validateIsPlainObject
+      ),
+      [CONSTRAINT_FIELD_NAMES.CHILDREN]: {
+        [CONSTRAINT_FIELD_NAMES.FIELDS]: [
           {
-            [NAME]: name2,
-            [VALIDATOR]: validateIsArrayOf(validateIsPlainObject),
-            [CHILDREN]: REPLACE_TOKEN,
+            [CONSTRAINT_FIELD_NAMES.NAME]: name2,
+            [CONSTRAINT_FIELD_NAMES.VALIDATOR]: validateIsArrayOf(
+              validateIsPlainObject
+            ),
+            [CONSTRAINT_FIELD_NAMES.CHILDREN]: REPLACE_TOKEN,
           },
         ],
       },
@@ -72,13 +77,13 @@ const level3ConstraintsRoot = {
 }
 
 const level3ExpectedFailureObjRoot = {
-  [FIELDS]: {
+  [FAILURE_FIELD_NAMES.FIELDS]: {
     [name1]: {
-      [CHILDREN]: {
+      [FAILURE_FIELD_NAMES.CHILDREN]: {
         '0': {
-          [FIELDS]: {
+          [FAILURE_FIELD_NAMES.FIELDS]: {
             [name2]: {
-              [CHILDREN]: {
+              [FAILURE_FIELD_NAMES.CHILDREN]: {
                 '0': REPLACE_TOKEN,
               },
             },

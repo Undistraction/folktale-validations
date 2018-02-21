@@ -1,5 +1,6 @@
 const defaultText = {
   KEY: `Key`,
+  ARGUMENT: `Arg`,
   ARGUMENTS: `Arguments`,
   OBJECT: `Object`,
   ARRAY: `Array`,

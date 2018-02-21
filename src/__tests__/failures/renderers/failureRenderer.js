@@ -1,4 +1,4 @@
-import { compose, assoc, of, prepend } from 'ramda'
+import { compose, of, prepend } from 'ramda'
 import { list } from 'ramda-adjunct'
 import {
   flatFailureMessage,
@@ -23,11 +23,13 @@ import {
   uid6,
   payload1,
   payload2,
+  scopeName1,
 } from '../../testHelpers/fixtures/generic'
 import { joinWithColon, wrapWithSoftBrackets } from '../../../utils/formatting'
 import { invalidFailureStructureErrorMessage } from '../../../errors'
 import failureRendererHelpersDefaults from '../../../config/defaults/customise/failureRendererHelpersDefaults'
 import failureRenderer from '../../../failures/renderers/failureRenderer'
+import { setPropScope } from '../../../utils/failures'
 
 const renderPayload = uid =>
   compose(joinWithColon, prepend(uid), of, wrapWithSoftBrackets, list)
@@ -83,12 +85,16 @@ describe(`failureRenderer()`, () => {
       )
     })
 
-    describe(`with a name`, () => {
+    describe(`with a scope`, () => {
       it(`renders the correct error message`, () => {
-        const name = `Object Name`
-        const result = renderer(assoc(`name`, name, flatFailureMessage))
+        const scope = {
+          name: scopeName1,
+        }
+
+        const failureWithScope = setPropScope(scope, flatFailureMessage)
+        const result = renderer(failureWithScope)
         expect(result).toEqualWithCompressedWhitespace(
-          `Object Name 
+          `scopeName1 
             – value1: (1,2)
             – included invalid value(s)
               – Key 'a': value2: (1,2)

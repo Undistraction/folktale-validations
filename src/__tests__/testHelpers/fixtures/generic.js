@@ -48,3 +48,4 @@ export const message2 = `message2`
 export const message3 = `message3`
 export const message4 = `message4`
 export const message5 = `message5`
+export const scopeName1 = `scopeName1`

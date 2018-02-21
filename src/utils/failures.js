@@ -25,6 +25,7 @@ const {
   CHILDREN,
   AND,
   OR,
+  SCOPE,
 } = FAILURE_FIELD_NAMES
 
 // -----------------------------------------------------------------------------
@@ -37,8 +38,10 @@ export const propChildren = prop(CHILDREN)
 export const propFieldsFailureMessage = prop(FIELDS_FAILURE_MESSAGE)
 export const propAnd = prop(AND)
 export const propOr = prop(OR)
+export const propScope = prop(SCOPE)
 
 export const setPropName = assoc(NAME)
+export const setPropScope = assoc(SCOPE)
 
 export const hasPropChildren = has(CHILDREN)
 export const isAndObj = has(AND)

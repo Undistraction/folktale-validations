@@ -48,7 +48,6 @@ import {
 import testLevels from '../../testHelpers/testLevels'
 import validateObjectWithConstraintsLevels from '../../testHelpers/data/validateObjectWithConstraintsLevels'
 import { pluralise } from '../../../utils/formatting'
-import { constraintsObjName } from '../../../messages'
 import typeData from '../../testHelpers/fixtures/typeData'
 
 const {
@@ -63,7 +62,7 @@ const {
   CHILDREN,
 } = CONSTRAINT_FIELD_NAMES
 
-const { FIELDS_FAILURE_MESSAGE } = FAILURE_FIELD_NAMES
+const { FIELDS_FAILURE_MESSAGE, SCOPE } = FAILURE_FIELD_NAMES
 
 // Note: No need to test the validity of the constraints object itself as this
 // is well tested in `validateConstraints.js`. These tests should validate that
@@ -226,7 +225,9 @@ describe(`validateObjectWithConstraints`, () => {
       }
 
       const expectedFailureObj = {
-        [NAME]: constraintsObjName(),
+        [SCOPE]: {
+          name: `Constraints`,
+        },
         [FIELDS_FAILURE_MESSAGE]: toPayload(
           VALIDATE_WHITELISTED_KEYS,
           constraints,

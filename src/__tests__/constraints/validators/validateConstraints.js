@@ -65,7 +65,6 @@ const exclusiveKeys = [
 ]
 
 const fieldErrors = [
-  // [NAME, `Wasn't 'String'`, typeData.withoutStringValues],
   [VALIDATOR, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [TRANSFORMER, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [IS_REQUIRED, VALIDATE_IS_BOOLEAN, typeData.withoutBooleanValues],

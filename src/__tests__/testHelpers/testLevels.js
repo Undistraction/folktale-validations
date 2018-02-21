@@ -1,10 +1,7 @@
-import { inc, when, ifElse, always, __, assoc } from 'ramda'
+import { inc, when, ifElse, always, __ } from 'ramda'
 import { isNotNull, mapIndexed } from 'ramda-adjunct'
-import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
-import { constraintsObjName } from '../../messages'
 import { replaceTokenWith } from './utils/objects'
-
-const { NAME } = CONSTRAINT_FIELD_NAMES
+import { setPropScope } from '../../utils/failures'
 
 export default (constraintsLevels, tests, rootFailureIsConstraints = false) => {
   mapIndexed(
@@ -26,7 +23,9 @@ export default (constraintsLevels, tests, rootFailureIsConstraints = false) => {
         replaceTokenWith(__, expectedFailureObjRoot),
         when(
           always(rootFailureIsConstraints),
-          assoc(NAME, constraintsObjName())
+          setPropScope({
+            name: `Constraints`,
+          })
         ) // Mark it as a constraint object
       )
 

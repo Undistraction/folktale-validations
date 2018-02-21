@@ -1,5 +1,4 @@
 import { compose } from 'ramda'
-import { setPropName } from '../../utils/failures'
 import { propValue } from '../../utils/props'
 import validateObjectWithConstraints from './validateObjectWithConstraints'
 import {
@@ -8,12 +7,20 @@ import {
   matchWithSuccessOrFailure,
 } from '../../utils/validations'
 import { constraintsObjName } from '../../messages'
+import failureFieldNames from '../../const/failureScopeFieldNames'
+import { setPropScope } from '../../utils/failures'
+
+const { NAME } = failureFieldNames
+
+const constraintsFailureScope = {
+  [NAME]: constraintsObjName(),
+}
 
 export default ownConstraints =>
   compose(
     matchWithSuccessOrFailure(
       composeSuccess(propValue),
-      composeFailure(setPropName(constraintsObjName()), propValue)
+      composeFailure(setPropScope(constraintsFailureScope), propValue)
     ),
     validateObjectWithConstraints(ownConstraints)
   )
