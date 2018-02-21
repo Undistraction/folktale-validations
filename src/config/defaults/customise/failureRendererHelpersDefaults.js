@@ -73,9 +73,6 @@ export default (validatorMessages, text = {}) => {
 
   const invalidArgumentsPrefix = always(ARGUMENTS)
 
-  const invalidObjectReasonInvalidValues = level =>
-    joinWithNoSpace([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
-
   const invalidArrayReasonInvalidValues = always(
     joinWithSpace([ARRAY, INVALID_VALUES_MESSAGE])
   )
@@ -114,10 +111,7 @@ export default (validatorMessages, text = {}) => {
       joinWithSpace,
       when(
         always(isNotEmpty(objectFields)),
-        concatRight([
-          invalidObjectReasonInvalidValues(level),
-          joinWithNoSpace(objectFields),
-        ])
+        concatRight([INVALID_VALUES_MESSAGE, joinWithNoSpace(objectFields)])
       ),
       when(
         always(isNotUndefined(fieldsErrorMessage)),
