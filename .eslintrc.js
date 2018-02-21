@@ -15,9 +15,6 @@ module.exports = {
       jsx: true,
     },
   },
-  globals: {
-    l: true,
-  },
   rules: {
     'func-names': ['error', 'never'],
     'no-param-reassign': 'off',
