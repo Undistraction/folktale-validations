@@ -540,7 +540,7 @@ expect(failedValidation.value).toEqual({
   },
 })
 expect(message).toEqualWithCompressedWhitespace(
-  `Object – missing required key(s): ['a']`
+  `Object missing required key(s): ['a']`
 )
 ```
 

@@ -75,8 +75,7 @@ describe(`failureRenderer()`, () => {
       const result = renderer(flatFailureMessage)
       expect(result).toEqualWithCompressedWhitespace(
         `Object 
-          – value1: (1,2)
-          included invalid value(s)
+          value1: (1,2) included invalid value(s)
             – Key 'a': value2: (1,2)
             – Key 'b': value3: (1,2)
             – Key 'c': value4: (1,2)`
@@ -89,8 +88,7 @@ describe(`failureRenderer()`, () => {
         const result = renderer(assoc(`name`, name, flatFailureMessage))
         expect(result).toEqualWithCompressedWhitespace(
           `Object Name 
-            – value1: (1,2)
-            included invalid value(s)
+            value1: (1,2) included invalid value(s)
               – Key 'a': value2: (1,2)
               – Key 'b': value3: (1,2)
               – Key 'c': value4: (1,2)`
@@ -103,15 +101,12 @@ describe(`failureRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithObject)
       expect(result).toEqualWithCompressedWhitespace(
-        `Object 
-          included invalid value(s)
-            – Key 'a': value1: (1,2)
-            – Key 'b':
-                Object
-                  – value2: (1,2)
-                  included invalid value(s)
-                    –  Key 'ba': value3: (1,2)
-            – Key 'c': value4: (1,2)`
+        `Object included invalid value(s)
+          – Key 'a': value1: (1,2)
+          – Key 'b': Object value2: (1,2) 
+            included invalid value(s)
+              – Key 'ba': value3: (1,2)
+              – Key 'c': value4: (1,2)`
       )
     })
   })
@@ -120,19 +115,15 @@ describe(`failureRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithArray)
       expect(result).toEqualWithCompressedWhitespace(
-        `Object 
-          included invalid value(s)
-            – Key 'a': value1: (1,2)
-            – Key 'b': Array included invalid value(s)
-              – [1] Object 
-                included invalid value(s)
-                  – Key 'b1a': value2: (1,2)
-                  – Key 'b1b': value3: (1,2)
-              – [3] Object 
-                – value4: (1,2)
-                included invalid value(s)
-                  – Key 'b2a': value5: (1,2)
-            – Key 'c': value6: (1,2)`
+        `Object included invalid value(s)
+          – Key 'a': value1: (1,2)
+          – Key 'b': Array included invalid value(s)
+            – [1] Object included invalid value(s)
+                – Key 'b1a': value2: (1,2)
+                – Key 'b1b': value3: (1,2)
+            – [3] Object value4: (1,2) included invalid value(s)
+                – Key 'b2a': value5: (1,2)
+          – Key 'c': value6: (1,2)`
       )
     })
   })
@@ -141,8 +132,7 @@ describe(`failureRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedAndsContainingOrs)
       expect(result).toEqualWithCompressedWhitespace(
-        `Object
-          included invalid value(s) 
+        `Object included invalid value(s) 
             – Key 'a': value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`
       )
     })
@@ -152,8 +142,7 @@ describe(`failureRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedOrsContainingAnds)
       expect(result).toEqualWithCompressedWhitespace(
-        `Object
-          included invalid value(s)
+        `Object included invalid value(s)
             – Key 'a': value1: (1,2) or value2: (1,2) or (value3: (1,2) and value4: (1,2) and (value5: (1,2) or value6: (1,2)))`
       )
     })
@@ -163,8 +152,7 @@ describe(`failureRenderer()`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithObjectAndNestedAnds)
       expect(result).toEqualWithCompressedWhitespace(
-        `Object
-          included invalid value(s)
+        `Object included invalid value(s)
             – Key 'a': value1: (1,2)
             – Key 'b': value2: (1,2) and value3: (1,2)`
       )

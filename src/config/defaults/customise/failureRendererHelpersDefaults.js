@@ -106,8 +106,9 @@ export default (validatorMessages, text = {}) => {
     objName,
     objectFields,
     fieldsErrorMessage
-  ) =>
-    compose(
+  ) => {
+    console.log(`Fields Error Message`, fieldsErrorMessage)
+    return compose(
       joinWithSpace,
       when(
         always(isNotEmpty(objectFields)),
@@ -119,6 +120,7 @@ export default (validatorMessages, text = {}) => {
       ),
       append(renderObjectPrefix(fieldName, level, objName))
     )([])
+  }
 
   const renderArray = (level, fieldName) => values =>
     compose(
@@ -150,7 +152,7 @@ export default (validatorMessages, text = {}) => {
     )
 
   const renderObjectFieldsError = level => value =>
-    useWith(compose(joinWithEmDash, list), [
+    useWith(compose(joinWithSpace, list), [
       newlineAndTabsForLevel,
       renderPayloadConfigured,
     ])(level, value)

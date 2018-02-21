@@ -57,8 +57,7 @@ describe(`validatorMessagesDefaults`, () => {
       expect(
         failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
-        `Constraints
-          – included key(s) not on whitelist: ['fieldsValidator', 'fields']`
+        `Constraints included key(s) not on whitelist: ['fieldsValidator', 'fields']`
       )
     })
   })
@@ -170,8 +169,8 @@ describe(`validatorMessagesDefaults`, () => {
         failureRenderer(failedValidation.value)
       ).toEqualWithCompressedWhitespace(
         `Object included invalid value(s)
-            – Key '${key1}': Wasn't Array
-            – Key '${key2}': Wasn't Boolean`
+          – Key '${key1}': Wasn't Array
+          – Key '${key2}': Wasn't Boolean`
       )
     })
   })

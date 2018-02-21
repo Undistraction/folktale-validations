@@ -379,7 +379,7 @@ describe(`code from README.md`, () => {
         },
       })
       expect(message).toEqualWithCompressedWhitespace(
-        `Object – missing required key(s): ['a']`
+        `Object missing required key(s): ['a']`
       )
     })
   })
