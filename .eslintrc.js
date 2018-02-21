@@ -15,9 +15,6 @@ module.exports = {
       jsx: true,
     },
   },
-  globals: {
-    l: true,
-  },
   rules: {
     'func-names': ['error', 'never'],
     'no-param-reassign': 'off',
@@ -39,9 +36,10 @@ module.exports = {
         argsIgnorePattern: '^_$',
       },
     ],
+    'no-console': ['error'],
     'ramda/always-simplification': ['error'],
     'ramda/compose-simplification': ['error'],
     'ramda/eq-by-simplification': ['error'],
     'ramda/prefer-complement': ['error'],
   },
-};
+}

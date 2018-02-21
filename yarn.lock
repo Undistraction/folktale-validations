@@ -2052,6 +2052,10 @@ folktale@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/folktale/-/folktale-2.0.1.tgz#6dc26a65565aefdef9520223e022dddf5b8d8462"
 
+folktale@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/folktale/-/folktale-2.1.0.tgz#3332b9e37b4b92150788b72bd0e2ddd8d70e4096"
+
 for-in@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -2782,6 +2786,16 @@ jasmine-expect@^3.8.3:
   dependencies:
     add-matchers "0.5.0"
 
+jasmine-folktale@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/jasmine-folktale/-/jasmine-folktale-0.0.5.tgz#76e12884e070ad8b69348bd78b7372218e329eb8"
+  dependencies:
+    deep-eql "^3.0.1"
+    folktale "^2.1.0"
+    ramda "^0.25.0"
+    ramda-adjunct "^2.5.0"
+    ramda-log "0.0.3"
+
 jest-changed-files@^22.1.4:
   version "22.1.4"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-22.1.4.tgz#1f7844bcb739dec07e5899a633c0cb6d5069834e"
@@ -2850,6 +2864,15 @@ jest-diff@^22.1.0:
     diff "^3.2.0"
     jest-get-type "^22.1.0"
     pretty-format "^22.1.0"
+
+jest-diff@^22.4.0:
+  version "22.4.0"
+  resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-22.4.0.tgz#384c2b78519ca44ca126382df53f134289232525"
+  dependencies:
+    chalk "^2.0.1"
+    diff "^3.2.0"
+    jest-get-type "^22.1.0"
+    pretty-format "^22.4.0"
 
 jest-docblock@^21.0.0:
   version "21.2.0"
@@ -2920,6 +2943,14 @@ jest-matcher-utils@^22.1.0:
     chalk "^2.0.1"
     jest-get-type "^22.1.0"
     pretty-format "^22.1.0"
+
+jest-matcher-utils@^22.4.0:
+  version "22.4.0"
+  resolved "https://registry.yarnpkg.com/jest-matcher-utils/-/jest-matcher-utils-22.4.0.tgz#d55f5faf2270462736bdf7c7485ee931c9d4b6a1"
+  dependencies:
+    chalk "^2.0.1"
+    jest-get-type "^22.1.0"
+    pretty-format "^22.4.0"
 
 jest-message-util@^22.1.0:
   version "22.1.0"
@@ -3928,6 +3959,13 @@ pretty-format@^22.1.0:
     ansi-regex "^3.0.0"
     ansi-styles "^3.2.0"
 
+pretty-format@^22.4.0:
+  version "22.4.0"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-22.4.0.tgz#237b1f7e1c50ed03bc65c03ccc29d7c8bb7beb94"
+  dependencies:
+    ansi-regex "^3.0.0"
+    ansi-styles "^3.2.0"
+
 pretty-ms@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/pretty-ms/-/pretty-ms-3.1.0.tgz#e9cac9c76bf6ee52fe942dd9c6c4213153b12881"
@@ -4020,6 +4058,14 @@ ramda-adjunct@^2.2.0:
 ramda-adjunct@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.5.0.tgz#50d7d74ca273731b05dcdda77d102bc57d7c1145"
+
+ramda-log@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ramda-log/-/ramda-log-0.0.3.tgz#bdfcd33868c071acac4627866893b4e7ef3f7914"
+  dependencies:
+    ramda "^0.25.0"
+    ramda-adjunct "^2.5.0"
+    safe-json-stringify "^1.1.0"
 
 ramda@0.25.0, ramda@^0.25.0:
   version "0.25.0"
@@ -4393,9 +4439,9 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.3.0"
     micromatch "^2.3.11"
 
-rollup@^0.54.0:
-  version "0.54.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.54.0.tgz#0641b8154ba02706464285d2ead924c486b48ba9"
+rollup@^0.56.2:
+  version "0.56.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.56.2.tgz#1788cf56d4350b6d8ecf76b5d654c59c7bf9c24a"
 
 run-async@^2.2.0:
   version "2.3.0"
@@ -4424,6 +4470,10 @@ safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
 safe-json-stringify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/safe-json-stringify/-/safe-json-stringify-1.0.4.tgz#81a098f447e4bbc3ff3312a243521bc060ef5911"
+
+safe-json-stringify@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/safe-json-stringify/-/safe-json-stringify-1.1.0.tgz#bd2b6dad1ebafab3c24672a395527f01804b7e19"
 
 samsam@1.x:
   version "1.3.0"

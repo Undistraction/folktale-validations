@@ -59,9 +59,6 @@ export default (validatorMessages, text = {}) => {
       value,
     ])
 
-  const invalidObjectReasonInvalidValues = level =>
-    joinWithEmDash([newlineAndTabsForLevel(level), INVALID_VALUES_MESSAGE])
-
   const invalidArrayReasonInvalidValues = always(
     joinWithSpace([ARRAY, INVALID_VALUES_MESSAGE])
   )
@@ -91,10 +88,7 @@ export default (validatorMessages, text = {}) => {
       joinWithSpace,
       when(
         always(isNotEmpty(objectFields)),
-        concatRight([
-          invalidObjectReasonInvalidValues(level),
-          joinWithNoSpace(objectFields),
-        ])
+        concatRight([INVALID_VALUES_MESSAGE, joinWithNoSpace(objectFields)])
       ),
       when(
         always(isNotUndefined(fieldsErrorMessage)),
@@ -120,7 +114,7 @@ export default (validatorMessages, text = {}) => {
   })
 
   const renderObjectFieldsError = level => value =>
-    useWith(compose(joinWithEmDash, list), [
+    useWith(compose(joinWithSpace, list), [
       newlineAndTabsForLevel,
       renderPayload,
     ])(level, value)
