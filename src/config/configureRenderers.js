@@ -7,13 +7,14 @@ import { mergeWithDefaults } from '../utils/object'
 export default ({
   validatorMessages,
   helpers = failureRendererHelpersDefaults,
+  helperText,
 } = {}) => {
   const mergedValidatorMessages = mergeWithDefaults(
     validatorMessagesDefaults,
     validatorMessages
   )
 
-  const configuredHelpers = helpers(mergedValidatorMessages)
+  const configuredHelpers = helpers(mergedValidatorMessages, helperText)
 
   const configuredFailureRenderer = failureRenderer(configuredHelpers)
   const configuredArgumentsFailureRenderer = argumentsFailureRenderer(

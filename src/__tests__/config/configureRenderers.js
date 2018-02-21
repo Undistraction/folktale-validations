@@ -1,10 +1,11 @@
 import { always } from 'ramda'
 import { configureRenderers } from '../../index'
 import toPayload from '../../failures/toPayload'
-import { message1 } from '../testHelpers/fixtures/generic'
+import { message1, value1, key1 } from '../testHelpers/fixtures/generic'
 import {
   VALIDATE_IS_ARRAY,
   VALIDATE_IS_OBJECT,
+  VALIDATE_IS_BOOLEAN,
 } from '../../const/validatorUids'
 
 describe(`configureRenderers()`, () => {
@@ -43,6 +44,30 @@ describe(`configureRenderers()`, () => {
       expect(failureRenderer(expectedIsObjectPayload)).toEqual(message1)
       expect(argumentsFailureRenderer(expectedIsObjectPayload)).toEqual(
         message1
+      )
+    })
+  })
+
+  describe(`with supplied 'helperTest'`, () => {
+    it(`overrides supplied helperText whilst leaving others untouched`, () => {
+      const helperText = {
+        OBJECT: value1,
+      }
+
+      const { failureRenderer } = configureRenderers({
+        helperText,
+      })
+
+      const payload = {
+        fields: {
+          [key1]: toPayload(VALIDATE_IS_BOOLEAN, value1),
+        },
+      }
+
+      // 'Object' replaced with 'value1'
+      expect(failureRenderer(payload)).toEqualWithCompressedWhitespace(
+        `value1 – included invalid value(s)
+          – Key 'key1': Wasn't Boolean`
       )
     })
   })

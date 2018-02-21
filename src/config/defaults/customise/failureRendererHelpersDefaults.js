@@ -1,4 +1,4 @@
-import { isNotUndefined, concatRight, isNotEmpty } from 'ramda-adjunct'
+import { isNotUndefined, concatRight, isNotEmpty, list } from 'ramda-adjunct'
 import {
   of,
   append,
@@ -10,6 +10,8 @@ import {
   prepend,
   when,
   join,
+  useWith,
+  merge,
 } from 'ramda'
 import {
   joinWithColon,
@@ -25,20 +27,25 @@ import {
 import andOrRenderer from '../../../failures/renderers/andOrRenderer'
 import payloadRenderer from '../../../failures/renderers/payloadRenderer'
 import messageLookup from '../../../failures/messageLookup'
+import defaultText from './failureRendererHelperTextDefault'
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const KEY = `Key`
-const ARGUMENTS = `Arguments`
-const OBJECT = `Object`
-const ARRAY = `Array`
-const AND = `and`
-const OR = `or`
-const INVALID_VALUES_MESSAGE = `included invalid value(s)`
+export default (validatorMessages, text = {}) => {
+  const mergedText = merge(defaultText, text)
 
-export default validatorMessages => {
+  const {
+    KEY,
+    ARGUMENTS,
+    OBJECT,
+    ARRAY,
+    AND,
+    OR,
+    INVALID_VALUES_MESSAGE,
+  } = mergedText
+
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
@@ -149,10 +156,10 @@ export default validatorMessages => {
     )
 
   const renderObjectFieldsError = level => value =>
-    joinWithEmDash([
-      newlineAndTabsForLevel(level),
-      renderPayloadConfigured(value),
-    ])
+    useWith(compose(joinWithEmDash, list), [
+      newlineAndTabsForLevel,
+      renderPayloadConfigured,
+    ])(level, value)
 
   return {
     renderObject,
