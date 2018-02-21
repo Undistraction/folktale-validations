@@ -85,6 +85,7 @@
     "folktale": "^2.0.1",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.5.0"
+    "ramda-log": "0.0.3"
   },
   "husky": {
     "hooks": {

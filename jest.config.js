@@ -4,7 +4,7 @@ module.exports = {
   collectCoverage: true,
   coverageDirectory: `./coverage/`,
   collectCoverageFrom: [`src/**/*.js`],
-  coveragePathIgnorePatterns: [`src/index.js`, `src/utils/logging.js`],
+  coveragePathIgnorePatterns: [`src/index.js`],
   coverageReporters: [`html`, `lcov`],
   setupTestFrameworkScriptFile: `<rootDir>/src/__tests__/testHelpers/matchers/customMatchers.js`,
   modulePathIgnorePatterns: [`testHelpers/`],
