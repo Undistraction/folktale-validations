@@ -27,6 +27,8 @@ import {
   value1,
   value2,
   invalidKeyName,
+  name1,
+  validator1,
 } from '../../testHelpers/fixtures/generic'
 
 import predicateValidators from '../../testHelpers/data/predicateValidators'
@@ -42,23 +44,46 @@ describe(`validatorMessagesDefaults`, () => {
   //
   // ===========================================================================
 
-  describe(`with invalid constraints`, () => {
-    it(`renders the errorObj to message`, () => {
-      const invalidConstraintsObj = {
-        [invalidKeyName]: value1,
-      }
+  describe(`constraints validation`, () => {
+    describe(`with invalid constraints`, () => {
+      it(`renders the errorObj to message`, () => {
+        const invalidConstraintsObj = {
+          [invalidKeyName]: value1,
+        }
 
-      const configuredValidator = validateObjectWithConstraints(
-        invalidConstraintsObj
-      )
+        const configuredValidator = validateObjectWithConstraints(
+          invalidConstraintsObj
+        )
 
-      const failedValidation = configuredValidator({})
+        const failedValidation = configuredValidator({})
 
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
-        `Constraints included key(s) not on whitelist: ['fieldsValidator', 'fields']`
-      )
+        expect(failureRenderer(failedValidation.value)).toEqual(
+          `Constraints included key(s) not on whitelist: ['fieldsValidator', 'fields']`
+        )
+      })
+    })
+
+    describe(`with invalid obj`, () => {
+      describe(`with failing fields validation`, () => {
+        it(`renders the errorObj to message`, () => {
+          const constraints = {
+            fields: [
+              {
+                name: name1,
+                validator: validator1,
+                isRequired: true,
+              },
+            ],
+          }
+
+          const configuredValidator = validateObjectWithConstraints(constraints)
+          const failedValidation = configuredValidator({})
+
+          expect(failureRenderer(failedValidation.value)).toEqual(
+            `Object missing required key(s): ['name1']`
+          )
+        })
+      })
     })
   })
 

@@ -55,7 +55,7 @@ export default rendererHelpers => failureObj => {
     }, [])
 
   const processArray = level =>
-    compose(renderArray, processArrayValues(inc(level)), propChildren)
+    compose(renderArray(level), processArrayValues(inc(level)), propChildren)
 
   // ---------------------------------------------------------------------------
   // Object
@@ -72,7 +72,7 @@ export default rendererHelpers => failureObj => {
 
   const processObjectFieldsErrorMessage = (level, o) =>
     compose(
-      when(isNotUndefined, renderObjectFieldsError(level)),
+      when(isNotUndefined, renderObjectFieldsError),
       propFieldsFailureMessage
     )(o)
 

@@ -31,7 +31,6 @@ import {
 // -----------------------------------------------------------------------------
 
 const NEWLINE = `\n`
-const TAB = `\t`
 const SINGLE_QUOTE = `'`
 const SQUARE_BRACKET_OPENING = `[`
 const SQUARE_BRACKET_CLOSING = `]`
@@ -49,6 +48,7 @@ const NAN = `NaN`
 const FUNCTION = `function () {}`
 const AND = `and`
 const OR = `or`
+const indentChars = `  `
 
 const stringRepresentationIfNil = compose(
   when(isNull, always(NULL)),
@@ -109,10 +109,10 @@ export const quoteAndJoinWithComma = compose(
   map(wrapWithSingleQuotes)
 )
 
-export const tabsForLevel = compose(joinWithNoSpace, repeat(TAB))
+export const indentBy = compose(joinWithNoSpace, repeat(indentChars))
 
 export const newlineAndTabsForLevel = level =>
-  joinWithNoSpace([NEWLINE, tabsForLevel(inc(level))])
+  joinWithNoSpace([NEWLINE, indentBy(inc(level))])
 
 export const toList = compose(wrapWithSquareBrackets, quoteAndJoinWithComma)
 

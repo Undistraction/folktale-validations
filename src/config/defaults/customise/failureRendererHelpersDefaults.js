@@ -1,4 +1,10 @@
-import { isNotUndefined, concatRight, isNotEmpty, list } from 'ramda-adjunct'
+import {
+  isNotUndefined,
+  concatRight,
+  isNotEmpty,
+  compact,
+  appendFlipped,
+} from 'ramda-adjunct'
 import {
   append,
   compose,
@@ -7,15 +13,14 @@ import {
   defaultTo,
   when,
   join,
-  useWith,
   merge,
+  prepend,
+  flatten,
 } from 'ramda'
 import {
   joinWithColon,
-  joinWithNoSpace,
   wrapWithSingleQuotes,
   joinWithSpace,
-  joinWithEmDash,
   wrapWithSquareBrackets,
   newlineAndTabsForLevel,
   wrapWithSoftBrackets,
@@ -34,30 +39,34 @@ import { propName, propKey } from '../../../utils/failureScope'
 export default (validatorMessages, text = {}) => {
   const mergedText = merge(defaultText, text)
 
-  const { KEY, OBJECT, ARRAY, AND, OR, INVALID_VALUES_MESSAGE } = mergedText
+  const {
+    KEY,
+    OBJECT,
+    ARRAY,
+    AND,
+    OR,
+    INVALID_VALUES_MESSAGE,
+    INDENT_PREFIX,
+  } = mergedText
 
   // ---------------------------------------------------------------------------
   // Helpers
   // ---------------------------------------------------------------------------
 
-  const textForKeys = compose(defaultTo(KEY), propKey)
+  const joinLines = level => join(newlineAndTabsForLevel(level))
+
+  const keyText = compose(defaultTo(KEY), propKey)
 
   const prefixWithKey = (level, fieldName, scope) =>
     compose(
       joinWithSpace,
-      pair(joinWithEmDash([newlineAndTabsForLevel(level), textForKeys(scope)])),
+      appendFlipped([INDENT_PREFIX, keyText(scope)]),
       joinWithColon,
       pair(wrapWithSingleQuotes(fieldName))
     )
 
   const prefixWithArrayIndex = (level, index, value) =>
-    joinWithSpace([
-      joinWithEmDash([
-        newlineAndTabsForLevel(level),
-        wrapWithSquareBrackets(index),
-      ]),
-      value,
-    ])
+    joinWithSpace([INDENT_PREFIX, wrapWithSquareBrackets(index), value])
 
   const invalidArrayReasonInvalidValues = always(
     joinWithSpace([ARRAY, INVALID_VALUES_MESSAGE])
@@ -79,16 +88,12 @@ export default (validatorMessages, text = {}) => {
   const renderObjectPrefix = (level, objName) =>
     compose(defaultTo(OBJECT))(objName)
 
-  // ---------------------------------------------------------------------------
-  // Exports
-  // ---------------------------------------------------------------------------
-
-  const renderObject = (level, scope, objectFields, fieldsErrorMessage) =>
+  const renderObjectHeader = (level, scope, objectFields, fieldsErrorMessage) =>
     compose(
       joinWithSpace,
       when(
         always(isNotEmpty(objectFields)),
-        concatRight([INVALID_VALUES_MESSAGE, joinWithNoSpace(objectFields)])
+        concatRight([INVALID_VALUES_MESSAGE])
       ),
       when(
         always(isNotUndefined(fieldsErrorMessage)),
@@ -97,12 +102,24 @@ export default (validatorMessages, text = {}) => {
       append(renderObjectPrefix(level, propName(scope)))
     )([])
 
-  const renderArray = values =>
-    compose(
-      joinWithSpace,
-      pair(invalidArrayReasonInvalidValues()),
-      joinWithNoSpace
-    )(values)
+  // ---------------------------------------------------------------------------
+  // Exports
+  // ---------------------------------------------------------------------------
+
+  const renderObject = (level, scope, objectFields, fieldsErrorMessage) => {
+    const header = renderObjectHeader(
+      level,
+      scope,
+      objectFields,
+      fieldsErrorMessage
+    )
+    return compose(joinLines(level), flatten, compact)([header, objectFields])
+  }
+
+  const renderArray = level => values =>
+    compose(joinLines(level), prepend(invalidArrayReasonInvalidValues()))(
+      values
+    )
 
   const renderArrayValue = (level, index, value) =>
     prefixWithArrayIndex(level, index, value)
@@ -113,11 +130,7 @@ export default (validatorMessages, text = {}) => {
     renderGroup,
   })
 
-  const renderObjectFieldsError = level => value =>
-    useWith(compose(joinWithSpace, list), [
-      newlineAndTabsForLevel,
-      renderPayload,
-    ])(level, value)
+  const renderObjectFieldsError = renderPayload
 
   const renderFieldNamePrefix = (level, fieldName, scope) =>
     when(
