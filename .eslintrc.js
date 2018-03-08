@@ -20,6 +20,12 @@ module.exports = {
     'no-param-reassign': 'off',
     'import/no-extraneous-dependencies': 'off',
     'no-confusing-arrow': 'off',
+    'no-unused-expressions': [
+      'error',
+      {
+        allowTaggedTemplates: true,
+      },
+    ],
     quotes: [
       'error',
       'backtick',

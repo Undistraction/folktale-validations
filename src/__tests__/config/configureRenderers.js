@@ -65,10 +65,9 @@ describe(`configureRenderers()`, () => {
       }
 
       // 'Object' replaced with 'value1'
-      expect(failureRenderer(payload)).toEqualWithCompressedWhitespace(
-        `value1 included invalid value(s)
-          – Key 'key1': Wasn't Boolean`
-      )
+      expect(failureRenderer(payload)).toEqualMultiline(`
+        value1 included invalid value(s)
+          – Key 'key1': Wasn't Boolean`)
     })
   })
 })

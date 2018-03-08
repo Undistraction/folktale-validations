@@ -59,29 +59,25 @@ describe(`failureRenderer()`, () => {
   describe(`with a single payload`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(payload1)
-      expect(result).toEqualWithCompressedWhitespace(`value1: (1,2)`)
+      expect(result).toEqual(`value1: (1,2)`)
     })
   })
 
   describe(`with ands and ors`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer({ and: [payload1, payload2] })
-      expect(result).toEqualWithCompressedWhitespace(
-        `value1: (1,2) and value2: (1,2)`
-      )
+      expect(result).toEqual(`value1: (1,2) and value2: (1,2)`)
     })
   })
 
   describe(`with a flat error object`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(flatFailureMessage)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object 
-          value1: (1,2) included invalid value(s)
-            – Key 'a': value2: (1,2)
-            – Key 'b': value3: (1,2)
-            – Key 'c': value4: (1,2)`
-      )
+      expect(result).toEqualMultiline(`
+        Object value1: (1,2) included invalid value(s)
+          – Key 'a': value2: (1,2)
+          – Key 'b': value3: (1,2)
+          – Key 'c': value4: (1,2)`)
     })
 
     describe(`with a scope`, () => {
@@ -92,12 +88,11 @@ describe(`failureRenderer()`, () => {
 
         const failureWithScope = setPropScope(scope, flatFailureMessage)
         const result = renderer(failureWithScope)
-        expect(result).toEqualWithCompressedWhitespace(
-          `scopeName1 value1: (1,2) included invalid value(s)
-            – Key 'a': value2: (1,2) 
-            – Key 'b': value3: (1,2) 
-            – Key 'c': value4: (1,2)`
-        )
+        expect(result).toEqualMultiline(`
+          scopeName1 value1: (1,2) included invalid value(s)
+            – Key 'a': value2: (1,2)
+            – Key 'b': value3: (1,2)
+            – Key 'c': value4: (1,2)`)
       })
     })
   })
@@ -105,61 +100,56 @@ describe(`failureRenderer()`, () => {
   describe(`with a nested error object`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithObject)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
+      expect(result).toEqualMultiline(`
+        Object included invalid value(s)
           – Key 'a': value1: (1,2)
           – Key 'b': Object value2: (1,2) included invalid value(s)
-              – Key 'ba': value3: (1,2)
-              – Key 'c': value4: (1,2)`
-      )
+            – Key 'ba': value3: (1,2)
+          – Key 'c': value4: (1,2)`)
     })
   })
 
   describe(`with a nested array of error objects`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithArray)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
+      expect(result).toEqualMultiline(`
+        Object included invalid value(s)
           – Key 'a': value1: (1,2)
           – Key 'b': Array included invalid value(s)
             – [1] Object included invalid value(s)
-                – Key 'b1a': value2: (1,2)
-                – Key 'b1b': value3: (1,2)
+              – Key 'b1a': value2: (1,2)
+              – Key 'b1b': value3: (1,2)
             – [3] Object value4: (1,2) included invalid value(s)
-                – Key 'b2a': value5: (1,2)
-          – Key 'c': value6: (1,2)`
-      )
+              – Key 'b2a': value5: (1,2)
+          – Key 'c': value6: (1,2)`)
     })
   })
 
   describe(`with nested ands > ors`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedAndsContainingOrs)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s) 
-            – Key 'a': value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`
-      )
+      expect(result).toEqualMultiline(`
+        Object included invalid value(s)
+          – Key 'a': value1: (1,2) and value2: (1,2) and (value3: (1,2) or value4: (1,2) or (value5: (1,2) and value6: (1,2)))`)
     })
   })
 
   describe(`with nested ors > ands`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedOrsContainingAnds)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
-            – Key 'a': value1: (1,2) or value2: (1,2) or (value3: (1,2) and value4: (1,2) and (value5: (1,2) or value6: (1,2)))`
-      )
+      expect(result).toEqualMultiline(`
+        Object included invalid value(s)
+          – Key 'a': value1: (1,2) or value2: (1,2) or (value3: (1,2) and value4: (1,2) and (value5: (1,2) or value6: (1,2)))`)
     })
   })
 
   describe(`with a flat error object and nested ands`, () => {
     it(`renders the correct error message`, () => {
       const result = renderer(nestedFailureMessageWithObjectAndNestedAnds)
-      expect(result).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
-            – Key 'a': value1: (1,2)
-            – Key 'b': value2: (1,2) and value3: (1,2)`
-      )
+      expect(result).toEqualMultiline(`
+        Object included invalid value(s)
+          – Key 'a': value1: (1,2)
+          – Key 'b': value2: (1,2) and value3: (1,2)`)
     })
   })
 })

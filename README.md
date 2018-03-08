@@ -156,7 +156,7 @@ Many of the validators are simple predicate validators - supply them with a valu
 
 **Example 1 - Predicate Validator**
 
-```javaScript
+```javascript
 const validValue = `a`
 const successfulValidation = validateIsString(validValue)
 
@@ -180,7 +180,7 @@ Other validators require configuring before use.
 
 **Example 2 - Association Validator**
 
-```javaScript
+```javascript
 const configuredValidator = validateIsLengthGreaterThan(2)
 
 const validValue = `abc`
@@ -206,65 +206,64 @@ Validators can also validate Objects - either keys or values. In the following e
 
 **Example 3 - Object Validator**
 
-```javaScript
+```javascript
 const configuredValidator = validateObjectValues({
-    a: validateIsNumber,
-    b: validateIsString,
-    c: validateIsNotEmpty,
-  })
+  a: validateIsNumber,
+  b: validateIsString,
+  c: validateIsNotEmpty,
+})
 
-  const validValue = {
-    a: 1,
-    b: `example`,
-    c: [1, 2, 3],
-  }
-  const successfulValidation = configuredValidator(validValue)
+const validValue = {
+  a: 1,
+  b: `example`,
+  c: [1, 2, 3],
+}
+const successfulValidation = configuredValidator(validValue)
 
-  expect(isSuccess(successfulValidation)).toBeTrue()
-  expect(successfulValidation.value).toEqual(validValue)
+expect(isSuccess(successfulValidation)).toBeTrue()
+expect(successfulValidation.value).toEqual(validValue)
 
-  const invalidValue = {
-    a: `example`,
-    b: true,
-    c: [],
-  }
-  const failedValidation = configuredValidator(invalidValue)
-  const message = failureRenderer(failedValidation.value)
+const invalidValue = {
+  a: `example`,
+  b: true,
+  c: [],
+}
+const failedValidation = configuredValidator(invalidValue)
+const message = failureRenderer(failedValidation.value)
 
-  expect(isFailure(failedValidation)).toBeTrue()
-  expect(failedValidation.value).toEqual({
-    fields: {
-      a: {
-        uid: `folktale-validations.validateIsNumber`,
-        value: `example`,
-        args: [],
-      },
-      b: {
-        uid: `folktale-validations.validateIsString`,
-        value: true,
-        args: [],
-      },
-      c: {
-        uid: `folktale-validations.validateIsNotEmpty`,
-        value: [],
-        args: [],
-      },
+expect(isFailure(failedValidation)).toBeTrue()
+expect(failedValidation.value).toEqual({
+  fields: {
+    a: {
+      uid: `folktale-validations.validateIsNumber`,
+      value: `example`,
+      args: [],
     },
-  })
-  expect(message).toEqualWithCompressedWhitespace(
-    `Object
+    b: {
+      uid: `folktale-validations.validateIsString`,
+      value: true,
+      args: [],
+    },
+    c: {
+      uid: `folktale-validations.validateIsNotEmpty`,
+      value: [],
+      args: [],
+    },
+  },
+})
+expect(message).toEqualMultiline(`
+    Object
       included invalid value(s)
         – Key 'a': Wasn't Number
         – Key 'b': Wasn't String
-        – Key 'c': Was Empty`
-  )
+        – Key 'c': Was Empty`)
 ```
 
 An Array of values can also be validated, using a single validator for all the values in the array.
 
 **Example 4 - Array Validator**
 
-```javaScript
+```javascript
 const configuredValidator = validateArrayElements(validateIsRegExp)
 
 const validValue = [/a/, /b/, /c/]
@@ -287,10 +286,9 @@ expect(failedValidation.value).toEqual({
     },
   },
 })
-expect(message).toEqualWithCompressedWhitespace(
-  `Array included invalid value(s)
-    – [1] Wasn't RegExp`
-      )
+expect(message).toEqualMultiline(`
+  Array included invalid value(s)
+    – [1] Wasn't RegExp`)
 ```
 
 ### Combining Validations
@@ -330,9 +328,7 @@ expect(failedValidation.value).toEqual({
     },
   ],
 })
-expect(message).toEqualWithCompressedWhitespace(
-  `Wasn't String and Length wasn't less than '5'`
-)
+expect(message).toEqual(`Wasn't String and Length wasn't less than '5'`)
 ```
 
 These validations can themselves be composed, for example:
@@ -379,7 +375,7 @@ expect(failedValidation.value).toEqual({
     },
   ],
 })
-expect(message).toEqualWithCompressedWhitespace(
+expect(message).toEqual(
   `(Wasn't String or Wasn't Number) and Length wasn't less than '5'`
 )
 ```
@@ -459,13 +455,12 @@ it(`returns expected values`, () => {
       },
     },
   })
-  expect(message).toEqualWithCompressedWhitespace(
-    `Object
+  expect(message).toEqualMultiline(`
+    Object
       included invalid value(s)
       – Key 'a': Wasn't String
       – Key 'b': Wasn't Array
-      – Key 'c': Wasn't Date`
-  )
+      – Key 'c': Wasn't Date`)
 })
 ```
 
@@ -539,9 +534,7 @@ expect(failedValidation.value).toEqual({
     args: [[`a`], [`a`]],
   },
 })
-expect(message).toEqualWithCompressedWhitespace(
-  `Object missing required key(s): ['a']`
-)
+expect(message).toEqual(`Object missing required key(s): ['a']`)
 ```
 
 #### Validating Object Graphs
@@ -644,15 +637,12 @@ expect(failedValidation.value).toEqual({
     },
   },
 })
-expect(message).toEqualWithCompressedWhitespace(
-  `Object
-  included invalid value(s)
-    – Key 'a': Object
-      included invalid value(s)
-        – Key 'a-b': Array included invalid value(s)
-          – [1] Object
-            included invalid value(s)
-              – Key 'a-b-a': Wasn't String`
+expect(message).toEqualMultiline(`
+  Object included invalid value(s)
+    – Key 'a': Object included invalid value(s)
+      – Key 'a-b': Array included invalid value(s)
+        – [1] Object included invalid value(s)
+          – Key 'a-b-a': Wasn't String`
 )
 })
 ```
@@ -678,7 +668,7 @@ it(`returns expected values`, () => {
 
   const failedValidation = validateIsBoolean(`yoda`)
   const message = configuredFailureRenderer(failedValidation.value)
-  expect(message).toEqualWithCompressedWhitespace(newMessage)
+  expect(message).toEqual(newMessage)
 })
 ```
 
@@ -706,9 +696,7 @@ const validateIsValidTitle = compose(
 
 const failedValidation = validateIsValidTitle(`emperor`)
 const message = configuredFailureRenderer(failedValidation.value)
-expect(message).toEqualWithCompressedWhitespace(
-  `Wasn't a title: mr,mrs,miss,ms,dr,mx`
-)
+expect(message).toEqual(`Wasn't a title: mr,mrs,miss,ms,dr,mx`)
 ```
 
 #### Customising Constraint Validation
@@ -745,7 +733,7 @@ expect(isSuccess(successfulValidation)).toBeTrue()
 
 const failedValidation = validateHasNoWhitespace(`a b`)
 const message = configuredFailureRenderer(failedValidation.value)
-expect(message).toEqualWithCompressedWhitespace(`Should not contain whitespace`)
+expect(message).toEqual(`Should not contain whitespace`)
 ```
 
 #### From scratch
@@ -797,7 +785,7 @@ expect(isSuccess(successfulValidation)).toBeTrue()
 
 const failedValidation = configuredValidator(`cat`)
 const message = configuredFailureRenderer(failedValidation.value)
-expect(message).toEqualWithCompressedWhitespace(`Didn't contain chars: [a,b,c]`)
+expect(message).toEqual(`Didn't contain chars: [a,b,c]`)
 ```
 
 ### Arguments Failure Renderer

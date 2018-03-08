@@ -46,16 +46,12 @@ export default rendererHelpers => failureObj => {
 
   const processArrayValues = level =>
     reduceObjIndexed((acc, [key, value]) => {
-      const result = renderArrayValue(
-        level,
-        key,
-        processValue(inc(level), value)
-      )
+      const result = renderArrayValue(level, key, processValue(level, value))
       return append(result, acc)
     }, [])
 
   const processArray = level =>
-    compose(renderArray, processArrayValues(inc(level)), propChildren)
+    compose(renderArray(level), processArrayValues(inc(level)), propChildren)
 
   // ---------------------------------------------------------------------------
   // Object
@@ -70,18 +66,17 @@ export default rendererHelpers => failureObj => {
       propFields
     )(o)
 
-  const processObjectFieldsErrorMessage = (level, o) =>
-    compose(
-      when(isNotUndefined, renderObjectFieldsError(level)),
-      propFieldsFailureMessage
-    )(o)
+  const processObjectFieldsErrorMessage = compose(
+    when(isNotUndefined, renderObjectFieldsError),
+    propFieldsFailureMessage
+  )
 
   const processObject = level => o =>
     renderObject(
       level,
       propScope(o),
-      processObjectFields(level, o),
-      processObjectFieldsErrorMessage(level, o)
+      processObjectFields(inc(level), o),
+      processObjectFieldsErrorMessage(o)
     )
 
   // ---------------------------------------------------------------------------
