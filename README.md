@@ -797,7 +797,6 @@ If you want to output a message relating to arguments instead of an object, you 
 The NPM module includes:
 
 * `lib` directory with imports transpiled for use by bundlers.
-* `dist` directory with a UMD build.
 
 ## Contributing
 
