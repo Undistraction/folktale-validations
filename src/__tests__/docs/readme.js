@@ -132,13 +132,11 @@ describe(`code from README.md`, () => {
           },
         },
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Object
-          included invalid value(s)
-            – Key 'a': Wasn't Number
-            – Key 'b': Wasn't String
-            – Key 'c': Was Empty`
-      )
+      expect(message).toEqualMultiline(`
+        Object included invalid value(s)
+          – Key 'a': Wasn't Number
+          – Key 'b': Wasn't String
+          – Key 'c': Was Empty`)
     })
   })
 
@@ -166,10 +164,9 @@ describe(`code from README.md`, () => {
           },
         },
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Array included invalid value(s)
-          – [1] Wasn't RegExp`
-      )
+      expect(message).toEqualMultiline(`
+        Array included invalid value(s)
+          – [1] Wasn't RegExp`)
     })
   })
 
@@ -205,9 +202,7 @@ describe(`code from README.md`, () => {
           },
         ],
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Wasn't String and Length wasn't less than '5'`
-      )
+      expect(message).toEqual(`Wasn't String and Length wasn't less than '5'`)
     })
   })
 
@@ -252,7 +247,7 @@ describe(`code from README.md`, () => {
           },
         ],
       })
-      expect(message).toEqualWithCompressedWhitespace(
+      expect(message).toEqual(
         `(Wasn't String or Wasn't Number) and Length wasn't less than '5'`
       )
     })
@@ -319,13 +314,11 @@ describe(`code from README.md`, () => {
           },
         },
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Object
-          included invalid value(s)
+      expect(message).toEqualMultiline(`
+        Object included invalid value(s)
           – Key 'a': Wasn't String
           – Key 'b': Wasn't Array
-          – Key 'c': Wasn't Date`
-      )
+          – Key 'c': Wasn't Date`)
     })
   })
 
@@ -378,9 +371,7 @@ describe(`code from README.md`, () => {
           args: [[`a`], [`a`]],
         },
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Object missing required key(s): ['a']`
-      )
+      expect(message).toEqual(`Object missing required key(s): ['a']`)
     })
   })
 
@@ -479,16 +470,12 @@ describe(`code from README.md`, () => {
           },
         },
       })
-      expect(message).toEqualWithCompressedWhitespace(
-        `Object
-        included invalid value(s)
-          – Key 'a': Object
-            included invalid value(s)
-              – Key 'a-b': Array included invalid value(s)
-                – [1] Object
-                  included invalid value(s)
-                    – Key 'a-b-a': Wasn't String`
-      )
+      expect(message).toEqualMultiline(`
+        Object included invalid value(s)
+          – Key 'a': Object included invalid value(s)
+            – Key 'a-b': Array included invalid value(s)
+              – [1] Object included invalid value(s)
+                – Key 'a-b-a': Wasn't String`)
     })
   })
 
@@ -505,7 +492,7 @@ describe(`code from README.md`, () => {
 
       const failedValidation = validateIsBoolean(`yoda`)
       const message = configuredFailureRenderer(failedValidation.value)
-      expect(message).toEqualWithCompressedWhitespace(newMessage)
+      expect(message).toEqual(newMessage)
     })
   })
 
@@ -530,9 +517,7 @@ describe(`code from README.md`, () => {
 
       const failedValidation = titleValidator(`emperor`)
       const message = configuredFailureRenderer(failedValidation.value)
-      expect(message).toEqualWithCompressedWhitespace(
-        `Wasn't a title: mr,mrs,miss,ms,dr,mx`
-      )
+      expect(message).toEqual(`Wasn't a title: mr,mrs,miss,ms,dr,mx`)
     })
   })
 
@@ -561,9 +546,7 @@ describe(`code from README.md`, () => {
 
       const failedValidation = validateHasNoWhitespace(`a b`)
       const message = configuredFailureRenderer(failedValidation.value)
-      expect(message).toEqualWithCompressedWhitespace(
-        `Should not contain whitespace`
-      )
+      expect(message).toEqual(`Should not contain whitespace`)
     })
   })
 
@@ -599,9 +582,7 @@ describe(`code from README.md`, () => {
 
       const failedValidation = configuredValidator(`cat`)
       const message = configuredFailureRenderer(failedValidation.value)
-      expect(message).toEqualWithCompressedWhitespace(
-        `Didn't contain chars: [a,b,c]`
-      )
+      expect(message).toEqual(`Didn't contain chars: [a,b,c]`)
     })
   })
 })

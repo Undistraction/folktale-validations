@@ -101,6 +101,7 @@ export const joinWithAnd = joinWithSpaced(AND)
 export const joinWithOr = joinWithSpaced(OR)
 export const joinWithEmDash = joinWithSpaced(EM_DASH)
 export const joinWithColon = joinWithRightPadded(COLON)
+export const joinWithNewline = joinWithRightPadded(NEWLINE)
 export const joinWithSpace = joinDefined(SPACE)
 export const joinWithDot = joinDefined(FULL_STOP)
 

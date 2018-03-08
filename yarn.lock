@@ -1401,6 +1401,14 @@ decamelize@^1.0.0, decamelize@^1.1.1, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
+dedent-preserving-indents@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/dedent-preserving-indents/-/dedent-preserving-indents-0.2.0.tgz#a301189d71950cbb9551a625a358ded743dbba3c"
+  dependencies:
+    ramda "^0.25.0"
+    ramda-adjunct "^2.5.0"
+    ramda-log "^0.0.3"
+
 deep-eql@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/deep-eql/-/deep-eql-3.0.1.tgz#dfc9404400ad1c8fe023e7da1df1c147c4b444df"
@@ -2458,6 +2466,14 @@ indent-string@^2.1.0:
   dependencies:
     repeating "^2.0.0"
 
+indent-to-first-line@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/indent-to-first-line/-/indent-to-first-line-0.1.0.tgz#ff0de63e71b118a4f8dc6ad134d3aa1361b7c621"
+  dependencies:
+    ramda "^0.25.0"
+    ramda-adjunct "^2.5.0"
+    ramda-log "0.0.3"
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"
@@ -2795,6 +2811,14 @@ jasmine-folktale@0.0.5:
     ramda "^0.25.0"
     ramda-adjunct "^2.5.0"
     ramda-log "0.0.3"
+
+jasmine-multiline-matchers@0.2:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/jasmine-multiline-matchers/-/jasmine-multiline-matchers-0.2.0.tgz#2d9208b4b4b03823f3461346c7463c7990f0e7a2"
+  dependencies:
+    dedent-preserving-indents "^0.2.0"
+    ramda "^0.25.0"
+    ramda-adjunct "^2.5.0"
 
 jest-changed-files@^22.1.4:
   version "22.1.4"
@@ -4059,7 +4083,7 @@ ramda-adjunct@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.5.0.tgz#50d7d74ca273731b05dcdda77d102bc57d7c1145"
 
-ramda-log@0.0.3:
+ramda-log@0.0.3, ramda-log@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/ramda-log/-/ramda-log-0.0.3.tgz#bdfcd33868c071acac4627866893b4e7ef3f7914"
   dependencies:

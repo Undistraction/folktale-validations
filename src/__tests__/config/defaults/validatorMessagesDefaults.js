@@ -190,13 +190,10 @@ describe(`validatorMessagesDefaults`, () => {
         [key2]: 2,
       })
 
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
-        `Object included invalid value(s)
+      expect(failureRenderer(failedValidation.value)).toEqualMultiline(`
+        Object included invalid value(s)
           – Key '${key1}': Wasn't Array
-          – Key '${key2}': Wasn't Boolean`
-      )
+          – Key '${key2}': Wasn't Boolean`)
     })
   })
 
@@ -209,9 +206,7 @@ describe(`validatorMessagesDefaults`, () => {
       const failedValidation = validateIsWhitelistedValue([value1, value2])(
         value3
       )
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `Value wasn't on the whitelist: ['${value1}', '${value2}']`
       )
     })
@@ -222,9 +217,7 @@ describe(`validatorMessagesDefaults`, () => {
       const failedValidation = validateIsNotBlacklistedValue([value1, value2])(
         value1
       )
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
+      expect(failureRenderer(failedValidation.value)).toEqual(
         `Value was on the blacklist: ['${value1}', '${value2}']`
       )
     })
@@ -234,9 +227,9 @@ describe(`validatorMessagesDefaults`, () => {
     it(`renders payload to message`, () => {
       const unit = `xx`
       const failedValidation = validateIsNumberWithUnit(unit)(12)
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(`Wasn't number with unit: '${unit}'`)
+      expect(failureRenderer(failedValidation.value)).toEqual(
+        `Wasn't number with unit: '${unit}'`
+      )
     })
   })
 
@@ -248,13 +241,10 @@ describe(`validatorMessagesDefaults`, () => {
     it(`renders payload to message`, () => {
       const a = [1, 2, null, 3, null]
       const failedValidation = validateArrayElements(validateIsNumber)(a)
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
-        `Array included invalid value(s)
+      expect(failureRenderer(failedValidation.value)).toEqualMultiline(`
+        Array included invalid value(s)
           – [2] Wasn't Number
-          – [4] Wasn't Number`
-      )
+          – [4] Wasn't Number`)
     })
   })
 
@@ -262,13 +252,10 @@ describe(`validatorMessagesDefaults`, () => {
     it(`renders payload to message`, () => {
       const a = [1, 2, null, 3, null]
       const failedValidation = validateIsArrayOf(validateIsNumber)(a)
-      expect(
-        failureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
-        `Array included invalid value(s)
+      expect(failureRenderer(failedValidation.value)).toEqualMultiline(`
+        Array included invalid value(s)
           – [2] Wasn't Number
-          – [4] Wasn't Number`
-      )
+          – [4] Wasn't Number`)
     })
   })
 
@@ -286,13 +273,11 @@ describe(`validatorMessagesDefaults`, () => {
         [key2]: 2,
       })
 
-      expect(
-        argumentsFailureRenderer(failedValidation.value)
-      ).toEqualWithCompressedWhitespace(
-        `Arguments included invalid value(s)
+      expect(argumentsFailureRenderer(failedValidation.value))
+        .toEqualMultiline(`
+          Arguments included invalid value(s)
             – Key '${key1}': Wasn't Array
-            – Key '${key2}': Wasn't Boolean`
-      )
+            – Key '${key2}': Wasn't Boolean`)
     })
   })
 })
