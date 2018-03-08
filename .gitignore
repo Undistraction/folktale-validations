@@ -3,5 +3,4 @@ node_modules.bak
 yarn-error.log
 coverage
 out
-dist
 lib
