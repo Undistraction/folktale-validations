@@ -84,8 +84,6 @@
     "cssapi-units": "^0.3.0",
     "deep-freeze": "^0.0.1",
     "folktale": "^2.0.1",
-    "jest-diff": "^22.4.0",
-    "jest-matcher-utils": "^22.4.0",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.5.0",
     "ramda-log": "0.0.3"
