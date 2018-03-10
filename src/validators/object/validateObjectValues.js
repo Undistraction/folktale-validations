@@ -8,6 +8,8 @@ import {
   toPairs,
   always,
   pair,
+  of,
+  tryCatch,
 } from 'ramda'
 import { isNotUndefined } from 'ramda-adjunct'
 import { toObjectError } from '../../utils/failures'
@@ -15,6 +17,8 @@ import {
   composeFailure,
   matchWithSuccessOrFailure,
 } from '../../utils/validations'
+import { propValue } from '../../../lib/utils/validations'
+import { throwError, validatorError } from '../../errors'
 
 const { Success, Failure } = Validation
 
@@ -23,10 +27,10 @@ const validate = validatorsMap => (acc, [name, v]) =>
     ifElse(
       isNotUndefined,
       compose(
-        matchWithSuccessOrFailure(always(acc), ({ value }) =>
-          acc.concat(Failure([pair(name, value)]))
+        matchWithSuccessOrFailure(always(acc), validation =>
+          acc.concat(compose(Failure, of, pair(name))(propValue(validation)))
         ),
-        applyTo(v)
+        tryCatch(applyTo(v), _ => throwError(validatorError(name, v)))
       ),
       always(acc)
     ),

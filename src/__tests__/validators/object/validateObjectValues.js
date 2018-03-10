@@ -160,4 +160,22 @@ describe(`validateObjectValues()`, () => {
       expect(v1.notCalled).toBeTrue()
     })
   })
+
+  describe(`with a validator throwing an error`, () => {
+    it(`throws an error with a helpful message`, () => {
+      const v1 = () => {
+        throw new Error(`error`)
+      }
+      const value = {
+        [key1]: value1,
+      }
+      const validators = {
+        [key1]: v1,
+      }
+      const validator = validateObjectValues(validators)
+      expect(() => validator(value)).toThrow(
+        `[validator] A validator threw an error for prop name: 'key1' with value 'value1'`
+      )
+    })
+  })
 })
