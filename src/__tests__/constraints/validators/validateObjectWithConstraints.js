@@ -889,6 +889,33 @@ describe(`validateObjectWithConstraints`, () => {
         // -----------------------------------------------------------------
 
         describe(`transformed values`, () => {
+          describe(`when transformer throws an error`, () => {
+            it(`throws an error with a helpful message`, () => {
+              const value = withValueRoot({
+                key1: value1,
+              })
+              const v1 = stubReturnsSuccess(value1)
+              const t1 = () => {
+                throw new Error(`error`)
+              }
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [TRANSFORMER]: t1,
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              expect(() => validator(value)).toThrow(
+                `[validator] A transformer threw an error for prop name: 'key1' with value 'value1'`
+              )
+            })
+          })
+
           describe(`when no value is supplied`, () => {
             it(`returns a Validation.Success without transform`, () => {
               const value = withValueRoot({

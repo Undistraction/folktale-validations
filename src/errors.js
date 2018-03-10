@@ -1,4 +1,4 @@
-import { map, compose, toPairs, always } from 'ramda'
+import { map, compose, toPairs } from 'ramda'
 import {
   joinWithColon,
   joinWithComma,
@@ -50,9 +50,13 @@ export const validatorError = (name, value) =>
     )} with value ${wrapWithSingleQuotes(value)}`,
   ])
 
-export const transformerError = always(
-  joinWithSpace([validatorPrefix, `A transformer threw an error`])
-)
+export const transformerError = (name, value) =>
+  joinWithSpace([
+    validatorPrefix,
+    `A transformer threw an error for prop name: ${wrapWithSingleQuotes(
+      name
+    )} with value ${wrapWithSingleQuotes(value)}`,
+  ])
 
 export const throwInvalidFailureStructureMessage = compose(
   throwError,
