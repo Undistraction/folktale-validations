@@ -6,6 +6,7 @@ export default Object.freeze({
   VALIDATOR: `validator`,
   TRANSFORMER: `transformer`,
   IS_REQUIRED: `isRequired`,
+  WHITELIST_KEYS: `whitelistKeys`,
   DEFAULT_VALUE: `defaultValue`,
   VALUE: `value`,
   CHILDREN: `children`,

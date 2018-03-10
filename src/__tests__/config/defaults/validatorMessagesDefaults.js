@@ -58,7 +58,7 @@ describe(`validatorMessagesDefaults`, () => {
         const failedValidation = configuredValidator({})
 
         expect(failureRenderer(failedValidation.value)).toEqual(
-          `Constraints included key(s) not on whitelist: ['fieldsValidator', 'fields']`
+          `Constraints included key(s) not on whitelist: ['fieldsValidator', 'fields', 'whitelistKeys']`
         )
       })
     })

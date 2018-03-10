@@ -57,6 +57,7 @@ const {
   VALIDATOR,
   TRANSFORMER,
   IS_REQUIRED,
+  WHITELIST_KEYS,
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
@@ -231,7 +232,7 @@ describe(`validateObjectWithConstraints`, () => {
         [FIELDS_FAILURE_MESSAGE]: toPayload(
           VALIDATE_WHITELISTED_KEYS,
           constraints,
-          [[FIELDS_VALIDATOR, FIELDS], [invalidKeyName]]
+          [[FIELDS_VALIDATOR, FIELDS, WHITELIST_KEYS], [invalidKeyName]]
         ),
       }
 
@@ -352,44 +353,126 @@ describe(`validateObjectWithConstraints`, () => {
         // -----------------------------------------------------------------
         describe(`keys`, () => {
           describe(`additional`, () => {
-            it(`returns a Validation.Failure with payload`, () => {
-              const v1 = spy()
-              const v2 = spy()
-              const o = {
-                [key1]: value1,
-                [key2]: value2,
-                [invalidKeyName]: invalidKeyValue,
-              }
-              const value = withValueRoot(o)
+            describe(`whitelisted`, () => {
+              describe(`default`, () => {
+                it(`returns a Validation.Failure with payload`, () => {
+                  const v1 = spy()
+                  const v2 = spy()
+                  const o = {
+                    [key1]: value1,
+                    [key2]: value2,
+                    [invalidKeyName]: invalidKeyValue,
+                  }
+                  const value = withValueRoot(o)
 
-              const constraints = withConstraintsRoot({
-                [FIELDS]: [
-                  {
-                    [NAME]: key1,
-                    [VALIDATOR]: v1,
-                    [IS_REQUIRED]: true,
-                  },
-                  {
-                    [NAME]: key2,
-                    [VALIDATOR]: v2,
-                    [IS_REQUIRED]: true,
-                  },
-                ],
+                  const constraints = withConstraintsRoot({
+                    [FIELDS]: [
+                      {
+                        [NAME]: key1,
+                        [VALIDATOR]: v1,
+                        [IS_REQUIRED]: true,
+                      },
+                      {
+                        [NAME]: key2,
+                        [VALIDATOR]: v2,
+                        [IS_REQUIRED]: true,
+                      },
+                    ],
+                  })
+
+                  const expectedFailureObj = withExpectedFailureObjRoot({
+                    [FIELDS_FAILURE_MESSAGE]: toPayload(
+                      VALIDATE_WHITELISTED_KEYS,
+                      o,
+                      [[key1, key2], [invalidKeyName]]
+                    ),
+                  })
+
+                  const validator = validateObjectWithConstraints(constraints)
+                  const validation = validator(value)
+                  expect(validation).toEqualFailureWithValue(expectedFailureObj)
+                  expect(v1.notCalled).toBeTrue()
+                  expect(v2.notCalled).toBeTrue()
+                })
               })
 
-              const expectedFailureObj = withExpectedFailureObjRoot({
-                [FIELDS_FAILURE_MESSAGE]: toPayload(
-                  VALIDATE_WHITELISTED_KEYS,
-                  o,
-                  [[key1, key2], [invalidKeyName]]
-                ),
-              })
+              describe(`explicit`, () => {
+                it(`returns a Validation.Failure with payload`, () => {
+                  const v1 = spy()
+                  const v2 = spy()
+                  const o = {
+                    [key1]: value1,
+                    [key2]: value2,
+                    [invalidKeyName]: invalidKeyValue,
+                  }
+                  const value = withValueRoot(o)
 
-              const validator = validateObjectWithConstraints(constraints)
-              const validation = validator(value)
-              expect(validation).toEqualFailureWithValue(expectedFailureObj)
-              expect(v1.notCalled).toBeTrue()
-              expect(v2.notCalled).toBeTrue()
+                  const constraints = withConstraintsRoot({
+                    [WHITELIST_KEYS]: true,
+                    [FIELDS]: [
+                      {
+                        [NAME]: key1,
+                        [VALIDATOR]: v1,
+                        [IS_REQUIRED]: true,
+                      },
+                      {
+                        [NAME]: key2,
+                        [VALIDATOR]: v2,
+                        [IS_REQUIRED]: true,
+                      },
+                    ],
+                  })
+
+                  const expectedFailureObj = withExpectedFailureObjRoot({
+                    [FIELDS_FAILURE_MESSAGE]: toPayload(
+                      VALIDATE_WHITELISTED_KEYS,
+                      o,
+                      [[key1, key2], [invalidKeyName]]
+                    ),
+                  })
+
+                  const validator = validateObjectWithConstraints(constraints)
+                  const validation = validator(value)
+                  expect(validation).toEqualFailureWithValue(expectedFailureObj)
+                  expect(v1.notCalled).toBeTrue()
+                  expect(v2.notCalled).toBeTrue()
+                })
+              })
+            })
+
+            describe(`not whitelisted`, () => {
+              describe(`default`, () => {
+                it(`returns a Validation.Failure with payload`, () => {
+                  const v1 = stubReturnsSuccess(value1)
+                  const v2 = stubReturnsSuccess(value2)
+                  const o = {
+                    [key1]: value1,
+                    [key2]: value2,
+                    [invalidKeyName]: invalidKeyValue,
+                  }
+                  const value = withValueRoot(o)
+
+                  const constraints = withConstraintsRoot({
+                    [WHITELIST_KEYS]: false,
+                    [FIELDS]: [
+                      {
+                        [NAME]: key1,
+                        [VALIDATOR]: v1,
+                        [IS_REQUIRED]: true,
+                      },
+                      {
+                        [NAME]: key2,
+                        [VALIDATOR]: v2,
+                        [IS_REQUIRED]: true,
+                      },
+                    ],
+                  })
+
+                  const validator = validateObjectWithConstraints(constraints)
+                  const validation = validator(value)
+                  expect(validation).toEqualSuccessWithValue(value)
+                })
+              })
             })
           })
 

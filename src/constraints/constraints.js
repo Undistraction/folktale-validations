@@ -20,6 +20,7 @@ const {
   VALIDATOR,
   TRANSFORMER,
   IS_REQUIRED,
+  WHITELIST_KEYS,
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
@@ -89,9 +90,14 @@ const fieldsField = {
   },
 }
 
+const whitelistKeys = {
+  [NAME]: WHITELIST_KEYS,
+  [VALIDATOR]: validateIsBoolean,
+}
+
 const constraintRoot = {
   [ID]: OWN_CONSTRAINTS,
-  [FIELDS]: [fieldsValidatorField, fieldsField],
+  [FIELDS]: [fieldsValidatorField, fieldsField, whitelistKeys],
 }
 
 // Set up a pointer pack to the rootmost object
