@@ -1,6 +1,6 @@
 {
   "name": "folktale-validations",
-  "version": "2.1.3",
+  "version": "2.2.1",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
@@ -23,12 +23,10 @@
   },
   "homepage": "https://github.com/Undistraction/folktale-validations",
   "scripts": {
-    "build": "npm run build:lib && npm run build:dist",
+    "build": "npm run build:lib",
     "prebuild:lib": "rimraf lib/*",
     "prebuild": "npm run lint",
     "build:lib": "babel --out-dir lib --ignore \"__tests__\" src",
-    "prebuild:dist": "rimraf dist/*",
-    "build:dist": "NODE_ENV=development rollup --config",
     "test": "jest --watch",
     "test:readme": "jest src/__tests__/docs/readme --watch",
     "test:noWatch": "jest",
@@ -86,8 +84,6 @@
     "cssapi-units": "^0.3.0",
     "deep-freeze": "^0.0.1",
     "folktale": "^2.0.1",
-    "jest-diff": "^22.4.0",
-    "jest-matcher-utils": "^22.4.0",
     "ramda": "^0.25.0",
     "ramda-adjunct": "^2.5.0",
     "ramda-log": "0.0.3"
