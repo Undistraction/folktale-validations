@@ -1,5 +1,15 @@
-import { always, when, append, curry, compose, juxt, defaultTo } from 'ramda'
-import { isNotUndefined } from 'ramda-adjunct'
+import {
+  ifElse,
+  always,
+  equals,
+  append,
+  curry,
+  compose,
+  juxt,
+  defaultTo,
+  converge,
+} from 'ramda'
+import { compact, stubUndefined } from 'ramda-adjunct'
 import untilFailureValidator from '../../helpers/untilFailureValidator'
 import validateObjectKeys from './validateObjectKeys'
 import applyDefaultsWithConstraints from '../applyDefaultsWithConstraints'
@@ -12,24 +22,37 @@ import { validateIsPlainObject } from '../../validators/predicate/generatedPredi
 import validateWhitelistedKeys from '../../validators/object/validateWhitelistedKeys'
 import validateRequiredKeys from '../../validators/object/validateRequiredKeys'
 import validateObjectValues from '../../validators/object/validateObjectValues'
+import { compactList } from '../../utils/array'
 
-const configureDefaultFieldValidators = juxt([
-  compose(validateWhitelistedKeys, pluckName),
-  compose(validateRequiredKeys, listRequiredKeys),
-])
+const configureValidateRequired = compose(
+  validateRequiredKeys,
+  listRequiredKeys
+)
 
-const fieldsValidators = fieldsValidator => fields =>
-  when(always(isNotUndefined(fieldsValidator)), append(fieldsValidator))(
-    configureDefaultFieldValidators(fields)
+const configureValidateWhitelistedKeys = ({ whitelistKeys }) =>
+  ifElse(
+    always(equals(false, whitelistKeys)),
+    stubUndefined,
+    compose(validateWhitelistedKeys, pluckName)
   )
+
+const configureDefaultFieldValidators = constraints =>
+  converge(compactList, [
+    configureValidateWhitelistedKeys(constraints),
+    configureValidateRequired,
+  ])
+
+const configureFieldsValidators = constraints => fields =>
+  compose(
+    compact,
+    append(constraints.fieldsValidator),
+    configureDefaultFieldValidators(constraints)
+  )(fields)
 
 const validationSteps = constraints =>
   compose(
     juxt([
-      compose(
-        validateObjectKeys,
-        fieldsValidators(constraints.fieldsValidator)
-      ),
+      compose(validateObjectKeys, configureFieldsValidators(constraints)),
       compose(validateObjectValues, buildValidatorsMap),
       applyDefaultsWithConstraints,
       transformValuesWithConstraints,

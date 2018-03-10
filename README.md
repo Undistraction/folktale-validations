@@ -385,8 +385,8 @@ expect(message).toEqual(
 Using constraints allows you to describe what constitutes a valid object or nested object graph. It also allows you to tansform the received values and apply default values for missing props. This involves three steps:
 
 1. Create a constraint object
-2. Configure `validateObjectWithConstraints` a constraint object
-3. Validate
+2. Configure `validateObjectWithConstraints` with a constraint object
+3. Validate an object
 
 Note: As part of the validation process, the constraints object itself is validated, and you will recieve a Failed Validation explaining where the problem is if it is invalid.
 
@@ -468,7 +468,9 @@ There are a number of other valid attributes for the constraints object.
 
 #### Validating the keys of the object
 
-All object's are validated by two field validators - one that checks there are no keys present that aren't described by the constraitns, and one that checks that any required keys (see below) are present. You can use the `fieldsValidator` attribute to supply an additional validator for the object's keys themselves. For example you might want to check that only one of a set of keys should appear per object.
+By default all object's are validated by two field validators - one that checks there are no keys present that aren't described by the constraitns, and one that checks that any required keys (see below) are present. You can use the `fieldsValidator` attribute to supply an additional validator for the object's keys themselves. For example you might want to check that only one of a set of keys should appear per object.
+
+If you want to allow arbitray keys on your object in addition to the keys you are validating you can use set the `whistelistKeys` key on the constraint for that object. This will prevent any errors being thrown if a key is discovered thay is not defined in the constraints. This allows you to only validate a subset of an object's keys or use object maps that are entirely composed of arbitrary keys.
 
 #### Object values
 

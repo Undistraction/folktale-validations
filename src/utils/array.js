@@ -1,4 +1,6 @@
-import { reduce, concat } from 'ramda'
+import { reduce, concat, compose } from 'ramda'
+import { list, compact } from 'ramda-adjunct'
 
-// eslint-disable-next-line import/prefer-default-export
 export const concatAll = reduce(concat, [])
+
+export const compactList = compose(compact, list)

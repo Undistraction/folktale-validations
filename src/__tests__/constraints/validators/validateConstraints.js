@@ -39,6 +39,7 @@ const {
   VALIDATOR,
   TRANSFORMER,
   IS_REQUIRED,
+  WHITELIST_KEYS,
   DEFAULT_VALUE,
   VALUE,
   CHILDREN,
@@ -62,6 +63,11 @@ const exclusiveKeys = [
     [VALUE]: {},
     [CHILDREN]: {},
   },
+]
+
+const rootErrors = [
+  [WHITELIST_KEYS, VALIDATE_IS_BOOLEAN, typeData.withoutBooleanValues],
+  [FIELDS_VALIDATOR, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
 ]
 
 const fieldErrors = [
@@ -185,25 +191,30 @@ describe(`validateConstraints`, () => {
         // 2 Keys
         // -------------------------------------------------------------------
         describe(`keys`, () => {
-          describe(`additional`, () => {
-            it(`returns a Validation.Failure with payload`, () => {
-              const o = {
-                [invalidKeyName]: value1,
-              }
+          describe(`default`, () => {
+            describe(`additional`, () => {
+              it(`returns a Validation.Failure with payload`, () => {
+                const o = {
+                  [invalidKeyName]: value1,
+                }
 
-              const value = withValueRoot(o)
+                const value = withValueRoot(o)
 
-              const expectedFailureObj = withExpectedFailureObjRoot({
-                [FIELDS_FAILURE_MESSAGE]: toPayload(
-                  VALIDATE_WHITELISTED_KEYS,
-                  o,
-                  [[FIELDS_VALIDATOR, FIELDS], [invalidKeyName]]
-                ),
+                const expectedFailureObj = withExpectedFailureObjRoot({
+                  [FIELDS_FAILURE_MESSAGE]: toPayload(
+                    VALIDATE_WHITELISTED_KEYS,
+                    o,
+                    [
+                      [FIELDS_VALIDATOR, FIELDS, WHITELIST_KEYS],
+                      [invalidKeyName],
+                    ]
+                  ),
+                })
+
+                const validation = validateConstraintsConfigured(value)
+
+                expect(validation).toEqualFailureWithValue(expectedFailureObj)
               })
-
-              const validation = validateConstraintsConfigured(value)
-
-              expect(validation).toEqualFailureWithValue(expectedFailureObj)
             })
           })
 
@@ -372,34 +383,35 @@ describe(`validateConstraints`, () => {
             })
 
             // -----------------------------------------------------------------
-            // 4 fieldsValidator
+            // 4 Root fields
             // -----------------------------------------------------------------
 
-            describe(`'fieldsValidator'`, () => {
-              describe(`with non-function value`, () => {
-                it(`returns a Validation.Failure with payload`, () => {
-                  map(fieldValue => {
-                    const value = withValueRoot({
-                      [FIELDS_VALIDATOR]: fieldValue,
-                      [FIELDS]: [],
-                    })
+            describe(`root key values`, () => {
+              map(([fieldName, validatorUID, typeDataValues]) => {
+                describe(`with invalid value for '${fieldName}'`, () => {
+                  describe(`with non-function value`, () => {
+                    it(`returns a Validation.Failure with payload`, () => {
+                      map(fieldValue => {
+                        const value = withValueRoot({
+                          [fieldName]: fieldValue,
+                          [FIELDS]: [],
+                        })
 
-                    const expectedFailureObj = withExpectedFailureObjRoot({
-                      [FIELDS]: {
-                        [FIELDS_VALIDATOR]: toPayload(
-                          VALIDATE_IS_FUNCTION,
-                          fieldValue
-                        ),
-                      },
-                    })
+                        const expectedFailureObj = withExpectedFailureObjRoot({
+                          [FIELDS]: {
+                            [fieldName]: toPayload(validatorUID, fieldValue),
+                          },
+                        })
 
-                    const validation = validateConstraintsConfigured(value)
-                    expect(validation).toEqualFailureWithValue(
-                      expectedFailureObj
-                    )
-                  }, typeData.withoutFunctionValues)
+                        const validation = validateConstraintsConfigured(value)
+                        expect(validation).toEqualFailureWithValue(
+                          expectedFailureObj
+                        )
+                      }, typeDataValues)
+                    })
+                  })
                 })
-              })
+              })(rootErrors)
             })
 
             // -----------------------------------------------------------------
