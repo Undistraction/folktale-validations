@@ -5,10 +5,8 @@ import {
   toEqualSuccessWithValue,
   toEqualFailureWithValue,
 } from 'jasmine-folktale'
-import toEqualWithCompressedWhitespace from './toEqualWithCompressedWhitespace'
 
 expect.extend({
-  toEqualWithCompressedWhitespace,
   toEqualMultiline,
   toEqualSuccessWithValue,
   toEqualFailureWithValue,
