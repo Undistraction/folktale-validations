@@ -6,7 +6,6 @@ import {
   curry,
   compose,
   juxt,
-  defaultTo,
   converge,
 } from 'ramda'
 import { compact, stubUndefined } from 'ramda-adjunct'
@@ -49,21 +48,25 @@ const configureFieldsValidators = constraints => fields =>
     configureDefaultFieldValidators(constraints)
   )(fields)
 
+const validateValues = compose(validateObjectValues, buildValidatorsMap)
+
+const validateKeys = constraints =>
+  compose(validateObjectKeys, configureFieldsValidators(constraints))
+
 const validationSteps = constraints =>
   compose(
     juxt([
-      compose(validateObjectKeys, configureFieldsValidators(constraints)),
-      compose(validateObjectValues, buildValidatorsMap),
+      validateKeys(constraints),
+      validateValues,
       applyDefaultsWithConstraints,
       transformValuesWithConstraints,
       validateFieldsWithValue,
       validateFieldsWithChildren,
     ]),
-    defaultTo([]),
     propFields
   )(constraints)
 
-const validateObject = curry((fieldName, constraints, o) =>
+const validateObject = curry((constraints, o) =>
   untilFailureValidator([
     validateIsPlainObject,
     ...validationSteps(constraints),

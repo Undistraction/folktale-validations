@@ -1,5 +1,5 @@
 import { compose, ifElse, identity, curry, propEq, __ } from 'ramda'
-import { ROOT_FIELD, OWN_CONSTRAINTS } from '../const'
+import { OWN_CONSTRAINTS } from '../const'
 import CONSTRAINT_FIELD_NAMES from '../../const/constraintFieldNames'
 import validateObject from './validateObject'
 import validateConstraints from './validateConstraints'
@@ -14,10 +14,10 @@ const constraintsAreOwnConstraints = propEq(
 const validateObjectWithConstraints = curry((constraints, o) =>
   ifElse(
     constraintsAreOwnConstraints,
-    validateObject(ROOT_FIELD, __, o),
+    validateObject(__, o),
     compose(
       matchWithSuccessOrFailure(
-        compose(validateObject(ROOT_FIELD, __, o), propValue),
+        compose(validateObject(__, o), propValue),
         identity
       ),
       validateConstraints(CONSTRAINTS)

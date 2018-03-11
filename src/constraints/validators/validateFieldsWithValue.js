@@ -13,11 +13,7 @@ import { reduceObjIndexed } from '../../utils/iteration'
 
 const validateValues = reduce(
   (acc, [fieldName, fieldValue, childConstraints]) =>
-    assoc(
-      fieldName,
-      validateObject(fieldName, childConstraints, fieldValue),
-      acc
-    ),
+    assoc(fieldName, validateObject(childConstraints, fieldValue), acc),
   {}
 )
 
