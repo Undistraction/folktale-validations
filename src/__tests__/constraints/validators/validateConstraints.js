@@ -30,6 +30,7 @@ import {
   VALIDATE_IS_FUNCTION,
   VALIDATE_IS_BOOLEAN,
   VALIDATE_IS_NOT_UNDEFINED,
+  VALIDATE_IS_STRING,
 } from '../../../const/validatorUids'
 
 const {
@@ -71,6 +72,7 @@ const rootErrors = [
 ]
 
 const fieldErrors = [
+  [NAME, VALIDATE_IS_STRING, typeData.withoutStringValues],
   [VALIDATOR, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [TRANSFORMER, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [IS_REQUIRED, VALIDATE_IS_BOOLEAN, typeData.withoutBooleanValues],
