@@ -30,16 +30,19 @@ const validateValue = (acc, name, value) =>
     tryCatch(applyTo(value), _ => throwError(validatorError(name, value)))
   )
 
-const validate = validatorsMap => (acc, [name, value]) =>
+const validateExplicitFields = validatorsMap => (acc, [name, value]) =>
   compose(
     ifElse(isNotUndefined, validateValue(acc, name, value), always(acc)),
     prop(name)
   )(validatorsMap)
 
+const validateValues = (validatorsMap, o) =>
+  reduce(validateExplicitFields(validatorsMap), Success(o))
+
 const validateObjectValues = validatorsMap => o =>
   compose(
     successOrElse(toObjectError),
-    reduce(validate(validatorsMap), Success(o)),
+    validateValues(validatorsMap, o),
     toPairs
   )(o)
 
