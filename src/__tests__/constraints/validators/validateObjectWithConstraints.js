@@ -38,6 +38,7 @@ import {
   defaultValue2,
   payload1,
   payload3,
+  funcWhichThrows,
 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
 import {
@@ -524,13 +525,14 @@ describe(`validateObjectWithConstraints`, () => {
               }
               const value = withValueRoot(o)
               const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess()
 
               const constraints = withConstraintsRoot({
                 [FIELDS_VALIDATOR]: v1,
                 [FIELDS]: [
                   {
                     [NAME]: key1,
-                    [VALIDATOR]: v1,
+                    [VALIDATOR]: v2,
                     [IS_REQUIRED]: false,
                   },
                 ],
@@ -550,13 +552,14 @@ describe(`validateObjectWithConstraints`, () => {
               }
               const value = withValueRoot(o)
               const v1 = stubReturnsFailure(payload1)
+              const v2 = stubReturnsSuccess()
 
               const constraints = withConstraintsRoot({
                 [FIELDS_VALIDATOR]: v1,
                 [FIELDS]: [
                   {
                     [NAME]: key1,
-                    [VALIDATOR]: v1,
+                    [VALIDATOR]: v2,
                     [IS_REQUIRED]: false,
                   },
                 ],
@@ -895,16 +898,13 @@ describe(`validateObjectWithConstraints`, () => {
                 key1: value1,
               })
               const v1 = stubReturnsSuccess(value1)
-              const t1 = () => {
-                throw new Error(`error`)
-              }
 
               const constraints = withConstraintsRoot({
                 [FIELDS]: [
                   {
                     [NAME]: key1,
                     [VALIDATOR]: v1,
-                    [TRANSFORMER]: t1,
+                    [TRANSFORMER]: funcWhichThrows,
                   },
                 ],
               })

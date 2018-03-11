@@ -1,6 +1,10 @@
 import toPayload from '../../../failures/toPayload'
 
 export const func = () => {}
+export const funcWhichThrows = () => {
+  throw new Error(`error`)
+}
+
 export const value1 = `value1`
 export const value2 = `value2`
 export const value3 = `value3`
