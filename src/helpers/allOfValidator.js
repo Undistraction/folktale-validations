@@ -6,14 +6,11 @@ import { composeFailure } from '../utils/validations'
 
 const { Success } = Validation
 
-const toErr = v => {
-  const r = composeFailure(ifElse(isArrayWithOneChild, head, andMessages))(v)
-  return r
-}
+const toError = composeFailure(ifElse(isArrayWithOneChild, head, andMessages))
 
 export default validators => o =>
   reduce(
     (acc, validator) => acc.concat(validator(o).orElse(composeFailure(of))),
     Success(o),
     validators
-  ).orElse(toErr)
+  ).orElse(toError)

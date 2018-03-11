@@ -7,6 +7,8 @@ import {
   compose,
   juxt,
   converge,
+  keys,
+  tryCatch,
 } from 'ramda'
 import { compact, stubUndefined } from 'ramda-adjunct'
 import untilFailureValidator from '../../helpers/untilFailureValidator'
@@ -22,6 +24,7 @@ import validateWhitelistedKeys from '../../validators/object/validateWhitelisted
 import validateRequiredKeys from '../../validators/object/validateRequiredKeys'
 import validateObjectValues from '../../validators/object/validateObjectValues'
 import { compactList } from '../../utils/array'
+import { throwError, fieldValidatorsError } from '../../errors'
 
 const configureValidateRequired = compose(
   validateRequiredKeys,
@@ -53,10 +56,15 @@ const validateValues = compose(validateObjectValues, buildValidatorsMap)
 const validateKeys = constraints =>
   compose(validateObjectKeys, configureFieldsValidators(constraints))
 
+const tryValidateKeys = constraints => o =>
+  tryCatch(validateKeys(constraints), _ =>
+    throwError(fieldValidatorsError(keys(o)))
+  )(o)
+
 const validationSteps = constraints =>
   compose(
     juxt([
-      validateKeys(constraints),
+      tryValidateKeys(constraints),
       validateValues,
       applyDefaultsWithConstraints,
       transformValuesWithConstraints,

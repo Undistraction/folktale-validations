@@ -5,6 +5,7 @@ import {
   wrapWithSquareBrackets,
   joinWithSpace,
   wrapWithSingleQuotes,
+  quoteAndJoinWithComma,
 } from './utils/formatting'
 
 const prefix = wrapWithSquareBrackets
@@ -56,6 +57,14 @@ export const transformerError = (name, value) =>
     `A transformer threw an error for prop name: ${wrapWithSingleQuotes(
       name
     )} with value ${wrapWithSingleQuotes(value)}`,
+  ])
+
+export const fieldValidatorsError = keys =>
+  joinWithSpace([
+    validatorPrefix,
+    `A fields validator threw an error while validating fields: ${quoteAndJoinWithComma(
+      keys
+    )}`,
   ])
 
 export const throwInvalidFailureStructureMessage = compose(
