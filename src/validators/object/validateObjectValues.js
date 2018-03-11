@@ -8,34 +8,39 @@ import {
   toPairs,
   always,
   pair,
+  of,
+  tryCatch,
 } from 'ramda'
 import { isNotUndefined } from 'ramda-adjunct'
 import { toObjectError } from '../../utils/failures'
 import {
-  composeFailure,
+  propValue,
   matchWithSuccessOrFailure,
+  successOrElse,
 } from '../../utils/validations'
+import { throwError, validatorError } from '../../errors'
 
 const { Success, Failure } = Validation
 
-const validate = validatorsMap => (acc, [name, v]) =>
+const validateValue = (acc, name, value) =>
   compose(
-    ifElse(
-      isNotUndefined,
-      compose(
-        matchWithSuccessOrFailure(always(acc), ({ value }) =>
-          acc.concat(Failure([pair(name, value)]))
-        ),
-        applyTo(v)
-      ),
-      always(acc)
+    matchWithSuccessOrFailure(always(acc), validation =>
+      acc.concat(compose(Failure, of, pair(name))(propValue(validation)))
     ),
+    tryCatch(applyTo(value), _ => throwError(validatorError(name, value)))
+  )
+
+const validate = validatorsMap => (acc, [name, value]) =>
+  compose(
+    ifElse(isNotUndefined, validateValue(acc, name, value), always(acc)),
     prop(name)
   )(validatorsMap)
 
 const validateObjectValues = validatorsMap => o =>
-  compose(reduce(validate(validatorsMap), Success(o)), toPairs)(o).orElse(
-    composeFailure(toObjectError)
-  )
+  compose(
+    successOrElse(toObjectError),
+    reduce(validate(validatorsMap), Success(o)),
+    toPairs
+  )(o)
 
 export default validateObjectValues

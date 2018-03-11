@@ -38,6 +38,7 @@ import {
   defaultValue2,
   payload1,
   payload3,
+  funcWhichThrows,
 } from '../../testHelpers/fixtures/generic'
 import toPayload from '../../../failures/toPayload'
 import {
@@ -524,13 +525,14 @@ describe(`validateObjectWithConstraints`, () => {
               }
               const value = withValueRoot(o)
               const v1 = stubReturnsSuccess(value)
+              const v2 = stubReturnsSuccess()
 
               const constraints = withConstraintsRoot({
                 [FIELDS_VALIDATOR]: v1,
                 [FIELDS]: [
                   {
                     [NAME]: key1,
-                    [VALIDATOR]: v1,
+                    [VALIDATOR]: v2,
                     [IS_REQUIRED]: false,
                   },
                 ],
@@ -550,13 +552,14 @@ describe(`validateObjectWithConstraints`, () => {
               }
               const value = withValueRoot(o)
               const v1 = stubReturnsFailure(payload1)
+              const v2 = stubReturnsSuccess()
 
               const constraints = withConstraintsRoot({
                 [FIELDS_VALIDATOR]: v1,
                 [FIELDS]: [
                   {
                     [NAME]: key1,
-                    [VALIDATOR]: v1,
+                    [VALIDATOR]: v2,
                     [IS_REQUIRED]: false,
                   },
                 ],
@@ -889,6 +892,30 @@ describe(`validateObjectWithConstraints`, () => {
         // -----------------------------------------------------------------
 
         describe(`transformed values`, () => {
+          describe(`when transformer throws an error`, () => {
+            it(`throws an error with a helpful message`, () => {
+              const value = withValueRoot({
+                key1: value1,
+              })
+              const v1 = stubReturnsSuccess(value1)
+
+              const constraints = withConstraintsRoot({
+                [FIELDS]: [
+                  {
+                    [NAME]: key1,
+                    [VALIDATOR]: v1,
+                    [TRANSFORMER]: funcWhichThrows,
+                  },
+                ],
+              })
+
+              const validator = validateObjectWithConstraints(constraints)
+              expect(() => validator(value)).toThrow(
+                `[validator] A transformer threw an error for prop name: 'key1' with value 'value1'`
+              )
+            })
+          })
+
           describe(`when no value is supplied`, () => {
             it(`returns a Validation.Success without transform`, () => {
               const value = withValueRoot({

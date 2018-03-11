@@ -46,21 +46,16 @@ const replaceChildren = (fieldToValidationsMap, o) =>
 // Validate each child and collect their validations.
 // -----------------------------------------------------------------------------
 
-const validateChild = (fieldName, fieldValue, childConstraints) =>
+const validateChild = (fieldValue, childConstraints) =>
   reduce(
-    (acc, child) =>
-      append(validateObject(fieldName, childConstraints, child), acc),
+    (acc, child) => append(validateObject(childConstraints, child), acc),
     [],
     fieldValue
   )
 
 const validateChildren = reduce(
   (acc, [fieldName, fieldValue, childConstraints]) => {
-    const childValidations = validateChild(
-      fieldName,
-      fieldValue,
-      childConstraints
-    )
+    const childValidations = validateChild(fieldValue, childConstraints)
     return when(
       always(isNotEmpty(childValidations)),
       assoc(fieldName, childValidations)

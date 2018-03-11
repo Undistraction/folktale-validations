@@ -11,6 +11,7 @@ import {
   value1,
   value2,
   value3,
+  funcWhichThrows,
 } from '../../testHelpers/fixtures/generic'
 import { VALIDATE_OBJECT_VALUES } from '../../../const/validatorUids'
 import toPayload from '../../../failures/toPayload'
@@ -158,6 +159,22 @@ describe(`validateObjectValues()`, () => {
       const validation = validator(value)
       expect(validation).toEqualSuccessWithValue(value)
       expect(v1.notCalled).toBeTrue()
+    })
+  })
+
+  describe(`with a validator throwing an error`, () => {
+    it(`throws an error with a helpful message`, () => {
+      const v1 = funcWhichThrows
+      const value = {
+        [key1]: value1,
+      }
+      const validators = {
+        [key1]: v1,
+      }
+      const validator = validateObjectValues(validators)
+      expect(() => validator(value)).toThrow(
+        `[validator] A validator threw an error for prop name: 'key1' with value 'value1'`
+      )
     })
   })
 })

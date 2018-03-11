@@ -6,8 +6,9 @@ import {
   curry,
   compose,
   juxt,
-  defaultTo,
   converge,
+  keys,
+  tryCatch,
 } from 'ramda'
 import { compact, stubUndefined } from 'ramda-adjunct'
 import untilFailureValidator from '../../helpers/untilFailureValidator'
@@ -23,6 +24,7 @@ import validateWhitelistedKeys from '../../validators/object/validateWhitelisted
 import validateRequiredKeys from '../../validators/object/validateRequiredKeys'
 import validateObjectValues from '../../validators/object/validateObjectValues'
 import { compactList } from '../../utils/array'
+import { throwError, fieldValidatorsError } from '../../errors'
 
 const configureValidateRequired = compose(
   validateRequiredKeys,
@@ -49,21 +51,30 @@ const configureFieldsValidators = constraints => fields =>
     configureDefaultFieldValidators(constraints)
   )(fields)
 
+const validateValues = compose(validateObjectValues, buildValidatorsMap)
+
+const validateKeys = constraints =>
+  compose(validateObjectKeys, configureFieldsValidators(constraints))
+
+const tryValidateKeys = constraints => o =>
+  tryCatch(validateKeys(constraints), _ =>
+    throwError(fieldValidatorsError(keys(o)))
+  )(o)
+
 const validationSteps = constraints =>
   compose(
     juxt([
-      compose(validateObjectKeys, configureFieldsValidators(constraints)),
-      compose(validateObjectValues, buildValidatorsMap),
+      tryValidateKeys(constraints),
+      validateValues,
       applyDefaultsWithConstraints,
       transformValuesWithConstraints,
       validateFieldsWithValue,
       validateFieldsWithChildren,
     ]),
-    defaultTo([]),
     propFields
   )(constraints)
 
-const validateObject = curry((fieldName, constraints, o) =>
+const validateObject = curry((constraints, o) =>
   untilFailureValidator([
     validateIsPlainObject,
     ...validationSteps(constraints),
