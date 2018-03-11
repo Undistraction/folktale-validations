@@ -11,6 +11,8 @@ import {
 } from '../validators/predicate/generatedPredicateValidators'
 import validateIsArrayOf from '../validators/array/validateIsArrayOf'
 import validateExclusiveKeys from '../validators/object/validateExclusiveKeys'
+import { orValidator } from '..'
+import { validateIsRegExp } from '../../lib/validators/predicate/generatedPredicateValidators'
 
 const {
   ID,
@@ -28,7 +30,7 @@ const {
 
 const nameField = {
   [NAME]: NAME,
-  [VALIDATOR]: validateIsString,
+  [VALIDATOR]: orValidator(validateIsString, validateIsRegExp),
   [IS_REQUIRED]: true,
 }
 

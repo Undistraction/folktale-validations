@@ -1,4 +1,5 @@
-import { keys, map, assoc, dissoc } from 'ramda'
+import { keys, map, assoc, dissoc, curry, compose, without } from 'ramda'
+import { isString } from 'ramda-adjunct'
 import validateConstraints from '../../../constraints/validators/validateConstraints'
 import typeData from '../../testHelpers/fixtures/typeData'
 import FAILURE_FIELD_NAMES from '../../../const/failureFieldNames'
@@ -31,7 +32,9 @@ import {
   VALIDATE_IS_BOOLEAN,
   VALIDATE_IS_NOT_UNDEFINED,
   VALIDATE_IS_STRING,
+  VALIDATE_IS_REGEXP,
 } from '../../../const/validatorUids'
+import { orMessages } from '../../../utils/failures'
 
 const {
   FIELDS,
@@ -72,7 +75,11 @@ const rootErrors = [
 ]
 
 const fieldErrors = [
-  [NAME, VALIDATE_IS_STRING, typeData.withoutStringValues],
+  [
+    NAME,
+    [VALIDATE_IS_STRING, VALIDATE_IS_REGEXP],
+    without(typeData.withoutStringValues, typeData.regExpValues),
+  ],
   [VALIDATOR, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [TRANSFORMER, VALIDATE_IS_FUNCTION, typeData.withoutFunctionValues],
   [IS_REQUIRED, VALIDATE_IS_BOOLEAN, typeData.withoutBooleanValues],
@@ -82,6 +89,13 @@ const fieldErrors = [
 ]
 
 const requiredKeysWithout = fieldName => dissoc(fieldName)(requiredFields)
+
+const toPayloadForUIDs = curry((fieldValue, validatorUIDs) => {
+  if (isString(validatorUIDs)) {
+    return toPayload(validatorUIDs, fieldValue)
+  }
+  return compose(orMessages, map(toPayloadForUIDs(fieldValue)))(validatorUIDs)
+})
 
 describe(`validateConstraints`, () => {
   const validateConstraintsConfigured = validateConstraints(constraints)
@@ -363,9 +377,9 @@ describe(`validateConstraints`, () => {
                             [CHILDREN]: {
                               '0': {
                                 [FIELDS]: {
-                                  [fieldName]: toPayload(
-                                    validatorUID,
-                                    fieldValue
+                                  [fieldName]: toPayloadForUIDs(
+                                    fieldValue,
+                                    validatorUID
                                   ),
                                 },
                               },
