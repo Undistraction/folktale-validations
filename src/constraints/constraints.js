@@ -8,11 +8,11 @@ import {
   validateIsNotUndefined,
   validateIsBoolean,
   validateIsPlainObject,
+  validateIsRegExp,
 } from '../validators/predicate/generatedPredicateValidators'
 import validateIsArrayOf from '../validators/array/validateIsArrayOf'
 import validateExclusiveKeys from '../validators/object/validateExclusiveKeys'
-import { orValidator } from '..'
-import { validateIsRegExp } from '../../lib/validators/predicate/generatedPredicateValidators'
+import orValidator from '../helpers/orValidator'
 
 const {
   ID,
