@@ -67,7 +67,7 @@ describe(`configureRenderers()`, () => {
       // 'Object' replaced with 'value1'
       expect(failureRenderer(payload)).toEqualMultiline(`
         value1 included invalid value(s)
-          – Key 'key1': Wasn't Boolean`)
+          – key1: Wasn't Boolean`)
     })
   })
 })

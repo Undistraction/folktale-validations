@@ -19,7 +19,6 @@ import {
 } from 'ramda'
 import {
   joinWithColon,
-  wrapWithSingleQuotes,
   joinWithSpace,
   wrapWithSquareBrackets,
   newlineAndTabsForLevel,
@@ -40,7 +39,6 @@ export default (validatorMessages, text = {}) => {
   const mergedText = merge(defaultText, text)
 
   const {
-    KEY,
     OBJECT,
     ARRAY,
     AND,
@@ -55,14 +53,14 @@ export default (validatorMessages, text = {}) => {
 
   const joinLines = level => join(newlineAndTabsForLevel(level))
 
-  const keyText = compose(defaultTo(KEY), propKey)
+  const keyText = compose(defaultTo(``), propKey)
 
   const prefixWithKey = (level, fieldName, scope) =>
     compose(
       joinWithSpace,
       appendFlipped([INDENT_PREFIX, keyText(scope)]),
       joinWithColon,
-      pair(wrapWithSingleQuotes(fieldName))
+      pair(fieldName)
     )
 
   const prefixWithArrayIndex = (level, index, value) =>

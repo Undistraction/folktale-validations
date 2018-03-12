@@ -14,6 +14,8 @@ import validateIsArrayOf from '../validators/array/validateIsArrayOf'
 import validateExclusiveKeys from '../validators/object/validateExclusiveKeys'
 import orValidator from '../helpers/orValidator'
 
+import orValidator from '../helpers/orValidator'
+
 const {
   ID,
   FIELDS,
