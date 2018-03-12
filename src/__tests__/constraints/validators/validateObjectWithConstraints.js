@@ -254,9 +254,9 @@ describe(`validateObjectWithConstraints`, () => {
       { withValueRoot, withConstraintsRoot, withExpectedFailureObjRoot }
     ) => {
       describe(`with ${level} object ${pluralise(`level`, level)}`, () => {
-        // -------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 1. Value Itself
-        // -------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         describe(`value itself`, () => {
           const v1 = stubReturnsSuccess(value1)
           const constraints = withConstraintsRoot({
@@ -299,9 +299,9 @@ describe(`validateObjectWithConstraints`, () => {
           })
         })
 
-        // -------------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 2. Values
-        // -------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         describe(`values`, () => {
           describe(`that don't satisfy constraints`, () => {
@@ -347,11 +347,129 @@ describe(`validateObjectWithConstraints`, () => {
               })
             })
           })
+
+          describe(`with name that is regexp`, () => {
+            describe(`no matches`, () => {
+              it(`returns a Validation.Success with expected value`, () => {
+                const v1 = stubReturnsSuccess()
+
+                const constraints = withConstraintsRoot({
+                  [WHITELIST_KEYS]: false,
+                  [FIELDS]: [
+                    {
+                      [NAME]: /xxx/,
+                      [VALIDATOR]: v1,
+                    },
+                  ],
+                })
+
+                const o = {
+                  [key1]: value1,
+                  [key2]: value2,
+                  [key3]: value3,
+                }
+                const value = withValueRoot(o)
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(value)
+                expect(v1.notCalled).toBeTrue()
+              })
+            })
+
+            describe(`some arbitrary fields`, () => {
+              it(`returns a Validation.Success with expected value`, () => {
+                const v1 = stubReturnsSuccess()
+
+                const constraints = withConstraintsRoot({
+                  [WHITELIST_KEYS]: false,
+                  [FIELDS]: [
+                    {
+                      [NAME]: /key.*/,
+                      [VALIDATOR]: v1,
+                    },
+                  ],
+                })
+
+                const o = {
+                  [key1]: value1,
+                  a: value2,
+                  [key3]: value3,
+                }
+                const value = withValueRoot(o)
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(value)
+                expect(v1.args).toEqual([[value1], [value3]])
+              })
+            })
+
+            describe(`all arbitrary fields`, () => {
+              it(`returns a Validation.Success with expected value`, () => {
+                const v1 = stubReturnsSuccess()
+
+                const constraints = withConstraintsRoot({
+                  [WHITELIST_KEYS]: false,
+                  [FIELDS]: [
+                    {
+                      [NAME]: /.*/,
+                      [VALIDATOR]: v1,
+                    },
+                  ],
+                })
+
+                const o = {
+                  [key1]: value1,
+                  [key2]: value2,
+                  [key3]: value3,
+                }
+                const value = withValueRoot(o)
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(value)
+                expect(v1.args).toEqual([[value1], [value2], [value3]])
+              })
+            })
+
+            describe(`mixed arbitrary and non-arbitrary fields`, () => {
+              it(`returns a Validation.Success with expected value`, () => {
+                const v1 = stubReturnsSuccess()
+                const v2 = stubReturnsSuccess()
+
+                const constraints = withConstraintsRoot({
+                  [WHITELIST_KEYS]: false,
+                  [FIELDS]: [
+                    {
+                      [NAME]: /.*/,
+                      [VALIDATOR]: v1,
+                    },
+                    {
+                      [NAME]: key2,
+                      [VALIDATOR]: v2,
+                    },
+                  ],
+                })
+
+                const o = {
+                  [key1]: value1,
+                  [key2]: value2,
+                  [key3]: value3,
+                }
+                const value = withValueRoot(o)
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(value)
+                expect(v1.calledTwice).toBeTrue()
+                expect(v1.args).toEqual([[value1], [value3]])
+                expect(v2.calledOnce).toBeTrue()
+                expect(v2.calledWith(value2)).toBeTrue()
+              })
+            })
+          })
         })
 
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 3. Keys
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         describe(`keys`, () => {
           describe(`additional`, () => {
             describe(`whitelisted`, () => {
@@ -441,38 +559,36 @@ describe(`validateObjectWithConstraints`, () => {
               })
             })
 
-            describe(`not whitelisted`, () => {
-              describe(`default`, () => {
-                it(`returns a Validation.Failure with payload`, () => {
-                  const v1 = stubReturnsSuccess(value1)
-                  const v2 = stubReturnsSuccess(value2)
-                  const o = {
-                    [key1]: value1,
-                    [key2]: value2,
-                    [invalidKeyName]: invalidKeyValue,
-                  }
-                  const value = withValueRoot(o)
+            describe(`with whitelist disabled`, () => {
+              it(`returns a Validation.Failure with payload`, () => {
+                const v1 = stubReturnsSuccess(value1)
+                const v2 = stubReturnsSuccess(value2)
+                const o = {
+                  [key1]: value1,
+                  [key2]: value2,
+                  [invalidKeyName]: invalidKeyValue,
+                }
+                const value = withValueRoot(o)
 
-                  const constraints = withConstraintsRoot({
-                    [WHITELIST_KEYS]: false,
-                    [FIELDS]: [
-                      {
-                        [NAME]: key1,
-                        [VALIDATOR]: v1,
-                        [IS_REQUIRED]: true,
-                      },
-                      {
-                        [NAME]: key2,
-                        [VALIDATOR]: v2,
-                        [IS_REQUIRED]: true,
-                      },
-                    ],
-                  })
-
-                  const validator = validateObjectWithConstraints(constraints)
-                  const validation = validator(value)
-                  expect(validation).toEqualSuccessWithValue(value)
+                const constraints = withConstraintsRoot({
+                  [WHITELIST_KEYS]: false,
+                  [FIELDS]: [
+                    {
+                      [NAME]: key1,
+                      [VALIDATOR]: v1,
+                      [IS_REQUIRED]: true,
+                    },
+                    {
+                      [NAME]: key2,
+                      [VALIDATOR]: v2,
+                      [IS_REQUIRED]: true,
+                    },
+                  ],
                 })
+
+                const validator = validateObjectWithConstraints(constraints)
+                const validation = validator(value)
+                expect(validation).toEqualSuccessWithValue(value)
               })
             })
           })
@@ -576,9 +692,9 @@ describe(`validateObjectWithConstraints`, () => {
             })
           })
         })
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 4. Children
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         describe(`children`, () => {
           describe(`empty array`, () => {
@@ -707,9 +823,9 @@ describe(`validateObjectWithConstraints`, () => {
             })
           })
         })
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 5. Value
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         describe(`value`, () => {
           describe(`empty object`, () => {
@@ -816,9 +932,9 @@ describe(`validateObjectWithConstraints`, () => {
           })
         })
 
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 6. Default Values
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         describe(`default values`, () => {
           describe(`when no value is supplied`, () => {
             it(`returns a Validation.Success with default value applied`, () => {
@@ -887,9 +1003,9 @@ describe(`validateObjectWithConstraints`, () => {
           })
         })
 
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
         // 7. Transformed Values
-        // -----------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         describe(`transformed values`, () => {
           describe(`when transformer throws an error`, () => {

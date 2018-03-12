@@ -8,9 +8,11 @@ import {
   validateIsNotUndefined,
   validateIsBoolean,
   validateIsPlainObject,
+  validateIsRegExp,
 } from '../validators/predicate/generatedPredicateValidators'
 import validateIsArrayOf from '../validators/array/validateIsArrayOf'
 import validateExclusiveKeys from '../validators/object/validateExclusiveKeys'
+import orValidator from '../helpers/orValidator'
 
 const {
   ID,
@@ -28,7 +30,7 @@ const {
 
 const nameField = {
   [NAME]: NAME,
-  [VALIDATOR]: validateIsString,
+  [VALIDATOR]: orValidator(validateIsString, validateIsRegExp),
   [IS_REQUIRED]: true,
 }
 
