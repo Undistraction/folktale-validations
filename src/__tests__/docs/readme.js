@@ -134,9 +134,9 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualMultiline(`
         Object included invalid value(s)
-          – Key 'a': Wasn't Number
-          – Key 'b': Wasn't String
-          – Key 'c': Was Empty`)
+          – a: Wasn't Number
+          – b: Wasn't String
+          – c: Was Empty`)
     })
   })
 
@@ -316,9 +316,9 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualMultiline(`
         Object included invalid value(s)
-          – Key 'a': Wasn't String
-          – Key 'b': Wasn't Array
-          – Key 'c': Wasn't Date`)
+          – a: Wasn't String
+          – b: Wasn't Array
+          – c: Wasn't Date`)
     })
   })
 
@@ -472,10 +472,10 @@ describe(`code from README.md`, () => {
       })
       expect(message).toEqualMultiline(`
         Object included invalid value(s)
-          – Key 'a': Object included invalid value(s)
-            – Key 'a-b': Array included invalid value(s)
+          – a: Object included invalid value(s)
+            – a-b: Array included invalid value(s)
               – [1] Object included invalid value(s)
-                – Key 'a-b-a': Wasn't String`)
+                – a-b-a: Wasn't String`)
     })
   })
 
