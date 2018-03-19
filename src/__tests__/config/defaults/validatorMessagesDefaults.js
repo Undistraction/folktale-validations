@@ -16,6 +16,8 @@ import {
   validateIsNumber,
   validateArrayElements,
   validateObjectWithConstraints,
+  validateIsValidNonNegativeNumberWithUnit,
+  validateIsValidPositiveNumberWithUnit,
 } from '../../../index'
 
 import {
@@ -229,6 +231,28 @@ describe(`validatorMessagesDefaults`, () => {
       const failedValidation = validateIsNumberWithUnit(unit)(12)
       expect(failureRenderer(failedValidation.value)).toEqual(
         `Wasn't number with unit: '${unit}'`
+      )
+    })
+  })
+
+  describe(`validateIsValidNonNegativeNumberWithUnit`, () => {
+    it(`renders payload to message`, () => {
+      const unit = `xx`
+      const failedValidation = validateIsValidNonNegativeNumberWithUnit(unit)(
+        12
+      )
+      expect(failureRenderer(failedValidation.value)).toEqual(
+        `Wasn't valid non-negative number with unit: 'xx'`
+      )
+    })
+  })
+
+  describe(`validateIsValidPositiveNumberWithUnit`, () => {
+    it(`renders payload to message`, () => {
+      const unit = `xx`
+      const failedValidation = validateIsValidPositiveNumberWithUnit(unit)(12)
+      expect(failureRenderer(failedValidation.value)).toEqual(
+        `Wasn't valid positive number with unit: 'xx'`
       )
     })
   })

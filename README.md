@@ -117,6 +117,8 @@ Many validators are included, but it is very easy to create your own. The follow
 * validateIsWhitelistedValue - Value must appear on whitelist
 * validateIsNotBlacklistedValue - Value must not appear on blacklist
 * validateIsNumberWithUnit - Value must be a number followed by supplied unit
+* validateIsValidNonNegativeNumberWithUnit
+* validateIsValidPositiveNumberWithUnit
 
 ### Constraints
 

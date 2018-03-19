@@ -13,7 +13,11 @@ const plainObjectValues = [...emptyPlainObjValues, ...nonEmptyPlainObjValues]
 const functionValues = [function() {}]
 const regExpValues = [/a/]
 const stringValues = [...emptyStringValues, ...nonEmptyStringValues]
-const validNumericValues = [0, 1, -1]
+const validNumericValues = [0, 0.5, 1, -0.5, -1]
+const validNonNegativeNumericValues = [0, 0.5, 1]
+const validPositiveNumericValues = [0.5, 1]
+const validNonPositiveNumericValues = [-0.5, -1, 0]
+const validNegativeNumericValues = [-0.5, -1]
 const numericConstValues = [-Infinity, Infinity, NaN]
 const positiveNumbers = [100, Infinity]
 const negativeNumbers = [-100, -Infinity]
@@ -109,6 +113,10 @@ export default {
   nonEmptyPlainObjValues,
   nonEmptyStringValues,
   validNumericValues,
+  validNonNegativeNumericValues,
+  validPositiveNumericValues,
+  validNegativeNumericValues,
+  validNonPositiveNumericValues,
   validDateValues,
   invalidDateValues,
   undefinedValues,

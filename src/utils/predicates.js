@@ -24,7 +24,10 @@ import {
   isTruthy,
   isTrue,
   list,
+  isPositive,
+  isNonNegative,
 } from 'ramda-adjunct'
+import { numericPartOfUnitedNumber } from 'cssapi-units'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
 import { propFields } from '../utils/failures'
 import { hasPropDefaultValue, hasPropIsRequired } from './constraints'
@@ -53,3 +56,13 @@ export const hasValueOrDefaults = argsPass(or, [
   isNotEmpty,
   hasFieldsWithDefaultValues,
 ])
+
+export const isNumericPartOfUnitValuePositive = compose(
+  isPositive,
+  numericPartOfUnitedNumber
+)
+
+export const isNumericPartOfUnitValueNonNegative = compose(
+  isNonNegative,
+  numericPartOfUnitedNumber
+)

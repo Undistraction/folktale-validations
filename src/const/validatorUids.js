@@ -102,3 +102,9 @@ export const VALIDATE_IS_NOT_BLACKLISTED_VALUE = toValidatorUID(
 export const VALIDATE_IS_NUMBER_WITH_UNIT = toValidatorUID(
   `validateIsNumberWithUnit`
 )
+export const VALIDATE_IS_VALID_NON_NEGATIVE_NUMBER_WITH_UNIT = toValidatorUID(
+  `validateIsValidNonNegativeNumberWithUnit`
+)
+export const VALIDATE_IS_VALID_POSITIVE_NUMBER_WITH_UNIT = toValidatorUID(
+  `validateIsValidPositiveNumberWithUnit`
+)

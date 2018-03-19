@@ -54,6 +54,18 @@ const isNotBlacklistedValueMessage = blacklist =>
 const isNumberWithUnitMessage = unit =>
   joinWithColon([`Wasn't number with unit`, wrapWithSingleQuotes(unit)])
 
+const isNonNegativeNumberWithUnitMessage = unit =>
+  joinWithColon([
+    `Wasn't valid non-negative number with unit`,
+    wrapWithSingleQuotes(unit),
+  ])
+
+const isPositiveNumberWithUnitMessage = unit =>
+  joinWithColon([
+    `Wasn't valid positive number with unit`,
+    wrapWithSingleQuotes(unit),
+  ])
+
 const messageMap = {
   // ---------------------------------------------------------------------------
   // Predicate
@@ -174,6 +186,8 @@ const messageMap = {
   [UIDS.VALIDATE_IS_WHITELISTED_VALUE]: isWhitelistedValueMessage,
   [UIDS.VALIDATE_IS_NOT_BLACKLISTED_VALUE]: isNotBlacklistedValueMessage,
   [UIDS.VALIDATE_IS_NUMBER_WITH_UNIT]: isNumberWithUnitMessage,
+  [UIDS.VALIDATE_IS_VALID_NON_NEGATIVE_NUMBER_WITH_UNIT]: isNonNegativeNumberWithUnitMessage,
+  [UIDS.VALIDATE_IS_VALID_POSITIVE_NUMBER_WITH_UNIT]: isPositiveNumberWithUnitMessage,
 }
 
 export default messageMap

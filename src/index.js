@@ -64,6 +64,12 @@ export {
 export {
   default as validateIsNumberWithUnit,
 } from './validators/other/validateIsNumberWithUnit'
+export {
+  default as validateIsValidNonNegativeNumberWithUnit,
+} from './validators/other/validateIsValidNonNegativeNumberWithUnit'
+export {
+  default as validateIsValidPositiveNumberWithUnit,
+} from './validators/other/validateIsValidPositiveNumberWithUnit'
 
 // Constraint Validators
 export {
