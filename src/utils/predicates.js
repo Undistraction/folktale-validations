@@ -22,6 +22,7 @@ import {
   isString,
   isNotUndefined,
   isTruthy,
+  isTrue,
   list,
 } from 'ramda-adjunct'
 import CONSTRAINT_FIELD_NAMES from '../const/constraintFieldNames'
@@ -36,7 +37,6 @@ export const hasNoMoreThanOneChild = compose(lte(__, 1), length)
 export const hasMoreThanOneChild = complement(hasNoMoreThanOneChild)
 export const isArrayWithOneChild = both(isArray, compose(equals(1), length))
 export const isStringOrArray = either(isString, isArray)
-export const isTrue = equals(true)
 export const isRequired = both(
   hasPropIsRequired,
   propSatisfies(isTrue, IS_REQUIRED)

@@ -56,6 +56,14 @@ export const VALIDATE_IS_NOT_VALID_NUMBER = toValidatorUID(
 // Numeric
 export const VALIDATE_IS_POSITIVE = toValidatorUID(`validateIsPositive`)
 export const VALIDATE_IS_NEGATIVE = toValidatorUID(`validateIsNegative`)
+export const VALIDATE_IS_NON_POSITIVE = toValidatorUID(`validateIsNonPositive`)
+export const VALIDATE_IS_NON_NEGATIVE = toValidatorUID(`validateIsNonNegative`)
+
+// True / False
+export const VALIDATE_IS_TRUE = toValidatorUID(`validateIsTrue`)
+export const VALIDATE_IS_FALSE = toValidatorUID(`validateIsFalse`)
+export const VALIDATE_IS_TRUTHY = toValidatorUID(`validateIsTruthy`)
+export const VALIDATE_IS_FALSY = toValidatorUID(`validateIsFalsy`)
 
 // ---------------------------------------------------------------------------
 // Association

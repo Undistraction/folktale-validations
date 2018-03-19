@@ -53,4 +53,11 @@ export const {
   // Numeric
   validateIsPositive,
   validateIsNegative,
+  validateIsNonPositive,
+  validateIsNonNegative,
+  // Truth
+  validateIsTrue,
+  validateIsFalse,
+  validateIsTruthy,
+  validateIsFalsy,
 } = reduceObjIndexed(buildValidator, {}, predicates)

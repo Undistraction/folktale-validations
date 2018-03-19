@@ -19,4 +19,10 @@ export default Object.freeze({
   validDate: `Valid Date`,
   positive: `Positive`,
   negative: `Negative`,
+  nonPositive: `Non-Positive`,
+  nonNegative: `Non-Negative`,
+  true: `True`,
+  false: `False`,
+  truthy: `Truthy`,
+  falsy: `Falsy`,
 })

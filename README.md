@@ -84,6 +84,13 @@ Many validators are included, but it is very easy to create your own. The follow
   #### Numericality
 * validateIsPositive
 * validateIsNegative
+* validateIsNonPositive
+* validateIsNonNegative
+  #### Truth
+* validateITrue
+* validateIsFalse
+* validateIsTruthy
+* validateIsFalsy
 
 ### Association
 

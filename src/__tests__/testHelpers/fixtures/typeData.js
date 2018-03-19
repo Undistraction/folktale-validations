@@ -39,6 +39,8 @@ const objectValues = concat(
   functionValues
 )
 
+const falsyValues = [false, 0, ``, null, undefined, NaN]
+
 const allValues = [
   ...arrayValues,
   ...plainObjectValues,
@@ -52,6 +54,8 @@ const allValues = [
   ...nullValues,
   ...undefinedValues,
 ]
+
+const truthyValues = without(falsyValues, allValues)
 
 const withoutBooleanValues = without(booleanValues, allValues)
 const withoutArrayValues = without(arrayValues, allValues)
@@ -81,6 +85,10 @@ const withoutObjectValues = without(
   ]),
   withoutFunctionValues
 )
+const withoutTrueValues = without([true], allValues)
+const withoutFalseValues = without([false], allValues)
+const withoutTruthyValues = [0, NaN, null, undefined, false]
+const withoutFalsyValues = [1, [], `abc`]
 
 export default {
   arrayValues,
@@ -107,6 +115,8 @@ export default {
   negativeNumbers,
   positiveNumbersIncludingZero,
   negativeNumbersIncludingZero,
+  truthyValues,
+  falsyValues,
   withoutBooleanValues,
   withoutNumericValues,
   withoutArrayValues,
@@ -125,4 +135,8 @@ export default {
   withoutValidNumericValues,
   withoutValidDateValues,
   withoutRegExpValues,
+  withoutTrueValues,
+  withoutFalseValues,
+  withoutTruthyValues,
+  withoutFalsyValues,
 }

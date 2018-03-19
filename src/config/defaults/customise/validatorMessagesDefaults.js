@@ -137,6 +137,18 @@ const messageMap = {
   // Numeric
   [UIDS.VALIDATE_IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
   [UIDS.VALIDATE_IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
+  [UIDS.VALIDATE_IS_NON_POSITIVE]: predicateMessage(
+    PREDICATE_NAMES.nonPositive
+  ),
+  [UIDS.VALIDATE_IS_NON_NEGATIVE]: predicateMessage(
+    PREDICATE_NAMES.nonNegative
+  ),
+
+  // Truth
+  [UIDS.VALIDATE_IS_TRUE]: predicateMessage(PREDICATE_NAMES.true),
+  [UIDS.VALIDATE_IS_FALSE]: predicateMessage(PREDICATE_NAMES.false),
+  [UIDS.VALIDATE_IS_TRUTHY]: predicateMessage(PREDICATE_NAMES.truthy),
+  [UIDS.VALIDATE_IS_FALSY]: predicateMessage(PREDICATE_NAMES.falsy),
 
   // ---------------------------------------------------------------------------
   // Association

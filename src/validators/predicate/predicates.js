@@ -30,6 +30,12 @@ import {
   isValidNumber,
   isPositive,
   isNegative,
+  isNonPositive,
+  isNonNegative,
+  isTrue,
+  isFalse,
+  isTruthy,
+  isFalsy,
   isObject,
   isNotObject,
   isPlainObject,
@@ -248,4 +254,26 @@ export default {
     isNegative,
     PREDICATE_NAMES.negative,
   ],
+  [UIDS.VALIDATE_IS_NON_POSITIVE]: [
+    `validateIsNonPositive`,
+    isNonPositive,
+    PREDICATE_NAMES.nonPositive,
+  ],
+  [UIDS.VALIDATE_IS_NON_NEGATIVE]: [
+    `validateIsNonNegative`,
+    isNonNegative,
+    PREDICATE_NAMES.nonNegative,
+  ],
+
+  // ---------------------------------------------------------------------------
+  // Truth
+  // ---------------------------------------------------------------------------
+  [UIDS.VALIDATE_IS_TRUE]: [`validateIsTrue`, isTrue, PREDICATE_NAMES.true],
+  [UIDS.VALIDATE_IS_FALSE]: [`validateIsFalse`, isFalse, PREDICATE_NAMES.false],
+  [UIDS.VALIDATE_IS_TRUTHY]: [
+    `validateIsTruthy`,
+    isTruthy,
+    PREDICATE_NAMES.truthy,
+  ],
+  [UIDS.VALIDATE_IS_FALSY]: [`validateIsFalsy`, isFalsy, PREDICATE_NAMES.falsy],
 }

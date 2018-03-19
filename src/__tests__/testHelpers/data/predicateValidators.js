@@ -35,6 +35,12 @@ import {
   validateIsNotRegExp,
   validateIsPositive,
   validateIsNegative,
+  validateIsNonPositive,
+  validateIsNonNegative,
+  validateIsTrue,
+  validateIsFalse,
+  validateIsTruthy,
+  validateIsFalsy,
 } from '../../../index'
 import PREDICATES from '../../../const/predicateNames'
 import {
@@ -71,8 +77,14 @@ import {
   VALIDATE_IS_NOT_VALID_DATE,
   VALIDATE_IS_POSITIVE,
   VALIDATE_IS_NEGATIVE,
+  VALIDATE_IS_NON_POSITIVE,
+  VALIDATE_IS_NON_NEGATIVE,
   VALIDATE_IS_REGEXP,
   VALIDATE_IS_NOT_REGEXP,
+  VALIDATE_IS_TRUE,
+  VALIDATE_IS_FALSE,
+  VALIDATE_IS_TRUTHY,
+  VALIDATE_IS_FALSY,
 } from '../../../const/validatorUids'
 
 export default {
@@ -193,5 +205,39 @@ export default {
     uids: [VALIDATE_IS_NEGATIVE],
     validators: { validateIsNegative },
     values: [typeData.negativeNumbers, typeData.positiveNumbersIncludingZero],
+  },
+  [PREDICATES.nonPositive]: {
+    uids: [VALIDATE_IS_NON_POSITIVE],
+    validators: { validateIsNonPositive },
+    values: [typeData.negativeNumbersIncludingZero, typeData.positiveNumbers],
+  },
+  [PREDICATES.nonNegative]: {
+    uids: [VALIDATE_IS_NON_NEGATIVE],
+    validators: { validateIsNonNegative },
+    values: [typeData.positiveNumbersIncludingZero, typeData.negativeNumbers],
+  },
+
+  // ---------------------------------------------------------------------------
+  // Truth
+  // ---------------------------------------------------------------------------
+  [PREDICATES.true]: {
+    uids: [VALIDATE_IS_TRUE],
+    validators: { validateIsTrue },
+    values: [[true], typeData.withoutTrueValues],
+  },
+  [PREDICATES.false]: {
+    uids: [VALIDATE_IS_FALSE],
+    validators: { validateIsFalse },
+    values: [[false], typeData.withoutFalseValues],
+  },
+  [PREDICATES.truthy]: {
+    uids: [VALIDATE_IS_TRUTHY],
+    validators: { validateIsTruthy },
+    values: [typeData.truthyValues, typeData.withoutTruthyValues],
+  },
+  [PREDICATES.falsy]: {
+    uids: [VALIDATE_IS_FALSY],
+    validators: { validateIsFalsy },
+    values: [typeData.falsyValues, typeData.withoutFalsyValues],
   },
 }
