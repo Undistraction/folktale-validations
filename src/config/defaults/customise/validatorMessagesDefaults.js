@@ -135,6 +135,10 @@ const messageMap = {
   ),
 
   // Numeric
+  [UIDS.VALIDATE_IS_INTEGER]: predicateMessage(PREDICATE_NAMES.integer),
+  [UIDS.VALIDATE_IS_NOT_INTEGER]: negatedPredicateMessage(
+    PREDICATE_NAMES.integer
+  ),
   [UIDS.VALIDATE_IS_POSITIVE]: predicateMessage(PREDICATE_NAMES.positive),
   [UIDS.VALIDATE_IS_NEGATIVE]: predicateMessage(PREDICATE_NAMES.negative),
   [UIDS.VALIDATE_IS_NON_POSITIVE]: predicateMessage(

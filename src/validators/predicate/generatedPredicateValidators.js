@@ -51,6 +51,8 @@ export const {
   validateIsValidDate,
   validateIsNotValidDate,
   // Numeric
+  validateIsInteger,
+  validateIsNotInteger,
   validateIsPositive,
   validateIsNegative,
   validateIsNonPositive,

@@ -42,6 +42,8 @@ import {
   isNotPlainObject,
   isNotRegExp,
   isRegExp,
+  isInteger,
+  isNotInteger,
 } from 'ramda-adjunct'
 import PREDICATE_NAMES from '../../const/predicateNames'
 import * as UIDS from '../../const/validatorUids'
@@ -242,8 +244,18 @@ export default {
   ],
 
   // ---------------------------------------------------------------------------
-  // Numberic
+  // Numeric
   // ---------------------------------------------------------------------------
+  [UIDS.VALIDATE_IS_INTEGER]: [
+    `validateIsInteger`,
+    isInteger,
+    PREDICATE_NAMES.integer,
+  ],
+  [UIDS.VALIDATE_IS_NOT_INTEGER]: [
+    `validateIsNotInteger`,
+    isNotInteger,
+    PREDICATE_NAMES.integer,
+  ],
   [UIDS.VALIDATE_IS_POSITIVE]: [
     `validateIsPositive`,
     isPositive,

@@ -40,6 +40,8 @@ const objectValues = concat(
 )
 
 const falsyValues = [false, 0, ``, null, undefined, NaN]
+const integers = [-1, 0, 1]
+const nonIntegers = [-1.1, 1.1]
 
 const allValues = [
   ...arrayValues,
@@ -117,6 +119,8 @@ export default {
   negativeNumbersIncludingZero,
   truthyValues,
   falsyValues,
+  integers,
+  nonIntegers,
   withoutBooleanValues,
   withoutNumericValues,
   withoutArrayValues,

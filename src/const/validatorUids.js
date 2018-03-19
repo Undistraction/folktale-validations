@@ -54,6 +54,8 @@ export const VALIDATE_IS_NOT_VALID_NUMBER = toValidatorUID(
   `validateIsNotValidNumber`
 )
 // Numeric
+export const VALIDATE_IS_INTEGER = toValidatorUID(`validateIsInteger`)
+export const VALIDATE_IS_NOT_INTEGER = toValidatorUID(`validateIsNotInteger`)
 export const VALIDATE_IS_POSITIVE = toValidatorUID(`validateIsPositive`)
 export const VALIDATE_IS_NEGATIVE = toValidatorUID(`validateIsNegative`)
 export const VALIDATE_IS_NON_POSITIVE = toValidatorUID(`validateIsNonPositive`)

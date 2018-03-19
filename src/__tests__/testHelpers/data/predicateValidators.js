@@ -41,6 +41,8 @@ import {
   validateIsFalse,
   validateIsTruthy,
   validateIsFalsy,
+  validateIsInteger,
+  validateIsNotInteger,
 } from '../../../index'
 import PREDICATES from '../../../const/predicateNames'
 import {
@@ -85,6 +87,8 @@ import {
   VALIDATE_IS_FALSE,
   VALIDATE_IS_TRUTHY,
   VALIDATE_IS_FALSY,
+  VALIDATE_IS_INTEGER,
+  VALIDATE_IS_NOT_INTEGER,
 } from '../../../const/validatorUids'
 
 export default {
@@ -196,6 +200,11 @@ export default {
   // ---------------------------------------------------------------------------
   // Numeric
   // ---------------------------------------------------------------------------
+  [PREDICATES.integer]: {
+    uids: [VALIDATE_IS_INTEGER, VALIDATE_IS_NOT_INTEGER],
+    validators: { validateIsInteger, validateIsNotInteger },
+    values: [typeData.integers, typeData.nonIntegers],
+  },
   [PREDICATES.positive]: {
     uids: [VALIDATE_IS_POSITIVE],
     validators: { validateIsPositive },

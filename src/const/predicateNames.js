@@ -25,4 +25,5 @@ export default Object.freeze({
   false: `False`,
   truthy: `Truthy`,
   falsy: `Falsy`,
+  integer: `Integer`,
 })

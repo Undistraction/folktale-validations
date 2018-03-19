@@ -82,6 +82,8 @@ Many validators are included, but it is very easy to create your own. The follow
 * validateIsValidDate
 * validateIsNotValidDate
   #### Numericality
+* validateIsInteger
+* validateIsNotInteger
 * validateIsPositive
 * validateIsNegative
 * validateIsNonPositive
