@@ -59,7 +59,7 @@ export const VALIDATE_IS_NEGATIVE = toValidatorUID(`validateIsNegative`)
 export const VALIDATE_IS_NON_POSITIVE = toValidatorUID(`validateIsNonPositive`)
 export const VALIDATE_IS_NON_NEGATIVE = toValidatorUID(`validateIsNonNegative`)
 
-// True / False
+// Truth
 export const VALIDATE_IS_TRUE = toValidatorUID(`validateIsTrue`)
 export const VALIDATE_IS_FALSE = toValidatorUID(`validateIsFalse`)
 export const VALIDATE_IS_TRUTHY = toValidatorUID(`validateIsTruthy`)
