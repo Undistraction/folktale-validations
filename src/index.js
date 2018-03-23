@@ -108,8 +108,10 @@ export { default as decorateValidator } from './helpers/decorateValidator'
 export { default as toPayload } from './failures/toPayload'
 
 // -----------------------------------------------------------------------------
-// Validations
+// Args
 // -----------------------------------------------------------------------------
+
+export { toArgsObj } from './utils/args'
 
 // -----------------------------------------------------------------------------
 // Validations

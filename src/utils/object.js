@@ -8,8 +8,9 @@ import {
   curry,
   compose,
   filter,
+  pickBy,
 } from 'ramda'
-import { isUndefined, neither } from 'ramda-adjunct'
+import { isUndefined, neither, isNotUndefined } from 'ramda-adjunct'
 
 export const hasFlipped = flip(has)
 
@@ -23,3 +24,5 @@ export const mergeWithDefaults = (defaultValue, value) =>
     merge(defaultValue),
     always(defaultValue)
   )(value)
+
+export const pickDefined = pickBy(isNotUndefined)
