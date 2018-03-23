@@ -2802,7 +2802,7 @@ jasmine-expect@^3.8.3:
   dependencies:
     add-matchers "0.5.0"
 
-jasmine-folktale@0.0.5:
+jasmine-folktale@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/jasmine-folktale/-/jasmine-folktale-0.0.5.tgz#76e12884e070ad8b69348bd78b7372218e329eb8"
   dependencies:
