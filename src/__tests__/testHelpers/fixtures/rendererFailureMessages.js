@@ -103,3 +103,23 @@ export const nestedFailureMessageWithObjectAndNestedAnds = {
     },
   },
 }
+
+export const failureMessageWithArrayNestedInAnds = {
+  [FIELDS]: {
+    a: {
+      and: [
+        payload1,
+        {
+          [CHILDREN]: {
+            '1': {
+              [FIELDS]: {
+                b1a: payload2,
+                b1b: payload3,
+              },
+            },
+          },
+        },
+      ],
+    },
+  },
+}
