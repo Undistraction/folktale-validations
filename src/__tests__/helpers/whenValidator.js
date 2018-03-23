@@ -4,7 +4,7 @@ import {
   stubReturnsSuccess,
   stubReturnsFailure,
 } from '../testHelpers/sinon'
-import whenValidator from '../../helpers/whenValidator'
+import { whenValidator } from '../../index'
 import { value1 } from '../testHelpers/fixtures/generic'
 
 describe(`whenValidator`, () => {
