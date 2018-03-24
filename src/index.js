@@ -112,6 +112,7 @@ export { default as toPayload } from './failures/toPayload'
 // -----------------------------------------------------------------------------
 
 export { toArgsObj } from './utils/args'
+export { fromArgsObj } from './utils/args'
 
 // -----------------------------------------------------------------------------
 // Validations

@@ -1,4 +1,6 @@
+import { compose, converge, map, prop } from 'ramda'
+import { list } from 'ramda-adjunct'
 import { pickDefined } from './object'
 
-// eslint-disable-next-line import/prefer-default-export
 export const toArgsObj = pickDefined
+export const fromArgsObj = compose(converge(list), map(prop))
