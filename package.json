@@ -78,7 +78,7 @@
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-plugin-node-resolve": "^3.0.0",
     "safe-json-stringify": "^1.0.4",
-    "sinon": "^4.1.4"
+    "sinon": "^5.0.5"
   },
   "dependencies": {
     "cssapi-units": "^0.3.0",
