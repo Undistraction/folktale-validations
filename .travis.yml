@@ -4,6 +4,7 @@ node_js:
   - 9
   - 8
   - 7
+  - 10
 notifications:
   email:
     on_failure: change
