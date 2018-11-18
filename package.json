@@ -84,7 +84,7 @@
     "cssapi-units": "^0.3.0",
     "deep-freeze-strict": "^1.1.1",
     "folktale": "^2.0.1",
-    "ramda": "^0.25.0",
+    "ramda": "^0.26.0",
     "ramda-adjunct": "^2.6.0",
     "ramda-log": "0.0.3"
   },
