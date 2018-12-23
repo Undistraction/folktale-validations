@@ -82,10 +82,10 @@ acorn@^5.5.3:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.5.3.tgz#f473dd47e0277a08e28e9bec5aeeb04751f0b8c9"
   integrity sha512-jd5MkIUlbbmb07nXH0DT3y7rDVtkzDi4XZOUVWAer8ajmF/DTSSbl5oNFyDOl/OXA33Bl79+ypHhl2pN20VeOQ==
 
-add-matchers@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/add-matchers/-/add-matchers-0.5.0.tgz#502190e4750cd5721618393268b61a157366e765"
-  integrity sha1-UCGQ5HUM1XIWGDkyaLYaFXNm52U=
+add-matchers@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/add-matchers/-/add-matchers-0.6.0.tgz#a10f7489fa5b34bee1acccfb5e1a1899253c7838"
+  integrity sha512-obhWW8vydiAHTQkOhLvsh1F7DX8Fh9dmCDS2qyVRwqLbdIlDFs9iEaVqMcXmWCC9d45NXV41KLlUZ6LcTckD/w==
 
 add-stream@^1.0.0:
   version "1.0.0"
@@ -3272,12 +3272,12 @@ items@2.x.x:
   resolved "https://registry.yarnpkg.com/items/-/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
   integrity sha1-i9FtnIOxlSneWuoyGsqtp4NkoZg=
 
-jasmine-expect@^3.8.3:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/jasmine-expect/-/jasmine-expect-3.8.3.tgz#ab82323fd16353b26f0a9cbeacf744752e7eb601"
-  integrity sha512-VZu4V0O/YWBfUa2dgb9cz/WcQdWRFtdM4SV0Iy+abORLEkqP6vUrMvoFtxP9TJ+Rtor+z6857Vz5ySOaTFEt2A==
+jasmine-expect@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jasmine-expect/-/jasmine-expect-4.0.0.tgz#1f95e75d59d0a06339ee5d48564eff0971d0be79"
+  integrity sha512-q3LQm69uWUTCpKn8V5CL6gKg4p/YHEBGR20b3jvbiPJIOGqR53qs6K2e9m0IiF7lWTI44usbuRdFBftjFfy6og==
   dependencies:
-    add-matchers "0.5.0"
+    add-matchers "0.6.0"
 
 jasmine-folktale@^0.0.5:
   version "0.0.5"
