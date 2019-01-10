@@ -68,7 +68,7 @@
     "jasmine-folktale": "^0.0.5",
     "jasmine-multiline-matchers": "0.2",
     "jest": "^22.1.4",
-    "madge": "^3.0.0",
+    "madge": "^3.4.1",
     "nsp": "^3.2.1",
     "prettier": "^1.8.2",
     "prettyjson": "^1.2.1",
