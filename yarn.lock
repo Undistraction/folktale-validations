@@ -4732,6 +4732,11 @@ qs@~6.5.1:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.1.tgz#349cdf6eef89ec45c12d7d5eb3fc0c870343a6d8"
   integrity sha512-eRzhrN1WSINYCDCbrz796z37LOe3m5tmW7RQf6oBntukAG1nmovJvhnwHHRMAfeoItc1m2Hk02WER2aQ/iqs+A==
 
+ramda-adjunct@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.16.0.tgz#555a754d4febfa1895cab1a3a7d1308bff94c1a2"
+  integrity sha512-T2CJHqRJ1hSOtDpmPf2JCzTPPToOHHAWeMtqVMKxCLisYq8PQ/4pnutZErqlslqncRj/goJx56OQePbUHMIMpQ==
+
 ramda-adjunct@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.4.0.tgz#d53ed31350b9dfac59965095be0a3dd967ee8853"
@@ -4741,11 +4746,6 @@ ramda-adjunct@^2.5.0:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.5.0.tgz#50d7d74ca273731b05dcdda77d102bc57d7c1145"
   integrity sha512-XHUwvZotvKsEpQU4AmugHv/fZZFod4K2kexFiiOkHI3L01tCQ/yqoCceKljogIRE/beZMRz/BB1t0iRy3stLHw==
-
-ramda-adjunct@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.6.0.tgz#ec71a0868054bd2b957ef6e5ab046a6c702fedf4"
-  integrity sha1-7HGghoBUvSuVfvblqwRqbHAv7fQ=
 
 ramda-log@0.0.3, ramda-log@^0.0.3:
   version "0.0.3"
